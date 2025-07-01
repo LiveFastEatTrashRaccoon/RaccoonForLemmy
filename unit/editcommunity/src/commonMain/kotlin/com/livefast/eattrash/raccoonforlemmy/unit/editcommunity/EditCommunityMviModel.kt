@@ -1,11 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.editcommunity
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityVisibilityType
 
 interface EditCommunityMviModel :
-    ScreenModel,
     MviModel<EditCommunityMviModel.Intent, EditCommunityMviModel.UiState, EditCommunityMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent

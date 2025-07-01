@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.editcommunity
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -21,14 +23,14 @@ class EditCommunityViewModel(
     private val communityRepository: CommunityRepository,
     private val mediaRepository: MediaRepository,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<EditCommunityMviModel.Intent, EditCommunityMviModel.UiState, EditCommunityMviModel.Effect>(
-    initialState = EditCommunityMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<EditCommunityMviModel.Intent, EditCommunityMviModel.UiState, EditCommunityMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = EditCommunityMviModel.UiState()),
     EditCommunityMviModel {
     private var originalCommunity: CommunityModel? = null
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             notificationCenter
                 .subscribe(NotificationCenterEvent.ChangeCommunityVisibility::class)
                 .onEach { event ->
@@ -40,7 +42,7 @@ class EditCommunityViewModel(
     override fun reduce(intent: EditCommunityMviModel.Intent) {
         when (intent) {
             EditCommunityMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
@@ -48,7 +50,7 @@ class EditCommunityViewModel(
             is EditCommunityMviModel.Intent.BannerSelected -> loadImageBanner(intent.value)
 
             is EditCommunityMviModel.Intent.ChangeDescription -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             description = intent.value,
@@ -59,7 +61,7 @@ class EditCommunityViewModel(
             }
 
             is EditCommunityMviModel.Intent.ChangeTitle -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             title = intent.value,
@@ -70,7 +72,7 @@ class EditCommunityViewModel(
             }
 
             is EditCommunityMviModel.Intent.ChangeName -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             name = intent.value,
@@ -81,7 +83,7 @@ class EditCommunityViewModel(
             }
 
             is EditCommunityMviModel.Intent.ChangeNsfw -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             nsfw = intent.value,
@@ -92,7 +94,7 @@ class EditCommunityViewModel(
             }
 
             is EditCommunityMviModel.Intent.ChangePostingRestrictedToMods -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             postingRestrictedToMods = intent.value,
@@ -139,7 +141,7 @@ class EditCommunityViewModel(
         if (bytes.isEmpty()) {
             return
         }
-        screenModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val url = mediaRepository.uploadImage(auth, bytes)
@@ -159,7 +161,7 @@ class EditCommunityViewModel(
         if (bytes.isEmpty()) {
             return
         }
-        screenModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val url = mediaRepository.uploadImage(auth, bytes)
@@ -176,7 +178,7 @@ class EditCommunityViewModel(
     }
 
     private fun updateVisibility(value: CommunityVisibilityType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     visibilityType = value,
@@ -190,7 +192,7 @@ class EditCommunityViewModel(
         val community = originalCommunity?.copy() ?: CommunityModel()
         val currentState = uiState.value
 
-        screenModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
