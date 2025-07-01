@@ -1,12 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.login
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 
-interface LoginMviModel :
-    MviModel<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect>,
-    ScreenModel {
+interface LoginMviModel : MviModel<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect> {
     sealed interface Intent {
         data class SetInstanceName(val value: String) : Intent
 
