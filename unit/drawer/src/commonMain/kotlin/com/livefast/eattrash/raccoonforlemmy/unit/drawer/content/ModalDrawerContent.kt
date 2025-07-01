@@ -30,11 +30,10 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
-import cafe.adriel.voyager.kodein.rememberScreenModel
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
+import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DrawerEvent
@@ -59,16 +58,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-object ModalDrawerContent : Tab {
-    override val options: TabOptions
-        @Composable get() {
-            return TabOptions(0u, "")
-        }
+class ModalDrawerContent : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: ModalDrawerMviModel = rememberScreenModel()
+        val model: ModalDrawerMviModel = getViewModel<ModalDrawerViewModel>()
         val uiState by model.uiState.collectAsState()
         val coordinator = remember { getDrawerCoordinator() }
         val themeRepository = remember { getThemeRepository() }
@@ -352,7 +347,6 @@ object ModalDrawerContent : Tab {
 
         if (selectInstanceBottomSheetOpened) {
             SelectInstanceBottomSheet(
-                parent = this,
                 state = rememberModalBottomSheetState(skipPartiallyExpanded = true),
                 onSelect = { instance ->
                     selectInstanceBottomSheetOpened = false
@@ -365,7 +359,6 @@ object ModalDrawerContent : Tab {
 
         if (manageAccountsBottomSheetOpened) {
             ManageAccountsBottomSheet(
-                parent = this,
                 onDismiss = { openLogin ->
                     manageAccountsBottomSheetOpened = false
                     if (openLogin) {
