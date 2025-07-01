@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
@@ -47,12 +49,12 @@ class FilteredContentsViewModel(
     private val notificationCenter: NotificationCenter,
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<FilteredContentsMviModel.Intent, FilteredContentsMviModel.State, FilteredContentsMviModel.Effect>(
-    initialState = FilteredContentsMviModel.State(),
-),
+) : ViewModel(),
+    MviModelDelegate<FilteredContentsMviModel.Intent, FilteredContentsMviModel.State, FilteredContentsMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = FilteredContentsMviModel.State()),
     FilteredContentsMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 val type = contentsType.toFilteredContentsType()
                 it.copy(
@@ -119,13 +121,13 @@ class FilteredContentsViewModel(
         when (intent) {
             is FilteredContentsMviModel.Intent.ChangeSection -> changeSection(intent.value)
             FilteredContentsMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
             FilteredContentsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             FilteredContentsMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
@@ -213,7 +215,7 @@ class FilteredContentsViewModel(
                     }
 
             is FilteredContentsMviModel.Intent.WillOpenDetail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     if (intent.commentId == null) {
                         val state = postPaginationManager.extractState()
                         postNavigationManager.push(state)
@@ -301,13 +303,13 @@ class FilteredContentsViewModel(
         updateState {
             it.copy(botTagColor = botTagColor, meTagColor = meTagColor)
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             loadNextPage()
         }
     }
 
     private fun changeSection(section: FilteredContentsSection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(section = section)
             }
@@ -383,7 +385,7 @@ class FilteredContentsViewModel(
                 voted = newValue,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.upVote(
@@ -409,7 +411,7 @@ class FilteredContentsViewModel(
                 downVoted = newValue,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.downVote(
@@ -432,7 +434,7 @@ class FilteredContentsViewModel(
                 saved = newValue,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.save(
@@ -451,7 +453,7 @@ class FilteredContentsViewModel(
     }
 
     private fun feature(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.featureInCommunity(
@@ -466,7 +468,7 @@ class FilteredContentsViewModel(
     }
 
     private fun featureLocal(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.featureInInstance(
@@ -481,7 +483,7 @@ class FilteredContentsViewModel(
     }
 
     private fun lock(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.lock(
@@ -496,7 +498,7 @@ class FilteredContentsViewModel(
     }
 
     private fun handlePostUpdate(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     posts =
@@ -520,7 +522,7 @@ class FilteredContentsViewModel(
                 voted = newValue,
             )
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.upVote(
@@ -539,7 +541,7 @@ class FilteredContentsViewModel(
         val newValue = comment.myVote >= 0
         val newComment = commentRepository.asDownVoted(comment, newValue)
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.downVote(
@@ -562,7 +564,7 @@ class FilteredContentsViewModel(
                 saved = newValue,
             )
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.save(
@@ -578,7 +580,7 @@ class FilteredContentsViewModel(
     }
 
     private fun distinguish(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newComment =
                 commentRepository.distinguish(
@@ -593,7 +595,7 @@ class FilteredContentsViewModel(
     }
 
     private fun handleCommentUpdate(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     comments =
@@ -610,7 +612,7 @@ class FilteredContentsViewModel(
     }
 
     private fun changeLiked(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(liked = value) }
             refresh(initial = true)
             emitEffect(FilteredContentsMviModel.Effect.BackToTop)

@@ -1,33 +1,32 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.ViewModelCreationArgs
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.bindViewModelWithArgs
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsViewModel
 import org.kodein.di.DI
-import org.kodein.di.bind
-import org.kodein.di.factory
 import org.kodein.di.instance
+
+data class FilteredContentsMviModelParams(val contentsType: Int) : ViewModelCreationArgs
 
 val filteredContentsModule =
     DI.Module("FilteredContentsModule") {
-        bind<FilteredContentsMviModel> {
-            factory { contentsType: Int ->
-                FilteredContentsViewModel(
-                    contentsType = contentsType,
-                    postPaginationManager = instance(),
-                    commentPaginationManager = instance(),
-                    themeRepository = instance(),
-                    settingsRepository = instance(),
-                    identityRepository = instance(),
-                    postRepository = instance(),
-                    commentRepository = instance(),
-                    accountRepository = instance(),
-                    userTagRepository = instance(),
-                    imagePreloadManager = instance(),
-                    hapticFeedback = instance(),
-                    notificationCenter = instance(),
-                    postNavigationManager = instance(),
-                    lemmyValueCache = instance(),
-                )
-            }
+        bindViewModelWithArgs { args: FilteredContentsMviModelParams ->
+            FilteredContentsViewModel(
+                contentsType = args.contentsType,
+                postPaginationManager = instance(),
+                commentPaginationManager = instance(),
+                themeRepository = instance(),
+                settingsRepository = instance(),
+                identityRepository = instance(),
+                postRepository = instance(),
+                commentRepository = instance(),
+                accountRepository = instance(),
+                userTagRepository = instance(),
+                imagePreloadManager = instance(),
+                hapticFeedback = instance(),
+                notificationCenter = instance(),
+                postNavigationManager = instance(),
+                lemmyValueCache = instance(),
+            )
         }
     }

@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -39,7 +38,6 @@ sealed interface FilteredContentsSection {
 }
 
 interface FilteredContentsMviModel :
-    ScreenModel,
     MviModel<FilteredContentsMviModel.Intent, FilteredContentsMviModel.State, FilteredContentsMviModel.Effect> {
     sealed interface Intent {
         data class ChangeSection(val value: FilteredContentsSection) : Intent
