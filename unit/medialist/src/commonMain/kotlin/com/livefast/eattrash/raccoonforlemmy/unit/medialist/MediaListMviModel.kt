@@ -1,13 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.medialist
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.MediaModel
 
-interface MediaListMviModel :
-    ScreenModel,
-    MviModel<MediaListMviModel.Intent, MediaListMviModel.State, MediaListMviModel.Effect> {
+interface MediaListMviModel : MviModel<MediaListMviModel.Intent, MediaListMviModel.State, MediaListMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 
