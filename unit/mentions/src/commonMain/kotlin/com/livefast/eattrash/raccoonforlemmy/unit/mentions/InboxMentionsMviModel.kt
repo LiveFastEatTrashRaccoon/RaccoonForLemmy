@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.mentions
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -11,8 +10,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 
 @Stable
 interface InboxMentionsMviModel :
-    MviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect>,
-    ScreenModel {
+    MviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 

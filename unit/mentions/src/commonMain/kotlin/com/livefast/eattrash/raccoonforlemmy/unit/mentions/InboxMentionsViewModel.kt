@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.mentions
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -28,14 +30,14 @@ class InboxMentionsViewModel(
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect>(
-    initialState = InboxMentionsMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<InboxMentionsMviModel.Intent, InboxMentionsMviModel.UiState, InboxMentionsMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = InboxMentionsMviModel.UiState()),
     InboxMentionsMviModel {
     private var currentPage: Int = 1
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             coordinator.events
                 .onEach {
                     when (it) {
@@ -91,18 +93,18 @@ class InboxMentionsViewModel(
     override fun reduce(intent: InboxMentionsMviModel.Intent) {
         when (intent) {
             InboxMentionsMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
             InboxMentionsMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                     emitEffect(InboxMentionsMviModel.Effect.BackToTop)
                 }
 
             is InboxMentionsMviModel.Intent.MarkAsRead ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     val mention = uiState.value.mentions.first { it.id == intent.id }
                     markAsRead(
                         read = intent.read,
@@ -122,7 +124,7 @@ class InboxMentionsViewModel(
             }
 
             is InboxMentionsMviModel.Intent.WillOpenDetail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     uiState.value.mentions.firstOrNull { it.id == intent.id }?.also { mention ->
                         if (!mention.read) {
                             markAsRead(
@@ -156,7 +158,7 @@ class InboxMentionsViewModel(
     }
 
     private fun changeUnreadOnly(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(unreadOnly = value) }
             refresh(initial = true)
             emitEffect(InboxMentionsMviModel.Effect.BackToTop)
@@ -205,7 +207,7 @@ class InboxMentionsViewModel(
     }
 
     private fun handleItemUpdate(item: PersonMentionModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     mentions =
@@ -254,7 +256,7 @@ class InboxMentionsViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handleItemUpdate(newMention)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.upVote(
@@ -286,7 +288,7 @@ class InboxMentionsViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handleItemUpdate(newMention)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.downVote(
@@ -310,14 +312,14 @@ class InboxMentionsViewModel(
     }
 
     private fun updateUnreadItems() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val unreadCount = coordinator.updateUnreadCount()
             emitEffect(InboxMentionsMviModel.Effect.UpdateUnreadItems(unreadCount))
         }
     }
 
     private fun handleLogout() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(mentions = emptyList()) }
             refresh(initial = true)
         }
