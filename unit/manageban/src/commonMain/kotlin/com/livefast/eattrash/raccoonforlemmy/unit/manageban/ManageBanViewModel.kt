@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.manageban
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.DomainBlocklistRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -37,9 +39,9 @@ class ManageBanViewModel(
     private val communityRepository: CommunityRepository,
     private val blocklistRepository: DomainBlocklistRepository,
     private val stopWordRepository: StopWordRepository,
-) : DefaultMviModel<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect>(
-    initialState = ManageBanMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = ManageBanMviModel.UiState()),
     ManageBanMviModel {
     private var originalBans: AccountBansModel? = null
     private var originalBlockedDomains: List<String> = emptyList()
@@ -47,7 +49,7 @@ class ManageBanViewModel(
     private val mutex = Mutex()
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             settingsRepository.currentSettings
                 .onEach { settings ->
                     updateState {
@@ -80,13 +82,13 @@ class ManageBanViewModel(
     override fun reduce(intent: ManageBanMviModel.Intent) {
         when (intent) {
             is ManageBanMviModel.Intent.ChangeSection -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(section = intent.section) }
                 }
             }
 
             ManageBanMviModel.Intent.Refresh -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
             }
@@ -116,7 +118,7 @@ class ManageBanViewModel(
     }
 
     private fun unbanUser(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             try {
                 userRepository.block(
@@ -135,7 +137,7 @@ class ManageBanViewModel(
     }
 
     private fun unbanCommunity(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             try {
                 communityRepository.block(
@@ -154,7 +156,7 @@ class ManageBanViewModel(
     }
 
     private fun unbanInstance(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             try {
                 siteRepository.block(
@@ -173,7 +175,7 @@ class ManageBanViewModel(
     }
 
     private fun updateSearchText(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(searchText = value) }
         }
     }
@@ -199,7 +201,7 @@ class ManageBanViewModel(
         if (domain.isBlank()) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             mutex.withLock {
                 val newValues =
                     if (originalBlockedDomains.contains(domain)) {
@@ -217,7 +219,7 @@ class ManageBanViewModel(
     }
 
     private fun unblockDomain(domain: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             mutex.withLock {
                 val newValues = originalBlockedDomains - domain
                 val accountId = accountRepository.getActive()?.id
@@ -233,7 +235,7 @@ class ManageBanViewModel(
         if (word.isBlank()) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             mutex.withLock {
                 val newValues =
                     if (originalStopWords.contains(word)) {
@@ -251,7 +253,7 @@ class ManageBanViewModel(
     }
 
     private fun removeStopWord(word: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             mutex.withLock {
                 val newValues = originalStopWords - word
                 val accountId = accountRepository.getActive()?.id
