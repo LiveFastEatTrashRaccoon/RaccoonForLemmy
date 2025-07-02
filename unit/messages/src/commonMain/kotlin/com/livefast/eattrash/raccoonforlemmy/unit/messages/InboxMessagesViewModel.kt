@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.messages
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -21,14 +23,14 @@ class InboxMessagesViewModel(
     private val settingsRepository: SettingsRepository,
     private val coordinator: InboxCoordinator,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect>(
-    initialState = InboxMessagesMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = InboxMessagesMviModel.UiState()),
     InboxMessagesMviModel {
     private var currentPage: Int = 1
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             coordinator.events
                 .onEach {
                     when (it) {
@@ -75,12 +77,12 @@ class InboxMessagesViewModel(
     override fun reduce(intent: InboxMessagesMviModel.Intent) {
         when (intent) {
             InboxMessagesMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
             InboxMessagesMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                     emitEffect(InboxMessagesMviModel.Effect.BackToTop)
                 }
@@ -105,7 +107,7 @@ class InboxMessagesViewModel(
         if (uiState.value.currentUserId == 0L) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(unreadOnly = value) }
             refresh(initial = true)
             emitEffect(InboxMessagesMviModel.Effect.BackToTop)
@@ -167,14 +169,14 @@ class InboxMessagesViewModel(
     }
 
     private fun updateUnreadItems() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val unreadCount = coordinator.updateUnreadCount()
             emitEffect(InboxMessagesMviModel.Effect.UpdateUnreadItems(unreadCount))
         }
     }
 
     private fun handleLogout() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(chats = emptyList()) }
             refresh(initial = true)
         }
