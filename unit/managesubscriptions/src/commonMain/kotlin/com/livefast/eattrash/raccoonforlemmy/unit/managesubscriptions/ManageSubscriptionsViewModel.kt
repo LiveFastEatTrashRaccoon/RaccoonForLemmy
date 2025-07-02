@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.FavoriteCommunityModel
@@ -16,9 +18,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
-import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsMviModel.Effect
-import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsMviModel.Intent
-import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsMviModel.UiState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,12 +38,16 @@ class ManageSubscriptionsViewModel(
     private val communityPaginationManager: CommunityPaginationManager,
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<Intent, UiState, Effect>(
-    initialState = UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<
+        ManageSubscriptionsMviModel.Intent,
+        ManageSubscriptionsMviModel.UiState,
+        ManageSubscriptionsMviModel.Effect,
+        >
+    by DefaultMviModelDelegate(initialState = ManageSubscriptionsMviModel.UiState()),
     ManageSubscriptionsMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             settingsRepository.currentSettings
                 .onEach { settings ->
                     updateState {
@@ -72,7 +75,7 @@ class ManageSubscriptionsViewModel(
                 .debounce(1_000)
                 .onEach {
                     if (!uiState.value.initial) {
-                        emitEffect(Effect.BackToTop)
+                        emitEffect(ManageSubscriptionsMviModel.Effect.BackToTop)
                         refresh()
                     }
                 }.launchIn(this)
@@ -82,17 +85,17 @@ class ManageSubscriptionsViewModel(
         }
     }
 
-    override fun reduce(intent: Intent) {
+    override fun reduce(intent: ManageSubscriptionsMviModel.Intent) {
         when (intent) {
-            Intent.HapticIndication -> hapticFeedback.vibrate()
-            Intent.Refresh -> screenModelScope.launch { refresh() }
-            is Intent.Unsubscribe -> {
+            ManageSubscriptionsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            ManageSubscriptionsMviModel.Intent.Refresh -> viewModelScope.launch { refresh() }
+            is ManageSubscriptionsMviModel.Intent.Unsubscribe -> {
                 uiState.value.communities.firstOrNull { it.id == intent.id }?.also { community ->
                     unsubscribe(community)
                 }
             }
 
-            is Intent.DeleteMultiCommunity -> {
+            is ManageSubscriptionsMviModel.Intent.DeleteMultiCommunity -> {
                 uiState.value.multiCommunities
                     .firstOrNull {
                         (it.id ?: 0L) == intent.id
@@ -101,16 +104,16 @@ class ManageSubscriptionsViewModel(
                     }
             }
 
-            is Intent.ToggleFavorite -> {
+            is ManageSubscriptionsMviModel.Intent.ToggleFavorite -> {
                 uiState.value.communities.firstOrNull { it.id == intent.id }?.also { community ->
                     toggleFavorite(community)
                 }
             }
 
-            is Intent.SetSearch -> updateSearchText(intent.value)
+            is ManageSubscriptionsMviModel.Intent.SetSearch -> updateSearchText(intent.value)
 
-            Intent.LoadNextPage ->
-                screenModelScope.launch {
+            ManageSubscriptionsMviModel.Intent.LoadNextPage ->
+                viewModelScope.launch {
                     loadNextPage()
                 }
         }
@@ -149,7 +152,7 @@ class ManageSubscriptionsViewModel(
     }
 
     private fun unsubscribe(community: CommunityModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value
             communityRepository.unsubscribe(
                 auth = auth,
@@ -162,7 +165,7 @@ class ManageSubscriptionsViewModel(
     }
 
     private fun deleteMultiCommunity(community: MultiCommunityModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             multiCommunityRepository.delete(community)
             updateState {
                 val newCommunities = it.multiCommunities.filter { c -> c.id != community.id }
@@ -172,7 +175,7 @@ class ManageSubscriptionsViewModel(
     }
 
     private fun handleMultiCommunityCreated(community: MultiCommunityModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val oldCommunities = uiState.value.multiCommunities
             val newCommunities =
                 if (oldCommunities.any { it.id == community.id }) {
@@ -192,7 +195,7 @@ class ManageSubscriptionsViewModel(
 
     private fun toggleFavorite(community: CommunityModel) {
         val communityId = community.id
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: 0L
             val newValue = !community.favorite
             if (newValue) {
@@ -207,12 +210,12 @@ class ManageSubscriptionsViewModel(
             }
             val newCommunity = community.copy(favorite = newValue)
             handleCommunityUpdate(newCommunity)
-            emitEffect(Effect.Success)
+            emitEffect(ManageSubscriptionsMviModel.Effect.Success)
         }
     }
 
     private fun handleCommunityUpdate(community: CommunityModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     communities =
@@ -229,7 +232,7 @@ class ManageSubscriptionsViewModel(
     }
 
     private fun updateSearchText(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(searchText = value) }
         }
     }

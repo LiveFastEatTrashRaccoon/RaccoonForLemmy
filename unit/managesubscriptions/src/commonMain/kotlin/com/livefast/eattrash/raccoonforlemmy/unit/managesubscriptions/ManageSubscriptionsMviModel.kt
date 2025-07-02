@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.MultiCommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -10,9 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubs
 import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsMviModel.UiState
 
 @Stable
-interface ManageSubscriptionsMviModel :
-    MviModel<Intent, UiState, Effect>,
-    ScreenModel {
+interface ManageSubscriptionsMviModel : MviModel<Intent, UiState, Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 
