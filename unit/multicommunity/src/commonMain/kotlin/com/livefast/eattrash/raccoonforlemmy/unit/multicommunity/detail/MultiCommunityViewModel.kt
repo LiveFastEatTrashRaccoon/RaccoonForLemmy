@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.MultiCommunityModel
@@ -51,14 +53,14 @@ class MultiCommunityViewModel(
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<MultiCommunityMviModel.Intent, MultiCommunityMviModel.UiState, MultiCommunityMviModel.Effect>(
-    initialState = MultiCommunityMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<MultiCommunityMviModel.Intent, MultiCommunityMviModel.UiState, MultiCommunityMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = MultiCommunityMviModel.UiState()),
     MultiCommunityMviModel {
     private var hideReadPosts = false
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             if ((uiState.value.community.id ?: 0) == 0L) {
                 val community =
                     multiCommunityRepository.getById(communityId) ?: MultiCommunityModel()
@@ -159,12 +161,12 @@ class MultiCommunityViewModel(
 
             MultiCommunityMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             MultiCommunityMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
             MultiCommunityMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
@@ -188,7 +190,7 @@ class MultiCommunityViewModel(
 
             MultiCommunityMviModel.Intent.ClearRead -> clearRead()
             is MultiCommunityMviModel.Intent.MarkAsRead ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     markAsRead(
                         post = uiState.value.posts.first { it.id == intent.id },
                     )
@@ -200,7 +202,7 @@ class MultiCommunityViewModel(
                 )
 
             is MultiCommunityMviModel.Intent.WillOpenDetail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                         markAsRead(post)
                         val state = postPaginationManager.extractState()
@@ -210,7 +212,7 @@ class MultiCommunityViewModel(
                 }
 
             is MultiCommunityMviModel.Intent.ToggleRead ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                         setRead(post = post, read = !post.read)
                     }
@@ -293,7 +295,7 @@ class MultiCommunityViewModel(
         if (uiState.value.sortType == value) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(MultiCommunityMviModel.Effect.BackToTop)
             delay(50)
@@ -310,7 +312,7 @@ class MultiCommunityViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.upVote(
@@ -362,7 +364,7 @@ class MultiCommunityViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.downVote(
@@ -391,7 +393,7 @@ class MultiCommunityViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.save(
@@ -412,7 +414,7 @@ class MultiCommunityViewModel(
     }
 
     private fun handlePostUpdate(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     posts =
@@ -429,7 +431,7 @@ class MultiCommunityViewModel(
     }
 
     private fun clearRead() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             hideReadPosts = true
             updateState {
                 val newPosts = it.posts.filter { e -> !e.read }
@@ -439,7 +441,7 @@ class MultiCommunityViewModel(
     }
 
     private fun hide(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.hide(

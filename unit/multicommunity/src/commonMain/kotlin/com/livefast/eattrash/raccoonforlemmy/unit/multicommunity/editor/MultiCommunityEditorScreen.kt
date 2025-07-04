@@ -52,9 +52,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
@@ -62,6 +62,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
+import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.di.MultiCommunityEditorMviModelParams
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -69,7 +70,8 @@ class MultiCommunityEditorScreen(private val communityId: Long? = null) : Screen
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: MultiCommunityEditorMviModel = rememberScreenModel(arg = communityId ?: 0)
+        val model: MultiCommunityEditorMviModel =
+            getViewModel<MultiCommunityEditorViewModel>(MultiCommunityEditorMviModelParams(communityId ?: 0))
         val uiState by model.uiState.collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
