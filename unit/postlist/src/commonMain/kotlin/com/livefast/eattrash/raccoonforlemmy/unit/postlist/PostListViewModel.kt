@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.postlist
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
@@ -57,14 +59,14 @@ class PostListViewModel(
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect>(
-    initialState = PostListMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = PostListMviModel.UiState()),
     PostListMviModel {
     private var hideReadPosts = false
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             apiConfigurationRepository.instance
                 .onEach { instance ->
                     updateState {
@@ -192,7 +194,7 @@ class PostListViewModel(
     }
 
     private fun onFirstLoad() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             updateState {
                 it.copy(
@@ -222,12 +224,12 @@ class PostListViewModel(
     override fun reduce(intent: PostListMviModel.Intent) {
         when (intent) {
             PostListMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
             is PostListMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     if (intent.hardReset) {
                         refreshUser()
                     }
@@ -264,7 +266,7 @@ class PostListViewModel(
             is PostListMviModel.Intent.Share -> shareHelper.share(intent.url)
 
             is PostListMviModel.Intent.MarkAsRead ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                         markAsRead(post)
                     }
@@ -277,13 +279,13 @@ class PostListViewModel(
                 }
 
             PostListMviModel.Intent.PauseZombieMode ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(zombieModeActive = false) }
                     zombieModeHelper.pause()
                 }
 
             is PostListMviModel.Intent.StartZombieMode ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(zombieModeActive = true) }
                     zombieModeHelper.start(
                         initialValue = intent.index,
@@ -292,7 +294,7 @@ class PostListViewModel(
                 }
 
             is PostListMviModel.Intent.WillOpenDetail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                         markAsRead(post)
                         val state = postPaginationManager.extractState()
@@ -302,7 +304,7 @@ class PostListViewModel(
                 }
 
             is PostListMviModel.Intent.ToggleRead ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                         setRead(post = post, read = !post.read)
                     }
@@ -388,7 +390,7 @@ class PostListViewModel(
         if (uiState.value.sortType == value) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(PostListMviModel.Effect.BackToTop)
             delay(50)
@@ -400,7 +402,7 @@ class PostListViewModel(
         if (uiState.value.listingType == value) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(listingType = value) }
             emitEffect(PostListMviModel.Effect.BackToTop)
             delay(50)
@@ -417,7 +419,7 @@ class PostListViewModel(
             )
         handlePostUpdate(newPost)
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.upVote(
@@ -470,7 +472,7 @@ class PostListViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.downVote(
@@ -499,7 +501,7 @@ class PostListViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.save(
@@ -520,7 +522,7 @@ class PostListViewModel(
     }
 
     private fun handlePostUpdate(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     posts =
@@ -537,7 +539,7 @@ class PostListViewModel(
     }
 
     private fun handleLogout() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     posts = emptyList(),
@@ -549,7 +551,7 @@ class PostListViewModel(
     }
 
     private fun deletePost(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost = postRepository.delete(id = id, auth = auth)
             if (newPost != null) {
@@ -559,7 +561,7 @@ class PostListViewModel(
     }
 
     private fun handlePostDelete(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(posts = it.posts.filter { p -> p.id != post.id })
             }
@@ -567,7 +569,7 @@ class PostListViewModel(
     }
 
     private fun clearRead() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             hideReadPosts = true
             updateState {
                 val newPosts = it.posts.filter { e -> !e.read }
@@ -577,7 +579,7 @@ class PostListViewModel(
     }
 
     private fun hide(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.hide(
@@ -598,7 +600,7 @@ class PostListViewModel(
     }
 
     private fun blockUser(userId: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             runCatching {
                 val auth = identityRepository.authToken.value
                 userRepository.block(
@@ -611,7 +613,7 @@ class PostListViewModel(
     }
 
     private fun blockCommunity(communityId: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             runCatching {
                 val auth = identityRepository.authToken.value
                 communityRepository.block(
@@ -624,7 +626,7 @@ class PostListViewModel(
     }
 
     private fun blockInstance(instanceId: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             runCatching {
                 val auth = identityRepository.authToken.value
                 siteRepository.block(
