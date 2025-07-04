@@ -42,9 +42,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -63,8 +63,7 @@ class ModerateWithReasonScreen(private val actionId: Int, private val contentId:
     @Composable
     override fun Content() {
         val model: ModerateWithReasonMviModel =
-            rememberScreenModel(
-                arg =
+            getViewModel<ModerateWithReasonViewModel>(
                 ModerateWithReasonMviModelParams(
                     actionId = actionId,
                     contentId = contentId,

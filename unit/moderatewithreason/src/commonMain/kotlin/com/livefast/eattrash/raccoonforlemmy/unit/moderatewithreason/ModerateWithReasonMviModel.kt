@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 
@@ -51,8 +50,7 @@ internal fun Int.toModerateWithReasonAction(): ModerateWithReasonAction = when (
 
 @Stable
 interface ModerateWithReasonMviModel :
-    MviModel<ModerateWithReasonMviModel.Intent, ModerateWithReasonMviModel.UiState, ModerateWithReasonMviModel.Effect>,
-    ScreenModel {
+    MviModel<ModerateWithReasonMviModel.Intent, ModerateWithReasonMviModel.UiState, ModerateWithReasonMviModel.Effect> {
     sealed interface Intent {
         data class SetText(val value: String) : Intent
 
