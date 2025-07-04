@@ -60,7 +60,7 @@
     <string name="home_instance_via">通过</string>
     <string name="home_listing_title">信息流</string>
     <string name="home_listing_type_all">全部</string>
-    <string name="home_listing_type_local">本地</string>
+    <string name="home_listing_type_local">本站</string>
     <string name="home_listing_type_subscribed">已订阅</string>
     <string name="home_sort_title">排序方式</string>
     <string name="home_sort_type_active">活跃</string>
@@ -302,7 +302,7 @@
     <string name="app_icon_classical">经典</string>
     <string name="app_icon_alt_1">单色</string>
     <string name="bar_theme_transparent">透明</string>
-    <string name="community_visibility_local_only">仅本地实例</string>
+    <string name="community_visibility_local_only">仅本站点</string>
     <string name="community_visibility_public">公开</string>
     <string name="configure_actions_side_end">右侧操作</string>
     <string name="configure_actions_side_start">左侧操作</string>
@@ -360,4 +360,17 @@
     <string name="default_tag_original_poster">楼主</string>
     <string name="default_tag_admin">管理员</string>
     <string name="default_tag_bot">机器人</string>
+    <string name="settings_user_manual">用户手册</string>
+    <string name="settings_subtitle_random_theme_color">应用启动时改变主题颜色</string>
+    <string name="settings_url_opening_mode_internal">应用内</string>
+    <string name="settings_url_opening_mode_custom_tabs">自定义标签页</string>
+    <string name="settings_url_opening_mode_external">外部浏览器</string>
+    <string name="settings_item_random_theme_color">使用随机颜色</string>
+    <string name="settings_infinite_scroll_disabled">关闭无限滚动</string>
+    <string name="settings_item_image_source_path">在指定的目录下保存图片</string>
+    <string name="navigation_drawer_title_drafts">草稿</string>
+    <string name="settings_item_configure_bottom_navigation_bar">设置底部导航栏</string>
+    <string name="settings_title_experimental">实验性功能</string>
+    <string name="settings_enable_buttons_to_scroll_between_comments">帖子内显示导航键</string>
+    <string name="notice_banned_user">当前用户已被这个社群封禁</string>
 </resources>
