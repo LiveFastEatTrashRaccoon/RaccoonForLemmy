@@ -1,13 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.modlog
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ModlogItem
 
-interface ModlogMviModel :
-    MviModel<ModlogMviModel.Intent, ModlogMviModel.UiState, ModlogMviModel.Effect>,
-    ScreenModel {
+interface ModlogMviModel : MviModel<ModlogMviModel.Intent, ModlogMviModel.UiState, ModlogMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 
