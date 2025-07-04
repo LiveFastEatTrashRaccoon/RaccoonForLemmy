@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.reportlist
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentReportModel
@@ -12,8 +11,7 @@ enum class ReportListSection {
 }
 
 interface ReportListMviModel :
-    MviModel<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect>,
-    ScreenModel {
+    MviModel<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect> {
     sealed interface Intent {
         data object HapticIndication : Intent
 
