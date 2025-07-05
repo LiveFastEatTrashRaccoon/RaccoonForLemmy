@@ -55,12 +55,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsFormattedInfo
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
@@ -91,7 +91,7 @@ class AccountSettingsScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: AccountSettingsMviModel = rememberScreenModel()
+        val model: AccountSettingsMviModel = getViewModel<AccountSettingsViewModel>()
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val topAppBarState = rememberTopAppBarState()

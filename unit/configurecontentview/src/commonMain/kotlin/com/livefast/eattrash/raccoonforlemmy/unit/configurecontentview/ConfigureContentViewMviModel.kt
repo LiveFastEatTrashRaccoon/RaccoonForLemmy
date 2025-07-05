@@ -2,7 +2,6 @@
 
 package com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.CommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
@@ -10,8 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontScales
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 interface ConfigureContentViewMviModel :
-    MviModel<ConfigureContentViewMviModel.Intent, ConfigureContentViewMviModel.UiState, ConfigureContentViewMviModel.Effect>,
-    ScreenModel {
+    MviModel<ConfigureContentViewMviModel.Intent, ConfigureContentViewMviModel.UiState, ConfigureContentViewMviModel.Effect> {
     sealed interface Intent {
         data class ChangePreferUserNicknames(val value: Boolean) : Intent
 

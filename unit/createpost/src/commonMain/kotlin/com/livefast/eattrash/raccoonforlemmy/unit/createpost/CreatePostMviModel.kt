@@ -2,7 +2,6 @@ package com.livefast.eattrash.raccoonforlemmy.unit.createpost
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.text.input.TextFieldValue
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -14,8 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 
 @Stable
 interface CreatePostMviModel :
-    MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect>,
-    ScreenModel {
+    MviModel<CreatePostMviModel.Intent, CreatePostMviModel.UiState, CreatePostMviModel.Effect> {
     sealed interface Intent {
         data class SetCommunity(val value: CommunityModel) : Intent
 

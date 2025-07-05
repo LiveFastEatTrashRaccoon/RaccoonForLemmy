@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.createcomment
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
@@ -43,12 +45,12 @@ class CreateCommentViewModel(
     private val draftRepository: DraftRepository,
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect>(
-    initialState = CreateCommentMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = CreateCommentMviModel.UiState()),
     CreateCommentMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val originalPostFromCache = postId?.let { itemCache.getPost(it) }
             val originalCommentFromCache = parentId?.let { itemCache.getComment(it) }
@@ -123,7 +125,7 @@ class CreateCommentViewModel(
     override fun reduce(intent: CreateCommentMviModel.Intent) {
         when (intent) {
             is CreateCommentMviModel.Intent.ChangeSection -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(section = intent.value) }
                 }
             }
@@ -133,13 +135,13 @@ class CreateCommentViewModel(
             }
 
             is CreateCommentMviModel.Intent.ChangeLanguage -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(currentLanguageId = intent.value) }
                 }
             }
 
             is CreateCommentMviModel.Intent.ChangeTextValue -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(textValue = intent.value) }
                 }
             }
@@ -155,7 +157,7 @@ class CreateCommentViewModel(
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     textError = null,
@@ -167,7 +169,7 @@ class CreateCommentViewModel(
 
         var valid = true
         if (text.isEmpty()) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 updateState {
                     it.copy(
                         textError = ValidationError.MissingField,
@@ -180,7 +182,7 @@ class CreateCommentViewModel(
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -232,7 +234,7 @@ class CreateCommentViewModel(
         if (bytes.isEmpty()) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val url = mediaRepository.uploadImage(auth, bytes)
@@ -265,7 +267,7 @@ class CreateCommentViewModel(
         val body = currentState.textValue.text
         val languageId = currentState.currentLanguageId
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             updateState { it.copy(loading = true) }
             val draft =

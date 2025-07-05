@@ -1,15 +1,13 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.instanceinfo
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 
 @Stable
 interface InstanceInfoMviModel :
-    MviModel<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect>,
-    ScreenModel {
+    MviModel<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 

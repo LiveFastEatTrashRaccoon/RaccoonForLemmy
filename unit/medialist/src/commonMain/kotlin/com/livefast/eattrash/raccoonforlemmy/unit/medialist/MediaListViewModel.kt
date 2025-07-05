@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.medialist
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -18,14 +20,14 @@ class MediaListViewModel(
     private val mediaRepository: MediaRepository,
     private val settingsRepository: SettingsRepository,
     private val themeRepository: ThemeRepository,
-) : DefaultMviModel<MediaListMviModel.Intent, MediaListMviModel.State, MediaListMviModel.Effect>(
-    initialState = MediaListMviModel.State(),
-),
+) : ViewModel(),
+    MviModelDelegate<MediaListMviModel.Intent, MediaListMviModel.State, MediaListMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = MediaListMviModel.State()),
     MediaListMviModel {
     private var currentPage = 1
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             themeRepository.postLayout
                 .onEach { layout ->
                     updateState { it.copy(postLayout = layout) }
@@ -56,12 +58,12 @@ class MediaListViewModel(
     override fun reduce(intent: MediaListMviModel.Intent) {
         when (intent) {
             MediaListMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
             MediaListMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
@@ -118,7 +120,7 @@ class MediaListViewModel(
     }
 
     private fun deleteMedia(media: MediaModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value
                 mediaRepository.delete(

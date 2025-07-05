@@ -1,12 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
 
 interface ManageAccountsMviModel :
-    MviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect>,
-    ScreenModel {
+    MviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect> {
     sealed interface Intent {
         data class SwitchAccount(val index: Int) : Intent
 

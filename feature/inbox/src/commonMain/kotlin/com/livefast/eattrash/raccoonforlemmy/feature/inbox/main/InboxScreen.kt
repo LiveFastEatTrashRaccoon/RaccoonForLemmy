@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
 import cafe.adriel.voyager.navigator.tab.Tab
@@ -39,6 +38,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
@@ -65,7 +65,7 @@ object InboxScreen : Tab {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: InboxMviModel = rememberScreenModel()
+        val model: InboxMviModel = getViewModel<InboxViewModel>()
         val uiState by model.uiState.collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)

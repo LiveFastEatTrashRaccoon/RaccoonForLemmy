@@ -1,15 +1,14 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
-import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonMviModel.Effect
-import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonMviModel.Intent
-import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonMviModel.UiState
 import kotlinx.coroutines.launch
 
 class ModerateWithReasonViewModel(
@@ -20,27 +19,31 @@ class ModerateWithReasonViewModel(
     private val commentRepository: CommentRepository,
     private val userRepository: UserRepository,
     private val communityRepository: CommunityRepository,
-) : DefaultMviModel<Intent, UiState, Effect>(
-    initialState = UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<
+        ModerateWithReasonMviModel.Intent,
+        ModerateWithReasonMviModel.UiState,
+        ModerateWithReasonMviModel.Effect,
+        >
+    by DefaultMviModelDelegate(initialState = ModerateWithReasonMviModel.UiState()),
     ModerateWithReasonMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(action = actionId.toModerateWithReasonAction()) }
         }
     }
 
-    override fun reduce(intent: Intent) {
+    override fun reduce(intent: ModerateWithReasonMviModel.Intent) {
         when (intent) {
-            is Intent.SetText -> {
-                screenModelScope.launch {
+            is ModerateWithReasonMviModel.Intent.SetText -> {
+                viewModelScope.launch {
                     updateState {
                         it.copy(text = intent.value)
                     }
                 }
             }
 
-            Intent.Submit -> submit()
+            ModerateWithReasonMviModel.Intent.Submit -> submit()
         }
     }
 
@@ -50,7 +53,7 @@ class ModerateWithReasonViewModel(
         }
         val text = uiState.value.text
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             try {
@@ -130,10 +133,10 @@ class ModerateWithReasonViewModel(
                         )
                     }
                 }
-                emitEffect(Effect.Success)
+                emitEffect(ModerateWithReasonMviModel.Effect.Success)
             } catch (e: Throwable) {
                 val message = e.message
-                emitEffect(Effect.Failure(message))
+                emitEffect(ModerateWithReasonMviModel.Effect.Failure(message))
             } finally {
                 updateState { it.copy(loading = false) }
             }

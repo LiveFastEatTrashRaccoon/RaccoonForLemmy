@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.drawer.content
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toTabNavigationSections
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
@@ -51,12 +53,12 @@ class ModalDrawerViewModel(
     private val communityPaginationManager: CommunityPaginationManager,
     private val notificationCenter: NotificationCenter,
     private val subscriptionsCache: SubscriptionsCache,
-) : DefaultMviModel<ModalDrawerMviModel.Intent, ModalDrawerMviModel.UiState, ModalDrawerMviModel.Effect>(
-    initialState = ModalDrawerMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ModalDrawerMviModel.Intent, ModalDrawerMviModel.UiState, ModalDrawerMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = ModalDrawerMviModel.UiState()),
     ModalDrawerMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             apiConfigurationRepository.instance
                 .onEach { instance ->
                     updateState {
@@ -127,12 +129,12 @@ class ModalDrawerViewModel(
     override fun reduce(intent: ModalDrawerMviModel.Intent) {
         when (intent) {
             ModalDrawerMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
             is ModalDrawerMviModel.Intent.SetSearch ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(searchText = intent.value) }
                 }
 
@@ -271,7 +273,7 @@ class ModalDrawerViewModel(
     }
 
     private fun toggleFavorite(communityId: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val currentState = uiState.value
             val accountId = accountRepository.getActive()?.id ?: 0L
             val isCurrentlyFavorite = currentState.favorites.any { it.id == communityId }

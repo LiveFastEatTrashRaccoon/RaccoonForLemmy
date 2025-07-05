@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.userinfo
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyItemCache
@@ -19,12 +21,12 @@ class UserInfoViewModel(
     private val settingsRepository: SettingsRepository,
     private val itemCache: LemmyItemCache,
     private val siteRepository: SiteRepository,
-) : DefaultMviModel<UserInfoMviModel.Intent, UserInfoMviModel.UiState, UserInfoMviModel.Effect>(
-    initialState = UserInfoMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<UserInfoMviModel.Intent, UserInfoMviModel.UiState, UserInfoMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = UserInfoMviModel.UiState()),
     UserInfoMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val user = itemCache.getUser(userId) ?: UserModel()
             updateState {
                 it.copy(user = user)

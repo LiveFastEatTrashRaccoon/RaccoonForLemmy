@@ -1,14 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 
 @Stable
 interface ConfigureNavBarMviModel :
-    MviModel<ConfigureNavBarMviModel.Intent, ConfigureNavBarMviModel.UiState, ConfigureNavBarMviModel.Effect>,
-    ScreenModel {
+    MviModel<ConfigureNavBarMviModel.Intent, ConfigureNavBarMviModel.UiState, ConfigureNavBarMviModel.Effect> {
     sealed interface Intent {
         data object Reset : Intent
 

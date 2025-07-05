@@ -52,12 +52,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsFormattedInfo
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeader
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsImageInfo
@@ -77,6 +77,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityVisibilityType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
+import com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.di.EditCommunityMviModelParams
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -84,7 +85,8 @@ class EditCommunityScreen(private val communityId: Long? = null) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: EditCommunityMviModel = rememberScreenModel(arg = communityId ?: 0)
+        val model: EditCommunityMviModel =
+            getViewModel<EditCommunityViewModel>(EditCommunityMviModelParams(communityId ?: 0))
         val uiState by model.uiState.collectAsState()
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val topAppBarState = rememberTopAppBarState()

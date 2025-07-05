@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -10,8 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 
 interface MultiCommunityMviModel :
-    MviModel<MultiCommunityMviModel.Intent, MultiCommunityMviModel.UiState, MultiCommunityMviModel.Effect>,
-    ScreenModel {
+    MviModel<MultiCommunityMviModel.Intent, MultiCommunityMviModel.UiState, MultiCommunityMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 

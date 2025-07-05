@@ -60,12 +60,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CreatePostSection
@@ -102,8 +102,7 @@ class CreatePostScreen(
     @Composable
     override fun Content() {
         val model: CreatePostMviModel =
-            rememberScreenModel(
-                arg =
+            getViewModel<CreatePostViewModel>(
                 CreatePostMviModelParams(
                     editedPostId = editedPostId ?: 0L,
                     crossPostId = crossPostId ?: 0L,

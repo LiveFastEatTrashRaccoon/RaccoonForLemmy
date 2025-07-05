@@ -1,23 +1,22 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.di
 
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.ViewModelCreationArgs
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.bindViewModelWithArgs
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageViewModel
 import org.kodein.di.DI
-import org.kodein.di.bind
-import org.kodein.di.factory
 import org.kodein.di.instance
+
+data class ZoomableImageMviModelParams(val url: String) : ViewModelCreationArgs
 
 val zoomableImageModule =
     DI.Module("ZoomableImageModule") {
-        bind<ZoomableImageMviModel> {
-            factory { url: String ->
-                ZoomableImageViewModel(
-                    url = url,
-                    settingsRepository = instance(),
-                    shareHelper = instance(),
-                    galleryHelper = instance(),
-                    imagePreloadManager = instance(),
-                )
-            }
+        bindViewModelWithArgs { args: ZoomableImageMviModelParams ->
+            ZoomableImageViewModel(
+                url = args.url,
+                settingsRepository = instance(),
+                shareHelper = instance(),
+                galleryHelper = instance(),
+                imagePreloadManager = instance(),
+            )
         }
     }

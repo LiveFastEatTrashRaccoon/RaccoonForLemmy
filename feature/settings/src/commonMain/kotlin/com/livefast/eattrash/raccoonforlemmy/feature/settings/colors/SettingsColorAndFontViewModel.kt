@@ -2,14 +2,16 @@ package com.livefast.eattrash.raccoonforlemmy.feature.settings.colors
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.CommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
@@ -30,12 +32,11 @@ class SettingsColorAndFontViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<Intent, UiState, Effect>(
-    initialState = UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<Intent, UiState, Effect> by DefaultMviModelDelegate(initialState = UiState()),
     SettingsColorAndFontMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             themeRepository.uiTheme
                 .onEach { value ->
                     updateState { it.copy(uiTheme = value) }
@@ -138,7 +139,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeTheme(value: UiTheme) {
         themeRepository.changeUiTheme(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(theme = value.toInt())
             saveSettings(settings)
@@ -147,7 +148,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeFontFamily(value: UiFontFamily) {
         themeRepository.changeUiFontFamily(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     uiFontFamily = value.toInt(),
@@ -158,7 +159,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeUiFontScale(value: Float) {
         themeRepository.changeUiFontScale(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     uiFontScale = value,
@@ -169,7 +170,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeDynamicColors(value: Boolean) {
         themeRepository.changeDynamicColors(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val oldSettings = settingsRepository.currentSettings.value
             val newRandomThemeColor = if (value) false else oldSettings.randomThemeColor
             val settings =
@@ -182,7 +183,7 @@ class SettingsColorAndFontViewModel(
     }
 
     private fun changeRandomColor(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val oldSettings = settingsRepository.currentSettings.value
             val newDynamicColors = if (value) false else oldSettings.dynamicColors
             themeRepository.changeDynamicColors(newDynamicColors)
@@ -197,7 +198,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeCustomSeedColor(value: Color?) {
         themeRepository.changeCustomSeedColor(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     customSeedColor = value?.toArgb(),
@@ -208,7 +209,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeUpVoteColor(value: Color?) {
         themeRepository.changeUpVoteColor(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     upVoteColor = value?.toArgb(),
@@ -219,7 +220,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeDownVoteColor(value: Color?) {
         themeRepository.changeDownVoteColor(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     downVoteColor = value?.toArgb(),
@@ -230,7 +231,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeReplyColor(value: Color?) {
         themeRepository.changeReplyColor(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     replyColor = value?.toArgb(),
@@ -241,7 +242,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeSaveColor(value: Color?) {
         themeRepository.changeSaveColor(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     saveColor = value?.toArgb(),
@@ -252,7 +253,7 @@ class SettingsColorAndFontViewModel(
 
     private fun changeCommentBarTheme(value: CommentBarTheme) {
         themeRepository.changeCommentBarTheme(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     commentBarTheme = value.toInt(),

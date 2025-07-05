@@ -53,11 +53,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
@@ -89,6 +89,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.components.ModdedCommentCard
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.components.ModdedCommentPlaceholder
+import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.di.FilteredContentsMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
@@ -102,7 +103,8 @@ class FilteredContentsScreen(private val type: Int) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: FilteredContentsMviModel = rememberScreenModel(arg = type)
+        val model: FilteredContentsMviModel =
+            getViewModel<FilteredContentsViewModel>(FilteredContentsMviModelParams(type))
         val uiState by model.uiState.collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)

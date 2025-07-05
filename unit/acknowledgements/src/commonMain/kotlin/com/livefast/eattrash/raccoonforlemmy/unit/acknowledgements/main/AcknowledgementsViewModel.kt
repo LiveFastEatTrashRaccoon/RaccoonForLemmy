@@ -1,17 +1,19 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.main
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.unit.acknowledgements.repository.AcknowledgementsRepository
 import kotlinx.coroutines.launch
 
 internal class AcknowledgementsViewModel(private val acknowledgementsRepository: AcknowledgementsRepository) :
-    DefaultMviModel<AcknowledgementsMviModel.Intent, AcknowledgementsMviModel.State, AcknowledgementsMviModel.Effect>(
-        initialState = AcknowledgementsMviModel.State(),
-    ),
+    ViewModel(),
+    MviModelDelegate<AcknowledgementsMviModel.Intent, AcknowledgementsMviModel.State, AcknowledgementsMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = AcknowledgementsMviModel.State()),
     AcknowledgementsMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             refresh(initial = true)
         }
     }
@@ -19,7 +21,7 @@ internal class AcknowledgementsViewModel(private val acknowledgementsRepository:
     override fun reduce(intent: AcknowledgementsMviModel.Intent) {
         when (intent) {
             AcknowledgementsMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
         }

@@ -65,11 +65,11 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDropDown
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
@@ -130,13 +130,7 @@ class UserDetailScreen(private val userId: Long, private val otherInstance: Stri
     @Composable
     override fun Content() {
         val model: UserDetailMviModel =
-            rememberScreenModel(
-                arg =
-                UserDetailMviModelParams(
-                    userId = userId,
-                    otherInstance = otherInstance,
-                ),
-            )
+            getViewModel<UserDetailViewModel>(UserDetailMviModelParams(userId = userId, otherInstance = otherInstance))
         val uiState by model.uiState.collectAsState()
         val lazyListState = rememberLazyListState()
         val scope = rememberCoroutineScope()

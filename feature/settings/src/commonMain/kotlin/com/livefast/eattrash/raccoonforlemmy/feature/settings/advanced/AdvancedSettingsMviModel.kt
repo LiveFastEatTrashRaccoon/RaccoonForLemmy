@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
@@ -10,7 +9,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
 interface AdvancedSettingsMviModel :
-    ScreenModel,
     MviModel<AdvancedSettingsMviModel.Intent, AdvancedSettingsMviModel.UiState, AdvancedSettingsMviModel.Effect> {
     sealed interface Intent {
         data class ChangeEnableDoubleTapAction(val value: Boolean) : Intent

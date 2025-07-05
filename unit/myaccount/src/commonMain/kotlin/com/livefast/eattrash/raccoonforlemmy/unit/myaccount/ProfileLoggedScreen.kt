@@ -40,12 +40,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
@@ -87,7 +87,7 @@ object ProfileLoggedScreen : Tab {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: ProfileLoggedMviModel = rememberScreenModel()
+        val model: ProfileLoggedMviModel = getViewModel<ProfileLoggedViewModel>()
         val uiState by model.uiState.collectAsState()
         val notificationCenter = remember { getNotificationCenter() }
         val navigationCoordinator = remember { getNavigationCoordinator() }

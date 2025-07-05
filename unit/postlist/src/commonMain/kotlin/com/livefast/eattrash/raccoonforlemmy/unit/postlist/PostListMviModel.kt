@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.postlist
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -11,9 +10,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 
 @Stable
-interface PostListMviModel :
-    MviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect>,
-    ScreenModel {
+interface PostListMviModel : MviModel<PostListMviModel.Intent, PostListMviModel.UiState, PostListMviModel.Effect> {
     sealed interface Intent {
         data class Refresh(val hardReset: Boolean = false) : Intent
 

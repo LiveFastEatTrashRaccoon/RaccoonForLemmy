@@ -1,14 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.messages
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 
 @Stable
 interface InboxMessagesMviModel :
-    MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect>,
-    ScreenModel {
+    MviModel<InboxMessagesMviModel.Intent, InboxMessagesMviModel.UiState, InboxMessagesMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 

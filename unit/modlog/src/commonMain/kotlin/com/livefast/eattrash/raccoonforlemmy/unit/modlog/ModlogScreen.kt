@@ -33,10 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -58,6 +58,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.modlog.components.ModRemovePos
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.components.ModTransferCommunityItem
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.components.ModlogItemPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.components.RemoveCommunityItem
+import com.livefast.eattrash.raccoonforlemmy.unit.modlog.di.ModlogMviModelParams
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -65,7 +66,7 @@ class ModlogScreen(private val communityId: Long? = null) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: ModlogMviModel = rememberScreenModel(arg = communityId ?: 0L)
+        val model: ModlogMviModel = getViewModel<ModlogViewModel>(ModlogMviModelParams(communityId ?: 0L))
         val uiState by model.uiState.collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)

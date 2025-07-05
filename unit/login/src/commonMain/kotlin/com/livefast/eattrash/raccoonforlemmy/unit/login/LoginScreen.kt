@@ -42,7 +42,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.focus.FocusRequester
@@ -54,10 +53,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.autofill
@@ -72,10 +71,10 @@ class LoginScreen : Screen {
         private const val HELP_URL = "https://join-lemmy.org/docs/users/01-getting-started.html"
     }
 
-    @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: LoginMviModel = rememberScreenModel()
+        val model: LoginMviModel = getViewModel<LoginViewModel>()
         val uiState by model.uiState.collectAsState()
         val topAppBarState = rememberTopAppBarState()
         val snackbarHostState = remember { SnackbarHostState() }

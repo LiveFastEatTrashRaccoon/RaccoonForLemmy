@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.instanceinfo
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -21,12 +23,12 @@ class InstanceInfoViewModel(
     private val notificationCenter: NotificationCenter,
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val communityPaginationManager: CommunityPaginationManager,
-) : DefaultMviModel<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect>(
-    initialState = InstanceInfoMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<InstanceInfoMviModel.Intent, InstanceInfoMviModel.UiState, InstanceInfoMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = InstanceInfoMviModel.UiState()),
     InstanceInfoMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             settingsRepository.currentSettings
                 .onEach { settings ->
                     updateState {
@@ -66,7 +68,7 @@ class InstanceInfoViewModel(
         when (intent) {
             InstanceInfoMviModel.Intent.LoadNextPage -> loadNextPage()
             InstanceInfoMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
         }
@@ -94,13 +96,13 @@ class InstanceInfoViewModel(
     private fun loadNextPage() {
         val currentState = uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 updateState { it.copy(refreshing = false) }
             }
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val itemsToAdd = communityPaginationManager.loadNextPage()
             updateState {
@@ -115,7 +117,7 @@ class InstanceInfoViewModel(
     }
 
     private fun changeSortType(value: SortType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(InstanceInfoMviModel.Effect.BackToTop)
             refresh()

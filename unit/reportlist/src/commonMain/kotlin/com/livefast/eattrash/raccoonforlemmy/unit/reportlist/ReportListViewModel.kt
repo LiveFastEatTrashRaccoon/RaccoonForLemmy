@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.reportlist
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -28,14 +30,14 @@ class ReportListViewModel(
     private val settingsRepository: SettingsRepository,
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect>(
-    initialState = ReportListMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = ReportListMviModel.UiState()),
     ReportListMviModel {
     private val currentPage = mutableMapOf<ReportListSection, Int>()
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             themeRepository.postLayout
                 .onEach { layout ->
                     updateState { it.copy(postLayout = layout) }
@@ -67,12 +69,12 @@ class ReportListViewModel(
             is ReportListMviModel.Intent.ChangeSection -> changeSection(intent.value)
             is ReportListMviModel.Intent.ChangeUnresolvedOnly -> changeUnresolvedOnly(intent.value)
             ReportListMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
             ReportListMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
@@ -95,7 +97,7 @@ class ReportListViewModel(
     }
 
     private fun changeSection(section: ReportListSection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     section = section,
@@ -105,7 +107,7 @@ class ReportListViewModel(
     }
 
     private fun changeUnresolvedOnly(value: Boolean) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(unresolvedOnly = value)
             }
@@ -221,7 +223,7 @@ class ReportListViewModel(
     }
 
     private fun resolve(report: PostReportModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(asyncInProgress = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val newReport =
@@ -242,7 +244,7 @@ class ReportListViewModel(
     }
 
     private fun resolve(report: CommentReportModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(asyncInProgress = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val newReport =
@@ -263,7 +265,7 @@ class ReportListViewModel(
     }
 
     private fun handleReportUpdate(report: PostReportModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     postReports =
@@ -280,7 +282,7 @@ class ReportListViewModel(
     }
 
     private fun handleReportUpdate(report: CommentReportModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     commentReports =
@@ -297,7 +299,7 @@ class ReportListViewModel(
     }
 
     private fun handleReporDelete(report: PostReportModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     postReports = it.postReports.filter { r -> r.id != report.id },
@@ -307,7 +309,7 @@ class ReportListViewModel(
     }
 
     private fun handleReporDelete(report: CommentReportModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     commentReports = it.commentReports.filter { r -> r.id != report.id },

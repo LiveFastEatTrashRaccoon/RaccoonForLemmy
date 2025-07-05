@@ -1,11 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.profile.menu
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 
 interface ProfileSideMenuMviModel :
-    MviModel<ProfileSideMenuMviModel.Intent, ProfileSideMenuMviModel.State, ProfileSideMenuMviModel.Effect>,
-    ScreenModel {
+    MviModel<ProfileSideMenuMviModel.Intent, ProfileSideMenuMviModel.State, ProfileSideMenuMviModel.Effect> {
     sealed interface Intent
 
     data class State(

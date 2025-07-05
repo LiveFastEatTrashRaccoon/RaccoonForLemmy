@@ -1,15 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.main
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 
-interface SettingsMviModel :
-    MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect>,
-    ScreenModel {
+interface SettingsMviModel : MviModel<SettingsMviModel.Intent, SettingsMviModel.UiState, SettingsMviModel.Effect> {
     sealed interface Intent {
         data class ChangeIncludeNsfw(val value: Boolean) : Intent
 

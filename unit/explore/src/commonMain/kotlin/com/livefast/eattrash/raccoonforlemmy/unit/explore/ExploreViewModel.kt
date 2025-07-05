@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.explore
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
@@ -60,9 +62,9 @@ class ExploreViewModel(
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val imagePreloadManager: ImagePreloadManager,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>(
-    initialState = ExploreMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ExploreMviModel.Intent, ExploreMviModel.UiState, ExploreMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = ExploreMviModel.UiState()),
     ExploreMviModel {
     private val isOnOtherInstance: Boolean get() = otherInstance.isNotEmpty()
     private val notificationEventKey: String
@@ -76,7 +78,7 @@ class ExploreViewModel(
             }
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     instance = apiConfigRepository.instance.value,
@@ -205,7 +207,7 @@ class ExploreViewModel(
     }
 
     private fun onFirstLoad() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val settings = settingsRepository.currentSettings.value
             val listingType =
                 if (isOnOtherInstance) ListingType.Local else settings.defaultExploreType.toListingType()
@@ -235,13 +237,13 @@ class ExploreViewModel(
     override fun reduce(intent: ExploreMviModel.Intent) {
         when (intent) {
             ExploreMviModel.Intent.LoadNextPage -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
             }
 
             ExploreMviModel.Intent.Refresh -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
             }
@@ -337,7 +339,7 @@ class ExploreViewModel(
     }
 
     private fun setSearch(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     searchText = value,
@@ -348,7 +350,7 @@ class ExploreViewModel(
     }
 
     private fun changeListingType(value: ListingType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(listingType = value) }
             emitEffect(ExploreMviModel.Effect.BackToTop)
             refresh()
@@ -356,7 +358,7 @@ class ExploreViewModel(
     }
 
     private fun changeSortType(value: SortType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(ExploreMviModel.Effect.BackToTop)
             refresh()
@@ -364,7 +366,7 @@ class ExploreViewModel(
     }
 
     private fun changeResultType(value: SearchResultType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(resultType = value) }
             emitEffect(ExploreMviModel.Effect.BackToTop)
             updateAvailableSortTypes()
@@ -442,7 +444,7 @@ class ExploreViewModel(
     }
 
     private fun handleLogout() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     listingType = ListingType.Local,
@@ -454,7 +456,7 @@ class ExploreViewModel(
     }
 
     private fun handlePostUpdate(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     results =
@@ -471,7 +473,7 @@ class ExploreViewModel(
     }
 
     private fun handleCommentUpdate(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     results =
@@ -488,7 +490,7 @@ class ExploreViewModel(
     }
 
     private fun toggleUpVote(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newVote = post.myVote <= 0
             val newPost =
                 postRepository.asUpVoted(
@@ -535,7 +537,7 @@ class ExploreViewModel(
     }
 
     private fun toggleDownVote(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newValue = post.myVote >= 0
             val newPost =
                 postRepository.asDownVoted(
@@ -582,7 +584,7 @@ class ExploreViewModel(
     }
 
     private fun toggleSave(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newValue = !post.saved
             val newPost =
                 postRepository.asSaved(
@@ -629,7 +631,7 @@ class ExploreViewModel(
     }
 
     private fun toggleUpVoteComment(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newValue = comment.myVote <= 0
             val newComment =
                 commentRepository.asUpVoted(
@@ -676,7 +678,7 @@ class ExploreViewModel(
     }
 
     private fun toggleDownVoteComment(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newValue = comment.myVote >= 0
             val newComment = commentRepository.asDownVoted(comment, newValue)
             updateState {
@@ -719,7 +721,7 @@ class ExploreViewModel(
     }
 
     private fun toggleSaveComment(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newValue = !comment.saved
             val newComment =
                 commentRepository.asSaved(
@@ -771,7 +773,7 @@ class ExploreViewModel(
                 .firstOrNull {
                     (it as? SearchResult.Community)?.model?.id == communityId
                 }.let { (it as? SearchResult.Community)?.model } ?: return
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newValue =
                 when (community.subscribed) {
                     true -> {
@@ -801,7 +803,7 @@ class ExploreViewModel(
     }
 
     private fun handleCommunityUpdate(community: CommunityModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     results =

@@ -1,12 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 
 interface SelectCommunityMviModel :
-    MviModel<SelectCommunityMviModel.Intent, SelectCommunityMviModel.UiState, SelectCommunityMviModel.Effect>,
-    ScreenModel {
+    MviModel<SelectCommunityMviModel.Intent, SelectCommunityMviModel.UiState, SelectCommunityMviModel.Effect> {
     sealed interface Intent {
         data class SetSearch(val value: String) : Intent
 

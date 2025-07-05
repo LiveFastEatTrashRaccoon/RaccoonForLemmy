@@ -10,10 +10,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kodein)
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.screenmodel)
-                implementation(libs.voyager.kodein)
-                implementation(libs.voyager.tab)
+                implementation(libs.voyager.core)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)

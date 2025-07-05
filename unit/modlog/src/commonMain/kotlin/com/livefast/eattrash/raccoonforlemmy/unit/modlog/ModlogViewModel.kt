@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.modlog
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.ModlogRepository
@@ -16,14 +18,14 @@ class ModlogViewModel(
     private val identityRepository: IdentityRepository,
     private val modlogRepository: ModlogRepository,
     private val settingsRepository: SettingsRepository,
-) : DefaultMviModel<ModlogMviModel.Intent, ModlogMviModel.UiState, ModlogMviModel.Effect>(
-    initialState = ModlogMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ModlogMviModel.Intent, ModlogMviModel.UiState, ModlogMviModel.Effect> by
+    DefaultMviModelDelegate(initialState = ModlogMviModel.UiState()),
     ModlogMviModel {
     private var currentPage: Int = 1
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             themeRepository.postLayout
                 .onEach { layout ->
                     updateState { it.copy(postLayout = layout) }
@@ -47,14 +49,14 @@ class ModlogViewModel(
         when (intent) {
             ModlogMviModel.Intent.Refresh -> refresh()
             ModlogMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
         }
     }
 
     private fun refresh(initial: Boolean = false) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             currentPage = 1
             updateState {
                 it.copy(
@@ -71,13 +73,13 @@ class ModlogViewModel(
     private fun loadNextPage() {
         val currentState = uiState.value
         if (!currentState.canFetchMore || currentState.loading) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 updateState { it.copy(refreshing = false) }
             }
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val refreshing = currentState.refreshing

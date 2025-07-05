@@ -1,11 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.inbox.main
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 
-interface InboxMviModel :
-    MviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect>,
-    ScreenModel {
+interface InboxMviModel : MviModel<InboxMviModel.Intent, InboxMviModel.UiState, InboxMviModel.Effect> {
     sealed interface Intent {
         data class ChangeSection(val value: InboxSection) : Intent
 

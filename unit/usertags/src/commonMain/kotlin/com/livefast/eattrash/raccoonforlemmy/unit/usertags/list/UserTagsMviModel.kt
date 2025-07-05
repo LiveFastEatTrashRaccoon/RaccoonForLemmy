@@ -1,15 +1,12 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.usertags.list
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 
 @Stable
-interface UserTagsMviModel :
-    MviModel<UserTagsMviModel.Intent, UserTagsMviModel.UiState, UserTagsMviModel.Effect>,
-    ScreenModel {
+interface UserTagsMviModel : MviModel<UserTagsMviModel.Intent, UserTagsMviModel.UiState, UserTagsMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 

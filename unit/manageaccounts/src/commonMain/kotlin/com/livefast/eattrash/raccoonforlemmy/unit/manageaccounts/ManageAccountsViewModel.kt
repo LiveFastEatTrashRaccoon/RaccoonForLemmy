@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
@@ -23,13 +25,13 @@ class ManageAccountsViewModel(
     private val logout: LogoutUseCase,
     private val deleteAccount: DeleteAccountUseCase,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect>(
-    initialState = ManageAccountsMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ManageAccountsMviModel.Intent, ManageAccountsMviModel.UiState, ManageAccountsMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = ManageAccountsMviModel.UiState()),
     ManageAccountsMviModel {
     init {
         if (uiState.value.accounts.isEmpty()) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 settingsRepository.currentSettings
                     .onEach { settings ->
                         updateState {
@@ -60,13 +62,13 @@ class ManageAccountsViewModel(
             is ManageAccountsMviModel.Intent.DeleteAccount -> {
                 uiState.value.accounts.getOrNull(intent.index)?.also { account ->
                     if (account.active) {
-                        screenModelScope.launch {
+                        viewModelScope.launch {
                             logout()
                             deleteAccount(account)
                             close()
                         }
                     } else {
-                        screenModelScope.launch {
+                        viewModelScope.launch {
                             deleteAccount(account)
                             updateState {
                                 it.copy(accounts = it.accounts.filter { a -> a.id != account.id })
@@ -82,7 +84,7 @@ class ManageAccountsViewModel(
         if (account.active) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             switchAccount(account)
             notificationCenter.send(NotificationCenterEvent.ResetHome)
             notificationCenter.send(NotificationCenterEvent.ResetExplore)

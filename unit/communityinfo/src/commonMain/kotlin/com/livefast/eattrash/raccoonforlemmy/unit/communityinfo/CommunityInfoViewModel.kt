@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.communityinfo
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
@@ -17,12 +19,12 @@ class CommunityInfoViewModel(
     private val communityRepository: CommunityRepository,
     private val settingsRepository: SettingsRepository,
     private val itemCache: LemmyItemCache,
-) : DefaultMviModel<CommunityInfoMviModel.Intent, CommunityInfoMviModel.UiState, CommunityInfoMviModel.Effect>(
-    initialState = CommunityInfoMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<CommunityInfoMviModel.Intent, CommunityInfoMviModel.UiState, CommunityInfoMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = CommunityInfoMviModel.UiState()),
     CommunityInfoMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             if (uiState.value.community.id == 0L) {
                 val community = itemCache.getCommunity(communityId) ?: CommunityModel()
                 updateState { it.copy(community = community) }

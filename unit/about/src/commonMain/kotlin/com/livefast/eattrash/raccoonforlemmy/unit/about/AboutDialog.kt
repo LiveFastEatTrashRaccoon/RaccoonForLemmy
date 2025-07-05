@@ -30,8 +30,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
@@ -47,7 +47,7 @@ class AboutDialog : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val viewModel: AboutDialogMviModel = rememberScreenModel()
+        val viewModel: AboutDialogMviModel = getViewModel<AboutDialogViewModel>()
         val uriHandler = LocalUriHandler.current
         val navigationCoordinator = remember { getNavigationCoordinator() }
         val uiState by viewModel.uiState.collectAsState()

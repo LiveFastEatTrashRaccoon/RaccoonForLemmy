@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.accountsettings
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -9,7 +8,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 
 @Stable
 interface AccountSettingsMviModel :
-    ScreenModel,
     MviModel<AccountSettingsMviModel.Intent, AccountSettingsMviModel.UiState, AccountSettingsMviModel.Effect> {
     sealed interface Intent {
         data class ChangeDisplayName(val value: String) : Intent

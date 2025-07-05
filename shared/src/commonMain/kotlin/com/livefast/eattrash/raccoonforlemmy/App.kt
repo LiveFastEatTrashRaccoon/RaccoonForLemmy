@@ -294,7 +294,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
                             gesturesEnabled = drawerGesturesEnabled,
                             drawerContent = {
                                 ModalDrawerSheet {
-                                    TabNavigator(ModalDrawerContent)
+                                    Navigator(ModalDrawerContent())
                                 }
                             },
                         ) {

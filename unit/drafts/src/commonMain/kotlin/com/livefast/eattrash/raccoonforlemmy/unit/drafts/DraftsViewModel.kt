@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.drafts
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
@@ -20,12 +22,12 @@ class DraftsViewModel(
     private val accountRepository: AccountRepository,
     private val draftRepository: DraftRepository,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<DraftsMviModel.Intent, DraftsMviModel.State, DraftsMviModel.Effect>(
-    initialState = DraftsMviModel.State(),
-),
+) : ViewModel(),
+    MviModelDelegate<DraftsMviModel.Intent, DraftsMviModel.State, DraftsMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = DraftsMviModel.State()),
     DraftsMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             themeRepository.postLayout
                 .onEach { layout ->
                     updateState { it.copy(postLayout = layout) }
@@ -46,7 +48,7 @@ class DraftsViewModel(
     override fun reduce(intent: DraftsMviModel.Intent) {
         when (intent) {
             is DraftsMviModel.Intent.ChangeSection ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(section = intent.section)
                     }
@@ -58,7 +60,7 @@ class DraftsViewModel(
     }
 
     private fun refresh(initial: Boolean = false) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     refreshing = !initial,
@@ -134,7 +136,7 @@ class DraftsViewModel(
     }
 
     private fun deleteDraft(model: DraftModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             model.id?.also { id ->
                 draftRepository.delete(id)
             }

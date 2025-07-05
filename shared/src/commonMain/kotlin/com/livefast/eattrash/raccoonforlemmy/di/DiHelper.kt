@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.api.di.apiModule
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.appearanceModule
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.viewModelFactoryModule
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.lemmyUiModule
 import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.l10nModule
@@ -143,6 +144,7 @@ fun initDi(additionalBuilder: DI.Builder.() -> Unit = {}) {
                 detailOpenerModule,
                 mainModule,
                 sharedResourcesModule,
+                viewModelFactoryModule,
             )
         }
 }

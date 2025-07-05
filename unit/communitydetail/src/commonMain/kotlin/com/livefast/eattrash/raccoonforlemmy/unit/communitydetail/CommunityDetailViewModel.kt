@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.communitydetail
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.FavoriteCommunityModel
@@ -74,14 +76,14 @@ class CommunityDetailViewModel(
     private val communityPreferredLanguageRepository: CommunityPreferredLanguageRepository,
     private val userTagRepository: UserTagRepository,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect>(
-    initialState = CommunityDetailMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<CommunityDetailMviModel.Intent, CommunityDetailMviModel.UiState, CommunityDetailMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = CommunityDetailMviModel.UiState()),
     CommunityDetailMviModel {
     private var hideReadPosts = false
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             if (uiState.value.community.id == 0L) {
                 val community = itemCache.getCommunity(communityId) ?: CommunityModel()
                 updateState {
@@ -252,12 +254,12 @@ class CommunityDetailViewModel(
     override fun reduce(intent: CommunityDetailMviModel.Intent) {
         when (intent) {
             CommunityDetailMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
             CommunityDetailMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
@@ -293,7 +295,7 @@ class CommunityDetailViewModel(
             CommunityDetailMviModel.Intent.Block -> blockCommunity()
             CommunityDetailMviModel.Intent.BlockInstance -> blockInstance()
             is CommunityDetailMviModel.Intent.MarkAsRead ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     markAsRead(uiState.value.posts.first { it.id == intent.id })
                 }
 
@@ -304,13 +306,13 @@ class CommunityDetailViewModel(
                 }
 
             CommunityDetailMviModel.Intent.PauseZombieMode ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(zombieModeActive = false) }
                     zombieModeHelper.pause()
                 }
 
             is CommunityDetailMviModel.Intent.StartZombieMode ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(zombieModeActive = true) }
                     zombieModeHelper.start(
                         initialValue = intent.index,
@@ -342,7 +344,7 @@ class CommunityDetailViewModel(
             is CommunityDetailMviModel.Intent.ModToggleModUser -> toggleModeratorStatus(intent.id)
             CommunityDetailMviModel.Intent.ToggleFavorite -> toggleFavorite()
             is CommunityDetailMviModel.Intent.ChangeSearching ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(searching = intent.value) }
                     if (!intent.value) {
                         updateSearchText("")
@@ -351,7 +353,7 @@ class CommunityDetailViewModel(
 
             is CommunityDetailMviModel.Intent.SetSearch -> updateSearchText(intent.value)
             is CommunityDetailMviModel.Intent.WillOpenDetail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     uiState.value.posts
                         .firstOrNull { it.id == intent.id }
                         ?.also { post ->
@@ -368,7 +370,7 @@ class CommunityDetailViewModel(
             CommunityDetailMviModel.Intent.DeleteCommunity -> deleteCommunity()
             is CommunityDetailMviModel.Intent.RestorePost -> restorePost(intent.id)
             is CommunityDetailMviModel.Intent.ToggleRead ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     uiState.value.posts.firstOrNull { it.id == intent.id }?.also { post ->
                         setRead(post = post, read = !post.read)
                     }
@@ -458,7 +460,7 @@ class CommunityDetailViewModel(
         if (uiState.value.sortType == value) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(CommunityDetailMviModel.Effect.BackToTop)
             delay(50)
@@ -523,7 +525,7 @@ class CommunityDetailViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.upVote(
@@ -578,7 +580,7 @@ class CommunityDetailViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.downVote(
@@ -610,7 +612,7 @@ class CommunityDetailViewModel(
             )
         val shouldBeMarkedAsRead = settingsRepository.currentSettings.value.markAsReadOnInteraction
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.save(
@@ -635,7 +637,7 @@ class CommunityDetailViewModel(
 
     private fun subscribe() {
         hapticFeedback.vibrate()
-        screenModelScope.launch {
+        viewModelScope.launch {
             val community =
                 communityRepository.subscribe(
                     auth = identityRepository.authToken.value,
@@ -654,7 +656,7 @@ class CommunityDetailViewModel(
 
     private fun unsubscribe() {
         hapticFeedback.vibrate()
-        screenModelScope.launch {
+        viewModelScope.launch {
             val community =
                 communityRepository.unsubscribe(
                     auth = identityRepository.authToken.value,
@@ -672,7 +674,7 @@ class CommunityDetailViewModel(
     }
 
     private fun handlePostUpdate(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     posts =
@@ -689,13 +691,13 @@ class CommunityDetailViewModel(
     }
 
     private fun handlePostDelete(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(posts = it.posts.filter { post -> post.id != id }) }
         }
     }
 
     private fun blockCommunity() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(asyncInProgress = true) }
             try {
                 val auth = identityRepository.authToken.value
@@ -714,7 +716,7 @@ class CommunityDetailViewModel(
     }
 
     private fun blockInstance() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(asyncInProgress = true) }
             try {
                 val community = uiState.value.community
@@ -731,7 +733,7 @@ class CommunityDetailViewModel(
     }
 
     private fun clearRead() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             hideReadPosts = true
             updateState {
                 val newPosts = it.posts.filter { e -> !e.read }
@@ -743,7 +745,7 @@ class CommunityDetailViewModel(
     }
 
     private fun hide(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.hide(
@@ -764,7 +766,7 @@ class CommunityDetailViewModel(
     }
 
     private fun feature(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.featureInCommunity(
@@ -779,7 +781,7 @@ class CommunityDetailViewModel(
     }
 
     private fun featureLocal(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.featureInInstance(
@@ -794,7 +796,7 @@ class CommunityDetailViewModel(
     }
 
     private fun lock(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.lock(
@@ -809,7 +811,7 @@ class CommunityDetailViewModel(
     }
 
     private fun toggleModeratorStatus(userId: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val isModerator = uiState.value.moderators.containsId(userId)
             val auth = identityRepository.authToken.value.orEmpty()
             val newModerators =
@@ -826,7 +828,7 @@ class CommunityDetailViewModel(
     }
 
     private fun toggleFavorite() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: 0L
             val newValue = !uiState.value.community.favorite
             if (newValue) {
@@ -846,13 +848,13 @@ class CommunityDetailViewModel(
     }
 
     private fun updateSearchText(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(searchText = value) }
         }
     }
 
     private fun unhideCommunity() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value
             try {
                 communityRepository.hide(
@@ -868,7 +870,7 @@ class CommunityDetailViewModel(
     }
 
     private fun updatePreferredLanguage(languageId: Long?) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val communityHandle = uiState.value.community.readableHandle
             communityPreferredLanguageRepository.save(handle = communityHandle, value = languageId)
             updateState {
@@ -878,7 +880,7 @@ class CommunityDetailViewModel(
     }
 
     private fun deleteCommunity() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             try {
                 communityRepository.delete(
@@ -893,7 +895,7 @@ class CommunityDetailViewModel(
     }
 
     private fun restorePost(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.restore(

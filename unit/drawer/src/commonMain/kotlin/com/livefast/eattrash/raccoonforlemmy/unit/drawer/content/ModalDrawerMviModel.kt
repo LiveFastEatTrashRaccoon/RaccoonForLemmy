@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.drawer.content
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.MultiCommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -9,8 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Stable
 interface ModalDrawerMviModel :
-    MviModel<ModalDrawerMviModel.Intent, ModalDrawerMviModel.UiState, ModalDrawerMviModel.Effect>,
-    ScreenModel {
+    MviModel<ModalDrawerMviModel.Intent, ModalDrawerMviModel.UiState, ModalDrawerMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 

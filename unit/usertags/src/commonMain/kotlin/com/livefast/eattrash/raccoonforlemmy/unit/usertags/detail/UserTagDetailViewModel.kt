@@ -1,17 +1,19 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.usertags.detail
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import kotlinx.coroutines.launch
 
 internal class UserTagDetailViewModel(private val tagId: Long, private val userTagRepository: UserTagRepository) :
-    DefaultMviModel<UserTagDetailMviModel.Intent, UserTagDetailMviModel.UiState, UserTagDetailMviModel.Effect>(
-        initialState = UserTagDetailMviModel.UiState(),
-    ),
+    ViewModel(),
+    MviModelDelegate<UserTagDetailMviModel.Intent, UserTagDetailMviModel.UiState, UserTagDetailMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = UserTagDetailMviModel.UiState()),
     UserTagDetailMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             if (uiState.value.initial) {
                 val tag = userTagRepository.getById(tagId)
                 updateState { it.copy(tag = tag) }
@@ -22,7 +24,7 @@ internal class UserTagDetailViewModel(private val tagId: Long, private val userT
 
     override fun reduce(intent: UserTagDetailMviModel.Intent) {
         when (intent) {
-            UserTagDetailMviModel.Intent.Refresh -> screenModelScope.launch { refresh() }
+            UserTagDetailMviModel.Intent.Refresh -> viewModelScope.launch { refresh() }
             is UserTagDetailMviModel.Intent.Remove -> removeUser(intent.username)
         }
     }
@@ -38,7 +40,7 @@ internal class UserTagDetailViewModel(private val tagId: Long, private val userT
     }
 
     private fun removeUser(username: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             userTagRepository.removeMember(
                 username = username,
                 userTagId = tagId,

@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.login
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
@@ -21,13 +23,13 @@ class LoginViewModel(
     private val communityRepository: CommunityRepository,
     private val login: LoginUseCase,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect>(
-    initialState = LoginMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<LoginMviModel.Intent, LoginMviModel.UiState, LoginMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = LoginMviModel.UiState()),
     LoginMviModel {
     init {
         val instance = apiConfigurationRepository.instance.value
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(instanceName = instance)
             }
@@ -45,25 +47,25 @@ class LoginViewModel(
     }
 
     private fun setInstanceName(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(instanceName = value) }
         }
     }
 
     private fun setUsername(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(username = value.trim()) }
         }
     }
 
     private fun setPassword(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(password = value) }
         }
     }
 
     private fun setTotp2faToken(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(totp2faToken = value) }
         }
     }
@@ -78,7 +80,7 @@ class LoginViewModel(
         val username = currentState.username
         val password = currentState.password
         val totp2faToken = currentState.totp2faToken
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     instanceNameError = null,
@@ -91,7 +93,7 @@ class LoginViewModel(
         val valid =
             when {
                 instance.isEmpty() -> {
-                    screenModelScope.launch {
+                    viewModelScope.launch {
                         updateState {
                             it.copy(instanceNameError = ValidationError.MissingField)
                         }
@@ -100,7 +102,7 @@ class LoginViewModel(
                 }
 
                 username.isEmpty() -> {
-                    screenModelScope.launch {
+                    viewModelScope.launch {
                         updateState {
                             it.copy(usernameError = ValidationError.MissingField)
                         }
@@ -109,7 +111,7 @@ class LoginViewModel(
                 }
 
                 password.isEmpty() -> {
-                    screenModelScope.launch {
+                    viewModelScope.launch {
                         updateState {
                             it.copy(passwordError = ValidationError.MissingField)
                         }
@@ -123,7 +125,7 @@ class LoginViewModel(
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
 
             val res =

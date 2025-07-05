@@ -1,14 +1,11 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.ban
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 
 @Stable
-interface BanUserMviModel :
-    MviModel<BanUserMviModel.Intent, BanUserMviModel.UiState, BanUserMviModel.Effect>,
-    ScreenModel {
+interface BanUserMviModel : MviModel<BanUserMviModel.Intent, BanUserMviModel.UiState, BanUserMviModel.Effect> {
     sealed interface Intent {
         data class SetText(val value: String) : Intent
 

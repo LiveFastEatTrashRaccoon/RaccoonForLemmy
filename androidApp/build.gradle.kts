@@ -89,9 +89,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.splashscreen)
     implementation(libs.kodein)
-    implementation(libs.coil)
-    implementation(libs.coil.gif)
-    implementation(libs.voyager.navigator)
     implementation(libs.voyager.tab)
 
     implementation(projects.shared)

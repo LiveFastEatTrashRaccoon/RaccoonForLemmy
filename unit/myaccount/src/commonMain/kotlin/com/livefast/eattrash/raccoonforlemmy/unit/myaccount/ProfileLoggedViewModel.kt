@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.myaccount
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ProfileLoggedSection
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -51,12 +53,12 @@ class ProfileLoggedViewModel(
     private val hapticFeedback: HapticFeedback,
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect>(
-    initialState = ProfileLoggedMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = ProfileLoggedMviModel.UiState()),
     ProfileLoggedMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             apiConfigurationRepository.instance
                 .onEach { instance ->
                     updateState {
@@ -149,12 +151,12 @@ class ProfileLoggedViewModel(
             is ProfileLoggedMviModel.Intent.DeleteComment -> deleteComment(intent.id)
             is ProfileLoggedMviModel.Intent.DeletePost -> deletePost(intent.id)
             ProfileLoggedMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
             ProfileLoggedMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refreshUser()
                     refresh()
                 }
@@ -218,7 +220,7 @@ class ProfileLoggedViewModel(
             }
 
             is ProfileLoggedMviModel.Intent.WillOpenDetail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     if (intent.commentId == null) {
                         val state = postPaginationManager.extractState()
                         postNavigationManager.push(state)
@@ -299,7 +301,7 @@ class ProfileLoggedViewModel(
     }
 
     private fun changeSection(section: ProfileLoggedSection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(section = section)
             }
@@ -365,7 +367,7 @@ class ProfileLoggedViewModel(
                 voted = newVote,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.upVote(
@@ -388,7 +390,7 @@ class ProfileLoggedViewModel(
                 downVoted = newValue,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.downVote(
@@ -411,7 +413,7 @@ class ProfileLoggedViewModel(
                 saved = newValue,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.save(
@@ -434,7 +436,7 @@ class ProfileLoggedViewModel(
                 voted = newValue,
             )
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.upVote(
@@ -453,7 +455,7 @@ class ProfileLoggedViewModel(
         val newValue = comment.myVote >= 0
         val newComment = commentRepository.asDownVoted(comment, newValue)
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.downVote(
@@ -476,7 +478,7 @@ class ProfileLoggedViewModel(
                 saved = newValue,
             )
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.save(
@@ -492,7 +494,7 @@ class ProfileLoggedViewModel(
     }
 
     private fun handlePostUpdate(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     posts =
@@ -509,7 +511,7 @@ class ProfileLoggedViewModel(
     }
 
     private fun handleCommentUpdate(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     comments =
@@ -526,7 +528,7 @@ class ProfileLoggedViewModel(
     }
 
     private fun deletePost(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost = postRepository.delete(id = id, auth = auth)
             if (newPost != null) {
@@ -536,7 +538,7 @@ class ProfileLoggedViewModel(
     }
 
     private fun deleteComment(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newComment = commentRepository.delete(id, auth)
             if (newComment != null) {
@@ -546,7 +548,7 @@ class ProfileLoggedViewModel(
     }
 
     private fun restorePost(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.restore(
@@ -560,7 +562,7 @@ class ProfileLoggedViewModel(
     }
 
     private fun restoreComment(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newComment =
                 commentRepository.restore(

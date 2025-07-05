@@ -27,8 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItemPlaceholder
@@ -41,7 +41,7 @@ class SelectCommunityDialog : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val model: SelectCommunityMviModel = rememberScreenModel()
+        val model: SelectCommunityMviModel = getViewModel<SelectCommunityViewModel>()
         val uiState by model.uiState.collectAsState()
         val notificationCenter = remember { getNotificationCenter() }
 

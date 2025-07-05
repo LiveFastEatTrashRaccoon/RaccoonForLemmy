@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.accountsettings
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
@@ -28,14 +30,14 @@ class AccountSettingsViewModel(
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<AccountSettingsMviModel.Intent, AccountSettingsMviModel.UiState, AccountSettingsMviModel.Effect>(
-    initialState = AccountSettingsMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<AccountSettingsMviModel.Intent, AccountSettingsMviModel.UiState, AccountSettingsMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = AccountSettingsMviModel.UiState()),
     AccountSettingsMviModel {
     private var accountSettings: AccountSettingsModel? = null
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             notificationCenter
                 .subscribe(NotificationCenterEvent.ChangeSortType::class)
                 .onEach { evt ->
@@ -62,7 +64,7 @@ class AccountSettingsViewModel(
     override fun reduce(intent: AccountSettingsMviModel.Intent) {
         when (intent) {
             is AccountSettingsMviModel.Intent.ChangeDisplayName ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             displayName = intent.value,
@@ -72,7 +74,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeEmail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             email = intent.value,
@@ -82,7 +84,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeMatrixUserId ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             matrixUserId = intent.value,
@@ -92,7 +94,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeBio ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             bio = intent.value,
@@ -102,7 +104,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeBot ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             bot = intent.value,
@@ -112,7 +114,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeSendNotificationsToEmail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             sendNotificationsToEmail = intent.value,
@@ -122,7 +124,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeShowBotAccounts ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             showBotAccounts = intent.value,
@@ -132,7 +134,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeShowNsfw ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             showNsfw = intent.value,
@@ -142,7 +144,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeShowScores ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             showScores = intent.value,
@@ -152,7 +154,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeShowDownVotes ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             showDownVotes = intent.value,
@@ -162,7 +164,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeShowUpVotePercentage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             showUpVotePercentage = intent.value,
@@ -172,7 +174,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeShowUpVotes ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             showUpVotes = intent.value,
@@ -182,7 +184,7 @@ class AccountSettingsViewModel(
                 }
 
             is AccountSettingsMviModel.Intent.ChangeShowReadPosts ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState {
                         it.copy(
                             showReadPosts = intent.value,
@@ -237,7 +239,7 @@ class AccountSettingsViewModel(
         if (bytes.isEmpty()) {
             return
         }
-        screenModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val url = mediaRepository.uploadImage(auth, bytes)
@@ -257,7 +259,7 @@ class AccountSettingsViewModel(
         if (bytes.isEmpty()) {
             return
         }
-        screenModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             val auth = identityRepository.authToken.value.orEmpty()
             val url = mediaRepository.uploadImage(auth, bytes)
@@ -274,7 +276,7 @@ class AccountSettingsViewModel(
     }
 
     private fun deleteAccount(deleteContent: Boolean, password: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             if (password.isEmpty()) {
                 emitEffect(
                     AccountSettingsMviModel.Effect.SetDeleteAccountValidationError(
@@ -337,7 +339,7 @@ class AccountSettingsViewModel(
                 showDownVotes = currentState.showDownVotes,
                 showUpVotePercentage = currentState.showUpVotePercentage,
             ) ?: return
-        screenModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             updateState { it.copy(loading = true) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()

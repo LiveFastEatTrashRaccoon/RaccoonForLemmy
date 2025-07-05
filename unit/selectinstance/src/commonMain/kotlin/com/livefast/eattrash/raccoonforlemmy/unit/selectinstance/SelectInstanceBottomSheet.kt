@@ -40,9 +40,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
@@ -58,13 +57,12 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectInstanceBottomSheet(
-    parent: Screen,
     modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     state: SheetState = rememberModalBottomSheetState(),
     onSelect: ((String?) -> Unit)? = null,
 ) {
-    val model: SelectInstanceMviModel = parent.rememberScreenModel()
+    val model: SelectInstanceMviModel = getViewModel<SelectInstanceViewModel>()
     val uiState by model.uiState.collectAsState()
     var changeInstanceDialogOpen by remember {
         mutableStateOf(false)

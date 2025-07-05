@@ -1,18 +1,20 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.licences
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.models.LicenceItem
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.models.LicenceItemType
 import kotlinx.coroutines.launch
 
 class LicencesViewModel :
-    DefaultMviModel<LicencesMviModel.Intent, LicencesMviModel.State, LicencesMviModel.Effect>(
-        initialState = LicencesMviModel.State(),
-    ),
+    ViewModel(),
+    MviModelDelegate<LicencesMviModel.Intent, LicencesMviModel.State, LicencesMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = LicencesMviModel.State()),
     LicencesMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             populate()
         }
     }

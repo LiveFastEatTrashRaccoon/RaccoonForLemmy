@@ -2,7 +2,6 @@ package com.livefast.eattrash.raccoonforlemmy.unit.createcomment
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.text.input.TextFieldValue
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -14,8 +13,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 
 @Stable
 interface CreateCommentMviModel :
-    MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect>,
-    ScreenModel {
+    MviModel<CreateCommentMviModel.Intent, CreateCommentMviModel.UiState, CreateCommentMviModel.Effect> {
     sealed interface Intent {
         data class ChangeSection(val value: CreatePostSection) : Intent
 

@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.myaccount
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -10,8 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 interface ProfileLoggedMviModel :
-    MviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect>,
-    ScreenModel {
+    MviModel<ProfileLoggedMviModel.Intent, ProfileLoggedMviModel.UiState, ProfileLoggedMviModel.Effect> {
     sealed interface Intent {
         data class ChangeSection(val section: ProfileLoggedSection) : Intent
 

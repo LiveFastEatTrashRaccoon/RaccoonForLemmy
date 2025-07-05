@@ -11,9 +11,7 @@ kotlin {
             dependencies {
                 implementation(libs.calf)
                 implementation(libs.kodein)
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.screenmodel)
-                implementation(libs.voyager.kodein)
+                implementation(libs.voyager.core)
 
                 implementation(projects.core.utils)
                 implementation(projects.core.appearance)

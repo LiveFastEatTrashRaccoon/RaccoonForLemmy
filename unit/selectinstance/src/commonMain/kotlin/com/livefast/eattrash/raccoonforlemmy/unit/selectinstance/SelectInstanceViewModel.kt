@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.selectinstance
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.InstanceSelectionRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
@@ -20,14 +22,14 @@ class SelectInstanceViewModel(
     private val communityRepository: CommunityRepository,
     private val apiConfigurationRepository: ApiConfigurationRepository,
     private val hapticFeedback: HapticFeedback,
-) : DefaultMviModel<SelectInstanceMviModel.Intent, SelectInstanceMviModel.State, SelectInstanceMviModel.Effect>(
-    initialState = SelectInstanceMviModel.State(),
-),
+) : ViewModel(),
+    MviModelDelegate<SelectInstanceMviModel.Intent, SelectInstanceMviModel.State, SelectInstanceMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = SelectInstanceMviModel.State()),
     SelectInstanceMviModel {
     private val saveOperationChannel = Channel<List<String>>()
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             apiConfigurationRepository.instance
                 .onEach { instance ->
                     updateState { it.copy(currentInstance = instance) }
@@ -43,7 +45,7 @@ class SelectInstanceViewModel(
         }
 
         if (uiState.value.instances.isEmpty()) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 val instances = instanceRepository.getAll()
                 updateState { it.copy(instances = instances) }
             }
@@ -57,7 +59,7 @@ class SelectInstanceViewModel(
             }
 
             is SelectInstanceMviModel.Intent.ChangeInstanceName -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(changeInstanceName = intent.value) }
                 }
             }
@@ -70,7 +72,7 @@ class SelectInstanceViewModel(
     }
 
     private fun deleteInstance(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             instanceRepository.remove(value)
             val instances = instanceRepository.getAll()
             updateState { it.copy(instances = instances) }
@@ -78,13 +80,13 @@ class SelectInstanceViewModel(
     }
 
     private fun submitChangeInstance() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(changeInstanceNameError = null) }
         }
         var valid = true
         val instanceName = uiState.value.changeInstanceName
         if (instanceName.isEmpty()) {
-            screenModelScope.launch {
+            viewModelScope.launch {
                 updateState { it.copy(changeInstanceNameError = ValidationError.MissingField) }
             }
             valid = false
@@ -93,7 +95,7 @@ class SelectInstanceViewModel(
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(changeInstanceLoading = true) }
             val res =
                 communityRepository.getList(
@@ -132,7 +134,7 @@ class SelectInstanceViewModel(
                 val element = removeAt(from)
                 add(to, element)
             }
-        screenModelScope.launch {
+        viewModelScope.launch {
             saveOperationChannel.send(newInstances)
             updateState {
                 it.copy(instances = newInstances)
@@ -142,7 +144,7 @@ class SelectInstanceViewModel(
 
     private fun confirmSelection(value: String) {
         apiConfigurationRepository.changeInstance(value)
-        screenModelScope.launch {
+        viewModelScope.launch {
             emitEffect(SelectInstanceMviModel.Effect.Confirm(value))
         }
     }

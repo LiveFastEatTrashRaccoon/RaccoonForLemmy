@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInts
@@ -23,12 +25,12 @@ internal class ConfigureNavBarViewModel(
     private val settingsRepository: SettingsRepository,
     private val hapticFeedback: HapticFeedback,
     private val notificationCenter: NotificationCenter,
-) : DefaultMviModel<ConfigureNavBarMviModel.Intent, ConfigureNavBarMviModel.UiState, ConfigureNavBarMviModel.Effect>(
-    initialState = ConfigureNavBarMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ConfigureNavBarMviModel.Intent, ConfigureNavBarMviModel.UiState, ConfigureNavBarMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = ConfigureNavBarMviModel.UiState()),
     ConfigureNavBarMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             notificationCenter
                 .subscribe(NotificationCenterEvent.TabNavigationSectionSelected::class)
                 .onEach { evt ->
@@ -80,7 +82,7 @@ internal class ConfigureNavBarViewModel(
     }
 
     private fun handleReset() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val oldSections = uiState.value.sections
             val newSections = BottomNavItemsRepository.DEFAULT_ITEMS
             updateState {
@@ -95,7 +97,7 @@ internal class ConfigureNavBarViewModel(
 
     private fun handleAdd(section: TabNavigationSection) {
         val newSections = uiState.value.sections + section
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     sections = newSections,
@@ -108,7 +110,7 @@ internal class ConfigureNavBarViewModel(
 
     private fun handleDelete(section: TabNavigationSection) {
         val newSections = uiState.value.sections - section
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     sections = newSections,
@@ -125,7 +127,7 @@ internal class ConfigureNavBarViewModel(
                 val element = removeAt(from)
                 add(to, element)
             }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     sections = newSections,
@@ -136,7 +138,7 @@ internal class ConfigureNavBarViewModel(
     }
 
     private fun save() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val currentSections = uiState.value.sections
             val accountId = accountRepository.getActive()?.id
             bottomNavItemsRepository.update(accountId, currentSections)

@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.postdetail
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
@@ -71,24 +73,24 @@ class PostDetailViewModel(
     private val itemCache: LemmyItemCache,
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
-) : DefaultMviModel<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect>(
-    initialState = PostDetailMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<PostDetailMviModel.Intent, PostDetailMviModel.UiState, PostDetailMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = PostDetailMviModel.UiState()),
     PostDetailMviModel {
     private var highlightCommentPath: String? = null
     private var commentWasHighlighted = false
     private val initialNavigationEnabled = postNavigationManager.canNavigate.value
     private var lastCommentNavigateIndex: Int? = null
 
-    override fun onDispose() {
-        super.onDispose()
+    override fun onCleared() {
+        super.onCleared()
         if (initialNavigationEnabled) {
             postNavigationManager.pop()
         }
     }
 
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     instance =
@@ -331,7 +333,7 @@ class PostDetailViewModel(
         } else {
             // comment to highlight found
             commentWasHighlighted = true
-            screenModelScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(Dispatchers.Main) {
                 // skip the first item which is the post
                 emitEffect(PostDetailMviModel.Effect.ScrollToComment(indexOfHighlight + 1))
             }
@@ -341,14 +343,14 @@ class PostDetailViewModel(
     override fun reduce(intent: PostDetailMviModel.Intent) {
         when (intent) {
             PostDetailMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     if (!uiState.value.initial) {
                         loadNextPage()
                     }
                 }
 
             PostDetailMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
@@ -442,7 +444,7 @@ class PostDetailViewModel(
             is PostDetailMviModel.Intent.ModToggleModUser -> toggleModeratorStatus(intent.id)
 
             is PostDetailMviModel.Intent.ChangeSearching -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(searching = intent.value) }
                     if (!intent.value) {
                         updateSearchText("")
@@ -465,7 +467,7 @@ class PostDetailViewModel(
     }
 
     private fun refreshPost() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value
             val post = uiState.value.post
             val updatedPost =
@@ -605,7 +607,7 @@ class PostDetailViewModel(
         if (uiState.value.sortType == value) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(PostDetailMviModel.Effect.BackToTop)
             delay(50)
@@ -614,7 +616,7 @@ class PostDetailViewModel(
     }
 
     private fun handlePostUpdate(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val newPost =
                 post.let {
                     with(userTagHelper) {
@@ -630,7 +632,7 @@ class PostDetailViewModel(
     private fun loadMoreComments(parentId: Long, loadUntilHighlight: Boolean = false) {
         val currentState = uiState.value
         val sort = currentState.sortType ?: return
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value
             val fetchResult =
                 commentRepository
@@ -686,7 +688,7 @@ class PostDetailViewModel(
                 post = post,
                 voted = newValue,
             )
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(post = newPost) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -712,7 +714,7 @@ class PostDetailViewModel(
                 post = post,
                 downVoted = newValue,
             )
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(post = newPost)
             }
@@ -740,7 +742,7 @@ class PostDetailViewModel(
                 post = post,
                 saved = newValue,
             )
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(post = newPost) }
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
@@ -760,7 +762,7 @@ class PostDetailViewModel(
     }
 
     private fun handleCommentUpdate(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     comments =
@@ -784,7 +786,7 @@ class PostDetailViewModel(
                 voted = newValue,
             )
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.upVote(
@@ -806,7 +808,7 @@ class PostDetailViewModel(
         val newValue = comment.myVote >= 0
         val newComment = commentRepository.asDownVoted(comment, newValue)
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.downVote(
@@ -832,7 +834,7 @@ class PostDetailViewModel(
                 saved = newValue,
             )
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.save(
@@ -851,7 +853,7 @@ class PostDetailViewModel(
     }
 
     private fun deleteComment(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newComment = commentRepository.delete(id, auth)
             if (newComment != null) {
@@ -862,7 +864,7 @@ class PostDetailViewModel(
     }
 
     private fun deletePost() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val postId = uiState.value.post.id
             val newPost = postRepository.delete(id = postId, auth = auth)
@@ -876,7 +878,7 @@ class PostDetailViewModel(
     }
 
     private fun toggleExpanded(comment: CommentModel) {
-        screenModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.Main) {
             val commentId = comment.id
             val newExpanded = !comment.expanded
             updateState {
@@ -909,7 +911,7 @@ class PostDetailViewModel(
     }
 
     private fun feature(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.featureInCommunity(
@@ -924,7 +926,7 @@ class PostDetailViewModel(
     }
 
     private fun featureLocal(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.featureInInstance(
@@ -939,7 +941,7 @@ class PostDetailViewModel(
     }
 
     private fun lock(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.lock(
@@ -954,7 +956,7 @@ class PostDetailViewModel(
     }
 
     private fun distinguish(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newComment =
                 commentRepository.distinguish(
@@ -969,7 +971,7 @@ class PostDetailViewModel(
     }
 
     private fun toggleModeratorStatus(userId: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val isModerator = uiState.value.moderators.containsId(userId)
             val auth = identityRepository.authToken.value.orEmpty()
             val post = uiState.value.post
@@ -990,14 +992,14 @@ class PostDetailViewModel(
     }
 
     private fun updateSearchText(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(searchText = value) }
         }
     }
 
     private fun navigateToPreviousPost() {
         val currentId = uiState.value.post.id
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true, initial = true) }
             postNavigationManager.getPrevious(currentId)?.also { newPost ->
                 loadNewPost(newPost)
@@ -1007,7 +1009,7 @@ class PostDetailViewModel(
 
     private fun navigateToNextPost() {
         val currentId = uiState.value.post.id
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true, initial = true) }
             postNavigationManager.getNext(currentId)?.also { newPost ->
                 loadNewPost(newPost)
@@ -1054,7 +1056,7 @@ class PostDetailViewModel(
             }
         // save last scrolled index to make function strictly decreasing
         lastCommentNavigateIndex = viewIndex
-        screenModelScope.launch {
+        viewModelScope.launch {
             emitEffect(PostDetailMviModel.Effect.ScrollToComment(viewIndex))
         }
     }
@@ -1085,12 +1087,12 @@ class PostDetailViewModel(
                 }
             // save last scrolled index to make function strictly increasing
             lastCommentNavigateIndex = viewIndex
-            screenModelScope.launch {
+            viewModelScope.launch {
                 emitEffect(PostDetailMviModel.Effect.ScrollToComment(viewIndex))
             }
         } else if (uiState.value.canFetchMore) {
             // fetch a new page and try again if possible (terminates on pagination end)
-            screenModelScope.launch {
+            viewModelScope.launch {
                 loadNextPage()
                 navigateToNextComment(index + 1)
             }
@@ -1098,7 +1100,7 @@ class PostDetailViewModel(
     }
 
     private fun restorePost() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newPost =
                 postRepository.restore(
@@ -1112,7 +1114,7 @@ class PostDetailViewModel(
     }
 
     private fun restoreComment(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
             val newComment =
                 commentRepository.restore(

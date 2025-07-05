@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.manageban
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.InstanceModel
@@ -9,8 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Stable
 interface ManageBanMviModel :
-    MviModel<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect>,
-    ScreenModel {
+    MviModel<ManageBanMviModel.Intent, ManageBanMviModel.UiState, ManageBanMviModel.Effect> {
     sealed interface Intent {
         data class ChangeSection(val section: ManageBanSection) : Intent
 
