@@ -1,7 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.userdetail
 
 import androidx.compose.runtime.Stable
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
@@ -15,8 +14,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Stable
 interface UserDetailMviModel :
-    MviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect>,
-    ScreenModel {
+    MviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect> {
     sealed interface Intent {
         data object Refresh : Intent
 

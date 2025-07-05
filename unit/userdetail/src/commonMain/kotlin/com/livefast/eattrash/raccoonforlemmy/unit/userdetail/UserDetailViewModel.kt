@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.userdetail
 
-import cafe.adriel.voyager.core.model.screenModelScope
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserDetailSection
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -73,12 +75,12 @@ class UserDetailViewModel(
     private val postNavigationManager: PostNavigationManager,
     private val lemmyValueCache: LemmyValueCache,
     private val userSortRepository: UserSortRepository,
-) : DefaultMviModel<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect>(
-    initialState = UserDetailMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<UserDetailMviModel.Intent, UserDetailMviModel.UiState, UserDetailMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = UserDetailMviModel.UiState()),
     UserDetailMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     instance =
@@ -162,7 +164,7 @@ class UserDetailViewModel(
                 }.launchIn(this)
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             settingsRepository.currentSettings
                 .onEach { settings ->
                     updateState {
@@ -254,12 +256,12 @@ class UserDetailViewModel(
 
             UserDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
             UserDetailMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
 
             UserDetailMviModel.Intent.Refresh ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     refresh()
                 }
 
@@ -307,7 +309,7 @@ class UserDetailViewModel(
             UserDetailMviModel.Intent.BlockInstance -> blockInstance()
 
             is UserDetailMviModel.Intent.WillOpenDetail ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     if (intent.commentId == null) {
                         val state = postPaginationManager.extractState()
                         postNavigationManager.push(state)
@@ -333,7 +335,7 @@ class UserDetailViewModel(
         if (uiState.value.commentSortType == value && section == UserDetailSection.Comments) {
             return
         }
-        screenModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.Main) {
             updateState {
                 when (section) {
                     UserDetailSection.Comments -> it.copy(commentSortType = value)
@@ -347,7 +349,7 @@ class UserDetailViewModel(
     }
 
     private fun changeSection(section: UserDetailSection) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(section = section)
             }
@@ -469,7 +471,7 @@ class UserDetailViewModel(
                 voted = newVote,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.upVote(
@@ -492,7 +494,7 @@ class UserDetailViewModel(
                 downVoted = newValue,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.downVote(
@@ -515,7 +517,7 @@ class UserDetailViewModel(
                 saved = newValue,
             )
         handlePostUpdate(newPost)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 postRepository.save(
@@ -538,7 +540,7 @@ class UserDetailViewModel(
                 voted = newValue,
             )
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.upVote(
@@ -557,7 +559,7 @@ class UserDetailViewModel(
         val newValue = comment.myVote >= 0
         val newComment = commentRepository.asDownVoted(comment, newValue)
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.downVote(
@@ -580,7 +582,7 @@ class UserDetailViewModel(
                 saved = newValue,
             )
         handleCommentUpdate(newComment)
-        screenModelScope.launch {
+        viewModelScope.launch {
             try {
                 val auth = identityRepository.authToken.value.orEmpty()
                 commentRepository.save(
@@ -596,7 +598,7 @@ class UserDetailViewModel(
     }
 
     private fun handlePostUpdate(post: PostModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     posts =
@@ -613,7 +615,7 @@ class UserDetailViewModel(
     }
 
     private fun handleCommentUpdate(comment: CommentModel) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(
                     comments =
@@ -630,7 +632,7 @@ class UserDetailViewModel(
     }
 
     private fun blockUser() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(asyncInProgress = true) }
             try {
                 val auth = identityRepository.authToken.value
@@ -649,7 +651,7 @@ class UserDetailViewModel(
     }
 
     private fun blockInstance() {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(asyncInProgress = true) }
             try {
                 val user = uiState.value.user
@@ -685,7 +687,7 @@ class UserDetailViewModel(
     }
 
     private fun addUserTag(name: String, color: Int?) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val model = UserTagModel(name = name, color = color)
             userTagRepository.create(model = model, accountId = accountId)
@@ -697,7 +699,7 @@ class UserDetailViewModel(
     }
 
     private fun updateTags(ids: List<Long>) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val username = uiState.value.user.readableHandle
             val currentTagIds =
