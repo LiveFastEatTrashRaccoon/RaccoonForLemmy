@@ -1,8 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage
 
 import androidx.compose.ui.layout.ContentScale
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.epochMillis
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.GalleryHelper
@@ -22,12 +24,12 @@ class ZoomableImageViewModel(
     private val shareHelper: ShareHelper,
     private val galleryHelper: GalleryHelper,
     private val imagePreloadManager: ImagePreloadManager,
-) : DefaultMviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect>(
-    initialState = ZoomableImageMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = ZoomableImageMviModel.UiState()),
     ZoomableImageMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             settingsRepository.currentSettings
                 .onEach { settings ->
                     updateState { it.copy(autoLoadImages = settings.autoLoadImages) }
@@ -53,7 +55,7 @@ class ZoomableImageViewModel(
         if (uiState.value.loading) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val imageSourcePath = settingsRepository.currentSettings.value.imageSourcePath
             try {
@@ -86,7 +88,7 @@ class ZoomableImageViewModel(
         if (uiState.value.loading) {
             return
         }
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(loading = true) }
             val imageSourcePath = settingsRepository.currentSettings.value.imageSourcePath
             try {
@@ -116,7 +118,7 @@ class ZoomableImageViewModel(
 
     private fun changeContentScale(contentScale: ContentScale) {
         imagePreloadManager.remove(url)
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState {
                 it.copy(contentScale = contentScale)
             }

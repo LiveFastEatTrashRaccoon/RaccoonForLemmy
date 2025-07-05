@@ -2,12 +2,10 @@ package com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.layout.ContentScale
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 
 @Stable
 interface ZoomableImageMviModel :
-    ScreenModel,
     MviModel<ZoomableImageMviModel.Intent, ZoomableImageMviModel.UiState, ZoomableImageMviModel.Effect> {
     sealed interface Intent {
         data class SaveToGallery(val source: String) : Intent
