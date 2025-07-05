@@ -25,6 +25,7 @@ import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.HttpClient
 
 interface UserServiceV3 {
     @GET("v3/user")
@@ -107,5 +108,74 @@ interface UserServiceV3 {
     suspend fun deleteAccount(
         @Header("Authorization") authHeader: String? = null,
         @Body form: DeleteAccountForm,
-    ): Response<Unit>
+    ): Boolean
+}
+
+internal class DefaultUserServiceV3(val baseUrl: String, val client: HttpClient) : UserServiceV3 {
+    override suspend fun getDetails(
+        authHeader: String?,
+        auth: String?,
+        communityId: CommunityId?,
+        personId: PersonId?,
+        page: Int?,
+        limit: Int?,
+        sort: CommentSortType,
+        username: String?,
+        savedOnly: Boolean?,
+    ): GetPersonDetailsResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getMentions(
+        authHeader: String?,
+        auth: String?,
+        page: Int?,
+        limit: Int?,
+        sort: CommentSortType,
+        unreadOnly: Boolean?,
+    ): GetPersonMentionsResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getReplies(
+        authHeader: String?,
+        auth: String?,
+        page: Int?,
+        limit: Int?,
+        sort: CommentSortType,
+        unreadOnly: Boolean?,
+    ): GetRepliesResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun markAllAsRead(authHeader: String?, form: MarkAllAsReadForm): GetRepliesResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun markPersonMentionAsRead(
+        authHeader: String?,
+        form: MarkPersonMentionAsReadForm,
+    ): PersonMentionResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun block(authHeader: String?, form: BlockPersonForm): BlockPersonResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun saveUserSettings(authHeader: String?, form: SaveUserSettingsForm): SaveUserSettingsResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun purge(authHeader: String?, form: PurgePersonForm): SuccessResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun listMedia(authHeader: String?, page: Int?, limit: Int?): ListMediaResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAccount(authHeader: String?, form: DeleteAccountForm): Boolean {
+        TODO("Not yet implemented")
+    }
 }

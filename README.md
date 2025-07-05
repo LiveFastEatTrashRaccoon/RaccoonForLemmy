@@ -75,7 +75,7 @@ from the [Releases](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/r
 Reach out to the community on Lemmy, Matrix or file a report in the [issue tracker](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/issues)
 here on GitHub. Alternatively, you can always write an [email](mailto://livefast.eattrash.raccoon@gmail.com).
 
-Please remember: every contribution is welcome and everyone's opinion matters here. This is a community project, 
+Please remember: every contribution is welcome and everyone's opinion matters here. This is a community project,
 open source, ad-free and free of charge, and it belongs to us all so don't be afraid to get involved.
 
 And don't forget every 🦝's motto: `#livefasteattrash`.
@@ -176,7 +176,7 @@ switch to the web UI.
 - [Compose Multiplatform Media Player](https://github.com/Chaintech-Network/ComposeMultiplatformMediaPlayer)
   for video playback;
 - [Kodein](https://github.com/kosi-libs/Kodein) for dependency injection;
-- [Ktor](https://ktor.io/) and [Ktorfit](https://foso.github.io/Ktorfit) for networking;
+- [Ktor](https://ktor.io/) for networking;
 - [Multiplatform Markdown Renderer](https://github.com/mikepenz/multiplatform-markdown-renderer) for
   Markdown rendering
 - [Multiplatform Settings](https://github.com/russhwolf/multiplatform-settings) for encrypted shared

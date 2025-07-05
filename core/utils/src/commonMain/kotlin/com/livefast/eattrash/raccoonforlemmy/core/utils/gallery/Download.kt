@@ -1,6 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.gallery
 
-import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngineFactory
+import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.prepareGet
@@ -14,7 +14,7 @@ import kotlinx.io.readByteArray
 
 suspend fun GalleryHelper.download(url: String): ByteArray =
     withContext(Dispatchers.IO) {
-        val factory = provideHttpClientEngineFactory()
+        val factory = provideHttpClientEngine()
         val client = HttpClient(factory)
         client.prepareGet(url).execute { httpResponse ->
             val channel: ByteReadChannel = httpResponse.body()

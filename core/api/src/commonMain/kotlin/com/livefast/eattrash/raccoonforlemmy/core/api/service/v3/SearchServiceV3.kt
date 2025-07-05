@@ -10,6 +10,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SortType
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.HttpClient
 
 interface SearchServiceV3 {
     @GET("v3/search")
@@ -32,4 +33,26 @@ interface SearchServiceV3 {
         @Header("Authorization") authHeader: String? = null,
         @Query("q") q: String,
     ): ResolveObjectResponse
+}
+
+internal class DefaultSearchServiceV3(val baseUrl: String, val client: HttpClient) : SearchServiceV3 {
+    override suspend fun search(
+        authHeader: String?,
+        q: String,
+        communityId: CommunityId?,
+        communityName: String?,
+        creatorId: PersonId?,
+        type: SearchType?,
+        sort: SortType?,
+        listingType: ListingType?,
+        page: Int?,
+        limit: Int?,
+        auth: String?,
+    ): SearchResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun resolveObject(authHeader: String?, q: String): ResolveObjectResponse {
+        TODO("Not yet implemented")
+    }
 }

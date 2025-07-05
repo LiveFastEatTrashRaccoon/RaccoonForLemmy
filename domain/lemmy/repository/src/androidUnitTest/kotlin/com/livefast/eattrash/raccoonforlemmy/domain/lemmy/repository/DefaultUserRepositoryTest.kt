@@ -709,10 +709,7 @@ class DefaultUserRepositoryTest {
     fun whenDeleteAccount_thenResultIsAsExpected() = runTest {
         coEvery {
             userServiceV3.deleteAccount(any(), any())
-        } returns
-            mockk(relaxUnitFun = true) {
-                every { isSuccessful } returns true
-            }
+        } returns true
         val password = "fake-password"
         val deleteContent = true
 
@@ -740,10 +737,7 @@ class DefaultUserRepositoryTest {
     fun givenError_whenDeleteAccount_thenResultIsAsExpected() = runTest {
         coEvery {
             userServiceV3.deleteAccount(any(), any())
-        } returns
-            mockk(relaxUnitFun = true) {
-                every { isSuccessful } returns false
-            }
+        } returns false
         val password = "fake-password"
         val deleteContent = true
 
