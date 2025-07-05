@@ -12,7 +12,6 @@ internal object LicenceUrls {
     const val KODEIN = "https://github.com/kosi-libs/Kodein/blob/main/LICENSE.txt"
     const val KOTLIN_CRYPTO = "https://github.com/KotlinCrypto/hash/blob/master/LICENSE"
     const val KTOR = "https://github.com/ktorio/ktor/blob/main/LICENSE"
-    const val KTORFIT = "https://github.com/Foso/Ktorfit/blob/master/LICENSE"
     const val LEMMY_LOGO = "https://en.m.wikipedia.org/wiki/File:Lemmy_logo.svg"
     const val MATERIAL_ICONS = "https://github.com/google/material-design-icons/blob/master/LICENSE"
     const val MATERIAL_KOLOR = "https://github.com/jordond/MaterialKolor/blob/main/LICENSE"
