@@ -25,6 +25,7 @@ import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.HttpClient
 
 interface CommunityServiceV3 {
     @GET("v3/community")
@@ -107,4 +108,62 @@ interface CommunityServiceV3 {
         @Header("Authorization") authHeader: String? = null,
         @Body form: PurgeCommunityForm,
     ): SuccessResponse
+}
+
+internal class DefaultCommunityServiceV3(val baseUrl: String, val client: HttpClient): CommunityServiceV3 {
+    override suspend fun get(
+        authHeader: String?,
+        auth: String?,
+        id: CommunityId?,
+        name: String?,
+    ): GetCommunityResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getAll(
+        authHeader: String?,
+        auth: String?,
+        page: Int?,
+        limit: Int?,
+        showNsfw: Boolean,
+        sort: SortType,
+    ): ListCommunitiesResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun follow(authHeader: String?, form: FollowCommunityForm): CommunityResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun block(authHeader: String?, form: BlockCommunityForm): BlockCommunityResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun ban(authHeader: String?, form: BanFromCommunityForm): BanFromCommunityResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun addMod(authHeader: String?, form: AddModToCommunityForm): AddModToCommunityResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun create(authHeader: String?, form: CreateCommunityForm): CommunityResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun edit(authHeader: String?, form: EditCommunityForm): CommunityResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun hide(authHeader: String?, form: HideCommunityForm): SuccessResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete(authHeader: String?, form: DeleteCommunityForm): CommunityResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun purge(authHeader: String?, form: PurgeCommunityForm): SuccessResponse {
+        TODO("Not yet implemented")
+    }
 }

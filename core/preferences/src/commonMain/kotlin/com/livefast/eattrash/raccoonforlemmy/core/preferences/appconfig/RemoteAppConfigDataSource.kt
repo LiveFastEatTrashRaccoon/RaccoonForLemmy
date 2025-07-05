@@ -1,15 +1,15 @@
 package com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig
 
-import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngineFactory
+import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngine
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.request.request
 import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-internal class RemoteAppConfigDataSource(factory: HttpClientEngineFactory<*> = provideHttpClientEngineFactory()) :
+internal class RemoteAppConfigDataSource(factory: HttpClientEngine = provideHttpClientEngine()) :
     AppConfigDataSource {
     private val client: HttpClient =
         HttpClient(factory) {

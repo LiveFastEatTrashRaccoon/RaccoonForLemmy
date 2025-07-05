@@ -30,6 +30,7 @@ import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.HttpClient
 
 interface CommentServiceV3 {
     @GET("v3/comment/list")
@@ -138,4 +139,84 @@ interface CommentServiceV3 {
         @Header("Authorization") authHeader: String? = null,
         @Body form: PurgeCommentForm,
     ): SuccessResponse
+}
+
+internal class DefaultCommentServiceV3(val baseUrl: String, val client: HttpClient) : CommentServiceV3 {
+    override suspend fun getAll(
+        authHeader: String?,
+        auth: String?,
+        limit: Int?,
+        sort: CommentSortType?,
+        postId: PostId?,
+        parentId: CommentId?,
+        page: Int?,
+        maxDepth: Int?,
+        type: ListingType?,
+        communityId: CommunityId?,
+        communityName: String?,
+        savedOnly: Boolean?,
+        likedOnly: Boolean?,
+        dislikedOnly: Boolean?,
+    ): GetCommentsResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getBy(authHeader: String?, id: CommentId, auth: String?): GetCommentResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun save(authHeader: String?, form: SaveCommentForm): CommentResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun like(authHeader: String?, form: CreateCommentLikeForm): CommentResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun create(authHeader: String?, form: CreateCommentForm): CommentResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun edit(authHeader: String?, form: EditCommentForm): CommentResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun markAsRead(authHeader: String?, form: MarkCommentAsReadForm): CommentReplyResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete(authHeader: String?, form: DeleteCommentForm): CommentResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun createReport(authHeader: String?, form: CreateCommentReportForm): CommentReportResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun remove(authHeader: String?, form: RemoveCommentForm): CommentResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun distinguish(authHeader: String?, form: DistinguishCommentForm): CommentResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun listReports(
+        authHeader: String?,
+        auth: String?,
+        limit: Int?,
+        page: Int?,
+        unresolvedOnly: Boolean?,
+        communityId: CommunityId?,
+    ): ListCommentReportsResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun resolveReport(authHeader: String?, form: ResolveCommentReportForm): CommentReportResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun purge(authHeader: String?, form: PurgeCommentForm): SuccessResponse {
+        TODO("Not yet implemented")
+    }
 }

@@ -105,13 +105,6 @@ class LicencesViewModel :
                         )
                     this +=
                         LicenceItem(
-                            type = LicenceItemType.Library,
-                            title = "Ktorfit",
-                            subtitle = "A HTTP client/Kotlin Symbol Processor for Kotlin Multiplatform",
-                            url = LicenceUrls.KTORFIT,
-                        )
-                    this +=
-                        LicenceItem(
                             type = LicenceItemType.Resource,
                             title = "Lemmy logo",
                             url = LicenceUrls.LEMMY_LOGO,

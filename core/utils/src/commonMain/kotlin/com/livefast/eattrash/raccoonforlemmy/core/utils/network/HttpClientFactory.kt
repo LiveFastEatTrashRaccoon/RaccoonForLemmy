@@ -1,5 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils.network
 
-import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.engine.HttpClientEngine
 
-expect fun provideHttpClientEngineFactory(): HttpClientEngineFactory<*>
+expect fun provideHttpClientEngine(): HttpClientEngine

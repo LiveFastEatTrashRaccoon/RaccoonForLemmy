@@ -14,6 +14,7 @@ import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.HttpClient
 
 interface PrivateMessageServiceV3 {
     @GET("v3/private_message/list")
@@ -53,4 +54,33 @@ interface PrivateMessageServiceV3 {
         @Header("Authorization") authHeader: String? = null,
         @Body form: DeletePrivateMessageForm,
     ): PrivateMessageResponse
+}
+
+internal class DefaultPrivateMessageServiceV3(val baseUrl: String, val client: HttpClient) : PrivateMessageServiceV3 {
+    override suspend fun getAll(
+        authHeader: String?,
+        auth: String?,
+        page: Int?,
+        creatorId: PersonId?,
+        limit: Int?,
+        unreadOnly: Boolean?,
+    ): PrivateMessagesResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun create(authHeader: String?, form: CreatePrivateMessageForm): PrivateMessageResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun edit(authHeader: String?, form: EditPrivateMessageForm): PrivateMessageResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun markAsRead(authHeader: String?, form: MarkPrivateMessageAsReadForm): PrivateMessageResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete(authHeader: String?, form: DeletePrivateMessageForm): PrivateMessageResponse {
+        TODO("Not yet implemented")
+    }
 }

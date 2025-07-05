@@ -7,6 +7,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.PersonId
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.HttpClient
 
 interface ModlogServiceV3 {
     @GET("v3/modlog")
@@ -20,4 +21,19 @@ interface ModlogServiceV3 {
         @Query("other_person_id") otherId: PersonId? = null,
         @Query("type_") type: ModlogActionType? = null,
     ): GetModlogResponse
+}
+
+internal class DefaultModlogServiceV3(val baseUrl: String, val client: HttpClient) : ModlogServiceV3 {
+    override suspend fun getItems(
+        authHeader: String?,
+        auth: String?,
+        page: Int?,
+        communityId: CommunityId?,
+        limit: Int?,
+        modId: PersonId?,
+        otherId: PersonId?,
+        type: ModlogActionType?,
+    ): GetModlogResponse {
+        TODO("Not yet implemented")
+    }
 }

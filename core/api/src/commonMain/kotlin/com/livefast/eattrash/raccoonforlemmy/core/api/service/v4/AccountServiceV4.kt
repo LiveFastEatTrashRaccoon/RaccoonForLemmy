@@ -9,6 +9,7 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Header
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
+import io.ktor.client.HttpClient
 
 interface AccountServiceV4 {
     @GET("v4/account")
@@ -20,4 +21,18 @@ interface AccountServiceV4 {
 
     @GET("v4/account/auth/logout")
     suspend fun logout(): SuccessResponse
+}
+
+internal class DefaultAccountServiceV4(val baseUrl: String, val client: HttpClient) : AccountServiceV4 {
+    override suspend fun get(authHeader: String?): MyUserInfo {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun login(form: LoginForm): LoginResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun logout(): SuccessResponse {
+        TODO("Not yet implemented")
+    }
 }

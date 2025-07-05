@@ -34,6 +34,7 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
 import de.jensklingenberg.ktorfit.http.Url
+import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
 
 interface PostServiceV3 {
@@ -155,4 +156,108 @@ interface PostServiceV3 {
     @POST("v3/admin/purge/post")
     @Headers("Content-Type: application/json")
     suspend fun purge(@Header("Authorization") authHeader: String? = null, @Body form: PurgePostForm): SuccessResponse
+}
+
+internal class DefaultPostServiceV3(val baseUrl: String, val client: HttpClient): PostServiceV3 {
+    override suspend fun getAll(
+        authHeader: String?,
+        auth: String?,
+        limit: Int?,
+        sort: SortType?,
+        page: Int?,
+        pageCursor: String?,
+        type: ListingType?,
+        communityId: CommunityId?,
+        communityName: String?,
+        savedOnly: Boolean?,
+        likedOnly: Boolean?,
+        dislikedOnly: Boolean?,
+        showHidden: Boolean?,
+    ): GetPostsResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun get(authHeader: String?, auth: String?, id: PostId?, commentId: CommentId?): GetPostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getSiteMetadata(authHeader: String?, url: String): GetSiteMetadataResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun save(authHeader: String?, form: SavePostForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun like(authHeader: String?, form: CreatePostLikeForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun create(authHeader: String?, form: CreatePostForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun edit(authHeader: String?, form: EditPostForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun markAsRead(authHeader: String?, form: MarkPostAsReadForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun hide(authHeader: String?, form: HidePostForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun delete(authHeader: String?, form: DeletePostForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun uploadImage(
+        url: String,
+        token: String,
+        authHeader: String?,
+        content: MultiPartFormDataContent,
+    ): PictrsImages {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteImage(url: String, token: String, authHeader: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun createReport(authHeader: String?, form: CreatePostReportForm): PostReportResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun feature(authHeader: String?, form: FeaturePostForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun remove(authHeader: String?, form: RemovePostForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun lock(authHeader: String?, form: LockPostForm): PostResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun listReports(
+        authHeader: String?,
+        auth: String?,
+        limit: Int?,
+        page: Int?,
+        unresolvedOnly: Boolean?,
+        communityId: CommunityId?,
+    ): ListPostReportsResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun resolveReport(authHeader: String?, form: ResolvePostReportForm): PostReportResponse {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun purge(authHeader: String?, form: PurgePostForm): SuccessResponse {
+        TODO("Not yet implemented")
+    }
 }
