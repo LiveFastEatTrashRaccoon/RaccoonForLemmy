@@ -99,12 +99,18 @@ val apiModule =
         }
         bind<ServiceProvider>(tag = "default") {
             singleton {
-                DefaultServiceProvider(appInfoRepository = instance())
+                DefaultServiceProvider(
+                    factory = instance(),
+                    appInfoRepository = instance(),
+                )
             }
         }
         bind<ServiceProvider>(tag = "custom") {
             singleton {
-                DefaultServiceProvider(appInfoRepository = instance())
+                DefaultServiceProvider(
+                    factory = instance(),
+                    appInfoRepository = instance(),
+                )
             }
         }
     }

@@ -1,23 +1,23 @@
 package com.livefast.eattrash.raccoonforlemmy.core.api.provider
 
+import com.livefast.eattrash.raccoonforlemmy.core.api.di.ServiceCreationArgs
+import com.livefast.eattrash.raccoonforlemmy.core.api.di.getService
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.AuthServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.CommentServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.CommunityServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.ModlogServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.PostServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.PrivateMessageServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SearchServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.SiteServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.UserServiceV3
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.V3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createAuthServiceV3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createCommentServiceV3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createCommunityServiceV3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createModlogServiceV3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createPostServiceV3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createPrivateMessageServiceV3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createSearchServiceV3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createSiteServiceV3
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v3.createUserServiceV3
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.AccountServiceV4
+import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.SiteServiceV4
 import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.V4
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.createAccountServiceV4
-import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.createSiteServiceV4
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.AppInfoRepository
-import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngineFactory
-import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -27,7 +27,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 internal class DefaultServiceProvider(
-    private val factory: HttpClientEngineFactory<*> = provideHttpClientEngineFactory(),
+    private val factory: HttpClientEngine,
     private val appInfoRepository: AppInfoRepository,
 ) : ServiceProvider {
     companion object {
@@ -40,7 +40,7 @@ internal class DefaultServiceProvider(
 
     override lateinit var v4: V4
 
-    private val baseUrl: String get() = "https://$currentInstance/api/"
+    private val baseUrl: String get() = "https://$currentInstance/api"
 
     private val loggingEnabled: Boolean get() = appInfoRepository.geInfo().isDebug
 
@@ -83,28 +83,23 @@ internal class DefaultServiceProvider(
                     )
                 }
             }
-        val ktorfit =
-            Ktorfit
-                .Builder()
-                .baseUrl(baseUrl)
-                .httpClient(client)
-                .build()
+        val serviceArgs = ServiceCreationArgs(baseUrl, client)
         v3 =
             object : V3 {
-                override val auth = ktorfit.createAuthServiceV3()
-                override val post = ktorfit.createPostServiceV3()
-                override val community = ktorfit.createCommunityServiceV3()
-                override val user = ktorfit.createUserServiceV3()
-                override val site = ktorfit.createSiteServiceV3()
-                override val comment = ktorfit.createCommentServiceV3()
-                override val search = ktorfit.createSearchServiceV3()
-                override val privateMessages = ktorfit.createPrivateMessageServiceV3()
-                override val modLog = ktorfit.createModlogServiceV3()
+                override val auth = getService<AuthServiceV3>(serviceArgs)
+                override val post = getService<PostServiceV3>(serviceArgs)
+                override val community = getService<CommunityServiceV3>(serviceArgs)
+                override val user = getService<UserServiceV3>(serviceArgs)
+                override val site = getService<SiteServiceV3>(serviceArgs)
+                override val comment = getService<CommentServiceV3>(serviceArgs)
+                override val search = getService<SearchServiceV3>(serviceArgs)
+                override val privateMessages = getService<PrivateMessageServiceV3>(serviceArgs)
+                override val modLog = getService<ModlogServiceV3>(serviceArgs)
             }
         v4 =
             object : V4 {
-                override val account = ktorfit.createAccountServiceV4()
-                override val site = ktorfit.createSiteServiceV4()
+                override val account = getService<AccountServiceV4>(serviceArgs)
+                override val site = getService<SiteServiceV4>(serviceArgs)
             }
     }
 
