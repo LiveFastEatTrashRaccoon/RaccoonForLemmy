@@ -1,13 +1,11 @@
 package com.livefast.eattrash.raccoonforlemmy.main
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 
 interface MainMviModel :
-    MviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>,
-    ScreenModel {
+    MviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect> {
     sealed interface Intent {
         data class SetBottomBarOffsetHeightPx(val value: Float) : Intent
 

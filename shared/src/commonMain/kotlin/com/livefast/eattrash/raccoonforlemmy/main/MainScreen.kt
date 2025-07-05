@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.kodein.rememberScreenModel
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DrawerEvent
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
@@ -64,7 +64,7 @@ internal object MainScreen : Screen {
     override fun Content() {
         val themeRepository = remember { getThemeRepository() }
         val navigationCoordinator = remember { getNavigationCoordinator() }
-        val model: MainMviModel = rememberScreenModel()
+        val model: MainMviModel = getViewModel<MainViewModel>()
         val uiState by model.uiState.collectAsState()
         val uiFontScale by themeRepository.uiFontScale.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
@@ -314,7 +314,6 @@ internal object MainScreen : Screen {
 
         if (manageAccountsBottomSheetOpened) {
             ManageAccountsBottomSheet(
-                parent = this,
                 onDismiss = { openLogin ->
                     manageAccountsBottomSheetOpened = false
                     if (openLogin) {

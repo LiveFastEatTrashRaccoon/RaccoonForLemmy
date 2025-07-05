@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.main
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toTabNavigationSections
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.CreateSpecialTagsUseCase
@@ -24,15 +26,13 @@ class MainViewModel(
     private val notificationChecker: InboxNotificationChecker,
     private val lemmyValueCache: LemmyValueCache,
     private val createSpecialTagsUseCase: CreateSpecialTagsUseCase,
-) : DefaultMviModel<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>(
-    initialState =
-        MainMviModel.UiState(
-            bottomBarSections = settingRepository.currentBottomBarSections.value.toTabNavigationSections(),
-        ),
-),
+) : ViewModel(),
+    MviModelDelegate<MainMviModel.Intent, MainMviModel.UiState, MainMviModel.Effect>
+        by DefaultMviModelDelegate(MainMviModel.UiState(
+        bottomBarSections = settingRepository.currentBottomBarSections.value.toTabNavigationSections())),
     MainMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             identityRepository.startup()
             val auth = identityRepository.authToken.value
             lemmyValueCache.refresh(auth)
@@ -77,7 +77,7 @@ class MainViewModel(
     override fun reduce(intent: MainMviModel.Intent) {
         when (intent) {
             is MainMviModel.Intent.SetBottomBarOffsetHeightPx -> {
-                screenModelScope.launch {
+                viewModelScope.launch {
                     updateState { it.copy(bottomBarOffsetHeightPx = intent.value) }
                 }
             }
@@ -105,7 +105,7 @@ class MainViewModel(
             return
         }
 
-        screenModelScope.launch {
+        viewModelScope.launch {
             val auth = identityRepository.authToken.value
             userRepository.readAll(auth)
             inboxCoordinator.sendEvent(InboxCoordinator.Event.Refresh)
