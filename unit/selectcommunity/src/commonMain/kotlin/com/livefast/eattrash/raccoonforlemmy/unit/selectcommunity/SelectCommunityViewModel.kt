@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.selectcommunity
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationSpecification
@@ -18,12 +20,12 @@ import kotlinx.coroutines.launch
 class SelectCommunityViewModel(
     private val settingsRepository: SettingsRepository,
     private val communityPaginationManager: CommunityPaginationManager,
-) : DefaultMviModel<SelectCommunityMviModel.Intent, SelectCommunityMviModel.UiState, SelectCommunityMviModel.Effect>(
-    initialState = SelectCommunityMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<SelectCommunityMviModel.Intent, SelectCommunityMviModel.UiState, SelectCommunityMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = SelectCommunityMviModel.UiState()),
     SelectCommunityMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             settingsRepository.currentSettings
                 .onEach { settings ->
                     updateState {
@@ -55,14 +57,14 @@ class SelectCommunityViewModel(
         when (intent) {
             is SelectCommunityMviModel.Intent.SetSearch -> setSearch(intent.value)
             SelectCommunityMviModel.Intent.LoadNextPage ->
-                screenModelScope.launch {
+                viewModelScope.launch {
                     loadNextPage()
                 }
         }
     }
 
     private fun setSearch(value: String) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             updateState { it.copy(searchText = value) }
         }
     }
