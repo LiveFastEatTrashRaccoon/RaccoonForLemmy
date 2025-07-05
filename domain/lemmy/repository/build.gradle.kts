@@ -10,8 +10,8 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kodein)
-                implementation(libs.ktorfit.lib)
-                implementation(libs.ktorfit.converters.response)
+                implementation(libs.kotlinx.coroutines)
+                implementation(libs.ktor.client.core)
 
                 implementation(projects.core.api)
                 implementation(projects.core.persistence)
