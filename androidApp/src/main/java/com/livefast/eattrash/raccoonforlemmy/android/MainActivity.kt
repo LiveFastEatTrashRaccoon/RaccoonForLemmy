@@ -99,7 +99,8 @@ class MainActivity : ComponentActivity() {
                 }
 
             else ->
-                data.toString().takeUnless { it.isEmpty() }?.also { url ->
+                data?.also {
+                    val url = it.toString()
                     handleDeeplink(url)
                 }
         }
