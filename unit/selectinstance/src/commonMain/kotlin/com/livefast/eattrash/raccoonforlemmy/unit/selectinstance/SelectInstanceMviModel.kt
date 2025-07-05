@@ -1,12 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.selectinstance
 
-import cafe.adriel.voyager.core.model.ScreenModel
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 
 interface SelectInstanceMviModel :
-    MviModel<SelectInstanceMviModel.Intent, SelectInstanceMviModel.State, SelectInstanceMviModel.Effect>,
-    ScreenModel {
+    MviModel<SelectInstanceMviModel.Intent, SelectInstanceMviModel.State, SelectInstanceMviModel.Effect> {
     sealed interface Intent {
         data class SelectInstance(val value: String) : Intent
 
