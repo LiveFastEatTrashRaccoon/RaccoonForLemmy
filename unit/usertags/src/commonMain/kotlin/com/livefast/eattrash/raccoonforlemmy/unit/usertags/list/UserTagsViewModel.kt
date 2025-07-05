@@ -1,7 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.usertags.list
 
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
+import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.UserTagType
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.isSpecial
@@ -15,12 +17,12 @@ internal class UserTagsViewModel(
     private val accountRepository: AccountRepository,
     private val userTagRepository: UserTagRepository,
     private val userTagHelper: UserTagHelper,
-) : DefaultMviModel<UserTagsMviModel.Intent, UserTagsMviModel.UiState, UserTagsMviModel.Effect>(
-    initialState = UserTagsMviModel.UiState(),
-),
+) : ViewModel(),
+    MviModelDelegate<UserTagsMviModel.Intent, UserTagsMviModel.UiState, UserTagsMviModel.Effect>
+    by DefaultMviModelDelegate(initialState = UserTagsMviModel.UiState()),
     UserTagsMviModel {
     init {
-        screenModelScope.launch {
+        viewModelScope.launch {
             if (uiState.value.initial) {
                 refresh(initial = true)
             }
@@ -29,7 +31,7 @@ internal class UserTagsViewModel(
 
     override fun reduce(intent: UserTagsMviModel.Intent) {
         when (intent) {
-            UserTagsMviModel.Intent.Refresh -> screenModelScope.launch { refresh() }
+            UserTagsMviModel.Intent.Refresh -> viewModelScope.launch { refresh() }
             is UserTagsMviModel.Intent.Add ->
                 addTag(name = intent.name, color = intent.color)
 
@@ -71,7 +73,7 @@ internal class UserTagsViewModel(
     }
 
     private fun addTag(name: String, color: Int?) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             val accountId = accountRepository.getActive()?.id ?: return@launch
             val tag = UserTagModel(name = name, color = color)
             userTagRepository.create(tag, accountId)
@@ -81,7 +83,7 @@ internal class UserTagsViewModel(
     }
 
     private fun editTag(id: Long, name: String, color: Int?, type: UserTagType) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             userTagRepository.update(
                 id = id,
                 name = name,
@@ -94,7 +96,7 @@ internal class UserTagsViewModel(
     }
 
     private fun removeTag(id: Long) {
-        screenModelScope.launch {
+        viewModelScope.launch {
             userTagRepository.delete(id)
             userTagHelper.clear()
             refresh()
