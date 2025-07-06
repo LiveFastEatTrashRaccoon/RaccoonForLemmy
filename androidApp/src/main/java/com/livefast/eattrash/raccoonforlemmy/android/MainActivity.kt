@@ -19,7 +19,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSectio
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.feature.home.ui.HomeTab
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
@@ -49,8 +48,7 @@ class MainActivity : ComponentActivity() {
 
                     // goes back to home
                     with(navigationCoordinator) {
-                        changeTab(HomeTab)
-                        setCurrentSection(TabNavigationSection.Home)
+                        setBottomNavigationSection(TabNavigationSection.Home)
                     }
                 }
             }

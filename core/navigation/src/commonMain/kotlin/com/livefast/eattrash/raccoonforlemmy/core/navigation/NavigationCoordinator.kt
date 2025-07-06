@@ -4,8 +4,6 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabNavigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Duration
@@ -35,7 +33,9 @@ interface NavigationCoordinator {
     val sideMenuOpened: StateFlow<Boolean>
     val globalMessage: Flow<String>
 
-    fun setCurrentSection(section: TabNavigationSection)
+    fun setBottomNavigator(adapter: BottomNavigationAdapter)
+
+    fun setBottomNavigationSection(section: TabNavigationSection)
 
     fun submitDeeplink(url: String)
 
@@ -58,10 +58,6 @@ interface NavigationCoordinator {
     fun popScreen()
 
     fun setExitMessageVisible(value: Boolean)
-
-    fun setTabNavigator(value: TabNavigator)
-
-    fun changeTab(value: Tab)
 
     fun openSideMenu(screen: Screen)
 

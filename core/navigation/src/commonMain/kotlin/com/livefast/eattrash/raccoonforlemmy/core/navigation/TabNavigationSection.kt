@@ -1,19 +1,34 @@
 package com.livefast.eattrash.raccoonforlemmy.core.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Article
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Bookmarks
+import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.Inbox
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import kotlinx.serialization.Serializable
 
 sealed interface TabNavigationSection {
+    @Serializable
     data object Home : TabNavigationSection
 
+    @Serializable
     data object Explore : TabNavigationSection
 
+    @Serializable
     data object Profile : TabNavigationSection
 
+    @Serializable
     data object Inbox : TabNavigationSection
 
+    @Serializable
     data object Settings : TabNavigationSection
 
+    @Serializable
     data object Bookmarks : TabNavigationSection
 }
 
@@ -25,6 +40,16 @@ fun TabNavigationSection.toReadableName(): String = when (this) {
     TabNavigationSection.Inbox -> LocalStrings.current.navigationInbox
     TabNavigationSection.Profile -> LocalStrings.current.navigationProfile
     TabNavigationSection.Settings -> LocalStrings.current.navigationSettings
+}
+
+@Composable
+fun TabNavigationSection.toIcon(): ImageVector = when (this) {
+    TabNavigationSection.Bookmarks -> Icons.Default.Bookmarks
+    TabNavigationSection.Explore -> Icons.Default.Explore
+    TabNavigationSection.Home -> Icons.AutoMirrored.Default.Article
+    TabNavigationSection.Inbox -> Icons.Default.Inbox
+    TabNavigationSection.Profile -> Icons.Default.AccountCircle
+    TabNavigationSection.Settings -> Icons.Default.Settings
 }
 
 fun Int.toTabNavigationSection(): TabNavigationSection? = when (this) {
