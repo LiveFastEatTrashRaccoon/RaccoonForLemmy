@@ -14,8 +14,9 @@ kotlin {
 
                 implementation(libs.compose.multiplatform.media.player)
                 implementation(libs.kodein.compose)
+                implementation(libs.voyager.navigator)
                 implementation(libs.voyager.core)
-                implementation(libs.voyager.tab)
+                implementation(libs.androidx.navigation.compose)
 
                 implementation(projects.core.api)
                 implementation(projects.core.appearance)

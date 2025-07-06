@@ -11,7 +11,6 @@ kotlin {
             dependencies {
                 implementation(libs.kodein)
                 implementation(libs.voyager.core)
-                implementation(libs.voyager.tab)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)

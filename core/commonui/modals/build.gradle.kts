@@ -9,7 +9,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.compose.colorpicker)
-                implementation(libs.voyager.core)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.commonui.components)
