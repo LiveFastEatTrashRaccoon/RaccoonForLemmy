@@ -188,6 +188,9 @@ class DefaultMediaRepositoryTest {
 
     @Test
     fun whenDelete_thenInteractionsAreAsExpected() = runTest {
+        coEvery {
+            postServiceV3.deleteImage(any(), any(), any())
+        } returns true
         val instance = "fake-instance"
 
         val media = MediaModel(alias = "fake-alias", deleteToken = "fake-delete-token")

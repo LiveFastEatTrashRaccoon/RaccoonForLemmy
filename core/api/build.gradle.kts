@@ -2,7 +2,6 @@ plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
     id("com.livefast.eattrash.serialization")
     id("com.livefast.eattrash.spotless")
-    alias(libs.plugins.ktorfit)
 }
 
 kotlin {
@@ -14,18 +13,10 @@ kotlin {
                 implementation(libs.ktor.json)
                 implementation(libs.ktor.logging)
                 implementation(libs.ktor.serialization)
-                implementation(libs.ktorfit.converters.response)
-                implementation(libs.ktorfit.lib)
 
+                implementation(projects.core.di)
                 implementation(projects.core.utils)
             }
         }
-    }
-}
-
-// workaround after KSP 2.0.0
-tasks.configureEach {
-    if (name.contains(Regex("ksp.*KotlinAndroid")) || name.contains(Regex("ksp.*KotlinIos*"))) {
-        dependsOn(tasks.named("kspCommonMainKotlinMetadata"))
     }
 }

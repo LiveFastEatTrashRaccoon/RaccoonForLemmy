@@ -336,18 +336,16 @@ internal class DefaultUserRepository(
         posts to response.nextPage
     }.getOrNull()
 
-    override suspend fun deleteAccount(auth: String?, password: String, deleteContent: Boolean): Boolean = runCatching {
+    override suspend fun deleteAccount(auth: String?, password: String, deleteContent: Boolean): Boolean {
         val data =
             DeleteAccountForm(
                 auth = auth.orEmpty(),
                 deleteContent = deleteContent,
                 password = password,
             )
-        val res =
-            services.v3.user.deleteAccount(
-                authHeader = auth.toAuthHeader(),
-                form = data,
-            )
-        res.isSuccessful
-    }.getOrElse { false }
+        return services.v3.user.deleteAccount(
+            authHeader = auth.toAuthHeader(),
+            form = data,
+        )
+    }
 }

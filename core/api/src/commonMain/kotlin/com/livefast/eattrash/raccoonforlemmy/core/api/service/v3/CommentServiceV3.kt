@@ -23,119 +23,55 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.RemoveCommentForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ResolveCommentReportForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SaveCommentForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SuccessResponse
-import de.jensklingenberg.ktorfit.http.Body
-import de.jensklingenberg.ktorfit.http.GET
-import de.jensklingenberg.ktorfit.http.Header
-import de.jensklingenberg.ktorfit.http.Headers
-import de.jensklingenberg.ktorfit.http.POST
-import de.jensklingenberg.ktorfit.http.PUT
-import de.jensklingenberg.ktorfit.http.Query
 
 interface CommentServiceV3 {
-    @GET("v3/comment/list")
     suspend fun getAll(
-        @Header("Authorization") authHeader: String? = null,
-        @Query("auth") auth: String? = null,
-        @Query("limit") limit: Int? = null,
-        @Query("sort") sort: CommentSortType? = null,
-        @Query("post_id") postId: PostId? = null,
-        @Query("parent_id") parentId: CommentId? = null,
-        @Query("page") page: Int? = null,
-        @Query("max_depth") maxDepth: Int? = null,
-        @Query("type_") type: ListingType? = null,
-        @Query("community_id") communityId: CommunityId? = null,
-        @Query("community_name") communityName: String? = null,
-        @Query("saved_only") savedOnly: Boolean? = null,
-        @Query("liked_only") likedOnly: Boolean? = null,
-        @Query("disliked_only") dislikedOnly: Boolean? = null,
+        authHeader: String? = null,
+        auth: String? = null,
+        limit: Int? = null,
+        sort: CommentSortType? = null,
+        postId: PostId? = null,
+        parentId: CommentId? = null,
+        page: Int? = null,
+        maxDepth: Int? = null,
+        type: ListingType? = null,
+        communityId: CommunityId? = null,
+        communityName: String? = null,
+        savedOnly: Boolean? = null,
+        likedOnly: Boolean? = null,
+        dislikedOnly: Boolean? = null,
     ): GetCommentsResponse
 
-    @GET("v3/comment")
-    suspend fun getBy(
-        @Header("Authorization") authHeader: String? = null,
-        @Query("id") id: CommentId,
-        @Query("auth") auth: String? = null,
-    ): GetCommentResponse
+    suspend fun getBy(authHeader: String? = null, id: CommentId, auth: String? = null): GetCommentResponse
 
-    @PUT("v3/comment/save")
-    @Headers("Content-Type: application/json")
-    suspend fun save(@Header("Authorization") authHeader: String? = null, @Body form: SaveCommentForm): CommentResponse
+    suspend fun save(authHeader: String? = null, form: SaveCommentForm): CommentResponse
 
-    @POST("v3/comment/like")
-    @Headers("Content-Type: application/json")
-    suspend fun like(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: CreateCommentLikeForm,
-    ): CommentResponse
+    suspend fun like(authHeader: String? = null, form: CreateCommentLikeForm): CommentResponse
 
-    @POST("v3/comment")
-    @Headers("Content-Type: application/json")
-    suspend fun create(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: CreateCommentForm,
-    ): CommentResponse
+    suspend fun create(authHeader: String? = null, form: CreateCommentForm): CommentResponse
 
-    @PUT("v3/comment")
-    @Headers("Content-Type: application/json")
-    suspend fun edit(@Header("Authorization") authHeader: String? = null, @Body form: EditCommentForm): CommentResponse
+    suspend fun edit(authHeader: String? = null, form: EditCommentForm): CommentResponse
 
-    @POST("v3/comment/mark_as_read")
-    @Headers("Content-Type: application/json")
-    suspend fun markAsRead(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: MarkCommentAsReadForm,
-    ): CommentReplyResponse
+    suspend fun markAsRead(authHeader: String? = null, form: MarkCommentAsReadForm): CommentReplyResponse
 
-    @POST("v3/comment/delete")
-    @Headers("Content-Type: application/json")
-    suspend fun delete(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: DeleteCommentForm,
-    ): CommentResponse
+    suspend fun delete(authHeader: String? = null, form: DeleteCommentForm): CommentResponse
 
-    @POST("v3/comment/report")
-    @Headers("Content-Type: application/json")
-    suspend fun createReport(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: CreateCommentReportForm,
-    ): CommentReportResponse
+    suspend fun createReport(authHeader: String? = null, form: CreateCommentReportForm): CommentReportResponse
 
-    @POST("v3/comment/remove")
-    @Headers("Content-Type: application/json")
-    suspend fun remove(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: RemoveCommentForm,
-    ): CommentResponse
+    suspend fun remove(authHeader: String? = null, form: RemoveCommentForm): CommentResponse
 
-    @POST("v3/comment/distinguish")
-    @Headers("Content-Type: application/json")
-    suspend fun distinguish(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: DistinguishCommentForm,
-    ): CommentResponse
+    suspend fun distinguish(authHeader: String? = null, form: DistinguishCommentForm): CommentResponse
 
-    @GET("v3/comment/report/list")
-    @Headers("Content-Type: application/json")
     suspend fun listReports(
-        @Header("Authorization") authHeader: String? = null,
-        @Query("auth") auth: String? = null,
-        @Query("limit") limit: Int? = null,
-        @Query("page") page: Int? = null,
-        @Query("unresolved_only") unresolvedOnly: Boolean? = null,
-        @Query("community_id") communityId: CommunityId? = null,
+        authHeader: String? = null,
+        auth: String? = null,
+        limit: Int? = null,
+        page: Int? = null,
+        unresolvedOnly: Boolean? = null,
+        communityId: CommunityId? = null,
     ): ListCommentReportsResponse
 
-    @PUT("v3/comment/report/resolve")
-    @Headers("Content-Type: application/json")
-    suspend fun resolveReport(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: ResolveCommentReportForm,
-    ): CommentReportResponse
+    suspend fun resolveReport(authHeader: String? = null, form: ResolveCommentReportForm): CommentReportResponse
 
-    @POST("v3/admin/purge/comment")
-    @Headers("Content-Type: application/json")
-    suspend fun purge(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: PurgeCommentForm,
-    ): SuccessResponse
+    suspend fun purge(authHeader: String? = null, form: PurgeCommentForm): SuccessResponse
 }

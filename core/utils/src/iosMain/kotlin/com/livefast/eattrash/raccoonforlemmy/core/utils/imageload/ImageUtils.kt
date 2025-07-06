@@ -7,7 +7,7 @@ import coil3.decode.Decoder
 import coil3.decode.SkiaImageDecoder
 import coil3.network.NetworkFetcher
 import coil3.network.ktor3.KtorNetworkFetcherFactory
-import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngineFactory
+import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngine
 import io.ktor.client.HttpClient
 import org.jetbrains.skia.Bitmap
 import org.jetbrains.skia.ColorAlphaType
@@ -34,6 +34,6 @@ actual fun getNativeDecoders(): List<Decoder.Factory> =
 
 actual fun getNativeFetchers(): List<NetworkFetcher.Factory> =
     buildList {
-        val httpClient = HttpClient(provideHttpClientEngineFactory())
+        val httpClient = HttpClient(provideHttpClientEngine())
         add(KtorNetworkFetcherFactory(httpClient))
     }

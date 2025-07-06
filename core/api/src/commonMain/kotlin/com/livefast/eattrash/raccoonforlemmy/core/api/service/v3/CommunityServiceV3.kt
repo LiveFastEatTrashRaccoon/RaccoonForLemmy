@@ -18,93 +18,39 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.dto.ListCommunitiesRespons
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.PurgeCommunityForm
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SortType
 import com.livefast.eattrash.raccoonforlemmy.core.api.dto.SuccessResponse
-import de.jensklingenberg.ktorfit.http.Body
-import de.jensklingenberg.ktorfit.http.GET
-import de.jensklingenberg.ktorfit.http.Header
-import de.jensklingenberg.ktorfit.http.Headers
-import de.jensklingenberg.ktorfit.http.POST
-import de.jensklingenberg.ktorfit.http.PUT
-import de.jensklingenberg.ktorfit.http.Query
 
 interface CommunityServiceV3 {
-    @GET("v3/community")
     suspend fun get(
-        @Header("Authorization") authHeader: String? = null,
-        @Query("auth") auth: String? = null,
-        @Query("id") id: CommunityId? = null,
-        @Query("name") name: String? = null,
+        authHeader: String? = null,
+        auth: String? = null,
+        id: CommunityId? = null,
+        name: String? = null,
     ): GetCommunityResponse
 
-    @GET("v3/community/list")
     suspend fun getAll(
-        @Header("Authorization") authHeader: String? = null,
-        @Query("auth") auth: String? = null,
-        @Query("page") page: Int? = null,
-        @Query("limit") limit: Int? = null,
-        @Query("show_nsfw") showNsfw: Boolean = true,
-        @Query("sort") sort: SortType = SortType.Active,
+        authHeader: String? = null,
+        auth: String? = null,
+        page: Int? = null,
+        limit: Int? = null,
+        showNsfw: Boolean = true,
+        sort: SortType = SortType.Active,
     ): ListCommunitiesResponse
 
-    @POST("v3/community/follow")
-    @Headers("Content-Type: application/json")
-    suspend fun follow(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: FollowCommunityForm,
-    ): CommunityResponse
+    suspend fun follow(authHeader: String? = null, form: FollowCommunityForm): CommunityResponse
 
-    @POST("v3/community/block")
-    @Headers("Content-Type: application/json")
-    suspend fun block(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: BlockCommunityForm,
-    ): BlockCommunityResponse
+    suspend fun block(authHeader: String? = null, form: BlockCommunityForm): BlockCommunityResponse
 
-    @POST("v3/community/ban_user")
-    @Headers("Content-Type: application/json")
-    suspend fun ban(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: BanFromCommunityForm,
-    ): BanFromCommunityResponse
+    suspend fun ban(authHeader: String? = null, form: BanFromCommunityForm): BanFromCommunityResponse
 
-    @POST("v3/community/mod")
-    @Headers("Content-Type: application/json")
-    suspend fun addMod(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: AddModToCommunityForm,
-    ): AddModToCommunityResponse
+    suspend fun addMod(authHeader: String? = null, form: AddModToCommunityForm): AddModToCommunityResponse
 
-    @POST("v3/community")
-    @Headers("Content-Type: application/json")
-    suspend fun create(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: CreateCommunityForm,
-    ): CommunityResponse
+    suspend fun create(authHeader: String? = null, form: CreateCommunityForm): CommunityResponse
 
-    @PUT("v3/community")
-    @Headers("Content-Type: application/json")
-    suspend fun edit(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: EditCommunityForm,
-    ): CommunityResponse
+    suspend fun edit(authHeader: String? = null, form: EditCommunityForm): CommunityResponse
 
-    @PUT("v3/community/hide")
-    @Headers("Content-Type: application/json")
-    suspend fun hide(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: HideCommunityForm,
-    ): SuccessResponse
+    suspend fun hide(authHeader: String? = null, form: HideCommunityForm): SuccessResponse
 
-    @POST("v3/community/delete")
-    @Headers("Content-Type: application/json")
-    suspend fun delete(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: DeleteCommunityForm,
-    ): CommunityResponse
+    suspend fun delete(authHeader: String? = null, form: DeleteCommunityForm): CommunityResponse
 
-    @POST("v3/admin/purge/community")
-    @Headers("Content-Type: application/json")
-    suspend fun purge(
-        @Header("Authorization") authHeader: String? = null,
-        @Body form: PurgeCommunityForm,
-    ): SuccessResponse
+    suspend fun purge(authHeader: String? = null, form: PurgeCommunityForm): SuccessResponse
 }

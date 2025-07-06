@@ -119,7 +119,7 @@ Here is a list of the main unit modules and their purpose:
 These are the foundational blocks containing the design system and various reusable utilities that are called throughout
 the whole project. Here is a short description of them:
 
-- `:core:api` contains the Ktorfit services used to interact with Lemmy APIs and all the data transfer objects (DTOs)
+- `:core:api` contains the services used to interact with Lemmy APIs and all the data transfer objects (DTOs)
   used to send and receive data from the APIs;
 - `:core:appearance` contains the look and feel repository which exposes the information about the current theme as
   observable states and allows to change them;
