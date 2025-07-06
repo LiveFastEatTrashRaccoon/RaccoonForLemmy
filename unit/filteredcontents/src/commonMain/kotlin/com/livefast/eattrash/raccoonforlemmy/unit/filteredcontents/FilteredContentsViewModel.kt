@@ -66,6 +66,8 @@ class FilteredContentsViewModel(
             identityRepository.isLogged
                 .onEach {
                     updateState { it.copy(currentUserId = identityRepository.cachedUser?.id) }
+                    // when this is a top-level screen, listen for auth changes
+                    refresh(initial = true)
                 }.launchIn(this)
             themeRepository.postLayout
                 .onEach { layout ->

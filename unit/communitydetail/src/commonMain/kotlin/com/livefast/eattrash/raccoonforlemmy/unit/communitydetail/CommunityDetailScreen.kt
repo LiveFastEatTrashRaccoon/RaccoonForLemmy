@@ -553,8 +553,15 @@ class CommunityDetailScreen(private val communityId: Long, private val otherInst
                                                 }
 
                                                 OptionId.ExploreInstance -> {
-                                                    val screen =
-                                                        ExploreScreen(otherInstance = uiState.community.host)
+                                                    val screen = object : Screen {
+                                                        override val key: ScreenKey =
+                                                            "ExploreScreen-${uiState.community.host}"
+
+                                                        @Composable
+                                                        override fun Content() {
+                                                            ExploreScreen(otherInstance = uiState.community.host)
+                                                        }
+                                                    }
                                                     navigationCoordinator.pushScreen(screen)
                                                 }
 

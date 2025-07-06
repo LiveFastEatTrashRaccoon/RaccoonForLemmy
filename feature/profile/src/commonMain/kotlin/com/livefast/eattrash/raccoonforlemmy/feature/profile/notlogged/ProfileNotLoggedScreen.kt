@@ -14,58 +14,49 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginScreen
 
-internal object ProfileNotLoggedScreen : Tab {
-    override val options: TabOptions
-        @Composable get() {
-            return TabOptions(1u, "")
-        }
+@Composable
+fun ProfileNotLoggedScreen(modifier: Modifier = Modifier) {
+    val model: ProfileNotLoggedMviModel = getViewModel<ProfileNotLoggedViewModel>()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val uiState by model.uiState.collectAsState()
 
-    @Composable
-    override fun Content() {
-        val model: ProfileNotLoggedMviModel = getViewModel<ProfileNotLoggedViewModel>()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val uiState by model.uiState.collectAsState()
-
-        Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = Spacing.m),
-            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-        ) {
-            val message =
-                if (uiState.authError) {
-                    LocalStrings.current.messageAuthIssue
-                } else {
-                    LocalStrings.current.profileNotLoggedMessage
-                }
-            Text(text = message)
-
-            Spacer(modifier = Modifier.height(Spacing.l))
-
+    Column(
+        modifier = modifier.fillMaxSize().padding(horizontal = Spacing.m),
+        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+    ) {
+        val message =
             if (uiState.authError) {
-                Button(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    onClick = {
-                        model.reduce(ProfileNotLoggedMviModel.Intent.Retry)
-                    },
-                ) {
-                    Text(LocalStrings.current.buttonRetry)
-                }
+                LocalStrings.current.messageAuthIssue
             } else {
-                Button(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    onClick = {
-                        navigationCoordinator.pushScreen(LoginScreen())
-                    },
-                ) {
-                    Text(LocalStrings.current.profileButtonLogin)
-                }
+                LocalStrings.current.profileNotLoggedMessage
+            }
+        Text(text = message)
+
+        Spacer(modifier = Modifier.height(Spacing.l))
+
+        if (uiState.authError) {
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = {
+                    model.reduce(ProfileNotLoggedMviModel.Intent.Retry)
+                },
+            ) {
+                Text(LocalStrings.current.buttonRetry)
+            }
+        } else {
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = {
+                    navigationCoordinator.pushScreen(LoginScreen())
+                },
+            ) {
+                Text(LocalStrings.current.profileButtonLogin)
             }
         }
     }

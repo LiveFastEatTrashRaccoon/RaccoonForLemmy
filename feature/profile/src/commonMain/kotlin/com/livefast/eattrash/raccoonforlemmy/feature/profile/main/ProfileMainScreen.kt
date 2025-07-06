@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuOpen
 import androidx.compose.material.icons.filled.ChevronRight
@@ -32,11 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import cafe.adriel.voyager.navigator.CurrentScreen
-import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabNavigator
-import cafe.adriel.voyager.navigator.tab.TabOptions
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
@@ -66,291 +65,292 @@ import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.ModlogScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedMviModel
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedScreen
+import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedViewModel
 import com.livefast.eattrash.raccoonforlemmy.unit.reportlist.ReportListScreen
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-internal object ProfileMainScreen : Tab {
-    override val options: TabOptions
-        @Composable get() {
-            return TabOptions(0u, "")
-        }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileMainScreen(
+    modifier: Modifier = Modifier,
+    model: ProfileMainMviModel = getViewModel<ProfileMainViewModel>(),
+    loggedModel: ProfileLoggedMviModel = getViewModel<ProfileLoggedViewModel>(),
+    loggedLazyListState: LazyListState = rememberLazyListState(),
+) {
+    val uiState by model.uiState.collectAsState()
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val drawerCoordinator = remember { getDrawerCoordinator() }
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val settingsRepository = remember { getSettingsRepository() }
+    val settings by settingsRepository.currentSettings.collectAsState()
+    val connection = navigationCoordinator.getBottomBarScrollConnection()
+    val scope = rememberCoroutineScope()
+    val notificationCenter = remember { getNotificationCenter() }
+    val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
+    var logoutConfirmDialogOpened by remember { mutableStateOf(false) }
+    var moderatorZoneBottomSheetOpened by remember { mutableStateOf(false) }
+    var manageAccountsBottomSheetOpened by remember { mutableStateOf(false) }
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: ProfileMainMviModel = getViewModel<ProfileMainViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val drawerCoordinator = remember { getDrawerCoordinator() }
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
-        val connection = navigationCoordinator.getBottomBarScrollConnection()
-        val scope = rememberCoroutineScope()
-        val notificationCenter = remember { getNotificationCenter() }
-        val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
-        var logoutConfirmDialogOpened by remember { mutableStateOf(false) }
-        var moderatorZoneBottomSheetOpened by remember { mutableStateOf(false) }
-        var manageAccountsBottomSheetOpened by remember { mutableStateOf(false) }
-
-        LaunchedEffect(notificationCenter) {
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ModeratorZoneActionSelected::class)
-                .onEach {
-                    val action = it.value.toModeratorZoneAction()
-                    when (action) {
-                        ModeratorZoneAction.GlobalModLog -> {
-                            navigationCoordinator.pushScreen(ModlogScreen())
-                        }
-
-                        ModeratorZoneAction.GlobalReports -> {
-                            navigationCoordinator.pushScreen(ReportListScreen())
-                        }
-
-                        ModeratorZoneAction.ModeratedContents -> {
-                            val screen = FilteredContentsScreen(type = FilteredContentsType.Moderated.toInt())
-                            navigationCoordinator.pushScreen(screen)
-                        }
+    LaunchedEffect(notificationCenter) {
+        notificationCenter
+            .subscribe(NotificationCenterEvent.ModeratorZoneActionSelected::class)
+            .onEach {
+                val action = it.value.toModeratorZoneAction()
+                when (action) {
+                    ModeratorZoneAction.GlobalModLog -> {
+                        navigationCoordinator.pushScreen(ModlogScreen())
                     }
-                }.launchIn(this)
 
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ProfileSideMenuAction::class)
-                .onEach { evt ->
-                    when (evt) {
-                        NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts -> {
-                            manageAccountsBottomSheetOpened = true
+                    ModeratorZoneAction.GlobalReports -> {
+                        navigationCoordinator.pushScreen(ReportListScreen())
+                    }
+
+                    ModeratorZoneAction.ModeratedContents -> {
+                        val screen = object : Screen {
+                            override val key: ScreenKey =
+                                "FilteredContentsScreen+${FilteredContentsType.Moderated.toInt()}"
+
+                            @Composable
+                            override fun Content() {
+                                FilteredContentsScreen(type = FilteredContentsType.Moderated.toInt())
+                            }
                         }
+                        navigationCoordinator.pushScreen(screen)
+                    }
+                }
+            }.launchIn(this)
 
-                        NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions -> {
-                            navigationCoordinator.pushScreen(ManageSubscriptionsScreen())
-                        }
+        notificationCenter
+            .subscribe(NotificationCenterEvent.ProfileSideMenuAction::class)
+            .onEach { evt ->
+                when (evt) {
+                    NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts -> {
+                        manageAccountsBottomSheetOpened = true
+                    }
 
-                        NotificationCenterEvent.ProfileSideMenuAction.Bookmarks -> {
-                            val screen =
+                    NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions -> {
+                        navigationCoordinator.pushScreen(ManageSubscriptionsScreen())
+                    }
+
+                    NotificationCenterEvent.ProfileSideMenuAction.Bookmarks -> {
+                        val screen = object : Screen {
+                            override val key: ScreenKey =
+                                "FilteredContentsScreen-${FilteredContentsType.Bookmarks.toInt()}"
+
+                            @Composable
+                            override fun Content() {
                                 FilteredContentsScreen(type = FilteredContentsType.Bookmarks.toInt())
-                            navigationCoordinator.pushScreen(screen)
+                            }
                         }
-
-                        NotificationCenterEvent.ProfileSideMenuAction.Drafts -> {
-                            navigationCoordinator.pushScreen(DraftsScreen())
-                        }
-
-                        NotificationCenterEvent.ProfileSideMenuAction.Votes -> {
-                            val screen =
-                                FilteredContentsScreen(type = FilteredContentsType.Votes.toInt())
-                            navigationCoordinator.pushScreen(screen)
-                        }
-
-                        NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone -> {
-                            moderatorZoneBottomSheetOpened = true
-                        }
-
-                        NotificationCenterEvent.ProfileSideMenuAction.Logout -> {
-                            logoutConfirmDialogOpened = true
-                        }
-
-                        NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity -> {
-                            navigationCoordinator.pushScreen(EditCommunityScreen())
-                        }
+                        navigationCoordinator.pushScreen(screen)
                     }
-                }.launchIn(this)
-        }
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
+                    NotificationCenterEvent.ProfileSideMenuAction.Drafts -> {
+                        navigationCoordinator.pushScreen(DraftsScreen())
+                    }
+
+                    NotificationCenterEvent.ProfileSideMenuAction.Votes -> {
+                        val screen = object : Screen {
+                            override val key: ScreenKey = "FilteredContentsScreen-${FilteredContentsType.Votes.toInt()}"
+
+                            @Composable
+                            override fun Content() {
+                                FilteredContentsScreen(type = FilteredContentsType.Votes.toInt())
+                            }
+                        }
+                        navigationCoordinator.pushScreen(screen)
+                    }
+
+                    NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone -> {
+                        moderatorZoneBottomSheetOpened = true
+                    }
+
+                    NotificationCenterEvent.ProfileSideMenuAction.Logout -> {
+                        logoutConfirmDialogOpened = true
+                    }
+
+                    NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity -> {
+                        navigationCoordinator.pushScreen(EditCommunityScreen())
+                    }
+                }
+            }.launchIn(this)
+    }
+
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                drawerCoordinator.toggleDrawer()
+                            }
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = LocalStrings.current.actionOpenSideMenu,
+                        )
+                    }
+                },
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.navigationProfile,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                actions = {
+                    if (uiState.logged == true) {
                         IconButton(
                             onClick = {
-                                scope.launch {
-                                    drawerCoordinator.toggleDrawer()
-                                }
+                                navigationCoordinator.openSideMenu(
+                                    ProfileSideMenuScreen(),
+                                )
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Menu,
+                                imageVector = Icons.AutoMirrored.Default.MenuOpen,
                                 contentDescription = LocalStrings.current.actionOpenSideMenu,
                             )
                         }
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        Box(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).nestedScroll(fabNestedScrollConnection)
+                .then(
+                    if (connection != null && settings.hideNavigationBarWhileScrolling) {
+                        Modifier.nestedScroll(connection)
+                    } else {
+                        Modifier
                     },
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = LocalStrings.current.navigationProfile,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
+                ).then(
+                    if (settings.hideNavigationBarWhileScrolling) {
+                        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
                     },
-                    actions = {
-                        if (uiState.logged == true) {
-                            IconButton(
-                                onClick = {
-                                    navigationCoordinator.openSideMenu(
-                                        ProfileSideMenuScreen(),
-                                    )
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.MenuOpen,
-                                    contentDescription = LocalStrings.current.actionOpenSideMenu,
-                                )
-                            }
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            // wait until logging status is determined
+            val logged = uiState.logged
+            when (logged) {
+                true -> ProfileLoggedScreen(
+                    model = loggedModel,
+                    lazyListState = loggedLazyListState,
+                )
+
+                false -> ProfileNotLoggedScreen()
+                else -> Unit
+            }
+        }
+    }
+
+    if (logoutConfirmDialogOpened) {
+        AlertDialog(
+            onDismissRequest = {
+                logoutConfirmDialogOpened = false
+            },
+            title = {
+                Text(
+                    text = LocalStrings.current.actionLogout,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            },
+            text = {
+                Text(text = LocalStrings.current.messageAreYouSure)
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        logoutConfirmDialogOpened = false
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonCancel)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        logoutConfirmDialogOpened = false
+                        navigationCoordinator.closeSideMenu()
+                        model.reduce(ProfileMainMviModel.Intent.Logout)
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonConfirm)
+                }
+            },
+        )
+    }
+
+    if (moderatorZoneBottomSheetOpened) {
+        val values =
+            listOf(
+                ModeratorZoneAction.GlobalReports,
+                ModeratorZoneAction.GlobalModLog,
+                ModeratorZoneAction.ModeratedContents,
+            )
+        CustomModalBottomSheet(
+            title = LocalStrings.current.moderatorZoneTitle,
+            items =
+            values.map {
+                CustomModalBottomSheetItem(
+                    label = it.toReadableName(),
+                    trailingContent = {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                        ) {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m),
+                                imageVector = it.toIcon(),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                            Icon(
+                                imageVector = Icons.Default.ChevronRight,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                                contentDescription = null,
+                            )
                         }
                     },
                 )
             },
-        ) { padding ->
-            Box(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).nestedScroll(fabNestedScrollConnection)
-                    .then(
-                        if (connection != null && settings.hideNavigationBarWhileScrolling) {
-                            Modifier.nestedScroll(connection)
-                        } else {
-                            Modifier
-                        },
-                    ).then(
-                        if (settings.hideNavigationBarWhileScrolling) {
-                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                        } else {
-                            Modifier
-                        },
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                // wait until logging status is determined
-                val logged = uiState.logged
-                if (logged != null) {
-                    val screens =
-                        remember {
-                            listOf(
-                                ProfileNotLoggedScreen,
-                                ProfileLoggedScreen,
-                            )
-                        }
-                    val root = if (logged) screens[1] else screens[0]
-                    TabNavigator(root) {
-                        CurrentScreen()
-                        val navigator = LocalTabNavigator.current
-                        LaunchedEffect(model) {
-                            model.uiState
-                                .map { s -> s.logged }
-                                .distinctUntilChanged()
-                                .onEach { logged ->
-                                    val index =
-                                        when (logged) {
-                                            true -> 1
-                                            else -> 0
-                                        }
-                                    navigator.current = screens[index]
-                                }.launchIn(this)
-                        }
-                    }
+            onSelect = { index ->
+                moderatorZoneBottomSheetOpened = false
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ModeratorZoneActionSelected(values[index].toInt()),
+                    )
                 }
-            }
-        }
+            },
+        )
+    }
 
-        if (logoutConfirmDialogOpened) {
-            AlertDialog(
-                onDismissRequest = {
-                    logoutConfirmDialogOpened = false
-                },
-                title = {
-                    Text(
-                        text = LocalStrings.current.actionLogout,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            logoutConfirmDialogOpened = false
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            logoutConfirmDialogOpened = false
-                            navigationCoordinator.closeSideMenu()
-                            model.reduce(ProfileMainMviModel.Intent.Logout)
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-            )
-        }
-
-        if (moderatorZoneBottomSheetOpened) {
-            val values =
-                listOf(
-                    ModeratorZoneAction.GlobalReports,
-                    ModeratorZoneAction.GlobalModLog,
-                    ModeratorZoneAction.ModeratedContents,
-                )
-            CustomModalBottomSheet(
-                title = LocalStrings.current.moderatorZoneTitle,
-                items =
-                values.map {
-                    CustomModalBottomSheetItem(
-                        label = it.toReadableName(),
-                        trailingContent = {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                            ) {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m),
-                                    imageVector = it.toIcon(),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                                Icon(
-                                    imageVector = Icons.Default.ChevronRight,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                    contentDescription = null,
-                                )
-                            }
-                        },
-                    )
-                },
-                onSelect = { index ->
-                    moderatorZoneBottomSheetOpened = false
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ModeratorZoneActionSelected(values[index].toInt()),
-                        )
-                    }
-                },
-            )
-        }
-
-        if (manageAccountsBottomSheetOpened) {
-            ManageAccountsBottomSheet(
-                onDismiss = { openLogin ->
-                    manageAccountsBottomSheetOpened = false
-                    if (openLogin) {
-                        navigationCoordinator.pushScreen(LoginScreen())
-                    }
-                },
-            )
-        }
+    if (manageAccountsBottomSheetOpened) {
+        ManageAccountsBottomSheet(
+            onDismiss = { openLogin ->
+                manageAccountsBottomSheetOpened = false
+                if (openLogin) {
+                    navigationCoordinator.pushScreen(LoginScreen())
+                }
+            },
+        )
     }
 }

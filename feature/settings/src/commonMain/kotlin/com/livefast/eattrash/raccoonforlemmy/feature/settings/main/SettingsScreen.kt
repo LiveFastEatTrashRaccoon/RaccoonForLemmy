@@ -1,5 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.feature.settings.main
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -41,6 +42,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.buildAnnotatedString
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
@@ -81,456 +83,464 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class SettingsScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: SettingsMviModel = getViewModel<SettingsViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val notificationCenter = remember { getNotificationCenter() }
-        val drawerCoordinator = remember { getDrawerCoordinator() }
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val scrollState = rememberScrollState()
-        var infoDialogOpened by remember { mutableStateOf(false) }
-        val scope = rememberCoroutineScope()
-        val uriHandler = LocalUriHandler.current
-        var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
-        var urlOpeningBottomSheetOpened by remember { mutableStateOf(false) }
-        var languageBottomSheetOpened by remember { mutableStateOf(false) }
-        var sortPostBottomSheetOpened by remember { mutableStateOf(false) }
-        var sortCommentsBottomSheetOpened by remember { mutableStateOf(false) }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(
+    modifier: Modifier = Modifier,
+    model: SettingsMviModel = getViewModel<SettingsViewModel>(),
+    scrollState: ScrollState = rememberScrollState(),
+) {
+    val uiState by model.uiState.collectAsState()
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val notificationCenter = remember { getNotificationCenter() }
+    val drawerCoordinator = remember { getDrawerCoordinator() }
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    var infoDialogOpened by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
+    var defaultListingTypeBottomSheetOpened by remember { mutableStateOf(false) }
+    var urlOpeningBottomSheetOpened by remember { mutableStateOf(false) }
+    var languageBottomSheetOpened by remember { mutableStateOf(false) }
+    var sortPostBottomSheetOpened by remember { mutableStateOf(false) }
+    var sortCommentsBottomSheetOpened by remember { mutableStateOf(false) }
 
-        LaunchedEffect(notificationCenter) {
-            notificationCenter
-                .subscribe(NotificationCenterEvent.CloseDialog::class)
-                .onEach {
-                    infoDialogOpened = false
-                }.launchIn(this)
-        }
+    LaunchedEffect(notificationCenter) {
+        notificationCenter
+            .subscribe(NotificationCenterEvent.CloseDialog::class)
+            .onEach {
+                infoDialogOpened = false
+            }.launchIn(this)
+    }
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
-                        if (navigationCoordinator.canPop.value) {
-                            IconButton(
-                                onClick = {
-                                    navigationCoordinator.popScreen()
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = LocalStrings.current.actionGoBack,
-                                )
-                            }
-                        } else {
-                            IconButton(
-                                onClick = {
-                                    scope.launch {
-                                        drawerCoordinator.toggleDrawer()
-                                    }
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = LocalStrings.current.actionOpenSideMenu,
-                                )
-                            }
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    if (navigationCoordinator.canPop.value) {
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.popScreen()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = LocalStrings.current.actionGoBack,
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    drawerCoordinator.toggleDrawer()
+                                }
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = LocalStrings.current.actionOpenSideMenu,
+                            )
+                        }
+                    }
+                },
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.navigationSettings,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+            )
+        },
+    ) { padding ->
+        Box(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).nestedScroll(scrollBehavior.nestedScrollConnection),
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
+            ) {
+                SettingsHeader(
+                    icon = Icons.Default.Style,
+                    title = LocalStrings.current.settingsSectionAppearance,
+                )
+
+                // language
+                SettingsRow(
+                    title = LocalStrings.current.settingsLanguage,
+                    annotatedValue =
+                    buildAnnotatedString {
+                        with(uiState.lang) {
+                            append(toLanguageFlag())
+                            append("  ")
+                            append(toLanguageName())
                         }
                     },
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = LocalStrings.current.navigationSettings,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
+                    onTap = {
+                        languageBottomSheetOpened = true
                     },
                 )
-            },
-        ) { padding ->
-            Box(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).nestedScroll(scrollBehavior.nestedScrollConnection),
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
-                ) {
+
+                // colors and fonts
+                SettingsRow(
+                    title = LocalStrings.current.settingsColorsAndFonts,
+                    disclosureIndicator = true,
+                    onTap = {
+                        navigationCoordinator.pushScreen(SettingsColorAndFontScreen())
+                    },
+                )
+
+                // content view configuration
+                SettingsRow(
+                    title = LocalStrings.current.settingsConfigureContent,
+                    disclosureIndicator = true,
+                    onTap = {
+                        navigationCoordinator.pushScreen(ConfigureContentViewScreen())
+                    },
+                )
+
+                SettingsHeader(
+                    icon = Icons.Default.SettingsApplications,
+                    title = LocalStrings.current.settingsSectionGeneral,
+                )
+
+                // default listing type
+                SettingsRow(
+                    title = LocalStrings.current.settingsDefaultListingType,
+                    value = uiState.defaultListingType.toReadableName(),
+                    onTap = {
+                        defaultListingTypeBottomSheetOpened = true
+                    },
+                )
+
+                // default post sort type
+                SettingsRow(
+                    title = LocalStrings.current.settingsDefaultPostSortType,
+                    value = uiState.defaultPostSortType.toReadableName(),
+                    onTap = {
+                        sortPostBottomSheetOpened = true
+                    },
+                )
+
+                // default comment sort type
+                SettingsRow(
+                    title = LocalStrings.current.settingsDefaultCommentSortType,
+                    value = uiState.defaultCommentSortType.toReadableName(),
+                    onTap = {
+                        sortCommentsBottomSheetOpened = true
+                    },
+                )
+
+                if (uiState.isLogged) {
+                    // swipe actions
+                    SettingsSwitchRow(
+                        title = LocalStrings.current.settingsEnableSwipeActions,
+                        value = uiState.enableSwipeActions,
+                        onChangeValue = { value ->
+                            model.reduce(
+                                SettingsMviModel.Intent.ChangeEnableSwipeActions(value),
+                            )
+                        },
+                    )
+                    SettingsRow(
+                        title = LocalStrings.current.settingsConfigureSwipeActions,
+                        disclosureIndicator = true,
+                        onTap = {
+                            val screen = ConfigureSwipeActionsScreen()
+                            navigationCoordinator.pushScreen(screen)
+                        },
+                    )
+                }
+
+                // URL open
+                SettingsRow(
+                    title = LocalStrings.current.settingsOpenUrlExternal,
+                    value = uiState.urlOpeningMode.toReadableName(),
+                    onTap = {
+                        urlOpeningBottomSheetOpened = true
+                    },
+                )
+
+                // advanced settings
+                SettingsRow(
+                    title = LocalStrings.current.settingsAdvanced,
+                    disclosureIndicator = true,
+                    onTap = {
+                        val screen = AdvancedSettingsScreen()
+                        navigationCoordinator.pushScreen(screen)
+                    },
+                )
+
+                if (uiState.isLogged) {
                     SettingsHeader(
-                        icon = Icons.Default.Style,
-                        title = LocalStrings.current.settingsSectionAppearance,
+                        icon = Icons.Default.AdminPanelSettings,
+                        title = LocalStrings.current.settingsSectionAccount,
                     )
 
-                    // language
+                    // web preferences
                     SettingsRow(
-                        title = LocalStrings.current.settingsLanguage,
-                        annotatedValue =
-                        buildAnnotatedString {
-                            with(uiState.lang) {
-                                append(toLanguageFlag())
-                                append("  ")
-                                append(toLanguageName())
-                            }
-                        },
-                        onTap = {
-                            languageBottomSheetOpened = true
-                        },
-                    )
-
-                    // colors and fonts
-                    SettingsRow(
-                        title = LocalStrings.current.settingsColorsAndFonts,
+                        title = LocalStrings.current.settingsWebPreferences,
                         disclosureIndicator = true,
                         onTap = {
-                            navigationCoordinator.pushScreen(SettingsColorAndFontScreen())
-                        },
-                    )
-
-                    // content view configuration
-                    SettingsRow(
-                        title = LocalStrings.current.settingsConfigureContent,
-                        disclosureIndicator = true,
-                        onTap = {
-                            navigationCoordinator.pushScreen(ConfigureContentViewScreen())
-                        },
-                    )
-
-                    SettingsHeader(
-                        icon = Icons.Default.SettingsApplications,
-                        title = LocalStrings.current.settingsSectionGeneral,
-                    )
-
-                    // default listing type
-                    SettingsRow(
-                        title = LocalStrings.current.settingsDefaultListingType,
-                        value = uiState.defaultListingType.toReadableName(),
-                        onTap = {
-                            defaultListingTypeBottomSheetOpened = true
-                        },
-                    )
-
-                    // default post sort type
-                    SettingsRow(
-                        title = LocalStrings.current.settingsDefaultPostSortType,
-                        value = uiState.defaultPostSortType.toReadableName(),
-                        onTap = {
-                            sortPostBottomSheetOpened = true
-                        },
-                    )
-
-                    // default comment sort type
-                    SettingsRow(
-                        title = LocalStrings.current.settingsDefaultCommentSortType,
-                        value = uiState.defaultCommentSortType.toReadableName(),
-                        onTap = {
-                            sortCommentsBottomSheetOpened = true
-                        },
-                    )
-
-                    if (uiState.isLogged) {
-                        // swipe actions
-                        SettingsSwitchRow(
-                            title = LocalStrings.current.settingsEnableSwipeActions,
-                            value = uiState.enableSwipeActions,
-                            onChangeValue = { value ->
-                                model.reduce(
-                                    SettingsMviModel.Intent.ChangeEnableSwipeActions(value),
-                                )
-                            },
-                        )
-                        SettingsRow(
-                            title = LocalStrings.current.settingsConfigureSwipeActions,
-                            disclosureIndicator = true,
-                            onTap = {
-                                val screen = ConfigureSwipeActionsScreen()
-                                navigationCoordinator.pushScreen(screen)
-                            },
-                        )
-                    }
-
-                    // URL open
-                    SettingsRow(
-                        title = LocalStrings.current.settingsOpenUrlExternal,
-                        value = uiState.urlOpeningMode.toReadableName(),
-                        onTap = {
-                            urlOpeningBottomSheetOpened = true
-                        },
-                    )
-
-                    // advanced settings
-                    SettingsRow(
-                        title = LocalStrings.current.settingsAdvanced,
-                        disclosureIndicator = true,
-                        onTap = {
-                            val screen = AdvancedSettingsScreen()
+                            val screen = AccountSettingsScreen()
                             navigationCoordinator.pushScreen(screen)
                         },
                     )
 
-                    if (uiState.isLogged) {
-                        SettingsHeader(
-                            icon = Icons.Default.AdminPanelSettings,
-                            title = LocalStrings.current.settingsSectionAccount,
-                        )
-
-                        // web preferences
+                    // uploaded media
+                    if (uiState.supportsMediaList) {
                         SettingsRow(
-                            title = LocalStrings.current.settingsWebPreferences,
+                            title = LocalStrings.current.settingsMediaList,
                             disclosureIndicator = true,
                             onTap = {
-                                val screen = AccountSettingsScreen()
-                                navigationCoordinator.pushScreen(screen)
+                                navigationCoordinator.pushScreen(MediaListScreen())
                             },
                         )
+                    }
 
-                        // uploaded media
-                        if (uiState.supportsMediaList) {
-                            SettingsRow(
-                                title = LocalStrings.current.settingsMediaList,
-                                disclosureIndicator = true,
-                                onTap = {
-                                    navigationCoordinator.pushScreen(MediaListScreen())
-                                },
-                            )
-                        }
+                    // bans and filters
+                    SettingsRow(
+                        title = LocalStrings.current.settingsManageBan,
+                        disclosureIndicator = true,
+                        onTap = {
+                            val screen = ManageBanScreen()
+                            navigationCoordinator.pushScreen(screen)
+                        },
+                    )
 
-                        // bans and filters
+                    if (uiState.supportsHiddenPosts) {
                         SettingsRow(
-                            title = LocalStrings.current.settingsManageBan,
+                            title = LocalStrings.current.settingsHiddenPosts,
                             disclosureIndicator = true,
                             onTap = {
-                                val screen = ManageBanScreen()
-                                navigationCoordinator.pushScreen(screen)
-                            },
-                        )
+                                val screen = object : Screen {
+                                    override val key: ScreenKey =
+                                        "FilteredContentsScreen-${FilteredContentsType.Hidden.toInt()}"
 
-                        if (uiState.supportsHiddenPosts) {
-                            SettingsRow(
-                                title = LocalStrings.current.settingsHiddenPosts,
-                                disclosureIndicator = true,
-                                onTap = {
-                                    val screen =
+                                    @Composable
+                                    override fun Content() {
                                         FilteredContentsScreen(
                                             type = FilteredContentsType.Hidden.toInt(),
                                         )
-                                    navigationCoordinator.pushScreen(screen)
-                                },
-                            )
-                        }
-
-                        // user tags
-                        SettingsRow(
-                            title = LocalStrings.current.userTagsTitle,
-                            disclosureIndicator = true,
-                            onTap = {
-                                navigationCoordinator.pushScreen(UserTagsScreen())
+                                    }
+                                }
+                                navigationCoordinator.pushScreen(screen)
                             },
                         )
                     }
 
-                    SettingsHeader(
-                        icon = Icons.Default.Explicit,
-                        title = LocalStrings.current.settingsSectionNsfw,
-                    )
-
-                    // NSFW options
-                    SettingsSwitchRow(
-                        title = LocalStrings.current.settingsIncludeNsfw,
-                        value = uiState.includeNsfw,
-                        onChangeValue = { value ->
-                            model.reduce(SettingsMviModel.Intent.ChangeIncludeNsfw(value))
-                        },
-                    )
-                    SettingsSwitchRow(
-                        title = LocalStrings.current.settingsBlurNsfw,
-                        value = uiState.blurNsfw,
-                        onChangeValue = { value ->
-                            model.reduce(SettingsMviModel.Intent.ChangeBlurNsfw(value))
-                        },
-                    )
-
-                    SettingsHeader(
-                        icon = Icons.Default.BugReport,
-                        title = LocalStrings.current.settingsSectionDebug,
-                    )
-
-                    // enable crash report
-                    SettingsSwitchRow(
-                        title = LocalStrings.current.settingsEnableCrashReport,
-                        value = uiState.crashReportEnabled,
-                        onChangeValue = { value ->
-                            model.reduce(SettingsMviModel.Intent.ChangeCrashReportEnabled(value))
-                        },
-                    )
-
-                    // about
+                    // user tags
                     SettingsRow(
-                        title = LocalStrings.current.settingsAbout,
-                        value = "",
+                        title = LocalStrings.current.userTagsTitle,
                         disclosureIndicator = true,
                         onTap = {
-                            infoDialogOpened = true
+                            navigationCoordinator.pushScreen(UserTagsScreen())
                         },
                     )
-
-                    // user manual
-                    SettingsRow(
-                        title = LocalStrings.current.settingsUserManual,
-                        value = "",
-                        disclosureIndicator = true,
-                        onTap = {
-                            uriHandler.openUri(SettingsConstants.USER_MANUAL_URL)
-                        },
-                    )
-
-                    Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
+
+                SettingsHeader(
+                    icon = Icons.Default.Explicit,
+                    title = LocalStrings.current.settingsSectionNsfw,
+                )
+
+                // NSFW options
+                SettingsSwitchRow(
+                    title = LocalStrings.current.settingsIncludeNsfw,
+                    value = uiState.includeNsfw,
+                    onChangeValue = { value ->
+                        model.reduce(SettingsMviModel.Intent.ChangeIncludeNsfw(value))
+                    },
+                )
+                SettingsSwitchRow(
+                    title = LocalStrings.current.settingsBlurNsfw,
+                    value = uiState.blurNsfw,
+                    onChangeValue = { value ->
+                        model.reduce(SettingsMviModel.Intent.ChangeBlurNsfw(value))
+                    },
+                )
+
+                SettingsHeader(
+                    icon = Icons.Default.BugReport,
+                    title = LocalStrings.current.settingsSectionDebug,
+                )
+
+                // enable crash report
+                SettingsSwitchRow(
+                    title = LocalStrings.current.settingsEnableCrashReport,
+                    value = uiState.crashReportEnabled,
+                    onChangeValue = { value ->
+                        model.reduce(SettingsMviModel.Intent.ChangeCrashReportEnabled(value))
+                    },
+                )
+
+                // about
+                SettingsRow(
+                    title = LocalStrings.current.settingsAbout,
+                    value = "",
+                    disclosureIndicator = true,
+                    onTap = {
+                        infoDialogOpened = true
+                    },
+                )
+
+                // user manual
+                SettingsRow(
+                    title = LocalStrings.current.settingsUserManual,
+                    value = "",
+                    disclosureIndicator = true,
+                    onTap = {
+                        uriHandler.openUri(SettingsConstants.USER_MANUAL_URL)
+                    },
+                )
+
+                Spacer(modifier = Modifier.height(Spacing.xxxl))
             }
         }
+    }
 
-        if (infoDialogOpened) {
-            AboutDialog().Content()
-        }
+    if (infoDialogOpened) {
+        AboutDialog().Content()
+    }
 
-        if (defaultListingTypeBottomSheetOpened) {
-            val values =
-                buildList {
-                    if (uiState.isLogged) {
-                        this += ListingType.Subscribed
-                    }
-                    this += ListingType.All
-                    this += ListingType.Local
+    if (defaultListingTypeBottomSheetOpened) {
+        val values =
+            buildList {
+                if (uiState.isLogged) {
+                    this += ListingType.Subscribed
                 }
-            CustomModalBottomSheet(
-                title = LocalStrings.current.inboxListingTypeTitle,
-                items =
-                values.map { value ->
-                    CustomModalBottomSheetItem(
-                        label = value.toReadableName(),
-                        trailingContent = {
-                            Icon(
-                                modifier = Modifier.size(IconSize.m),
-                                imageVector = value.toIcon(),
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onBackground,
-                            )
-                        },
-                    )
-                },
-                onSelect = { index ->
-                    defaultListingTypeBottomSheetOpened = false
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeFeedType(
-                                value = values[index],
-                                screenKey = "settings",
-                            ),
+                this += ListingType.All
+                this += ListingType.Local
+            }
+        CustomModalBottomSheet(
+            title = LocalStrings.current.inboxListingTypeTitle,
+            items =
+            values.map { value ->
+                CustomModalBottomSheetItem(
+                    label = value.toReadableName(),
+                    trailingContent = {
+                        Icon(
+                            modifier = Modifier.size(IconSize.m),
+                            imageVector = value.toIcon(),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
-                    }
-                },
-            )
-        }
-
-        if (urlOpeningBottomSheetOpened) {
-            val values =
-                buildList {
-                    this += UrlOpeningMode.Internal
-                    if (uiState.customTabsEnabled) {
-                        this += UrlOpeningMode.CustomTabs
-                    }
-                    this += UrlOpeningMode.External
+                    },
+                )
+            },
+            onSelect = { index ->
+                defaultListingTypeBottomSheetOpened = false
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeFeedType(
+                            value = values[index],
+                            screenKey = "settings",
+                        ),
+                    )
                 }
-            CustomModalBottomSheet(
-                title = LocalStrings.current.settingsOpenUrlExternal,
-                items =
-                values.map { value ->
-                    CustomModalBottomSheetItem(label = value.toReadableName())
-                },
-                onSelect = { index ->
-                    urlOpeningBottomSheetOpened = false
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeUrlOpeningMode(
-                                value = values[index].toInt(),
-                            ),
-                        )
-                    }
-                },
-            )
-        }
+            },
+        )
+    }
 
-        if (languageBottomSheetOpened) {
-            val values = Locales.ALL
-            CustomModalBottomSheet(
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-                title = LocalStrings.current.settingsLanguage,
-                items =
-                values.map { value ->
-                    CustomModalBottomSheetItem(
-                        label =
-                        buildString {
-                            with(value) {
-                                append(toLanguageFlag())
-                                append("  ")
-                                append(toLanguageName())
-                            }
-                        },
+    if (urlOpeningBottomSheetOpened) {
+        val values =
+            buildList {
+                this += UrlOpeningMode.Internal
+                if (uiState.customTabsEnabled) {
+                    this += UrlOpeningMode.CustomTabs
+                }
+                this += UrlOpeningMode.External
+            }
+        CustomModalBottomSheet(
+            title = LocalStrings.current.settingsOpenUrlExternal,
+            items =
+            values.map { value ->
+                CustomModalBottomSheetItem(label = value.toReadableName())
+            },
+            onSelect = { index ->
+                urlOpeningBottomSheetOpened = false
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeUrlOpeningMode(
+                            value = values[index].toInt(),
+                        ),
                     )
-                },
-                onSelect = { index ->
-                    languageBottomSheetOpened = false
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeLanguage(
-                                value = values[index],
-                            ),
-                        )
-                    }
-                },
-            )
-        }
+                }
+            },
+        )
+    }
 
-        if (sortPostBottomSheetOpened) {
-            SortBottomSheet(
-                values = uiState.availableSortTypesForPosts,
-                expandTop = true,
-                onSelect = { value ->
-                    sortPostBottomSheetOpened = false
-                    if (value != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeSortType(
-                                value = value,
-                                screenKey = "settings",
-                            ),
-                        )
-                    }
-                },
-            )
-        }
+    if (languageBottomSheetOpened) {
+        val values = Locales.ALL
+        CustomModalBottomSheet(
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            title = LocalStrings.current.settingsLanguage,
+            items =
+            values.map { value ->
+                CustomModalBottomSheetItem(
+                    label =
+                    buildString {
+                        with(value) {
+                            append(toLanguageFlag())
+                            append("  ")
+                            append(toLanguageName())
+                        }
+                    },
+                )
+            },
+            onSelect = { index ->
+                languageBottomSheetOpened = false
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeLanguage(
+                            value = values[index],
+                        ),
+                    )
+                }
+            },
+        )
+    }
 
-        if (sortCommentsBottomSheetOpened) {
-            SortBottomSheet(
-                values = uiState.availableSortTypesForComments,
-                expandTop = false,
-                onSelect = { value ->
-                    sortCommentsBottomSheetOpened = false
-                    if (value != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeCommentSortType(
-                                value = value,
-                                screenKey = "settings",
-                            ),
-                        )
-                    }
-                },
-            )
-        }
+    if (sortPostBottomSheetOpened) {
+        SortBottomSheet(
+            values = uiState.availableSortTypesForPosts,
+            expandTop = true,
+            onSelect = { value ->
+                sortPostBottomSheetOpened = false
+                if (value != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeSortType(
+                            value = value,
+                            screenKey = "settings",
+                        ),
+                    )
+                }
+            },
+        )
+    }
+
+    if (sortCommentsBottomSheetOpened) {
+        SortBottomSheet(
+            values = uiState.availableSortTypesForComments,
+            expandTop = false,
+            onSelect = { value ->
+                sortCommentsBottomSheetOpened = false
+                if (value != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeCommentSortType(
+                            value = value,
+                            screenKey = "settings",
+                        ),
+                    )
+                }
+            },
+        )
     }
 }
