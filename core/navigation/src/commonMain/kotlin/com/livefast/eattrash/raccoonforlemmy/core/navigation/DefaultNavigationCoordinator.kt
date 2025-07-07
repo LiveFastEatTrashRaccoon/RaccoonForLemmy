@@ -3,8 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.core.navigation
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabNavigator
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +38,7 @@ internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Di
 
     private var connection: NestedScrollConnection? = null
     private var navigator: Navigator? = null
-    private var tabNavigator: TabNavigator? = null
+    private var bottomNavController: BottomNavigationAdapter? = null
     private var canGoBackCallback: (() -> Boolean)? = null
     private val screenChannel = Channel<NavigationEvent>()
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
@@ -78,7 +76,12 @@ internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Di
 
     override fun getBottomBarScrollConnection() = connection
 
-    override fun setCurrentSection(section: TabNavigationSection) {
+    override fun setBottomNavigator(adapter: BottomNavigationAdapter) {
+        bottomNavController = adapter
+    }
+
+    override fun setBottomNavigationSection(section: TabNavigationSection) {
+        bottomNavController?.navigate(section)
         currentSection.getAndUpdate { oldValue ->
             if (section == oldValue) {
                 scope.launch {
@@ -133,14 +136,6 @@ internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Di
 
     override fun setExitMessageVisible(value: Boolean) {
         exitMessageVisible.value = value
-    }
-
-    override fun setTabNavigator(value: TabNavigator) {
-        tabNavigator = value
-    }
-
-    override fun changeTab(value: Tab) {
-        tabNavigator?.current = value
     }
 
     override fun openSideMenu(screen: Screen) {

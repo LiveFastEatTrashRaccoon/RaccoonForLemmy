@@ -358,8 +358,15 @@ class UserDetailScreen(private val userId: Long, private val otherInstance: Stri
                                                 }
 
                                                 OptionId.ExploreInstance -> {
-                                                    val screen =
-                                                        ExploreScreen(otherInstance = uiState.user.host)
+                                                    val screen = object : Screen {
+                                                        override val key: ScreenKey =
+                                                            "ExploreScreen-${uiState.user.host}"
+
+                                                        @Composable
+                                                        override fun Content() {
+                                                            ExploreScreen(otherInstance = uiState.user.host)
+                                                        }
+                                                    }
                                                     navigationCoordinator.pushScreen(screen)
                                                 }
 

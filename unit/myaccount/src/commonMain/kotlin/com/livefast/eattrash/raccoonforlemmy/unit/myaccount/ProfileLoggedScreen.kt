@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,8 +41,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -78,379 +77,202 @@ private object AuthIssueAnnotations {
     const val ACTION_LOGIN = "login"
 }
 
-object ProfileLoggedScreen : Tab {
-    override val options: TabOptions
-        @Composable get() {
-            return TabOptions(0u, "")
-        }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileLoggedScreen(
+    modifier: Modifier = Modifier,
+    model: ProfileLoggedMviModel = getViewModel<ProfileLoggedViewModel>(),
+    lazyListState: LazyListState = rememberLazyListState(),
+) {
+    val uiState by model.uiState.collectAsState()
+    val notificationCenter = remember { getNotificationCenter() }
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    var rawContent by remember { mutableStateOf<Any?>(null) }
+    val detailOpener = remember { getDetailOpener() }
+    val settingsRepository = remember { getSettingsRepository() }
+    val settings by settingsRepository.currentSettings.collectAsState()
+    var postIdToDelete by remember { mutableStateOf<Long?>(null) }
+    var commentIdToDelete by remember { mutableStateOf<Long?>(null) }
+    var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: ProfileLoggedMviModel = getViewModel<ProfileLoggedViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val notificationCenter = remember { getNotificationCenter() }
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val lazyListState = rememberLazyListState()
-        var rawContent by remember { mutableStateOf<Any?>(null) }
-        val detailOpener = remember { getDetailOpener() }
-        val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
-        var postIdToDelete by remember { mutableStateOf<Long?>(null) }
-        var commentIdToDelete by remember { mutableStateOf<Long?>(null) }
-        var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
-
-        LaunchedEffect(navigationCoordinator) {
-            navigationCoordinator.onDoubleTabSelection
-                .onEach { section ->
-                    runCatching {
-                        if (section == TabNavigationSection.Profile) {
-                            lazyListState.scrollToItem(0)
-                        }
+    LaunchedEffect(navigationCoordinator) {
+        navigationCoordinator.onDoubleTabSelection
+            .onEach { section ->
+                runCatching {
+                    if (section == TabNavigationSection.Profile) {
+                        lazyListState.scrollToItem(0)
                     }
-                }.launchIn(this)
-        }
-        LaunchedEffect(notificationCenter) {
-            notificationCenter
-                .subscribe(NotificationCenterEvent.PostCreated::class)
-                .onEach {
-                    model.reduce(ProfileLoggedMviModel.Intent.Refresh)
-                }.launchIn(this)
+                }
+            }.launchIn(this)
+    }
+    LaunchedEffect(notificationCenter) {
+        notificationCenter
+            .subscribe(NotificationCenterEvent.PostCreated::class)
+            .onEach {
+                model.reduce(ProfileLoggedMviModel.Intent.Refresh)
+            }.launchIn(this)
 
-            notificationCenter
-                .subscribe(NotificationCenterEvent.CommentCreated::class)
-                .onEach {
-                    model.reduce(ProfileLoggedMviModel.Intent.Refresh)
-                }.launchIn(this)
-        }
-        LaunchedEffect(model) {
-            model.effects
-                .onEach { effect ->
-                    when (effect) {
-                        is ProfileLoggedMviModel.Effect.OpenDetail ->
-                            detailOpener.openPostDetail(
-                                post = PostModel(id = effect.postId),
-                                highlightCommentId = effect.commentId,
-                            )
-                    }
-                }.launchIn(this)
-        }
+        notificationCenter
+            .subscribe(NotificationCenterEvent.CommentCreated::class)
+            .onEach {
+                model.reduce(ProfileLoggedMviModel.Intent.Refresh)
+            }.launchIn(this)
+    }
+    LaunchedEffect(model) {
+        model.effects
+            .onEach { effect ->
+                when (effect) {
+                    is ProfileLoggedMviModel.Effect.OpenDetail ->
+                        detailOpener.openPostDetail(
+                            post = PostModel(id = effect.postId),
+                            highlightCommentId = effect.commentId,
+                        )
+                }
+            }.launchIn(this)
+    }
 
-        if (uiState.initial) {
-            ProgressHud()
-            return
-        }
+    if (uiState.initial) {
+        ProgressHud()
+        return
+    }
 
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(Spacing.s),
-            horizontalAlignment = Alignment.CenterHorizontally,
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(Spacing.s),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        PullToRefreshBox(
+            isRefreshing = uiState.refreshing,
+            onRefresh = {
+                model.reduce(ProfileLoggedMviModel.Intent.Refresh)
+            },
         ) {
-            PullToRefreshBox(
-                isRefreshing = uiState.refreshing,
-                onRefresh = {
-                    model.reduce(ProfileLoggedMviModel.Intent.Refresh)
-                },
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = lazyListState,
             ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = lazyListState,
-                ) {
-                    if (uiState.user == null) {
-                        item {
-                            Text(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s),
-                                textAlign = TextAlign.Center,
-                                text = LocalStrings.current.messageAuthIssue,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
+                if (uiState.user == null) {
+                    item {
+                        Text(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s),
+                            textAlign = TextAlign.Center,
+                            text = LocalStrings.current.messageAuthIssue,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
 
-                            val annotatedString =
-                                buildAnnotatedString {
-                                    val linkStyle =
-                                        SpanStyle(
-                                            color = MaterialTheme.colorScheme.primary,
-                                            textDecoration = TextDecoration.Underline,
-                                        )
-                                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                                        append(LocalStrings.current.messageAuthIssueSegue0)
-                                        append("\n• ")
-                                        pushLink(
-                                            LinkAnnotation.Clickable(
-                                                tag = AuthIssueAnnotations.ACTION_REFRESH,
-                                                linkInteractionListener = {
-                                                    model.reduce(ProfileLoggedMviModel.Intent.Refresh)
-                                                },
-                                            ),
-                                        )
-                                        withStyle(linkStyle) {
-                                            append(LocalStrings.current.messageAuthIssueSegue1)
-                                        }
-                                        pop()
-                                        append("\n• ")
-                                        pushLink(
-                                            LinkAnnotation.Clickable(
-                                                tag = AuthIssueAnnotations.ACTION_LOGIN,
-                                                linkInteractionListener = {
-                                                    notificationCenter.send(
-                                                        NotificationCenterEvent.ProfileSideMenuAction.Logout,
-                                                    )
-                                                },
-                                            ),
-                                        )
-                                        withStyle(linkStyle) {
-                                            append(LocalStrings.current.messageAuthIssueSegue2)
-                                        }
-                                        pop()
-                                        append("\n• ")
-                                        append(LocalStrings.current.messageAuthIssueSegue3)
+                        val annotatedString =
+                            buildAnnotatedString {
+                                val linkStyle =
+                                    SpanStyle(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        textDecoration = TextDecoration.Underline,
+                                    )
+                                withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                                    append(LocalStrings.current.messageAuthIssueSegue0)
+                                    append("\n• ")
+                                    pushLink(
+                                        LinkAnnotation.Clickable(
+                                            tag = AuthIssueAnnotations.ACTION_REFRESH,
+                                            linkInteractionListener = {
+                                                model.reduce(ProfileLoggedMviModel.Intent.Refresh)
+                                            },
+                                        ),
+                                    )
+                                    withStyle(linkStyle) {
+                                        append(LocalStrings.current.messageAuthIssueSegue1)
                                     }
+                                    pop()
+                                    append("\n• ")
+                                    pushLink(
+                                        LinkAnnotation.Clickable(
+                                            tag = AuthIssueAnnotations.ACTION_LOGIN,
+                                            linkInteractionListener = {
+                                                notificationCenter.send(
+                                                    NotificationCenterEvent.ProfileSideMenuAction.Logout,
+                                                )
+                                            },
+                                        ),
+                                    )
+                                    withStyle(linkStyle) {
+                                        append(LocalStrings.current.messageAuthIssueSegue2)
+                                    }
+                                    pop()
+                                    append("\n• ")
+                                    append(LocalStrings.current.messageAuthIssueSegue3)
                                 }
-                            Box(
-                                modifier =
-                                Modifier
-                                    .padding(
-                                        vertical = Spacing.m,
-                                        horizontal = Spacing.s,
-                                    ).border(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                        shape = RoundedCornerShape(CornerSize.l),
-                                    ).padding(
-                                        vertical = Spacing.s,
-                                        horizontal = Spacing.m,
-                                    ),
-                            ) {
-                                Text(
-                                    modifier =
-                                    Modifier.fillMaxWidth(),
-                                    text = annotatedString,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                )
                             }
-                        }
-                    } else {
-                        item {
-                            uiState.user?.also { user ->
-                                UserHeader(
-                                    user = user,
-                                    autoLoadImages = uiState.autoLoadImages,
-                                    onOpenImage = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                source = user.readableHandle,
-                                            ),
-                                        )
-                                    },
-                                )
-                            }
-                        }
-                        item {
-                            SectionSelector(
-                                modifier = Modifier.padding(bottom = Spacing.s),
-                                titles =
-                                listOf(
-                                    LocalStrings.current.profileSectionPosts,
-                                    LocalStrings.current.profileSectionComments,
+                        Box(
+                            modifier =
+                            Modifier
+                                .padding(
+                                    vertical = Spacing.m,
+                                    horizontal = Spacing.s,
+                                ).border(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    shape = RoundedCornerShape(CornerSize.l),
+                                ).padding(
+                                    vertical = Spacing.s,
+                                    horizontal = Spacing.m,
                                 ),
-                                currentSection =
-                                when (uiState.section) {
-                                    ProfileLoggedSection.Comments -> 1
-                                    else -> 0
-                                },
-                                onSectionSelected = { idx ->
-                                    val section =
-                                        when (idx) {
-                                            1 -> ProfileLoggedSection.Comments
-                                            else -> ProfileLoggedSection.Posts
-                                        }
-                                    model.reduce(
-                                        ProfileLoggedMviModel.Intent.ChangeSection(section),
+                        ) {
+                            Text(
+                                modifier =
+                                Modifier.fillMaxWidth(),
+                                text = annotatedString,
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                        }
+                    }
+                } else {
+                    item {
+                        uiState.user?.also { user ->
+                            UserHeader(
+                                user = user,
+                                autoLoadImages = uiState.autoLoadImages,
+                                onOpenImage = { url ->
+                                    navigationCoordinator.pushScreen(
+                                        ZoomableImageScreen(
+                                            url = url,
+                                            source = user.readableHandle,
+                                        ),
                                     )
                                 },
                             )
                         }
-                        if (uiState.section == ProfileLoggedSection.Posts) {
-                            if (uiState.posts.isEmpty() && uiState.loading && !uiState.initial) {
-                                items(5) {
-                                    PostCardPlaceholder(
-                                        modifier = Modifier.padding(horizontal = Spacing.xs),
-                                        postLayout = uiState.postLayout,
-                                    )
-                                    if (uiState.postLayout != PostLayout.Card) {
-                                        HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
-                                    } else {
-                                        Spacer(modifier = Modifier.height(Spacing.interItem))
+                    }
+                    item {
+                        SectionSelector(
+                            modifier = Modifier.padding(bottom = Spacing.s),
+                            titles =
+                            listOf(
+                                LocalStrings.current.profileSectionPosts,
+                                LocalStrings.current.profileSectionComments,
+                            ),
+                            currentSection =
+                            when (uiState.section) {
+                                ProfileLoggedSection.Comments -> 1
+                                else -> 0
+                            },
+                            onSectionSelected = { idx ->
+                                val section =
+                                    when (idx) {
+                                        1 -> ProfileLoggedSection.Comments
+                                        else -> ProfileLoggedSection.Posts
                                     }
-                                }
-                            }
-                            items(
-                                items = uiState.posts,
-                                key = {
-                                    it.id.toString() + (it.updateDate ?: it.publishDate)
-                                },
-                            ) { post ->
-                                PostCard(
-                                    post = post,
+                                model.reduce(
+                                    ProfileLoggedMviModel.Intent.ChangeSection(section),
+                                )
+                            },
+                        )
+                    }
+                    if (uiState.section == ProfileLoggedSection.Posts) {
+                        if (uiState.posts.isEmpty() && uiState.loading && !uiState.initial) {
+                            items(5) {
+                                PostCardPlaceholder(
+                                    modifier = Modifier.padding(horizontal = Spacing.xs),
                                     postLayout = uiState.postLayout,
-                                    limitBodyHeight = true,
-                                    fullHeightImage = uiState.fullHeightImages,
-                                    fullWidthImage = uiState.fullWidthImages,
-                                    voteFormat = uiState.voteFormat,
-                                    autoLoadImages = uiState.autoLoadImages,
-                                    preferNicknames = uiState.preferNicknames,
-                                    showScores = uiState.showScores,
-                                    showUnreadComments = uiState.showUnreadComments,
-                                    hideAuthor = true,
-                                    blurNsfw = false,
-                                    downVoteEnabled = uiState.downVoteEnabled,
-                                    onClick = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.WillOpenDetail(
-                                                postId = post.id,
-                                            ),
-                                        )
-                                    },
-                                    onReply = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.WillOpenDetail(
-                                                postId = post.id,
-                                            ),
-                                        )
-                                    },
-                                    onOpenCommunity = { community, instance ->
-                                        detailOpener.openCommunityDetail(community, instance)
-                                    },
-                                    onOpenCreator = { user, instance ->
-                                        detailOpener.openUserDetail(user, instance)
-                                    },
-                                    onOpenImage = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                source = post.community?.readableHandle.orEmpty(),
-                                            ),
-                                        )
-                                    },
-                                    onOpenVideo = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                isVideo = true,
-                                                source = post.community?.readableHandle.orEmpty(),
-                                            ),
-                                        )
-                                    },
-                                    onUpVote = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.UpVotePost(
-                                                id = post.id,
-                                            ),
-                                        )
-                                    },
-                                    onDownVote = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.DownVotePost(
-                                                id = post.id,
-                                            ),
-                                        )
-                                    },
-                                    onSave = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.SavePost(
-                                                id = post.id,
-                                            ),
-                                        )
-                                    },
-                                    options =
-                                    buildList {
-                                        this +=
-                                            Option(
-                                                OptionId.Share,
-                                                LocalStrings.current.postActionShare,
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.CrossPost,
-                                                LocalStrings.current.postActionCrossPost,
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.SeeRaw,
-                                                LocalStrings.current.postActionSeeRaw,
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.Edit,
-                                                LocalStrings.current.postActionEdit,
-                                            )
-                                        if (post.deleted) {
-                                            this +=
-                                                Option(
-                                                    OptionId.Restore,
-                                                    LocalStrings.current.actionRestore,
-                                                )
-                                        } else {
-                                            this +=
-                                                Option(
-                                                    OptionId.Delete,
-                                                    LocalStrings.current.commentActionDelete,
-                                                )
-                                        }
-                                    },
-                                    onSelectOption = { optionId ->
-                                        when (optionId) {
-                                            OptionId.Delete -> {
-                                                postIdToDelete = post.id
-                                            }
-
-                                            OptionId.Edit -> {
-                                                detailOpener.openCreatePost(
-                                                    editedPost = post,
-                                                )
-                                            }
-
-                                            OptionId.SeeRaw -> {
-                                                rawContent = post
-                                            }
-
-                                            OptionId.CrossPost -> {
-                                                detailOpener.openCreatePost(
-                                                    crossPost = post,
-                                                    forceCommunitySelection = true,
-                                                )
-                                            }
-
-                                            OptionId.Share -> {
-                                                val urls =
-                                                    listOfNotNull(
-                                                        post.originalUrl,
-                                                        "https://${uiState.instance}/post/${post.id}",
-                                                    ).distinct()
-                                                if (urls.size == 1) {
-                                                    model.reduce(
-                                                        ProfileLoggedMviModel.Intent.Share(
-                                                            urls.first(),
-                                                        ),
-                                                    )
-                                                } else {
-                                                    shareBottomSheetUrls = urls
-                                                }
-                                            }
-
-                                            OptionId.Restore -> {
-                                                model.reduce(
-                                                    ProfileLoggedMviModel.Intent.RestorePost(
-                                                        post.id,
-                                                    ),
-                                                )
-                                            }
-
-                                            else -> Unit
-                                        }
-                                    },
                                 )
                                 if (uiState.postLayout != PostLayout.Card) {
                                     HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
@@ -458,375 +280,547 @@ object ProfileLoggedScreen : Tab {
                                     Spacer(modifier = Modifier.height(Spacing.interItem))
                                 }
                             }
-
-                            if (uiState.posts.isEmpty() && !uiState.loading && !uiState.initial) {
-                                item {
-                                    Text(
-                                        modifier =
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = Spacing.xs),
-                                        textAlign = TextAlign.Center,
-                                        text = LocalStrings.current.messageEmptyList,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.onBackground,
+                        }
+                        items(
+                            items = uiState.posts,
+                            key = {
+                                it.id.toString() + (it.updateDate ?: it.publishDate)
+                            },
+                        ) { post ->
+                            PostCard(
+                                post = post,
+                                postLayout = uiState.postLayout,
+                                limitBodyHeight = true,
+                                fullHeightImage = uiState.fullHeightImages,
+                                fullWidthImage = uiState.fullWidthImages,
+                                voteFormat = uiState.voteFormat,
+                                autoLoadImages = uiState.autoLoadImages,
+                                preferNicknames = uiState.preferNicknames,
+                                showScores = uiState.showScores,
+                                showUnreadComments = uiState.showUnreadComments,
+                                hideAuthor = true,
+                                blurNsfw = false,
+                                downVoteEnabled = uiState.downVoteEnabled,
+                                onClick = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.WillOpenDetail(
+                                            postId = post.id,
+                                        ),
                                     )
-                                }
-                            }
-                        } else {
-                            if (uiState.comments.isEmpty() && uiState.loading && uiState.initial) {
-                                items(5) {
-                                    CommentCardPlaceholder(
-                                        modifier = Modifier.padding(horizontal = Spacing.xs),
-                                        hideAuthor = true,
+                                },
+                                onReply = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.WillOpenDetail(
+                                            postId = post.id,
+                                        ),
                                     )
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(vertical = Spacing.xxxs),
-                                        thickness = 0.25.dp,
+                                },
+                                onOpenCommunity = { community, instance ->
+                                    detailOpener.openCommunityDetail(community, instance)
+                                },
+                                onOpenCreator = { user, instance ->
+                                    detailOpener.openUserDetail(user, instance)
+                                },
+                                onOpenImage = { url ->
+                                    navigationCoordinator.pushScreen(
+                                        ZoomableImageScreen(
+                                            url = url,
+                                            source = post.community?.readableHandle.orEmpty(),
+                                        ),
                                     )
-                                }
-                            }
-                            items(
-                                items = uiState.comments,
-                                key = { it.id.toString() + (it.updateDate ?: it.publishDate) },
-                            ) { comment ->
-                                CommentCard(
-                                    modifier = Modifier.background(MaterialTheme.colorScheme.background),
-                                    comment = comment,
-                                    voteFormat = uiState.voteFormat,
-                                    autoLoadImages = uiState.autoLoadImages,
-                                    showScores = uiState.showScores,
-                                    hideCommunity = false,
-                                    hideAuthor = true,
-                                    indentAmount = 0,
-                                    downVoteEnabled = uiState.downVoteEnabled,
-                                    onImageClick = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                source = comment.community?.readableHandle.orEmpty(),
-                                            ),
+                                },
+                                onOpenVideo = { url ->
+                                    navigationCoordinator.pushScreen(
+                                        ZoomableImageScreen(
+                                            url = url,
+                                            isVideo = true,
+                                            source = post.community?.readableHandle.orEmpty(),
+                                        ),
+                                    )
+                                },
+                                onUpVote = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.UpVotePost(
+                                            id = post.id,
+                                        ),
+                                    )
+                                },
+                                onDownVote = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.DownVotePost(
+                                            id = post.id,
+                                        ),
+                                    )
+                                },
+                                onSave = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.SavePost(
+                                            id = post.id,
+                                        ),
+                                    )
+                                },
+                                options =
+                                buildList {
+                                    this +=
+                                        Option(
+                                            OptionId.Share,
+                                            LocalStrings.current.postActionShare,
                                         )
-                                    },
-                                    onOpenCommunity = { community, instance ->
-                                        detailOpener.openCommunityDetail(community, instance)
-                                    },
-                                    onClick = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.WillOpenDetail(
-                                                postId = comment.postId,
-                                                commentId = comment.id,
-                                            ),
+                                    this +=
+                                        Option(
+                                            OptionId.CrossPost,
+                                            LocalStrings.current.postActionCrossPost,
                                         )
-                                    },
-                                    onReply = {
-                                        detailOpener.openReply(
-                                            originalPost = PostModel(id = comment.postId),
-                                            originalComment = comment,
+                                    this +=
+                                        Option(
+                                            OptionId.SeeRaw,
+                                            LocalStrings.current.postActionSeeRaw,
                                         )
-                                    },
-                                    onUpVote = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.UpVoteComment(
-                                                id = comment.id,
-                                            ),
+                                    this +=
+                                        Option(
+                                            OptionId.Edit,
+                                            LocalStrings.current.postActionEdit,
                                         )
-                                    },
-                                    onDownVote = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.DownVoteComment(
-                                                id = comment.id,
-                                            ),
-                                        )
-                                    },
-                                    onSave = {
-                                        model.reduce(
-                                            ProfileLoggedMviModel.Intent.SaveComment(
-                                                id = comment.id,
-                                            ),
-                                        )
-                                    },
-                                    options =
-                                    buildList {
+                                    if (post.deleted) {
                                         this +=
                                             Option(
-                                                OptionId.SeeRaw,
-                                                LocalStrings.current.postActionSeeRaw,
+                                                OptionId.Restore,
+                                                LocalStrings.current.actionRestore,
                                             )
+                                    } else {
                                         this +=
                                             Option(
-                                                OptionId.SeeRaw,
-                                                LocalStrings.current.postActionSeeRaw,
+                                                OptionId.Delete,
+                                                LocalStrings.current.commentActionDelete,
                                             )
-                                        this +=
-                                            Option(
-                                                OptionId.Edit,
-                                                LocalStrings.current.postActionEdit,
-                                            )
-                                        if (comment.deleted) {
-                                            this +=
-                                                Option(
-                                                    OptionId.Restore,
-                                                    LocalStrings.current.actionRestore,
-                                                )
-                                        } else {
-                                            this +=
-                                                Option(
-                                                    OptionId.Delete,
-                                                    LocalStrings.current.commentActionDelete,
-                                                )
+                                    }
+                                },
+                                onSelectOption = { optionId ->
+                                    when (optionId) {
+                                        OptionId.Delete -> {
+                                            postIdToDelete = post.id
                                         }
-                                    },
-                                    onSelectOption = { optionId ->
-                                        when (optionId) {
-                                            OptionId.Delete -> {
-                                                commentIdToDelete = comment.id
-                                            }
 
-                                            OptionId.Edit -> {
-                                                detailOpener.openReply(
-                                                    originalPost = PostModel(id = comment.postId),
-                                                    editedComment = comment,
-                                                )
-                                            }
+                                        OptionId.Edit -> {
+                                            detailOpener.openCreatePost(
+                                                editedPost = post,
+                                            )
+                                        }
 
-                                            OptionId.SeeRaw -> {
-                                                rawContent = comment
-                                            }
+                                        OptionId.SeeRaw -> {
+                                            rawContent = post
+                                        }
 
-                                            OptionId.Share -> {
-                                                val urls =
-                                                    listOfNotNull(
-                                                        comment.originalUrl,
-                                                        "https://${uiState.instance}/comment/${comment.id}",
-                                                    ).distinct()
-                                                if (urls.size == 1) {
-                                                    model.reduce(
-                                                        ProfileLoggedMviModel.Intent.Share(
-                                                            urls.first(),
-                                                        ),
-                                                    )
-                                                } else {
-                                                    shareBottomSheetUrls = urls
-                                                }
-                                            }
+                                        OptionId.CrossPost -> {
+                                            detailOpener.openCreatePost(
+                                                crossPost = post,
+                                                forceCommunitySelection = true,
+                                            )
+                                        }
 
-                                            OptionId.Restore -> {
+                                        OptionId.Share -> {
+                                            val urls =
+                                                listOfNotNull(
+                                                    post.originalUrl,
+                                                    "https://${uiState.instance}/post/${post.id}",
+                                                ).distinct()
+                                            if (urls.size == 1) {
                                                 model.reduce(
-                                                    ProfileLoggedMviModel.Intent.RestoreComment(
-                                                        comment.id,
+                                                    ProfileLoggedMviModel.Intent.Share(
+                                                        urls.first(),
                                                     ),
                                                 )
+                                            } else {
+                                                shareBottomSheetUrls = urls
                                             }
-
-                                            else -> Unit
                                         }
-                                    },
+
+                                        OptionId.Restore -> {
+                                            model.reduce(
+                                                ProfileLoggedMviModel.Intent.RestorePost(
+                                                    post.id,
+                                                ),
+                                            )
+                                        }
+
+                                        else -> Unit
+                                    }
+                                },
+                            )
+                            if (uiState.postLayout != PostLayout.Card) {
+                                HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
+                            } else {
+                                Spacer(modifier = Modifier.height(Spacing.interItem))
+                            }
+                        }
+
+                        if (uiState.posts.isEmpty() && !uiState.loading && !uiState.initial) {
+                            item {
+                                Text(
+                                    modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = Spacing.xs),
+                                    textAlign = TextAlign.Center,
+                                    text = LocalStrings.current.messageEmptyList,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
+                            }
+                        }
+                    } else {
+                        if (uiState.comments.isEmpty() && uiState.loading && uiState.initial) {
+                            items(5) {
+                                CommentCardPlaceholder(
+                                    modifier = Modifier.padding(horizontal = Spacing.xs),
+                                    hideAuthor = true,
                                 )
                                 HorizontalDivider(
                                     modifier = Modifier.padding(vertical = Spacing.xxxs),
                                     thickness = 0.25.dp,
                                 )
                             }
-
-                            if (uiState.comments.isEmpty() && !uiState.loading && !uiState.initial) {
-                                item {
-                                    Text(
-                                        modifier =
-                                        Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = Spacing.xs),
-                                        textAlign = TextAlign.Center,
-                                        text = LocalStrings.current.messageEmptyList,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                }
-                            }
                         }
-                        item {
-                            if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                                if (settings.infiniteScrollEnabled) {
-                                    model.reduce(ProfileLoggedMviModel.Intent.LoadNextPage)
-                                } else {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
-                                        horizontalArrangement = Arrangement.Center,
-                                    ) {
-                                        Button(
-                                            onClick = {
-                                                model.reduce(ProfileLoggedMviModel.Intent.LoadNextPage)
-                                            },
-                                        ) {
-                                            Text(
-                                                text =
-                                                if (uiState.section == ProfileLoggedSection.Posts) {
-                                                    LocalStrings.current.postListLoadMorePosts
-                                                } else {
-                                                    LocalStrings.current.postDetailLoadMoreComments
-                                                },
-                                                style = MaterialTheme.typography.labelSmall,
+                        items(
+                            items = uiState.comments,
+                            key = { it.id.toString() + (it.updateDate ?: it.publishDate) },
+                        ) { comment ->
+                            CommentCard(
+                                modifier = Modifier.background(MaterialTheme.colorScheme.background),
+                                comment = comment,
+                                voteFormat = uiState.voteFormat,
+                                autoLoadImages = uiState.autoLoadImages,
+                                showScores = uiState.showScores,
+                                hideCommunity = false,
+                                hideAuthor = true,
+                                indentAmount = 0,
+                                downVoteEnabled = uiState.downVoteEnabled,
+                                onImageClick = { url ->
+                                    navigationCoordinator.pushScreen(
+                                        ZoomableImageScreen(
+                                            url = url,
+                                            source = comment.community?.readableHandle.orEmpty(),
+                                        ),
+                                    )
+                                },
+                                onOpenCommunity = { community, instance ->
+                                    detailOpener.openCommunityDetail(community, instance)
+                                },
+                                onClick = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.WillOpenDetail(
+                                            postId = comment.postId,
+                                            commentId = comment.id,
+                                        ),
+                                    )
+                                },
+                                onReply = {
+                                    detailOpener.openReply(
+                                        originalPost = PostModel(id = comment.postId),
+                                        originalComment = comment,
+                                    )
+                                },
+                                onUpVote = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.UpVoteComment(
+                                            id = comment.id,
+                                        ),
+                                    )
+                                },
+                                onDownVote = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.DownVoteComment(
+                                            id = comment.id,
+                                        ),
+                                    )
+                                },
+                                onSave = {
+                                    model.reduce(
+                                        ProfileLoggedMviModel.Intent.SaveComment(
+                                            id = comment.id,
+                                        ),
+                                    )
+                                },
+                                options =
+                                buildList {
+                                    this +=
+                                        Option(
+                                            OptionId.SeeRaw,
+                                            LocalStrings.current.postActionSeeRaw,
+                                        )
+                                    this +=
+                                        Option(
+                                            OptionId.SeeRaw,
+                                            LocalStrings.current.postActionSeeRaw,
+                                        )
+                                    this +=
+                                        Option(
+                                            OptionId.Edit,
+                                            LocalStrings.current.postActionEdit,
+                                        )
+                                    if (comment.deleted) {
+                                        this +=
+                                            Option(
+                                                OptionId.Restore,
+                                                LocalStrings.current.actionRestore,
+                                            )
+                                    } else {
+                                        this +=
+                                            Option(
+                                                OptionId.Delete,
+                                                LocalStrings.current.commentActionDelete,
+                                            )
+                                    }
+                                },
+                                onSelectOption = { optionId ->
+                                    when (optionId) {
+                                        OptionId.Delete -> {
+                                            commentIdToDelete = comment.id
+                                        }
+
+                                        OptionId.Edit -> {
+                                            detailOpener.openReply(
+                                                originalPost = PostModel(id = comment.postId),
+                                                editedComment = comment,
                                             )
                                         }
+
+                                        OptionId.SeeRaw -> {
+                                            rawContent = comment
+                                        }
+
+                                        OptionId.Share -> {
+                                            val urls =
+                                                listOfNotNull(
+                                                    comment.originalUrl,
+                                                    "https://${uiState.instance}/comment/${comment.id}",
+                                                ).distinct()
+                                            if (urls.size == 1) {
+                                                model.reduce(
+                                                    ProfileLoggedMviModel.Intent.Share(
+                                                        urls.first(),
+                                                    ),
+                                                )
+                                            } else {
+                                                shareBottomSheetUrls = urls
+                                            }
+                                        }
+
+                                        OptionId.Restore -> {
+                                            model.reduce(
+                                                ProfileLoggedMviModel.Intent.RestoreComment(
+                                                    comment.id,
+                                                ),
+                                            )
+                                        }
+
+                                        else -> Unit
                                     }
-                                }
-                            }
-                            if (uiState.loading && !uiState.refreshing) {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(25.dp),
-                                        color = MaterialTheme.colorScheme.primary,
-                                    )
-                                }
+                                },
+                            )
+                            HorizontalDivider(
+                                modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                thickness = 0.25.dp,
+                            )
+                        }
+
+                        if (uiState.comments.isEmpty() && !uiState.loading && !uiState.initial) {
+                            item {
+                                Text(
+                                    modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = Spacing.xs),
+                                    textAlign = TextAlign.Center,
+                                    text = LocalStrings.current.messageEmptyList,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                )
                             }
                         }
                     }
                     item {
-                        Spacer(modifier = Modifier.height(Spacing.xxxl))
+                        if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                            if (settings.infiniteScrollEnabled) {
+                                model.reduce(ProfileLoggedMviModel.Intent.LoadNextPage)
+                            } else {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
+                                    horizontalArrangement = Arrangement.Center,
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            model.reduce(ProfileLoggedMviModel.Intent.LoadNextPage)
+                                        },
+                                    ) {
+                                        Text(
+                                            text =
+                                            if (uiState.section == ProfileLoggedSection.Posts) {
+                                                LocalStrings.current.postListLoadMorePosts
+                                            } else {
+                                                LocalStrings.current.postDetailLoadMoreComments
+                                            },
+                                            style = MaterialTheme.typography.labelSmall,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        if (uiState.loading && !uiState.refreshing) {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(25.dp),
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        }
                     }
+                }
+                item {
+                    Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
             }
         }
+    }
 
-        if (rawContent != null) {
-            when (val content = rawContent) {
-                is PostModel -> {
-                    RawContentDialog(
-                        title = content.title,
-                        publishDate = content.publishDate,
-                        updateDate = content.updateDate,
-                        url = content.url,
-                        text = content.text,
-                        upVotes = content.upvotes,
-                        downVotes = content.downvotes,
-                        onDismiss = {
-                            rawContent = null
-                        },
-                        onQuote = { quotation ->
-                            rawContent = null
-                            if (quotation != null) {
-                                detailOpener.openReply(
-                                    originalPost = content,
-                                    initialText =
-                                    buildString {
-                                        append("> ")
-                                        append(quotation)
-                                        append("\n\n")
-                                    },
-                                )
-                            }
-                        },
-                    )
-                }
+    if (rawContent != null) {
+        when (val content = rawContent) {
+            is PostModel -> {
+                RawContentDialog(
+                    title = content.title,
+                    publishDate = content.publishDate,
+                    updateDate = content.updateDate,
+                    url = content.url,
+                    text = content.text,
+                    upVotes = content.upvotes,
+                    downVotes = content.downvotes,
+                    onDismiss = {
+                        rawContent = null
+                    },
+                    onQuote = { quotation ->
+                        rawContent = null
+                        if (quotation != null) {
+                            detailOpener.openReply(
+                                originalPost = content,
+                                initialText =
+                                buildString {
+                                    append("> ")
+                                    append(quotation)
+                                    append("\n\n")
+                                },
+                            )
+                        }
+                    },
+                )
+            }
 
-                is CommentModel -> {
-                    RawContentDialog(
-                        text = content.text,
-                        upVotes = content.upvotes,
-                        downVotes = content.downvotes,
-                        publishDate = content.publishDate,
-                        updateDate = content.updateDate,
-                        onDismiss = {
-                            rawContent = null
-                        },
-                        onQuote = { quotation ->
-                            rawContent = null
-                            if (quotation != null) {
-                                detailOpener.openReply(
-                                    originalPost = PostModel(id = content.postId),
-                                    originalComment = content,
-                                    initialText =
-                                    buildString {
-                                        append("> ")
-                                        append(quotation)
-                                        append("\n\n")
-                                    },
-                                )
-                            }
-                        },
-                    )
-                }
+            is CommentModel -> {
+                RawContentDialog(
+                    text = content.text,
+                    upVotes = content.upvotes,
+                    downVotes = content.downvotes,
+                    publishDate = content.publishDate,
+                    updateDate = content.updateDate,
+                    onDismiss = {
+                        rawContent = null
+                    },
+                    onQuote = { quotation ->
+                        rawContent = null
+                        if (quotation != null) {
+                            detailOpener.openReply(
+                                originalPost = PostModel(id = content.postId),
+                                originalComment = content,
+                                initialText =
+                                buildString {
+                                    append("> ")
+                                    append(quotation)
+                                    append("\n\n")
+                                },
+                            )
+                        }
+                    },
+                )
             }
         }
+    }
 
-        postIdToDelete?.also { itemId ->
-            AlertDialog(
-                onDismissRequest = {
-                    postIdToDelete = null
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            postIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            model.reduce(ProfileLoggedMviModel.Intent.DeletePost(itemId))
-                            postIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
-                },
-            )
-        }
-        commentIdToDelete?.also { itemId ->
-            AlertDialog(
-                onDismissRequest = {
-                    commentIdToDelete = null
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            commentIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            model.reduce(ProfileLoggedMviModel.Intent.DeleteComment(itemId))
-                            commentIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
-                },
-            )
-        }
+    postIdToDelete?.also { itemId ->
+        AlertDialog(
+            onDismissRequest = {
+                postIdToDelete = null
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        postIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonCancel)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        model.reduce(ProfileLoggedMviModel.Intent.DeletePost(itemId))
+                        postIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonConfirm)
+                }
+            },
+            text = {
+                Text(text = LocalStrings.current.messageAreYouSure)
+            },
+        )
+    }
+    commentIdToDelete?.also { itemId ->
+        AlertDialog(
+            onDismissRequest = {
+                commentIdToDelete = null
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        commentIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonCancel)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        model.reduce(ProfileLoggedMviModel.Intent.DeleteComment(itemId))
+                        commentIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonConfirm)
+                }
+            },
+            text = {
+                Text(text = LocalStrings.current.messageAreYouSure)
+            },
+        )
+    }
 
-        shareBottomSheetUrls?.also { values ->
-            CustomModalBottomSheet(
-                title = LocalStrings.current.postActionShare,
-                items =
-                values.map { value ->
-                    CustomModalBottomSheetItem(label = value)
-                },
-                onSelect = { index ->
-                    shareBottomSheetUrls = null
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.Share(url = values[index]),
-                        )
-                    }
-                },
-            )
-        }
+    shareBottomSheetUrls?.also { values ->
+        CustomModalBottomSheet(
+            title = LocalStrings.current.postActionShare,
+            items =
+            values.map { value ->
+                CustomModalBottomSheetItem(label = value)
+            },
+            onSelect = { index ->
+                shareBottomSheetUrls = null
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.Share(url = values[index]),
+                    )
+                }
+            },
+        )
     }
 }

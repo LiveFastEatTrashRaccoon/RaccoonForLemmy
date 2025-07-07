@@ -8,13 +8,9 @@ import app.cash.turbine.test
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.tab.Tab
-import cafe.adriel.voyager.navigator.tab.TabNavigator
-import cafe.adriel.voyager.navigator.tab.TabOptions
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -39,22 +35,22 @@ class DefaultNavigationCoordinatorTest {
         )
 
     @Test
-    fun whenSetCurrentSection_thenValueIsUpdated() = runTest {
+    fun whenSetBottomNavigationSection_thenValueIsUpdated() = runTest {
         val initial = sut.currentSection.value
         assertNull(initial)
 
-        sut.setCurrentSection(TabNavigationSection.Profile)
+        sut.setBottomNavigationSection(TabNavigationSection.Profile)
 
         val value = sut.currentSection.value
         assertEquals(TabNavigationSection.Profile, value)
     }
 
     @Test
-    fun whenSetCurrentSectionTwice_thenOnDoubleTabSelectionTriggered() = runTest {
-        sut.setCurrentSection(TabNavigationSection.Profile)
+    fun whenSetBottomNavigationSectionTwice_thenOnDoubleTabSelectionTriggered() = runTest {
+        sut.setBottomNavigationSection(TabNavigationSection.Profile)
         launch {
             delay(DELAY)
-            sut.setCurrentSection(TabNavigationSection.Profile)
+            sut.setBottomNavigationSection(TabNavigationSection.Profile)
         }
         sut.onDoubleTabSelection.test {
             val section = awaitItem()
@@ -107,27 +103,15 @@ class DefaultNavigationCoordinatorTest {
     }
 
     @Test
-    fun whenChangeTab_thenCurrentTabIsUpdated() = runTest {
-        val tabSlot = slot<Tab>()
-        val navigator =
-            mockk<TabNavigator>(relaxUnitFun = true) {
-                every { current = capture(tabSlot) } answers {}
-            }
-        val tab =
-            object : Tab {
-                override val options @Composable get() = TabOptions(index = 0u, "title")
+    fun whenSetBottomNavigationSection_thenAdapterNavigatesToSection() = runTest {
+        val adapter = mockk<BottomNavigationAdapter>(relaxUnitFun = true)
+        sut.setBottomNavigator(adapter)
 
-                @Composable
-                override fun Content() {
-                    Box(modifier = Modifier.fillMaxSize())
-                }
-            }
-        sut.setTabNavigator(navigator)
+        sut.setBottomNavigationSection(TabNavigationSection.Home)
 
-        sut.changeTab(tab)
-
-        val value = tabSlot.captured
-        assertEquals(tab, value)
+        verify {
+            adapter.navigate(TabNavigationSection.Home)
+        }
     }
 
     @Test
@@ -173,7 +157,7 @@ class DefaultNavigationCoordinatorTest {
     fun whenPushScreenTwice_thenInteractionsAreAsExpected() = runTest {
         val screen =
             object : Screen {
-                override val key: ScreenKey = ""
+                override val key: ScreenKey = "screen"
 
                 @Composable
                 override fun Content() {
@@ -224,6 +208,8 @@ class DefaultNavigationCoordinatorTest {
     fun whenShowSideMenu_thenInteractionsAreAsExpected() = runTest {
         val screen =
             object : Screen {
+                override val key: ScreenKey = "screen"
+
                 @Composable
                 override fun Content() {
                     Box(modifier = Modifier.fillMaxSize())
@@ -241,9 +227,11 @@ class DefaultNavigationCoordinatorTest {
     }
 
     @Test
-    fun given_already_open_whenShowSideMenu_thenInteractionsAreAsExpected() = runTest {
+    fun givenAlreadyOpen_whenShowSideMenu_thenInteractionsAreAsExpected() = runTest {
         val screen =
             object : Screen {
+                override val key: ScreenKey = "screen"
+
                 @Composable
                 override fun Content() {
                     Box(modifier = Modifier.fillMaxSize())
@@ -266,6 +254,8 @@ class DefaultNavigationCoordinatorTest {
     fun whenCloseSideMenu_thenInteractionsAreAsExpected() = runTest {
         val screen =
             object : Screen {
+                override val key: ScreenKey = "screen"
+
                 @Composable
                 override fun Content() {
                     Box(modifier = Modifier.fillMaxSize())

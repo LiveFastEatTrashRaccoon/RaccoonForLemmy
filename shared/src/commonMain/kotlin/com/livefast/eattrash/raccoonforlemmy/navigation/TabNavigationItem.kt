@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -21,21 +19,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextOverflow
-import cafe.adriel.voyager.navigator.tab.Tab
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.feature.home.ui.HomeTab
-import com.livefast.eattrash.raccoonforlemmy.feature.inbox.ui.InboxTab
-import com.livefast.eattrash.raccoonforlemmy.feature.profile.ui.ProfileTab
-import com.livefast.eattrash.raccoonforlemmy.feature.search.ui.ExploreTab
-import com.livefast.eattrash.raccoonforlemmy.feature.settings.SettingsTab
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.toIcon
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.toReadableName
 
 @Composable
 internal fun RowScope.TabNavigationItem(
@@ -49,7 +42,6 @@ internal fun RowScope.TabNavigationItem(
     val unread by navigationCoordinator.inboxUnread.collectAsState()
     val currentSection by navigationCoordinator.currentSection.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }
-    val tab = section.toTab()
 
     val pointerInputModifier =
         Modifier.pointerInput(Unit) {
@@ -92,13 +84,13 @@ internal fun RowScope.TabNavigationItem(
                 } else {
                     Icon(
                         modifier = pointerInputModifier,
-                        painter = tab.options.icon ?: rememberVectorPainter(Icons.Default.Home),
+                        imageVector = section.toIcon(),
                         contentDescription = null,
                     )
                 }
             }
             val inboxTitle = LocalStrings.current.navigationInbox
-            if (tab.options.title == inboxTitle && unread > 0) {
+            if (section.toReadableName() == inboxTitle && unread > 0) {
                 BadgedBox(
                     badge = {
                         Badge(
@@ -126,7 +118,7 @@ internal fun RowScope.TabNavigationItem(
             if (withText) {
                 Text(
                     modifier = Modifier,
-                    text = tab.options.title,
+                    text = section.toReadableName(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -135,11 +127,3 @@ internal fun RowScope.TabNavigationItem(
     )
 }
 
-internal fun TabNavigationSection.toTab(): Tab = when (this) {
-    TabNavigationSection.Explore -> ExploreTab
-    TabNavigationSection.Profile -> ProfileTab
-    TabNavigationSection.Inbox -> InboxTab
-    TabNavigationSection.Settings -> SettingsTab
-    TabNavigationSection.Bookmarks -> BookmarksTab
-    else -> HomeTab
-}
