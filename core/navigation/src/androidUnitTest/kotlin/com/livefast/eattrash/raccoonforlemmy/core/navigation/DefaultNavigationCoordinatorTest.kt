@@ -1,13 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.core.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import app.cash.turbine.test
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
-import cafe.adriel.voyager.navigator.Navigator
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk
@@ -63,7 +57,7 @@ class DefaultNavigationCoordinatorTest {
         val initial = sut.canPop.value
         assertFalse(initial)
         val navigator =
-            mockk<Navigator> {
+            mockk<NavigationAdapter> {
                 every { canPop } returns true
             }
 
@@ -116,84 +110,35 @@ class DefaultNavigationCoordinatorTest {
 
     @Test
     fun whenPushScreen_thenInteractionsAreAsExpected() = runTest {
-        val previous =
-            object : Screen {
-                override val key: ScreenKey = "old"
-
-                @Composable
-                override fun Content() {
-                    Box(modifier = Modifier.fillMaxSize())
-                }
-            }
-        val screen =
-            object : Screen {
-                override val key: ScreenKey = "new"
-
-                @Composable
-                override fun Content() {
-                    Box(modifier = Modifier.fillMaxSize())
-                }
-            }
+        val destination = Destination.WebInternal(url = "www.example.com")
         val navigator =
-            mockk<Navigator>(relaxUnitFun = true) {
+            mockk<NavigationAdapter>(relaxUnitFun = true) {
                 every { canPop } returns true
-                every { lastItem } returns previous
             }
         sut.setRootNavigator(navigator)
 
         launch {
-            sut.pushScreen(screen)
+            sut.push(destination)
         }
         delay(DELAY)
 
         val canPop = sut.canPop.value
         assertTrue(canPop)
         verify {
-            navigator.push(screen)
-        }
-    }
-
-    @Test
-    fun whenPushScreenTwice_thenInteractionsAreAsExpected() = runTest {
-        val screen =
-            object : Screen {
-                override val key: ScreenKey = "screen"
-
-                @Composable
-                override fun Content() {
-                    Box(modifier = Modifier.fillMaxSize())
-                }
-            }
-        val navigator =
-            mockk<Navigator>(relaxUnitFun = true) {
-                every { canPop } returns true
-                every { lastItem } returns screen
-            }
-        sut.setRootNavigator(navigator)
-
-        launch {
-            sut.pushScreen(screen)
-        }
-        advanceTimeBy(DELAY)
-
-        val canPop = sut.canPop.value
-        assertTrue(canPop)
-        verify(inverse = true) {
-            navigator.push(screen)
+            navigator.navigate(destination)
         }
     }
 
     @Test
     fun whenPopScreen_thenInteractionsAreAsExpected() = runTest {
         val navigator =
-            mockk<Navigator>(relaxUnitFun = true) {
-                every { pop() } returns true
+            mockk<NavigationAdapter>(relaxUnitFun = true) {
                 every { canPop } returns false
             }
         sut.setRootNavigator(navigator)
 
         launch {
-            sut.popScreen()
+            sut.pop()
         }
         advanceTimeBy(DELAY)
 
@@ -206,62 +151,38 @@ class DefaultNavigationCoordinatorTest {
 
     @Test
     fun whenShowSideMenu_thenInteractionsAreAsExpected() = runTest {
-        val screen =
-            object : Screen {
-                override val key: ScreenKey = "screen"
-
-                @Composable
-                override fun Content() {
-                    Box(modifier = Modifier.fillMaxSize())
-                }
-            }
+        val content = @Composable {}
         launch {
             delay(DELAY)
-            sut.openSideMenu(screen)
+            sut.openSideMenu(content)
         }
 
         sut.sideMenuEvents.test {
             val item = awaitItem()
-            assertEquals(SideMenuEvents.Open(screen), item)
+            assertEquals(SideMenuEvents.Open(content), item)
         }
     }
 
     @Test
     fun givenAlreadyOpen_whenShowSideMenu_thenInteractionsAreAsExpected() = runTest {
-        val screen =
-            object : Screen {
-                override val key: ScreenKey = "screen"
-
-                @Composable
-                override fun Content() {
-                    Box(modifier = Modifier.fillMaxSize())
-                }
-            }
+        val content = @Composable {}
         launch {
             delay(DELAY)
-            sut.openSideMenu(screen)
-            sut.openSideMenu(screen)
+            sut.openSideMenu(content)
+            sut.openSideMenu(content)
         }
 
         sut.sideMenuEvents.test {
             val item = awaitItem()
-            assertEquals(SideMenuEvents.Open(screen), item)
+            assertEquals(SideMenuEvents.Open(content), item)
             expectNoEvents()
         }
     }
 
     @Test
     fun whenCloseSideMenu_thenInteractionsAreAsExpected() = runTest {
-        val screen =
-            object : Screen {
-                override val key: ScreenKey = "screen"
-
-                @Composable
-                override fun Content() {
-                    Box(modifier = Modifier.fillMaxSize())
-                }
-            }
-        sut.openSideMenu(screen)
+        val content = @Composable {}
+        sut.openSideMenu(content)
         launch {
             delay(DELAY)
             sut.closeSideMenu()
@@ -303,7 +224,7 @@ class DefaultNavigationCoordinatorTest {
     @Test
     fun whenPopUntilRoot_thenInteractionsAreAsExpected() = runTest {
         val navigator =
-            mockk<Navigator>(relaxUnitFun = true) {
+            mockk<NavigationAdapter>(relaxUnitFun = true) {
                 every { canPop } returns false
             }
         sut.setRootNavigator(navigator)

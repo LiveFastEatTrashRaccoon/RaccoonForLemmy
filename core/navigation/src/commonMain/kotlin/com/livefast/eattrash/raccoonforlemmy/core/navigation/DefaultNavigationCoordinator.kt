@@ -1,27 +1,19 @@
 package com.livefast.eattrash.raccoonforlemmy.core.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
-
-private sealed interface NavigationEvent {
-    data class Show(val screen: Screen) : NavigationEvent
-}
 
 internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Dispatchers.Main) :
     NavigationCoordinator {
@@ -37,37 +29,17 @@ internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Di
     override val globalMessage = MutableSharedFlow<String>()
 
     private var connection: NestedScrollConnection? = null
-    private var navigator: Navigator? = null
+    private var rootNavController: NavigationAdapter? = null
     private var bottomNavController: BottomNavigationAdapter? = null
-    private var canGoBackCallback: (() -> Boolean)? = null
-    private val screenChannel = Channel<NavigationEvent>()
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 
     companion object {
         private const val DEEP_LINK_DELAY = 500L
     }
 
-    init {
-        scope.launch {
-            screenChannel
-                .receiveAsFlow()
-                .onEach { evt ->
-                    when (evt) {
-                        is NavigationEvent.Show -> {
-                            // make sure the new screen has a different key than the top of the stack
-                            if (evt.screen.key != navigator?.lastItem?.key) {
-                                navigator?.push(evt.screen)
-                                canPop.value = navigator?.canPop == true
-                            }
-                        }
-                    }
-                }.launchIn(this)
-        }
-    }
-
-    override fun setRootNavigator(value: Navigator?) {
-        navigator = value
-        canPop.value = value?.canPop == true
+    override fun setRootNavigator(adapter: NavigationAdapter) {
+        rootNavController = adapter
+        refreshCanPop()
     }
 
     override fun setBottomBarScrollConnection(value: NestedScrollConnection?) {
@@ -112,36 +84,29 @@ internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Di
         }
     }
 
-    override fun setCanGoBackCallback(value: (() -> Boolean)?) {
-        canGoBackCallback = value
-    }
-
-    override fun getCanGoBackCallback(): (() -> Boolean)? = canGoBackCallback
-
     override fun setInboxUnread(count: Int) {
         inboxUnread.value = count
     }
 
-    override fun pushScreen(screen: Screen) {
+    override fun push(destination: Destination) {
         closeSideMenu()
-        scope.launch {
-            screenChannel.send(NavigationEvent.Show(screen))
-        }
+        rootNavController?.navigate(destination)
+        refreshCanPop()
     }
 
-    override fun popScreen() {
-        navigator?.pop()
-        canPop.value = navigator?.canPop == true
+    override fun pop() {
+        rootNavController?.pop()
+        refreshCanPop()
     }
 
     override fun setExitMessageVisible(value: Boolean) {
         exitMessageVisible.value = value
     }
 
-    override fun openSideMenu(screen: Screen) {
+    override fun openSideMenu(content: @Composable () -> Unit) {
         if (!sideMenuOpened.value) {
             scope.launch {
-                sideMenuEvents.emit(SideMenuEvents.Open(screen))
+                sideMenuEvents.emit(SideMenuEvents.Open(content))
                 sideMenuOpened.value = true
             }
         }
@@ -164,6 +129,12 @@ internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Di
     }
 
     override fun popUntilRoot() {
-        navigator?.popUntilRoot()
+        rootNavController?.popUntilRoot()
+    }
+
+    private fun refreshCanPop() {
+        canPop.update {
+            rootNavController?.canPop ?: false
+        }
     }
 }

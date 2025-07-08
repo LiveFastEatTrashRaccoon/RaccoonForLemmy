@@ -1,9 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.core.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Duration
@@ -15,7 +14,7 @@ sealed interface ComposeEvent {
 }
 
 sealed interface SideMenuEvents {
-    data class Open(val screen: Screen) : SideMenuEvents
+    data class Open(val content: @Composable (() -> Unit)) : SideMenuEvents
 
     data object Close : SideMenuEvents
 }
@@ -41,11 +40,7 @@ interface NavigationCoordinator {
 
     fun submitComposeEvent(event: ComposeEvent)
 
-    fun setRootNavigator(value: Navigator?)
-
-    fun setCanGoBackCallback(value: (() -> Boolean)?)
-
-    fun getCanGoBackCallback(): (() -> Boolean)?
+    fun setRootNavigator(adapter: NavigationAdapter)
 
     fun setBottomBarScrollConnection(value: NestedScrollConnection?)
 
@@ -53,13 +48,13 @@ interface NavigationCoordinator {
 
     fun setInboxUnread(count: Int)
 
-    fun pushScreen(screen: Screen)
+    fun push(destination: Destination)
 
-    fun popScreen()
+    fun pop()
 
     fun setExitMessageVisible(value: Boolean)
 
-    fun openSideMenu(screen: Screen)
+    fun openSideMenu(content: @Composable () -> Unit)
 
     fun closeSideMenu()
 
