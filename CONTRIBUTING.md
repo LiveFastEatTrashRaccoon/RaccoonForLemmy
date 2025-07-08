@@ -162,7 +162,7 @@ In this case, you should:
 
 First of all, determine the locale code, suppose it is `xx_YY`, based on the IANA conventions: it
 can consist a set of letters for the language `xx`, optionally followed by an underscore and
-another letter set for the region `YY` (e.g. `pt_BR` for Brazilian Portuguese or `pt` for 
+another letter set for the region `YY` (e.g. `pt_BR` for Brazilian Portuguese or `pt` for
 Portuguese). If you only have to use the `xx` part, please ignore the `yy` indication in the rest
 of the explanation contained in this paragraph.
 
@@ -310,10 +310,8 @@ Every part of the app which has some non trivial user-interaction follows the Mo
 architectural pattern. This means that there are two different components interacting with each
 other:
 
-- the View, represented by a `Screen` implementation
-- the ViewModel, represented by a `ScreenModel` implementation
-
-where the interfaces (Screen and ScreenModel) both come from the Voyager navigation library.
+- the View, represented by a Composable function;
+- the ViewModel.
 
 The **View** has the responsibility of drawing to screen the UI components that are needed to
 represent a particular **state**, which is provided by the ViewModel they have a reference to (the
