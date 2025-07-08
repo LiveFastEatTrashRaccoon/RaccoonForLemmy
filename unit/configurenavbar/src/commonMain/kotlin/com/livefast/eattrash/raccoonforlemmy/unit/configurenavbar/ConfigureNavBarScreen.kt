@@ -28,19 +28,19 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.PredictiveBackHandler
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
@@ -58,235 +58,225 @@ import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.composable.Con
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
-class ConfigureNavBarScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: ConfigureNavBarMviModel = getViewModel<ConfigureNavBarViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val notificationCenter = remember { getNotificationCenter() }
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
-        val lazyListState = rememberLazyListState()
-        val reorderableLazyColumnState =
-            rememberReorderableLazyListState(lazyListState) { from, to ->
-                model.reduce(
-                    ConfigureNavBarMviModel.Intent.SwapItems(
-                        from = from.index - 1,
-                        to = to.index - 1,
-                    ),
-                )
-            }
-        var confirmBackWithUnsavedChangesDialogOpened by remember { mutableStateOf(false) }
-        var selectTabNavigationSectionBottomSheetOpened by remember { mutableStateOf(false) }
-
-        DisposableEffect(key) {
-            navigationCoordinator.setCanGoBackCallback {
-                if (uiState.hasUnsavedChanges) {
-                    confirmBackWithUnsavedChangesDialogOpened = true
-                    return@setCanGoBackCallback false
-                }
-                true
-            }
-            onDispose {
-                navigationCoordinator.setCanGoBackCallback(null)
-            }
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@Composable
+fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
+    val model: ConfigureNavBarMviModel = getViewModel<ConfigureNavBarViewModel>()
+    val uiState by model.uiState.collectAsState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val notificationCenter = remember { getNotificationCenter() }
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val settingsRepository = remember { getSettingsRepository() }
+    val settings by settingsRepository.currentSettings.collectAsState()
+    val lazyListState = rememberLazyListState()
+    val reorderableLazyColumnState =
+        rememberReorderableLazyListState(lazyListState) { from, to ->
+            model.reduce(
+                ConfigureNavBarMviModel.Intent.SwapItems(
+                    from = from.index - 1,
+                    to = to.index - 1,
+                ),
+            )
         }
+    var confirmBackWithUnsavedChangesDialogOpened by remember { mutableStateOf(false) }
+    var selectTabNavigationSectionBottomSheetOpened by remember { mutableStateOf(false) }
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    scrollBehavior = scrollBehavior,
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = LocalStrings.current.settingsItemConfigureBottomNavigationBar,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    navigationIcon = {
-                        if (navigationCoordinator.canPop.value) {
-                            IconButton(
-                                onClick = {
-                                    if (uiState.hasUnsavedChanges) {
-                                        confirmBackWithUnsavedChangesDialogOpened = true
-                                    } else {
-                                        navigationCoordinator.popScreen()
-                                    }
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = LocalStrings.current.actionGoBack,
-                                )
-                            }
-                        }
-                    },
-                    actions = {
-                        TextButton(
-                            contentPadding =
-                            PaddingValues(
-                                horizontal = Spacing.xs,
-                                vertical = Spacing.xxs,
-                            ),
+    PredictiveBackHandler(uiState.hasUnsavedChanges) {
+        confirmBackWithUnsavedChangesDialogOpened = true
+    }
+
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                scrollBehavior = scrollBehavior,
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.settingsItemConfigureBottomNavigationBar,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                navigationIcon = {
+                    if (navigationCoordinator.canPop.value) {
+                        IconButton(
                             onClick = {
-                                model.reduce(ConfigureNavBarMviModel.Intent.Reset)
+                                if (uiState.hasUnsavedChanges) {
+                                    confirmBackWithUnsavedChangesDialogOpened = true
+                                } else {
+                                    navigationCoordinator.pop()
+                                }
                             },
                         ) {
-                            Text(
-                                text = LocalStrings.current.buttonReset,
-                                style = MaterialTheme.typography.labelSmall,
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = LocalStrings.current.actionGoBack,
                             )
-                        }
-                    },
-                )
-            },
-        ) { padding ->
-            Column(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).then(
-                        if (settings.hideNavigationBarWhileScrolling) {
-                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                        } else {
-                            Modifier
-                        },
-                    ),
-            ) {
-                LazyColumn(
-                    modifier = Modifier.weight(1f).fillMaxWidth(),
-                    state = lazyListState,
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                ) {
-                    if (uiState.sections.isEmpty()) {
-                        item {
-                            Text(
-                                modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
-                                textAlign = TextAlign.Center,
-                                text = LocalStrings.current.messageEmptyList,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                    } else {
-                        item {
-                            // workaround for https://github.com/Calvin-LL/Reorderable/issues/4
-                            ReorderableItem(
-                                state = reorderableLazyColumnState,
-                                key = "dummy",
-                                enabled = false,
-                                modifier = Modifier.fillMaxWidth().height(Dp.Hairline),
-                            ) {}
                         }
                     }
-                    items(
-                        items = uiState.sections,
-                        key = { it.toInt().toString() },
-                    ) { section ->
+                },
+                actions = {
+                    TextButton(
+                        contentPadding =
+                        PaddingValues(
+                            horizontal = Spacing.xs,
+                            vertical = Spacing.xxs,
+                        ),
+                        onClick = {
+                            model.reduce(ConfigureNavBarMviModel.Intent.Reset)
+                        },
+                    ) {
+                        Text(
+                            text = LocalStrings.current.buttonReset,
+                            style = MaterialTheme.typography.labelSmall,
+                        )
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        Column(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).then(
+                    if (settings.hideNavigationBarWhileScrolling) {
+                        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
+                    },
+                ),
+        ) {
+            LazyColumn(
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+                state = lazyListState,
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+            ) {
+                if (uiState.sections.isEmpty()) {
+                    item {
+                        Text(
+                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
+                            textAlign = TextAlign.Center,
+                            text = LocalStrings.current.messageEmptyList,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                } else {
+                    item {
+                        // workaround for https://github.com/Calvin-LL/Reorderable/issues/4
                         ReorderableItem(
                             state = reorderableLazyColumnState,
-                            key = section.toInt().toString(),
-                        ) { isDragging ->
-                            val elevation by animateDpAsState(if (isDragging) 4.dp else 0.dp)
-                            Surface(
-                                shadowElevation = elevation,
-                            ) {
-                                ConfigureNavBarItem(
-                                    reorderableScope = this,
-                                    title = section.toReadableName(),
-                                    onStartDrag = {
-                                        model.reduce(ConfigureNavBarMviModel.Intent.HapticFeedback)
-                                    },
-                                    onDelete = {
-                                        model.reduce(ConfigureNavBarMviModel.Intent.Delete(section))
-                                    },
-                                )
-                            }
-                        }
+                            key = "dummy",
+                            enabled = false,
+                            modifier = Modifier.fillMaxWidth().height(Dp.Hairline),
+                        ) {}
                     }
-                    if (uiState.availableSections.isNotEmpty() && uiState.sections.size < 5) {
-                        item {
-                            ConfigureAddAction(
-                                onAdd = {
-                                    selectTabNavigationSectionBottomSheetOpened = true
+                }
+                items(
+                    items = uiState.sections,
+                    key = { it.toInt().toString() },
+                ) { section ->
+                    ReorderableItem(
+                        state = reorderableLazyColumnState,
+                        key = section.toInt().toString(),
+                    ) { isDragging ->
+                        val elevation by animateDpAsState(if (isDragging) 4.dp else 0.dp)
+                        Surface(
+                            shadowElevation = elevation,
+                        ) {
+                            ConfigureNavBarItem(
+                                reorderableScope = this,
+                                title = section.toReadableName(),
+                                onStartDrag = {
+                                    model.reduce(ConfigureNavBarMviModel.Intent.HapticFeedback)
+                                },
+                                onDelete = {
+                                    model.reduce(ConfigureNavBarMviModel.Intent.Delete(section))
                                 },
                             )
                         }
                     }
                 }
-
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.m),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Button(
-                        enabled = uiState.hasUnsavedChanges,
-                        onClick = {
-                            model.reduce(ConfigureNavBarMviModel.Intent.Save)
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.actionSave)
+                if (uiState.availableSections.isNotEmpty() && uiState.sections.size < 5) {
+                    item {
+                        ConfigureAddAction(
+                            onAdd = {
+                                selectTabNavigationSectionBottomSheetOpened = true
+                            },
+                        )
                     }
                 }
             }
-        }
 
-        if (confirmBackWithUnsavedChangesDialogOpened) {
-            AlertDialog(
-                onDismissRequest = {
-                    confirmBackWithUnsavedChangesDialogOpened = false
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            confirmBackWithUnsavedChangesDialogOpened = false
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonNoStay)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            confirmBackWithUnsavedChangesDialogOpened = false
-                            navigationCoordinator.popScreen()
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonYesQuit)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageUnsavedChanges)
-                },
-            )
+            Box(
+                modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.m),
+                contentAlignment = Alignment.Center,
+            ) {
+                Button(
+                    enabled = uiState.hasUnsavedChanges,
+                    onClick = {
+                        model.reduce(ConfigureNavBarMviModel.Intent.Save)
+                    },
+                ) {
+                    Text(text = LocalStrings.current.actionSave)
+                }
+            }
         }
+    }
 
-        if (selectTabNavigationSectionBottomSheetOpened) {
-            val values = model.uiState.value.availableSections
-            CustomModalBottomSheet(
-                title = LocalStrings.current.inboxListingTypeTitle,
-                items =
-                values.map { value ->
-                    CustomModalBottomSheetItem(label = value.toReadableName())
-                },
-                onSelect = { index ->
-                    selectTabNavigationSectionBottomSheetOpened = false
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.TabNavigationSectionSelected(
-                                sectionId = values[index].toInt(),
-                            ),
-                        )
-                    }
-                },
-            )
-        }
+    if (confirmBackWithUnsavedChangesDialogOpened) {
+        AlertDialog(
+            onDismissRequest = {
+                confirmBackWithUnsavedChangesDialogOpened = false
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        confirmBackWithUnsavedChangesDialogOpened = false
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonNoStay)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        confirmBackWithUnsavedChangesDialogOpened = false
+                        navigationCoordinator.pop()
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonYesQuit)
+                }
+            },
+            text = {
+                Text(text = LocalStrings.current.messageUnsavedChanges)
+            },
+        )
+    }
+
+    if (selectTabNavigationSectionBottomSheetOpened) {
+        val values = model.uiState.value.availableSections
+        CustomModalBottomSheet(
+            title = LocalStrings.current.inboxListingTypeTitle,
+            items =
+            values.map { value ->
+                CustomModalBottomSheetItem(label = value.toReadableName())
+            },
+            onSelect = { index ->
+                selectTabNavigationSectionBottomSheetOpened = false
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.TabNavigationSectionSelected(
+                            sectionId = values[index].toInt(),
+                        ),
+                    )
+                }
+            },
+        )
     }
 }

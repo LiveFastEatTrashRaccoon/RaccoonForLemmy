@@ -56,7 +56,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -68,6 +67,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.TextFormattingBar
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
@@ -77,348 +77,344 @@ import com.livefast.eattrash.raccoonforlemmy.unit.chat.components.MessageCard
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.components.MessageCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.unit.chat.di.InboxChatMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class InboxChatScreen(private val otherUserId: Long) : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: InboxChatMviModel = getViewModel<InboxChatViewModel>(InboxChatMviModelParams(otherUserId))
-        val uiState by model.uiState.collectAsState()
-        val topAppBarState = rememberTopAppBarState()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val galleryHelper = remember { getGalleryHelper() }
-        var openImagePicker by remember { mutableStateOf(false) }
-        var textFieldValue by remember {
-            mutableStateOf(
-                TextFieldValue(text = ""),
-            )
-        }
-        val themeRepository = remember { getThemeRepository() }
-        val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
-        val typography = contentFontFamily.toTypography()
-        var rawContent by remember { mutableStateOf<Any?>(null) }
-        val lazyListState = rememberLazyListState()
-        var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
-        val focusRequester = remember { FocusRequester() }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InboxChatScreen(otherUserId: Long, modifier: Modifier = Modifier) {
+    val model: InboxChatMviModel = getViewModel<InboxChatViewModel>(InboxChatMviModelParams(otherUserId))
+    val uiState by model.uiState.collectAsState()
+    val topAppBarState = rememberTopAppBarState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val mainRouter = remember { getMainRouter() }
+    val galleryHelper = remember { getGalleryHelper() }
+    var openImagePicker by remember { mutableStateOf(false) }
+    var textFieldValue by remember {
+        mutableStateOf(
+            TextFieldValue(text = ""),
+        )
+    }
+    val themeRepository = remember { getThemeRepository() }
+    val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
+    val typography = contentFontFamily.toTypography()
+    var rawContent by remember { mutableStateOf<Any?>(null) }
+    val lazyListState = rememberLazyListState()
+    var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
+    val focusRequester = remember { FocusRequester() }
 
-        LaunchedEffect(model) {
-            model.effects
-                .onEach { effect ->
-                    when (effect) {
-                        is InboxChatMviModel.Effect.AddImageToText -> {
-                            textFieldValue =
-                                textFieldValue.let {
-                                    it.copy(text = it.text + "\n![](${effect.url})")
-                                }
-                        }
-
-                        InboxChatMviModel.Effect.ScrollToBottom -> {
-                            runCatching {
-                                lazyListState.scrollToItem(0)
+    LaunchedEffect(model) {
+        model.effects
+            .onEach { effect ->
+                when (effect) {
+                    is InboxChatMviModel.Effect.AddImageToText -> {
+                        textFieldValue =
+                            textFieldValue.let {
+                                it.copy(text = it.text + "\n![](${effect.url})")
                             }
+                    }
+
+                    InboxChatMviModel.Effect.ScrollToBottom -> {
+                        runCatching {
+                            lazyListState.scrollToItem(0)
                         }
                     }
-                }.launchIn(this)
-        }
+                }
+            }.launchIn(this)
+    }
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            modifier = Modifier.navigationBarsPadding().safeImePadding(),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    title = {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            val avatar = uiState.otherUserAvatar.orEmpty()
-                            if (avatar.isNotEmpty()) {
-                                CustomImage(
-                                    modifier =
-                                    Modifier
-                                        .padding(Spacing.xxxs)
-                                        .size(IconSize.s)
-                                        .clip(RoundedCornerShape(IconSize.s / 2)),
-                                    url = avatar,
-                                    autoload = uiState.autoLoadImages,
-                                    quality = FilterQuality.Low,
-                                    contentScale = ContentScale.FillBounds,
-                                )
-                            }
-                            Text(
-                                modifier = Modifier.padding(horizontal = Spacing.s),
-                                text = uiState.otherUserName,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.titleMedium,
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier.navigationBarsPadding().safeImePadding(),
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                title = {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        val avatar = uiState.otherUserAvatar.orEmpty()
+                        if (avatar.isNotEmpty()) {
+                            CustomImage(
+                                modifier =
+                                Modifier
+                                    .padding(Spacing.xxxs)
+                                    .size(IconSize.s)
+                                    .clip(RoundedCornerShape(IconSize.s / 2)),
+                                url = avatar,
+                                autoload = uiState.autoLoadImages,
+                                quality = FilterQuality.Low,
+                                contentScale = ContentScale.FillBounds,
                             )
                         }
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                navigationCoordinator.popScreen()
+                        Text(
+                            modifier = Modifier.padding(horizontal = Spacing.s),
+                            text = uiState.otherUserName,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navigationCoordinator.pop()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = LocalStrings.current.actionGoBack,
+                        )
+                    }
+                },
+            )
+        },
+        bottomBar = {
+            Column(
+                modifier =
+                Modifier
+                    .navigationBarsPadding()
+                    .safeImePadding()
+                    .fillMaxWidth()
+                    .padding(bottom = Spacing.s)
+                    .background(MaterialTheme.colorScheme.background),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+            ) {
+                OutlinedTextField(
+                    modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester)
+                        .heightIn(
+                            min = 80.dp,
+                            max = 360.dp,
+                        ),
+                    colors =
+                    TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent,
+                    ),
+                    label = {
+                        Text(
+                            text =
+                            buildString {
+                                if (uiState.editedMessageId != null) {
+                                    append(LocalStrings.current.inboxChatMessage)
+                                    append(" (")
+                                    append(LocalStrings.current.postActionEdit)
+                                    append(")")
+                                } else {
+                                    append(LocalStrings.current.actionChat)
+                                }
                             },
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = LocalStrings.current.actionGoBack,
-                            )
-                        }
+                            style = typography.bodyMedium,
+                        )
+                    },
+                    textStyle = typography.bodyMedium,
+                    value = textFieldValue,
+                    keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        autoCorrectEnabled = true,
+                        capitalization = KeyboardCapitalization.Sentences,
+                    ),
+                    onValueChange = { value ->
+                        textFieldValue = value
                     },
                 )
-            },
-            bottomBar = {
-                Column(
-                    modifier =
-                    Modifier
-                        .navigationBarsPadding()
-                        .safeImePadding()
-                        .fillMaxWidth()
-                        .padding(bottom = Spacing.s)
-                        .background(MaterialTheme.colorScheme.background),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                ) {
-                    OutlinedTextField(
-                        modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .focusRequester(focusRequester)
-                            .heightIn(
-                                min = 80.dp,
-                                max = 360.dp,
-                            ),
-                        colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                        ),
-                        label = {
-                            Text(
-                                text =
-                                buildString {
-                                    if (uiState.editedMessageId != null) {
-                                        append(LocalStrings.current.inboxChatMessage)
-                                        append(" (")
-                                        append(LocalStrings.current.postActionEdit)
-                                        append(")")
-                                    } else {
-                                        append(LocalStrings.current.actionChat)
-                                    }
-                                },
-                                style = typography.bodyMedium,
-                            )
-                        },
-                        textStyle = typography.bodyMedium,
-                        value = textFieldValue,
-                        keyboardOptions =
-                        KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            autoCorrectEnabled = true,
-                            capitalization = KeyboardCapitalization.Sentences,
-                        ),
-                        onValueChange = { value ->
-                            textFieldValue = value
-                        },
-                    )
 
-                    TextFormattingBar(
-                        modifier =
-                        Modifier.padding(
-                            top = Spacing.xs,
-                            start = Spacing.s,
-                            end = Spacing.s,
-                        ),
-                        textFieldValue = textFieldValue,
-                        onChangeTextFieldValue = {
-                            textFieldValue = it
-                        },
-                        onSelectImage = {
-                            openImagePicker = true
-                        },
-                        lastActionIcon = Icons.AutoMirrored.Default.Send,
-                        lastActionDescription = LocalStrings.current.actionSend,
-                        onLastAction = {
-                            model.reduce(
-                                InboxChatMviModel.Intent.SubmitNewMessage(
-                                    textFieldValue.text,
-                                ),
-                            )
-                            textFieldValue = TextFieldValue(text = "")
-                        },
-                    )
-                }
-            },
-        ) { padding ->
-            if (uiState.currentUserId != null) {
-                Box(
+                TextFormattingBar(
                     modifier =
-                    Modifier
-                        .padding(
-                            top = padding.calculateTopPadding(),
-                            bottom = padding.calculateBottomPadding(),
-                        ).consumeWindowInsets(padding),
+                    Modifier.padding(
+                        top = Spacing.xs,
+                        start = Spacing.s,
+                        end = Spacing.s,
+                    ),
+                    textFieldValue = textFieldValue,
+                    onChangeTextFieldValue = {
+                        textFieldValue = it
+                    },
+                    onSelectImage = {
+                        openImagePicker = true
+                    },
+                    lastActionIcon = Icons.AutoMirrored.Default.Send,
+                    lastActionDescription = LocalStrings.current.actionSend,
+                    onLastAction = {
+                        model.reduce(
+                            InboxChatMviModel.Intent.SubmitNewMessage(
+                                textFieldValue.text,
+                            ),
+                        )
+                        textFieldValue = TextFieldValue(text = "")
+                    },
+                )
+            }
+        },
+    ) { padding ->
+        if (uiState.currentUserId != null) {
+            Box(
+                modifier =
+                Modifier
+                    .padding(
+                        top = padding.calculateTopPadding(),
+                        bottom = padding.calculateBottomPadding(),
+                    ).consumeWindowInsets(padding),
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    reverseLayout = true,
+                    state = lazyListState,
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        reverseLayout = true,
-                        state = lazyListState,
-                    ) {
-                        item {
-                            Spacer(modifier = Modifier.height(Spacing.s))
+                    item {
+                        Spacer(modifier = Modifier.height(Spacing.s))
+                    }
+                    if (uiState.messages.isEmpty() && uiState.initial) {
+                        items(5) {
+                            MessageCardPlaceholder()
                         }
-                        if (uiState.messages.isEmpty() && uiState.initial) {
-                            items(5) {
-                                MessageCardPlaceholder()
-                            }
-                        }
-                        items(
-                            items = uiState.messages,
-                            key = {
-                                it.id.toString() + (it.updateDate ?: it.publishDate)
+                    }
+                    items(
+                        items = uiState.messages,
+                        key = {
+                            it.id.toString() + (it.updateDate ?: it.publishDate)
+                        },
+                    ) { message ->
+                        val isMyMessage = message.creator?.id == uiState.currentUserId
+                        val content = message.content.orEmpty()
+                        val date = message.publishDate.orEmpty()
+                        MessageCard(
+                            isMyMessage = isMyMessage,
+                            content = content,
+                            date = date,
+                            onOpenImage = { url ->
+                                mainRouter.openImage(
+                                    url = url,
+                                    source = message.creator?.readableHandle.orEmpty(),
+                                )
                             },
-                        ) { message ->
-                            val isMyMessage = message.creator?.id == uiState.currentUserId
-                            val content = message.content.orEmpty()
-                            val date = message.publishDate.orEmpty()
-                            MessageCard(
-                                isMyMessage = isMyMessage,
-                                content = content,
-                                date = date,
-                                onOpenImage = { url ->
-                                    navigationCoordinator.pushScreen(
-                                        ZoomableImageScreen(
-                                            url = url,
-                                            source = message.creator?.readableHandle.orEmpty(),
-                                        ),
+                            options =
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.SeeRaw,
+                                        LocalStrings.current.postActionSeeRaw,
                                     )
-                                },
-                                options =
-                                buildList {
+                                if (isMyMessage) {
                                     this +=
                                         Option(
-                                            OptionId.SeeRaw,
-                                            LocalStrings.current.postActionSeeRaw,
+                                            OptionId.Edit,
+                                            LocalStrings.current.postActionEdit,
                                         )
-                                    if (isMyMessage) {
-                                        this +=
-                                            Option(
-                                                OptionId.Edit,
-                                                LocalStrings.current.postActionEdit,
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.Delete,
-                                                LocalStrings.current.commentActionDelete,
-                                            )
-                                    }
-                                },
-                                onSelectOption = { optionId ->
-                                    when (optionId) {
-                                        OptionId.Edit -> {
-                                            model.reduce(
-                                                InboxChatMviModel.Intent.EditMessage(message.id),
-                                            )
-                                            message.content?.also {
-                                                textFieldValue = TextFieldValue(text = it)
-                                            }
-                                        }
-
-                                        OptionId.SeeRaw -> {
-                                            rawContent = message
-                                        }
-
-                                        OptionId.Delete -> {
-                                            itemIdToDelete = message.id
-                                        }
-
-                                        else -> Unit
-                                    }
-                                },
-                            )
-                            Spacer(modifier = Modifier.height(Spacing.s))
-                        }
-                        item {
-                            if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                                model.reduce(InboxChatMviModel.Intent.LoadNextPage)
-                            }
-                            if (!uiState.initial && uiState.loading && !uiState.refreshing) {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(25.dp),
-                                        color = MaterialTheme.colorScheme.primary,
-                                    )
+                                    this +=
+                                        Option(
+                                            OptionId.Delete,
+                                            LocalStrings.current.commentActionDelete,
+                                        )
                                 }
+                            },
+                            onSelectOption = { optionId ->
+                                when (optionId) {
+                                    OptionId.Edit -> {
+                                        model.reduce(
+                                            InboxChatMviModel.Intent.EditMessage(message.id),
+                                        )
+                                        message.content?.also {
+                                            textFieldValue = TextFieldValue(text = it)
+                                        }
+                                    }
+
+                                    OptionId.SeeRaw -> {
+                                        rawContent = message
+                                    }
+
+                                    OptionId.Delete -> {
+                                        itemIdToDelete = message.id
+                                    }
+
+                                    else -> Unit
+                                }
+                            },
+                        )
+                        Spacer(modifier = Modifier.height(Spacing.s))
+                    }
+                    item {
+                        if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                            model.reduce(InboxChatMviModel.Intent.LoadNextPage)
+                        }
+                        if (!uiState.initial && uiState.loading && !uiState.refreshing) {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(25.dp),
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
                             }
                         }
-                        item {
-                            Spacer(modifier = Modifier.height(Spacing.xxxl))
-                        }
                     }
-                }
-            }
-
-            if (openImagePicker) {
-                galleryHelper.getImageFromGallery { bytes ->
-                    openImagePicker = false
-                    if (bytes.isNotEmpty()) {
-                        model.reduce(InboxChatMviModel.Intent.ImageSelected(bytes))
+                    item {
+                        Spacer(modifier = Modifier.height(Spacing.xxxl))
                     }
                 }
             }
         }
 
-        if (rawContent != null) {
-            when (val content = rawContent) {
-                is PrivateMessageModel -> {
-                    RawContentDialog(
-                        publishDate = content.publishDate,
-                        updateDate = content.updateDate,
-                        text = content.content,
-                        onDismiss = {
-                            rawContent = null
-                        },
-                    )
+        if (openImagePicker) {
+            galleryHelper.getImageFromGallery { bytes ->
+                openImagePicker = false
+                if (bytes.isNotEmpty()) {
+                    model.reduce(InboxChatMviModel.Intent.ImageSelected(bytes))
                 }
             }
         }
+    }
 
-        itemIdToDelete?.also { itemId ->
-            AlertDialog(
-                onDismissRequest = {
-                    itemIdToDelete = null
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            itemIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            model.reduce(InboxChatMviModel.Intent.DeleteMessage(itemId))
-                            itemIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
-                },
-            )
+    if (rawContent != null) {
+        when (val content = rawContent) {
+            is PrivateMessageModel -> {
+                RawContentDialog(
+                    publishDate = content.publishDate,
+                    updateDate = content.updateDate,
+                    text = content.content,
+                    onDismiss = {
+                        rawContent = null
+                    },
+                )
+            }
         }
+    }
+
+    itemIdToDelete?.also { itemId ->
+        AlertDialog(
+            onDismissRequest = {
+                itemIdToDelete = null
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        itemIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonCancel)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        model.reduce(InboxChatMviModel.Intent.DeleteMessage(itemId))
+                        itemIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonConfirm)
+                }
+            },
+            text = {
+                Text(text = LocalStrings.current.messageAreYouSure)
+            },
+        )
     }
 }

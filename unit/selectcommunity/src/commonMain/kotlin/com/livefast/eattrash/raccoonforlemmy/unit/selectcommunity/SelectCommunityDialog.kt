@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
@@ -37,110 +36,109 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
-class SelectCommunityDialog : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: SelectCommunityMviModel = getViewModel<SelectCommunityViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val notificationCenter = remember { getNotificationCenter() }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SelectCommunityDialog(modifier: Modifier = Modifier) {
+    val model: SelectCommunityMviModel = getViewModel<SelectCommunityViewModel>()
+    val uiState by model.uiState.collectAsState()
+    val notificationCenter = remember { getNotificationCenter() }
 
-        BasicAlertDialog(
-            onDismissRequest = {
-                model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
-                notificationCenter.send(NotificationCenterEvent.CloseDialog)
-            },
+    BasicAlertDialog(
+        modifier = modifier,
+        onDismissRequest = {
+            model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
+            notificationCenter.send(NotificationCenterEvent.CloseDialog)
+        },
+    ) {
+        Column(
+            modifier =
+            Modifier
+                .background(color = MaterialTheme.colorScheme.surface)
+                .padding(vertical = Spacing.s),
+            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
+            Text(
+                text = LocalStrings.current.dialogTitleSelectCommunity,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            Spacer(modifier = Modifier.height(Spacing.s))
+
+            SearchField(
+                modifier = Modifier.fillMaxWidth(),
+                hint = LocalStrings.current.exploreSearchPlaceholder,
+                value = uiState.searchText,
+                onValueChange = { value ->
+                    model.reduce(SelectCommunityMviModel.Intent.SetSearch(value))
+                },
+                onClear = {
+                    model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
+                },
+            )
+
+            Box(
                 modifier =
                 Modifier
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .padding(vertical = Spacing.s),
-                verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .fillMaxWidth()
+                    .heightIn(min = 500.dp, max = 500.dp)
+                    .padding(horizontal = Spacing.xs),
             ) {
-                Text(
-                    text = LocalStrings.current.dialogTitleSelectCommunity,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                )
-                Spacer(modifier = Modifier.height(Spacing.s))
-
-                SearchField(
-                    modifier = Modifier.fillMaxWidth(),
-                    hint = LocalStrings.current.exploreSearchPlaceholder,
-                    value = uiState.searchText,
-                    onValueChange = { value ->
-                        model.reduce(SelectCommunityMviModel.Intent.SetSearch(value))
-                    },
-                    onClear = {
-                        model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
-                    },
-                )
-
-                Box(
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 500.dp, max = 500.dp)
-                        .padding(horizontal = Spacing.xs),
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                    ) {
-                        if (uiState.communities.isEmpty() && uiState.initial) {
-                            items(5) {
-                                CommunityItemPlaceholder()
-                            }
+                    if (uiState.communities.isEmpty() && uiState.initial) {
+                        items(5) {
+                            CommunityItemPlaceholder()
                         }
-                        items(uiState.communities, { it.id }) { community ->
-                            CommunityItem(
-                                modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .background(MaterialTheme.colorScheme.background)
-                                    .onClick(
-                                        onClick = {
-                                            notificationCenter.send(
-                                                NotificationCenterEvent.SelectCommunity(community),
-                                            )
-                                            notificationCenter.send(NotificationCenterEvent.CloseDialog)
-                                        },
-                                    ),
-                                autoLoadImages = uiState.autoLoadImages,
-                                preferNicknames = uiState.preferNicknames,
-                                community = community,
-                            )
-                        }
+                    }
+                    items(uiState.communities, { it.id }) { community ->
+                        CommunityItem(
+                            modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background)
+                                .onClick(
+                                    onClick = {
+                                        notificationCenter.send(
+                                            NotificationCenterEvent.SelectCommunity(community),
+                                        )
+                                        notificationCenter.send(NotificationCenterEvent.CloseDialog)
+                                    },
+                                ),
+                            autoLoadImages = uiState.autoLoadImages,
+                            preferNicknames = uiState.preferNicknames,
+                            community = community,
+                        )
+                    }
 
-                        item {
-                            if (!uiState.initial && !uiState.loading && uiState.canFetchMore) {
-                                model.reduce(SelectCommunityMviModel.Intent.LoadNextPage)
-                            }
-                            if (!uiState.initial && uiState.loading) {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(25.dp),
-                                        color = MaterialTheme.colorScheme.primary,
-                                    )
-                                }
+                    item {
+                        if (!uiState.initial && !uiState.loading && uiState.canFetchMore) {
+                            model.reduce(SelectCommunityMviModel.Intent.LoadNextPage)
+                        }
+                        if (!uiState.initial && uiState.loading) {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(25.dp),
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
                             }
                         }
                     }
                 }
+            }
 
-                Button(
-                    onClick = {
-                        model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
-                        notificationCenter.send(NotificationCenterEvent.CloseDialog)
-                    },
-                ) {
-                    Text(text = LocalStrings.current.buttonClose)
-                }
+            Button(
+                onClick = {
+                    model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
+                    notificationCenter.send(NotificationCenterEvent.CloseDialog)
+                },
+            ) {
+                Text(text = LocalStrings.current.buttonClose)
             }
         }
     }

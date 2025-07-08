@@ -100,7 +100,6 @@ dependencies {
 
     kover(projects.shared)
     kover(projects.core.appearance)
-    kover(projects.core.commonui.detailopener.impl)
     kover(projects.core.navigation)
     kover(projects.core.notifications)
     kover(projects.core.persistence)

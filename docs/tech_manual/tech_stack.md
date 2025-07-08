@@ -22,17 +22,20 @@ reliable library and I don't want to hear about Koin ever (ever!) again in my li
 
 <dt>Navigation</dt>
 <dd>
-For navigation the <a href="https://github.com/adrielcafe/voyager">Voyager</a> library has been
-selected. Again, the choice was driven by its multi-platform support, its very practical approach
-and ease to set up and get going, compared to other multi-platform libraries like Decompose that
-were used in the past. Nonetheless, and this lesson was learned the hard way, easiness of use and
+Yhe project started with the <a href="https://github.com/adrielcafe/voyager">Voyager</a> library.
+This choice was driven by its multi-platform support, its very practical approach
+and ease to set up, compared to other multi-platform libraries (like Decompose) that were available
+in 2023. Nonetheless, and this lesson was learned the hard way, easiness of use and
 compactness mean that things will go smooth in the future, and as the project grew the navigation
 library started to show its limits. Part of them were addressed by encapsulating the transition
 logic (to push/pop screens into the navigation stack and open/close modal bottom sheets) into a
-centralized component NavigationCoordinator.kt.
-Something similar was done for the navigation drawer in DrawerCoordinator.kt.
-Even the DI integration was not totally pain-free, the <code>:core:navigation</code> module contains
-some glue code that is used to work around some of the issues that were encountered.
+centralized <code>NavigationCoordinator</code>.
+Something similar was done for the navigation drawer in <code>DrawerCoordinator</code>.
+Even the DI integration was not totally pain-free, and the <code>:core:navigation</code> module
+started accumulating more and more "glue code" to work around some of the issues that were
+encountered (especially for deep links). After JetBrains ported AndroidX navigation to Compose
+Multiplatform, I took the opportunity to migrate the whole project to it and abandon Voyager in
+favor of a more stardard solution.
 </dd>
 
 <dt>Networking</dt>

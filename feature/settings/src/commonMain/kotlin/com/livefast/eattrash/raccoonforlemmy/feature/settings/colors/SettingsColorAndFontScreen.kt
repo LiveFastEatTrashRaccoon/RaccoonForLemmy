@@ -35,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.CommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.FontScale
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
@@ -85,549 +84,556 @@ internal enum class CustomColorType {
     None,
 }
 
-class SettingsColorAndFontScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: SettingsColorAndFontMviModel = getViewModel<SettingsColorAndFontViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val notificationCenter = remember { getNotificationCenter() }
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val settingsRepository = remember { getSettingsRepository() }
-        val themeRepository = remember { getThemeRepository() }
-        val appColorRepository = remember { getAppColorRepository() }
-        val scrollState = rememberScrollState()
-        val colorSchemeProvider = remember { getColorSchemeProvider() }
-        val defaultTheme =
-            if (isSystemInDarkTheme()) {
-                UiTheme.Dark
-            } else {
-                UiTheme.Light
-            }
-        var uiFontSizeWorkaround by remember { mutableStateOf(true) }
-        var uiThemeBottomSheetOpened by remember { mutableStateOf(false) }
-        var customColorBottomSheetOpened by remember { mutableStateOf(false) }
-        var voteThemeBottomSheetOpened by remember { mutableStateOf(false) }
-        var commentBarColorsBottomSheetOpened by remember { mutableStateOf(false) }
-        var fontFamilyBottomSheetOpened by remember { mutableStateOf(false) }
-        var fontScaleBottomSheetOpened by remember { mutableStateOf(false) }
-        var customColorPickerDialogOpened by remember { mutableStateOf(false) }
-        var customColorTypeSelection by remember { mutableStateOf(CustomColorType.None) }
-
-        LaunchedEffect(themeRepository) {
-            themeRepository.uiFontScale
-                .drop(1)
-                .onEach {
-                    uiFontSizeWorkaround = false
-                    delay(50)
-                    uiFontSizeWorkaround = true
-                }.launchIn(this)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
+    val model: SettingsColorAndFontMviModel = getViewModel<SettingsColorAndFontViewModel>()
+    val uiState by model.uiState.collectAsState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val notificationCenter = remember { getNotificationCenter() }
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val settingsRepository = remember { getSettingsRepository() }
+    val themeRepository = remember { getThemeRepository() }
+    val appColorRepository = remember { getAppColorRepository() }
+    val scrollState = rememberScrollState()
+    val colorSchemeProvider = remember { getColorSchemeProvider() }
+    val defaultTheme =
+        if (isSystemInDarkTheme()) {
+            UiTheme.Dark
+        } else {
+            UiTheme.Light
         }
+    var uiFontSizeWorkaround by remember { mutableStateOf(true) }
+    var uiThemeBottomSheetOpened by remember { mutableStateOf(false) }
+    var customColorBottomSheetOpened by remember { mutableStateOf(false) }
+    var voteThemeBottomSheetOpened by remember { mutableStateOf(false) }
+    var commentBarColorsBottomSheetOpened by remember { mutableStateOf(false) }
+    var fontFamilyBottomSheetOpened by remember { mutableStateOf(false) }
+    var fontScaleBottomSheetOpened by remember { mutableStateOf(false) }
+    var customColorPickerDialogOpened by remember { mutableStateOf(false) }
+    var customColorTypeSelection by remember { mutableStateOf(CustomColorType.None) }
 
-        if (!uiFontSizeWorkaround) {
-            return
-        }
+    LaunchedEffect(themeRepository) {
+        themeRepository.uiFontScale
+            .drop(1)
+            .onEach {
+                uiFontSizeWorkaround = false
+                delay(50)
+                uiFontSizeWorkaround = true
+            }.launchIn(this)
+    }
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    scrollBehavior = scrollBehavior,
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = LocalStrings.current.settingsColorsAndFonts,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    navigationIcon = {
-                        if (navigationCoordinator.canPop.value) {
-                            IconButton(
-                                onClick = {
-                                    navigationCoordinator.popScreen()
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = LocalStrings.current.actionGoBack,
-                                )
-                            }
+    if (!uiFontSizeWorkaround) {
+        return
+    }
+
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                scrollBehavior = scrollBehavior,
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.settingsColorsAndFonts,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                navigationIcon = {
+                    if (navigationCoordinator.canPop.value) {
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.pop()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = LocalStrings.current.actionGoBack,
+                            )
                         }
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        Box(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).nestedScroll(scrollBehavior.nestedScrollConnection),
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
+            ) {
+                // theme
+                SettingsRow(
+                    title = LocalStrings.current.settingsUiTheme,
+                    value = uiState.uiTheme.toReadableName(),
+                    onTap = {
+                        uiThemeBottomSheetOpened = true
                     },
                 )
-            },
-        ) { padding ->
-            Box(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).nestedScroll(scrollBehavior.nestedScrollConnection),
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
-                ) {
-                    // theme
-                    SettingsRow(
-                        title = LocalStrings.current.settingsUiTheme,
-                        value = uiState.uiTheme.toReadableName(),
-                        onTap = {
-                            uiThemeBottomSheetOpened = true
-                        },
-                    )
 
-                    // dynamic colors
-                    if (uiState.supportsDynamicColors) {
-                        SettingsSwitchRow(
-                            title = LocalStrings.current.settingsDynamicColors,
-                            value = uiState.dynamicColors,
-                            onChangeValue = { value ->
-                                model.reduce(
-                                    SettingsColorAndFontMviModel.Intent.ChangeDynamicColors(value),
-                                )
-                            },
-                        )
-                    }
-                    // random color
+                // dynamic colors
+                if (uiState.supportsDynamicColors) {
                     SettingsSwitchRow(
-                        title = LocalStrings.current.settingsItemRandomThemeColor,
-                        subtitle = LocalStrings.current.settingsSubtitleRandomThemeColor,
-                        value = uiState.randomColor,
+                        title = LocalStrings.current.settingsDynamicColors,
+                        value = uiState.dynamicColors,
                         onChangeValue = { value ->
                             model.reduce(
-                                SettingsColorAndFontMviModel.Intent.ChangeRandomColor(value),
+                                SettingsColorAndFontMviModel.Intent.ChangeDynamicColors(value),
                             )
                         },
                     )
+                }
+                // random color
+                SettingsSwitchRow(
+                    title = LocalStrings.current.settingsItemRandomThemeColor,
+                    subtitle = LocalStrings.current.settingsSubtitleRandomThemeColor,
+                    value = uiState.randomColor,
+                    onChangeValue = { value ->
+                        model.reduce(
+                            SettingsColorAndFontMviModel.Intent.ChangeRandomColor(value),
+                        )
+                    },
+                )
 
-                    // custom scheme seed color
+                // custom scheme seed color
+                SettingsColorRow(
+                    title = LocalStrings.current.settingsCustomSeedColor,
+                    value =
+                    uiState.customSeedColor ?: colorSchemeProvider
+                        .getColorScheme(
+                            theme = uiState.uiTheme ?: defaultTheme,
+                            dynamic = uiState.dynamicColors,
+                        ).primary,
+                    onTap = {
+                        customColorBottomSheetOpened = true
+                    },
+                )
+
+                if (uiState.isLogged) {
+                    // action colors
                     SettingsColorRow(
-                        title = LocalStrings.current.settingsCustomSeedColor,
+                        title = LocalStrings.current.settingsUpvoteColor,
+                        value = uiState.upVoteColor ?: MaterialTheme.colorScheme.primary,
+                        onTap = {
+                            customColorTypeSelection = CustomColorType.UpvoteColor
+                            voteThemeBottomSheetOpened = true
+                        },
+                    )
+                    SettingsColorRow(
+                        title = LocalStrings.current.settingsDownvoteColor,
+                        value = uiState.downVoteColor ?: MaterialTheme.colorScheme.tertiary,
+                        onTap = {
+                            customColorTypeSelection = CustomColorType.DownvoteColor
+                            voteThemeBottomSheetOpened = true
+                        },
+                    )
+                    SettingsColorRow(
+                        title = LocalStrings.current.settingsReplyColor,
+                        value = uiState.replyColor ?: MaterialTheme.colorScheme.secondary,
+                        onTap = {
+                            customColorTypeSelection = CustomColorType.ReplyColor
+                            voteThemeBottomSheetOpened = true
+                        },
+                    )
+                    SettingsColorRow(
+                        title = LocalStrings.current.settingsSaveColor,
                         value =
-                        uiState.customSeedColor ?: colorSchemeProvider
-                            .getColorScheme(
-                                theme = uiState.uiTheme ?: defaultTheme,
-                                dynamic = uiState.dynamicColors,
-                            ).primary,
+                        uiState.saveColor
+                            ?: MaterialTheme.colorScheme.secondaryContainer,
                         onTap = {
-                            customColorBottomSheetOpened = true
-                        },
-                    )
-
-                    if (uiState.isLogged) {
-                        // action colors
-                        SettingsColorRow(
-                            title = LocalStrings.current.settingsUpvoteColor,
-                            value = uiState.upVoteColor ?: MaterialTheme.colorScheme.primary,
-                            onTap = {
-                                customColorTypeSelection = CustomColorType.UpvoteColor
-                                voteThemeBottomSheetOpened = true
-                            },
-                        )
-                        SettingsColorRow(
-                            title = LocalStrings.current.settingsDownvoteColor,
-                            value = uiState.downVoteColor ?: MaterialTheme.colorScheme.tertiary,
-                            onTap = {
-                                customColorTypeSelection = CustomColorType.DownvoteColor
-                                voteThemeBottomSheetOpened = true
-                            },
-                        )
-                        SettingsColorRow(
-                            title = LocalStrings.current.settingsReplyColor,
-                            value = uiState.replyColor ?: MaterialTheme.colorScheme.secondary,
-                            onTap = {
-                                customColorTypeSelection = CustomColorType.ReplyColor
-                                voteThemeBottomSheetOpened = true
-                            },
-                        )
-                        SettingsColorRow(
-                            title = LocalStrings.current.settingsSaveColor,
-                            value =
-                            uiState.saveColor
-                                ?: MaterialTheme.colorScheme.secondaryContainer,
-                            onTap = {
-                                customColorTypeSelection = CustomColorType.SaveColor
-                                voteThemeBottomSheetOpened = true
-                            },
-                        )
-                    }
-
-                    // comment bar theme
-                    val commentBarColors =
-                        themeRepository.getCommentBarColors(uiState.commentBarTheme)
-                    SettingsMultiColorRow(
-                        title = LocalStrings.current.settingsCommentBarTheme,
-                        values = commentBarColors,
-                        onTap = {
-                            commentBarColorsBottomSheetOpened = true
-                        },
-                    )
-
-                    // font family
-                    SettingsRow(
-                        title = LocalStrings.current.settingsUiFontFamily,
-                        value = uiState.uiFontFamily.toReadableName(),
-                        onTap = {
-                            fontFamilyBottomSheetOpened = true
-                        },
-                    )
-
-                    // font scale
-                    SettingsRow(
-                        title = LocalStrings.current.settingsUiFontScale,
-                        value = uiState.uiFontScale.toFontScale().toReadableName(),
-                        onTap = {
-                            fontScaleBottomSheetOpened = true
+                            customColorTypeSelection = CustomColorType.SaveColor
+                            voteThemeBottomSheetOpened = true
                         },
                     )
                 }
+
+                // comment bar theme
+                val commentBarColors =
+                    themeRepository.getCommentBarColors(uiState.commentBarTheme)
+                SettingsMultiColorRow(
+                    title = LocalStrings.current.settingsCommentBarTheme,
+                    values = commentBarColors,
+                    onTap = {
+                        commentBarColorsBottomSheetOpened = true
+                    },
+                )
+
+                // font family
+                SettingsRow(
+                    title = LocalStrings.current.settingsUiFontFamily,
+                    value = uiState.uiFontFamily.toReadableName(),
+                    onTap = {
+                        fontFamilyBottomSheetOpened = true
+                    },
+                )
+
+                // font scale
+                SettingsRow(
+                    title = LocalStrings.current.settingsUiFontScale,
+                    value = uiState.uiFontScale.toFontScale().toReadableName(),
+                    onTap = {
+                        fontScaleBottomSheetOpened = true
+                    },
+                )
             }
         }
+    }
 
-        if (uiThemeBottomSheetOpened) {
-            val items =
-                listOf(
-                    UiTheme.Light,
-                    UiTheme.Dark,
-                    UiTheme.Black,
-                    UiTheme.Default,
+    if (uiThemeBottomSheetOpened) {
+        val items =
+            listOf(
+                UiTheme.Light,
+                UiTheme.Dark,
+                UiTheme.Black,
+                UiTheme.Default,
+            )
+        CustomModalBottomSheet(
+            title = LocalStrings.current.settingsUiTheme,
+            items =
+            items.map { theme ->
+                CustomModalBottomSheetItem(
+                    label = theme.toReadableName(),
+                    trailingContent = {
+                        Icon(
+                            modifier = Modifier.size(IconSize.m),
+                            imageVector = theme.toIcon(),
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                    },
                 )
-            CustomModalBottomSheet(
-                title = LocalStrings.current.settingsUiTheme,
-                items =
-                items.map { theme ->
+            },
+            onSelect = { index ->
+                uiThemeBottomSheetOpened = false
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeTheme(items[index]),
+                    )
+                }
+            },
+        )
+    }
+
+    if (customColorBottomSheetOpened) {
+        CustomModalBottomSheet(
+            title = LocalStrings.current.settingsCustomSeedColor,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            items =
+            buildList {
+                this +=
+                    appColorRepository.getColors().map { theme ->
+                        CustomModalBottomSheetItem(
+                            label = theme.toReadableName(),
+                            trailingContent = {
+                                Box(
+                                    modifier =
+                                    Modifier
+                                        .padding(start = Spacing.xs)
+                                        .size(size = IconSize.m)
+                                        .background(
+                                            color = theme.toColor(),
+                                            shape = CircleShape,
+                                        ),
+                                )
+                            },
+                        )
+                    }
+                this +=
                     CustomModalBottomSheetItem(
-                        label = theme.toReadableName(),
+                        label = LocalStrings.current.settingsColorCustom,
                         trailingContent = {
                             Icon(
-                                modifier = Modifier.size(IconSize.m),
-                                imageVector = theme.toIcon(),
+                                imageVector = Icons.Default.ChevronRight,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onBackground,
                             )
                         },
                     )
-                },
-                onSelect = { index ->
-                    uiThemeBottomSheetOpened = false
-                    if (index != null) {
+            },
+            onSelect = { index ->
+                customColorBottomSheetOpened = false
+                if (index != null) {
+                    if (index in appColorRepository.getColors().indices) {
                         notificationCenter.send(
-                            NotificationCenterEvent.ChangeTheme(items[index]),
+                            NotificationCenterEvent.ChangeColor(
+                                appColorRepository.getColors()[index].toColor(),
+                            ),
                         )
+                    } else {
+                        customColorPickerDialogOpened = true
+                        customColorBottomSheetOpened = true
                     }
-                },
-            )
-        }
-
-        if (customColorBottomSheetOpened) {
-            CustomModalBottomSheet(
-                title = LocalStrings.current.settingsCustomSeedColor,
-                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-                items =
-                buildList {
-                    this +=
-                        appColorRepository.getColors().map { theme ->
-                            CustomModalBottomSheetItem(
-                                label = theme.toReadableName(),
-                                trailingContent = {
-                                    Box(
-                                        modifier =
-                                        Modifier
-                                            .padding(start = Spacing.xs)
-                                            .size(size = IconSize.m)
-                                            .background(
-                                                color = theme.toColor(),
-                                                shape = CircleShape,
-                                            ),
-                                    )
-                                },
-                            )
-                        }
-                    this +=
-                        CustomModalBottomSheetItem(
-                            label = LocalStrings.current.settingsColorCustom,
-                            trailingContent = {
-                                Icon(
-                                    imageVector = Icons.Default.ChevronRight,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                )
-                            },
-                        )
-                },
-                onSelect = { index ->
+                }
+            },
+        )
+        if (customColorPickerDialogOpened) {
+            val current =
+                settingsRepository.currentSettings.value.customSeedColor
+                    ?.let { Color(it) }
+            CustomColorPickerDialog(
+                initialValue = current ?: MaterialTheme.colorScheme.primary,
+                onClose = { newColor ->
+                    customColorPickerDialogOpened = false
                     customColorBottomSheetOpened = false
-                    if (index != null) {
-                        if (index in appColorRepository.getColors().indices) {
-                            notificationCenter.send(
-                                NotificationCenterEvent.ChangeColor(
-                                    appColorRepository.getColors()[index].toColor(),
-                                ),
-                            )
-                        } else {
-                            customColorPickerDialogOpened = true
-                            customColorBottomSheetOpened = true
-                        }
+                    if (newColor != null) {
+                        notificationCenter.send(NotificationCenterEvent.ChangeColor(newColor))
                     }
                 },
             )
-            if (customColorPickerDialogOpened) {
-                val current =
-                    settingsRepository.currentSettings.value.customSeedColor
-                        ?.let { Color(it) }
-                CustomColorPickerDialog(
-                    initialValue = current ?: MaterialTheme.colorScheme.primary,
-                    onClose = { newColor ->
-                        customColorPickerDialogOpened = false
-                        customColorBottomSheetOpened = false
-                        if (newColor != null) {
-                            notificationCenter.send(NotificationCenterEvent.ChangeColor(newColor))
-                        }
-                    },
-                )
-            }
         }
+    }
 
-        if (voteThemeBottomSheetOpened) {
-            val items =
-                listOf(
-                    CommentBarTheme.Blue,
-                    CommentBarTheme.Green,
-                    CommentBarTheme.Red,
-                    CommentBarTheme.Rainbow,
-                )
-            CustomModalBottomSheet(
-                title =
-                when (customColorTypeSelection) {
-                    CustomColorType.UpvoteColor -> {
-                        LocalStrings.current.settingsUpvoteColor
-                    }
-                    CustomColorType.DownvoteColor -> {
-                        LocalStrings.current.settingsDownvoteColor
-                    }
-                    CustomColorType.ReplyColor -> {
-                        LocalStrings.current.settingsReplyColor
-                    }
-                    CustomColorType.SaveColor -> {
-                        LocalStrings.current.settingsSaveColor
-                    }
-                    else -> {
-                        ""
-                    }
-                },
-                items =
-                buildList {
-                    this +=
-                        items.map { barTheme ->
-                            CustomModalBottomSheetItem(
-                                label = barTheme.toReadableName(),
-                                trailingContent = {
-                                    Box(
-                                        modifier =
-                                        Modifier
-                                            .size(IconSize.m)
-                                            .background(
-                                                color =
-                                                when (customColorTypeSelection) {
-                                                    CustomColorType.UpvoteColor -> {
-                                                        barTheme.toUpVoteColor()
-                                                    }
-                                                    CustomColorType.DownvoteColor -> {
-                                                        barTheme.toDownVoteColor()
-                                                    }
-                                                    CustomColorType.ReplyColor -> {
-                                                        barTheme.toReplyColor()
-                                                    }
-                                                    CustomColorType.SaveColor -> {
-                                                        barTheme.toSaveColor()
-                                                    }
-                                                    else -> {
-                                                        Color.Unspecified
-                                                    }
-                                                },
-                                                shape = CircleShape,
-                                            ),
-                                    )
-                                },
-                            )
-                        }
-                    this +=
+    if (voteThemeBottomSheetOpened) {
+        val items =
+            listOf(
+                CommentBarTheme.Blue,
+                CommentBarTheme.Green,
+                CommentBarTheme.Red,
+                CommentBarTheme.Rainbow,
+            )
+        CustomModalBottomSheet(
+            title =
+            when (customColorTypeSelection) {
+                CustomColorType.UpvoteColor -> {
+                    LocalStrings.current.settingsUpvoteColor
+                }
+
+                CustomColorType.DownvoteColor -> {
+                    LocalStrings.current.settingsDownvoteColor
+                }
+
+                CustomColorType.ReplyColor -> {
+                    LocalStrings.current.settingsReplyColor
+                }
+
+                CustomColorType.SaveColor -> {
+                    LocalStrings.current.settingsSaveColor
+                }
+
+                else -> {
+                    ""
+                }
+            },
+            items =
+            buildList {
+                this +=
+                    items.map { barTheme ->
                         CustomModalBottomSheetItem(
-                            label = LocalStrings.current.settingsColorCustom,
+                            label = barTheme.toReadableName(),
                             trailingContent = {
-                                Icon(
-                                    imageVector = Icons.Default.ChevronRight,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
+                                Box(
+                                    modifier =
+                                    Modifier
+                                        .size(IconSize.m)
+                                        .background(
+                                            color =
+                                            when (customColorTypeSelection) {
+                                                CustomColorType.UpvoteColor -> {
+                                                    barTheme.toUpVoteColor()
+                                                }
+
+                                                CustomColorType.DownvoteColor -> {
+                                                    barTheme.toDownVoteColor()
+                                                }
+
+                                                CustomColorType.ReplyColor -> {
+                                                    barTheme.toReplyColor()
+                                                }
+
+                                                CustomColorType.SaveColor -> {
+                                                    barTheme.toSaveColor()
+                                                }
+
+                                                else -> {
+                                                    Color.Unspecified
+                                                }
+                                            },
+                                            shape = CircleShape,
+                                        ),
                                 )
                             },
                         )
-                },
-                onSelect = { index ->
-                    voteThemeBottomSheetOpened = false
-                    if (index != null) {
-                        if (index in items.indices) {
-                            notificationCenter.send(
-                                NotificationCenterEvent.ChangeActionColor(
-                                    color =
-                                    when (customColorTypeSelection) {
-                                        CustomColorType.UpvoteColor -> {
-                                            items[index].toUpVoteColor()
-                                        }
-
-                                        CustomColorType.DownvoteColor -> {
-                                            items[index].toDownVoteColor()
-                                        }
-
-                                        CustomColorType.ReplyColor -> {
-                                            items[index].toReplyColor()
-                                        }
-
-                                        CustomColorType.SaveColor -> {
-                                            items[index].toSaveColor()
-                                        }
-
-                                        else -> {
-                                            Color.Unspecified
-                                        }
-                                    },
-                                    actionType = customColorTypeSelection.ordinal,
-                                ),
-                            )
-                            customColorTypeSelection = CustomColorType.None
-                        } else {
-                            customColorPickerDialogOpened = true
-                            voteThemeBottomSheetOpened = true
-                        }
                     }
-                },
-            )
-            if (customColorPickerDialogOpened) {
-                val current =
-                    settingsRepository.currentSettings.value.customSeedColor
-                        ?.let { Color(it) }
-                CustomColorPickerDialog(
-                    initialValue = current ?: MaterialTheme.colorScheme.primary,
-                    onClose = { newColor ->
-                        customColorPickerDialogOpened = false
-                        voteThemeBottomSheetOpened = false
-                        if (newColor != null) {
-                            notificationCenter.send(
-                                NotificationCenterEvent.ChangeActionColor(
-                                    color = newColor,
-                                    actionType = customColorTypeSelection.ordinal,
-                                ),
-                            )
-                        }
-                        customColorTypeSelection = CustomColorType.None
-                    },
-                )
-            }
-        }
-
-        if (commentBarColorsBottomSheetOpened) {
-            val items =
-                listOf(
-                    CommentBarTheme.Blue,
-                    CommentBarTheme.Green,
-                    CommentBarTheme.Red,
-                    CommentBarTheme.Rainbow,
-                )
-            CustomModalBottomSheet(
-                title = LocalStrings.current.settingsCommentBarTheme,
-                items =
-                items.map { barTheme ->
+                this +=
                     CustomModalBottomSheetItem(
-                        label = barTheme.toReadableName(),
+                        label = LocalStrings.current.settingsColorCustom,
                         trailingContent = {
-                            val colors = themeRepository.getCommentBarColors(barTheme)
-                            MultiColorPreview(
-                                modifier = Modifier.size(36.dp),
-                                colors = colors,
+                            Icon(
+                                imageVector = Icons.Default.ChevronRight,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
                             )
                         },
                     )
-                },
-                onSelect = { index ->
-                    commentBarColorsBottomSheetOpened = false
-                    if (index != null && index in items.indices) {
+            },
+            onSelect = { index ->
+                voteThemeBottomSheetOpened = false
+                if (index != null) {
+                    if (index in items.indices) {
                         notificationCenter.send(
-                            NotificationCenterEvent.ChangeCommentBarTheme(
-                                value = items[index],
+                            NotificationCenterEvent.ChangeActionColor(
+                                color =
+                                when (customColorTypeSelection) {
+                                    CustomColorType.UpvoteColor -> {
+                                        items[index].toUpVoteColor()
+                                    }
+
+                                    CustomColorType.DownvoteColor -> {
+                                        items[index].toDownVoteColor()
+                                    }
+
+                                    CustomColorType.ReplyColor -> {
+                                        items[index].toReplyColor()
+                                    }
+
+                                    CustomColorType.SaveColor -> {
+                                        items[index].toSaveColor()
+                                    }
+
+                                    else -> {
+                                        Color.Unspecified
+                                    }
+                                },
+                                actionType = customColorTypeSelection.ordinal,
+                            ),
+                        )
+                        customColorTypeSelection = CustomColorType.None
+                    } else {
+                        customColorPickerDialogOpened = true
+                        voteThemeBottomSheetOpened = true
+                    }
+                }
+            },
+        )
+        if (customColorPickerDialogOpened) {
+            val current =
+                settingsRepository.currentSettings.value.customSeedColor
+                    ?.let { Color(it) }
+            CustomColorPickerDialog(
+                initialValue = current ?: MaterialTheme.colorScheme.primary,
+                onClose = { newColor ->
+                    customColorPickerDialogOpened = false
+                    voteThemeBottomSheetOpened = false
+                    if (newColor != null) {
+                        notificationCenter.send(
+                            NotificationCenterEvent.ChangeActionColor(
+                                color = newColor,
+                                actionType = customColorTypeSelection.ordinal,
                             ),
                         )
                     }
+                    customColorTypeSelection = CustomColorType.None
                 },
             )
         }
+    }
 
-        if (fontFamilyBottomSheetOpened) {
-            val items =
-                listOf(
-                    UiFontFamily.Poppins,
-                    UiFontFamily.NotoSans,
-                    UiFontFamily.AtkinsonHyperlegible,
-                    UiFontFamily.Default,
-                ).map { it.toInt() }
-            CustomModalBottomSheet(
-                title = LocalStrings.current.settingsUiFontFamily,
-                items =
-                items.map { fontFamily ->
-                    CustomModalBottomSheetItem(
-                        label = fontFamily.toUiFontFamily().toReadableName(),
-                        customLabelStyle =
-                        fontFamily
-                            .toUiFontFamily()
-                            .toTypography()
-                            .titleMedium,
-                    )
-                },
-                onSelect = { index ->
-                    fontFamilyBottomSheetOpened = false
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeFontFamily(items[index].toUiFontFamily()),
-                        )
-                    }
-                },
+    if (commentBarColorsBottomSheetOpened) {
+        val items =
+            listOf(
+                CommentBarTheme.Blue,
+                CommentBarTheme.Green,
+                CommentBarTheme.Red,
+                CommentBarTheme.Rainbow,
             )
-        }
+        CustomModalBottomSheet(
+            title = LocalStrings.current.settingsCommentBarTheme,
+            items =
+            items.map { barTheme ->
+                CustomModalBottomSheetItem(
+                    label = barTheme.toReadableName(),
+                    trailingContent = {
+                        val colors = themeRepository.getCommentBarColors(barTheme)
+                        MultiColorPreview(
+                            modifier = Modifier.size(36.dp),
+                            colors = colors,
+                        )
+                    },
+                )
+            },
+            onSelect = { index ->
+                commentBarColorsBottomSheetOpened = false
+                if (index != null && index in items.indices) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeCommentBarTheme(
+                            value = items[index],
+                        ),
+                    )
+                }
+            },
+        )
+    }
 
-        if (fontScaleBottomSheetOpened) {
-            val items =
-                listOf(
-                    FontScale.Largest,
-                    FontScale.Larger,
-                    FontScale.Large,
-                    FontScale.Normal,
-                    FontScale.Small,
-                    FontScale.Smaller,
-                    FontScale.Smallest,
-                ).map { it.scaleFactor }
-            CustomModalBottomSheet(
-                title = LocalStrings.current.settingsUiFontScale,
-                items =
-                items.map { font ->
-                    CustomModalBottomSheetItem(
-                        label = font.toFontScale().toReadableName(),
-                        customLabelStyle =
-                        MaterialTheme.typography.titleMedium.let {
-                            it.copy(fontSize = it.fontSize * font)
-                        },
+    if (fontFamilyBottomSheetOpened) {
+        val items =
+            listOf(
+                UiFontFamily.Poppins,
+                UiFontFamily.NotoSans,
+                UiFontFamily.AtkinsonHyperlegible,
+                UiFontFamily.Default,
+            ).map { it.toInt() }
+        CustomModalBottomSheet(
+            title = LocalStrings.current.settingsUiFontFamily,
+            items =
+            items.map { fontFamily ->
+                CustomModalBottomSheetItem(
+                    label = fontFamily.toUiFontFamily().toReadableName(),
+                    customLabelStyle =
+                    fontFamily
+                        .toUiFontFamily()
+                        .toTypography()
+                        .titleMedium,
+                )
+            },
+            onSelect = { index ->
+                fontFamilyBottomSheetOpened = false
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeFontFamily(items[index].toUiFontFamily()),
                     )
-                },
-                onSelect = { index ->
-                    fontScaleBottomSheetOpened = false
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeUiFontSize(items[index]),
-                        )
-                    }
-                },
-            )
-        }
+                }
+            },
+        )
+    }
+
+    if (fontScaleBottomSheetOpened) {
+        val items =
+            listOf(
+                FontScale.Largest,
+                FontScale.Larger,
+                FontScale.Large,
+                FontScale.Normal,
+                FontScale.Small,
+                FontScale.Smaller,
+                FontScale.Smallest,
+            ).map { it.scaleFactor }
+        CustomModalBottomSheet(
+            title = LocalStrings.current.settingsUiFontScale,
+            items =
+            items.map { font ->
+                CustomModalBottomSheetItem(
+                    label = font.toFontScale().toReadableName(),
+                    customLabelStyle =
+                    MaterialTheme.typography.titleMedium.let {
+                        it.copy(fontSize = it.fontSize * font)
+                    },
+                )
+            },
+            onSelect = { index ->
+                fontScaleBottomSheetOpened = false
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeUiFontSize(items[index]),
+                    )
+                }
+            },
+        )
     }
 }

@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler
 
 import androidx.compose.ui.platform.UriHandler
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.DetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.MainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.CustomTabsHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
@@ -20,7 +20,7 @@ internal class DefaultCustomUriHandler(
     private val userProcessor: UserProcessor,
     private val postProcessor: PostProcessor,
     private val commentProcessor: CommentProcessor,
-    private val detailOpener: DetailOpener,
+    private val mainRouter: MainRouter,
     private val customTabsHelper: CustomTabsHelper,
     dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : CustomUriHandler {
@@ -45,7 +45,7 @@ internal class DefaultCustomUriHandler(
                 val openingMode = settings.urlOpeningMode.toUrlOpeningMode()
                 when {
                     openingMode == UrlOpeningMode.Internal && allowOpenExternal ->
-                        detailOpener.openWebInternal(uri)
+                        mainRouter.openWebInternal(uri)
 
                     openingMode == UrlOpeningMode.CustomTabs && allowOpenExternal ->
                         runCatching { customTabsHelper.handle(uri) }

@@ -24,6 +24,7 @@ It started in 2023 as an exercise to play around with Kotlin and Compose multipl
 grew as a fully functional client.
 
 Main features:
+
 - view post feed and comments with different listing and sort types;
 - possibility to upvote and downvote (with configurable swipe actions);
 - community and user detail (with custom sort types);
@@ -72,11 +73,14 @@ from the [Releases](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/r
   <a href="https://lemmy.world/c/raccoonforlemmyapp" target="_blank"><img alt="Lemmy logo" src="https://img.shields.io/badge/lemmy-ff0066?logo=Lemmy" /></a>
 </div>
 
-Reach out to the community on Lemmy, Matrix or file a report in the [issue tracker](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/issues)
-here on GitHub. Alternatively, you can always write an [email](mailto://livefast.eattrash.raccoon@gmail.com).
+Reach out to the community on Lemmy, Matrix or file a report in the
+[issue tracker](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/issues)
+here on GitHub. Alternatively, you can always write an
+[email](mailto://livefast.eattrash.raccoon@gmail.com).
 
-Please remember: every contribution is welcome and everyone's opinion matters here. This is a community project,
-open source, ad-free and free of charge, and it belongs to us all so don't be afraid to get involved.
+Please remember: every contribution is welcome and everyone's opinion matters here. This is a
+community project, open source, ad-free and free of charge, and it belongs to us all so don't be
+afraid to get involved.
 
 And don't forget every 🦝's motto: `#livefasteattrash`.
 
@@ -139,10 +143,10 @@ Joking apart, one of the main goals was to experiment with KMP and learn how to 
 the challenges of a multiplatform environment, and a medium-sized project like this was an ideal
 testing ground for that technology.
 
-Secondly, I felt that the Android ecosystem of Lemmy apps in 2023 was a little "poor" with few native
-apps (fewer open source), while the "market" is dominated by iOS and cross-platform clients.
-I️ ❤️ Kotlin, I ❤️ Free and Open Source Software and I ❤️ native app development, so there was a niche
-that could be filled.
+Secondly, I felt that the Android ecosystem of Lemmy apps in 2023 was a little "poor" with few
+native apps (fewer open source), while the "market" is dominated by iOS and cross-platform clients.
+I️ ❤️ Kotlin, I ❤️ Free and Open Source Software and I ❤️ native app development, so there was a
+niche that could be filled.
 
 Developing a new client was an opportunity to add all the good features that were "scattered" across
 different apps, e.g. the feature richness of [Liftoff](https://github.com/liftoff-app/liftoff),
@@ -184,11 +188,11 @@ switch to the web UI.
 - [MaterialKolor](https://github.com/jordond/MaterialKolor) for custom theme generation;
 - [SQLDelight](https://github.com/cashapp/sqldelight)
   and [SQLCipher](https://github.com/sqlcipher/sqlcipher) for local persistence
-- [Voyager](https://voyager.adriel.cafe/) for navigation;
+- [AndroidX Compose navigation](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation.htm)
+  for navigation;
 
 More info about the technologies used in the project can be found in
 the [CONTRIBUTING.md](https://github.com/livefasteattrashraccoon/RaccoonForLemmy/blob/master/CONTRIBUTING.md#51-tech-stack).
-
 
 ## Disclaimers
 

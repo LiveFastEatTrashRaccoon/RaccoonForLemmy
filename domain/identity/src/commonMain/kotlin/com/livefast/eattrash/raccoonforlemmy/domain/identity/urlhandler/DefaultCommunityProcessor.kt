@@ -1,6 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler
 
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.DetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.MainRouter
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
 import kotlinx.coroutines.withTimeoutOrNull
@@ -8,7 +8,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 internal class DefaultCommunityProcessor(
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
-    private val detailOpener: DetailOpener,
+    private val mainRouter: MainRouter,
     private val urlDecoder: UrlDecoder,
 ) : CommunityProcessor {
     override suspend fun process(url: String): Boolean = withTimeoutOrNull(2500) {
@@ -20,12 +20,12 @@ internal class DefaultCommunityProcessor(
             )
 
         if (resolved != null) {
-            detailOpener.openCommunityDetail(community = resolved)
+            mainRouter.openCommunityDetail(community = resolved)
             true
         } else {
             val community = urlDecoder.getCommunity(url)
             if (community != null) {
-                detailOpener.openCommunityDetail(
+                mainRouter.openCommunityDetail(
                     community = community,
                     otherInstance = community.host,
                 )

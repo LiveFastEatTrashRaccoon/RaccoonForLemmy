@@ -51,7 +51,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
@@ -66,183 +65,137 @@ import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.di.MultiCommuni
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class MultiCommunityEditorScreen(private val communityId: Long? = null) : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: MultiCommunityEditorMviModel =
-            getViewModel<MultiCommunityEditorViewModel>(MultiCommunityEditorMviModelParams(communityId ?: 0))
-        val uiState by model.uiState.collectAsState()
-        val topAppBarState = rememberTopAppBarState()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MultiCommunityEditorScreen(modifier: Modifier = Modifier, communityId: Long? = null) {
+    val model: MultiCommunityEditorMviModel =
+        getViewModel<MultiCommunityEditorViewModel>(MultiCommunityEditorMviModelParams(communityId ?: 0))
+    val uiState by model.uiState.collectAsState()
+    val topAppBarState = rememberTopAppBarState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
 
-        LaunchedEffect(model) {
-            model.effects
-                .onEach {
-                    when (it) {
-                        MultiCommunityEditorMviModel.Effect.Close -> {
-                            navigationCoordinator.popScreen()
-                        }
-                    }
-                }.launchIn(this)
-        }
-
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    title = {
-                        Text(
-                            text = LocalStrings.current.multiCommunityEditorTitle,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                navigationCoordinator.popScreen()
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = LocalStrings.current.actionGoBack,
-                            )
-                        }
-                    },
-                    actions = {
-                        IconButton(
-                            modifier = Modifier.padding(horizontal = Spacing.xs),
-                            onClick = {
-                                model.reduce(MultiCommunityEditorMviModel.Intent.Submit)
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.CheckCircle,
-                                contentDescription = LocalStrings.current.buttonConfirm,
-                            )
-                        }
-                    },
-                )
-            },
-        ) { padding ->
-            val focusManager = LocalFocusManager.current
-            val keyboardScrollConnection =
-                remember {
-                    object : NestedScrollConnection {
-                        override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                            focusManager.clearFocus()
-                            return Offset.Zero
-                        }
+    LaunchedEffect(model) {
+        model.effects
+            .onEach {
+                when (it) {
+                    MultiCommunityEditorMviModel.Effect.Close -> {
+                        navigationCoordinator.pop()
                     }
                 }
-            Column(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).nestedScroll(keyboardScrollConnection),
-                verticalArrangement = Arrangement.spacedBy(Spacing.s),
-            ) {
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                    ),
-                    maxLines = 1,
-                    label = {
-                        Text(text = LocalStrings.current.multiCommunityEditorName)
-                    },
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    value = uiState.name,
-                    keyboardOptions =
-                    KeyboardOptions(
-                        autoCorrectEnabled = false,
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
-                    onValueChange = { value ->
-                        model.reduce(MultiCommunityEditorMviModel.Intent.SetName(value))
-                    },
-                    isError = uiState.nameError != null,
-                    supportingText = {
-                        val error = uiState.nameError
-                        if (error != null) {
-                            Text(
-                                text = error.toReadableMessage(),
-                                color = MaterialTheme.colorScheme.error,
-                            )
-                        }
-                    },
-                )
+            }.launchIn(this)
+    }
 
-                Spacer(modifier = Modifier.height(Spacing.s))
-                Column(
-                    modifier = Modifier.padding(horizontal = Spacing.m),
-                ) {
-                    Text(text = LocalStrings.current.multiCommunityEditorIcon)
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                title = {
+                    Text(
+                        text = LocalStrings.current.multiCommunityEditorTitle,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navigationCoordinator.pop()
+                        },
                     ) {
-                        val iconSize = 40.dp
-                        if (uiState.autoLoadImages) {
-                            itemsIndexed(uiState.availableIcons) { idx, url ->
-                                val selected = url == uiState.icon
-                                CustomImage(
-                                    modifier =
-                                    Modifier
-                                        .size(iconSize)
-                                        .clip(RoundedCornerShape(iconSize / 2))
-                                        .let {
-                                            if (selected) {
-                                                it
-                                                    .border(
-                                                        width = 1.dp,
-                                                        color = MaterialTheme.colorScheme.primary,
-                                                        shape = CircleShape,
-                                                    ).padding(1.dp)
-                                                    .border(
-                                                        width = 1.dp,
-                                                        color = MaterialTheme.colorScheme.onPrimary,
-                                                        shape = CircleShape,
-                                                    ).padding(1.dp)
-                                                    .border(
-                                                        width = 1.dp,
-                                                        color = MaterialTheme.colorScheme.primary,
-                                                        shape = CircleShape,
-                                                    )
-                                            } else {
-                                                it
-                                            }
-                                        }.onClick(
-                                            onClick = {
-                                                model.reduce(
-                                                    MultiCommunityEditorMviModel.Intent.SelectImage(
-                                                        idx,
-                                                    ),
-                                                )
-                                            },
-                                        ),
-                                    url = url,
-                                    autoload = uiState.autoLoadImages,
-                                    contentScale = ContentScale.FillBounds,
-                                )
-                            }
-                        }
-                        item {
-                            val selected = uiState.icon == null
-                            Box(
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = LocalStrings.current.actionGoBack,
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        modifier = Modifier.padding(horizontal = Spacing.xs),
+                        onClick = {
+                            model.reduce(MultiCommunityEditorMviModel.Intent.Submit)
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = LocalStrings.current.buttonConfirm,
+                        )
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        val focusManager = LocalFocusManager.current
+        val keyboardScrollConnection =
+            remember {
+                object : NestedScrollConnection {
+                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                        focusManager.clearFocus()
+                        return Offset.Zero
+                    }
+                }
+            }
+        Column(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).nestedScroll(keyboardScrollConnection),
+            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+        ) {
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                colors =
+                TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
+                maxLines = 1,
+                label = {
+                    Text(text = LocalStrings.current.multiCommunityEditorName)
+                },
+                textStyle = MaterialTheme.typography.bodyMedium,
+                value = uiState.name,
+                keyboardOptions =
+                KeyboardOptions(
+                    autoCorrectEnabled = false,
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
+                onValueChange = { value ->
+                    model.reduce(MultiCommunityEditorMviModel.Intent.SetName(value))
+                },
+                isError = uiState.nameError != null,
+                supportingText = {
+                    val error = uiState.nameError
+                    if (error != null) {
+                        Text(
+                            text = error.toReadableMessage(),
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                },
+            )
+
+            Spacer(modifier = Modifier.height(Spacing.s))
+            Column(
+                modifier = Modifier.padding(horizontal = Spacing.m),
+            ) {
+                Text(text = LocalStrings.current.multiCommunityEditorIcon)
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                ) {
+                    val iconSize = 40.dp
+                    if (uiState.autoLoadImages) {
+                        itemsIndexed(uiState.availableIcons) { idx, url ->
+                            val selected = url == uiState.icon
+                            CustomImage(
                                 modifier =
                                 Modifier
-                                    .padding(Spacing.xxxs)
                                     .size(iconSize)
-                                    .background(
-                                        color = MaterialTheme.colorScheme.primary,
-                                        shape = RoundedCornerShape(iconSize / 2),
-                                    ).let {
+                                    .clip(RoundedCornerShape(iconSize / 2))
+                                    .let {
                                         if (selected) {
                                             it
                                                 .border(
@@ -267,101 +220,146 @@ class MultiCommunityEditorScreen(private val communityId: Long? = null) : Screen
                                         onClick = {
                                             model.reduce(
                                                 MultiCommunityEditorMviModel.Intent.SelectImage(
-                                                    null,
+                                                    idx,
                                                 ),
                                             )
                                         },
                                     ),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Text(
-                                    text =
-                                    uiState.name
-                                        .firstOrNull()
-                                        ?.toString()
-                                        .orEmpty()
-                                        .uppercase(),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(Spacing.s))
-                Column(
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Spacing.s),
-                ) {
-                    Text(
-                        text = LocalStrings.current.multiCommunityEditorCommunities,
-                    )
-
-                    // search field
-                    SearchField(
-                        modifier = Modifier.fillMaxWidth(),
-                        hint = LocalStrings.current.exploreSearchPlaceholder,
-                        value = uiState.searchText,
-                        onValueChange = { value ->
-                            model.reduce(MultiCommunityEditorMviModel.Intent.SetSearch(value))
-                        },
-                        onClear = {
-                            model.reduce(MultiCommunityEditorMviModel.Intent.SetSearch(""))
-                        },
-                    )
-                }
-                LazyColumn(
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = Spacing.s)
-                        .weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                ) {
-                    items(uiState.communities) { community ->
-                        val selected = uiState.selectedCommunityIds.contains(community.id)
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            CommunityItem(
-                                modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .background(MaterialTheme.colorScheme.background),
-                                noPadding = true,
-                                community = community,
-                                preferNicknames = uiState.preferNicknames,
-                            )
-                            Checkbox(
-                                checked = selected,
-                                onCheckedChange = {
-                                    model.reduce(
-                                        MultiCommunityEditorMviModel.Intent.ToggleCommunity(
-                                            community.id,
-                                        ),
-                                    )
-                                },
+                                url = url,
+                                autoload = uiState.autoLoadImages,
+                                contentScale = ContentScale.FillBounds,
                             )
                         }
                     }
-
                     item {
-                        if (!uiState.loading && uiState.canFetchMore) {
-                            model.reduce(MultiCommunityEditorMviModel.Intent.LoadNextPage)
-                        }
-                        if (uiState.loading) {
-                            Box(
-                                modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(25.dp),
+                        val selected = uiState.icon == null
+                        Box(
+                            modifier =
+                            Modifier
+                                .padding(Spacing.xxxs)
+                                .size(iconSize)
+                                .background(
                                     color = MaterialTheme.colorScheme.primary,
+                                    shape = RoundedCornerShape(iconSize / 2),
+                                ).let {
+                                    if (selected) {
+                                        it
+                                            .border(
+                                                width = 1.dp,
+                                                color = MaterialTheme.colorScheme.primary,
+                                                shape = CircleShape,
+                                            ).padding(1.dp)
+                                            .border(
+                                                width = 1.dp,
+                                                color = MaterialTheme.colorScheme.onPrimary,
+                                                shape = CircleShape,
+                                            ).padding(1.dp)
+                                            .border(
+                                                width = 1.dp,
+                                                color = MaterialTheme.colorScheme.primary,
+                                                shape = CircleShape,
+                                            )
+                                    } else {
+                                        it
+                                    }
+                                }.onClick(
+                                    onClick = {
+                                        model.reduce(
+                                            MultiCommunityEditorMviModel.Intent.SelectImage(
+                                                null,
+                                            ),
+                                        )
+                                    },
+                                ),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text =
+                                uiState.name
+                                    .firstOrNull()
+                                    ?.toString()
+                                    .orEmpty()
+                                    .uppercase(),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                            )
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(Spacing.s))
+            Column(
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Spacing.s),
+            ) {
+                Text(
+                    text = LocalStrings.current.multiCommunityEditorCommunities,
+                )
+
+                // search field
+                SearchField(
+                    modifier = Modifier.fillMaxWidth(),
+                    hint = LocalStrings.current.exploreSearchPlaceholder,
+                    value = uiState.searchText,
+                    onValueChange = { value ->
+                        model.reduce(MultiCommunityEditorMviModel.Intent.SetSearch(value))
+                    },
+                    onClear = {
+                        model.reduce(MultiCommunityEditorMviModel.Intent.SetSearch(""))
+                    },
+                )
+            }
+            LazyColumn(
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Spacing.s)
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+            ) {
+                items(uiState.communities) { community ->
+                    val selected = uiState.selectedCommunityIds.contains(community.id)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        CommunityItem(
+                            modifier =
+                            Modifier
+                                .weight(1f)
+                                .background(MaterialTheme.colorScheme.background),
+                            noPadding = true,
+                            community = community,
+                            preferNicknames = uiState.preferNicknames,
+                        )
+                        Checkbox(
+                            checked = selected,
+                            onCheckedChange = {
+                                model.reduce(
+                                    MultiCommunityEditorMviModel.Intent.ToggleCommunity(
+                                        community.id,
+                                    ),
                                 )
-                            }
+                            },
+                        )
+                    }
+                }
+
+                item {
+                    if (!uiState.loading && uiState.canFetchMore) {
+                        model.reduce(MultiCommunityEditorMviModel.Intent.LoadNextPage)
+                    }
+                    if (uiState.loading) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(25.dp),
+                                color = MaterialTheme.colorScheme.primary,
+                            )
                         }
                     }
                 }

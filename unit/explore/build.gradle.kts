@@ -10,12 +10,10 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kodein)
-                implementation(libs.voyager.core)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)
                 implementation(projects.core.commonui.components)
-                implementation(projects.core.commonui.detailopener.api)
                 implementation(projects.core.commonui.lemmyui)
                 implementation(projects.core.commonui.modals)
                 implementation(projects.core.l10n)

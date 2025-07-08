@@ -79,6 +79,7 @@ class PostListViewModel(
                     refreshUser()
                     updateState { it.copy(isLogged = logged ?: false) }
                     updateAvailableSortTypes()
+                    onFirstLoad()
                 }.launchIn(this)
             combine(
                 identityRepository.isLogged.map { it == true },
@@ -348,9 +349,6 @@ class PostListViewModel(
             it.copy(botTagColor = botTagColor, meTagColor = meTagColor)
         }
         loadNextPage()
-        if (identityRepository.isLogged.value == null) {
-            identityRepository.refreshLoggedState()
-        }
     }
 
     private suspend fun loadNextPage() {

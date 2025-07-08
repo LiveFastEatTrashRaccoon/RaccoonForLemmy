@@ -41,7 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
@@ -66,581 +65,580 @@ import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.compo
 
 private data class ActionConfig(val target: ActionOnSwipeTarget, val direction: ActionOnSwipeDirection)
 
-class ConfigureSwipeActionsScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: ConfigureSwipeActionsMviModel = getViewModel<ConfigureSwipeActionsViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
-        val notificationCenter = remember { getNotificationCenter() }
-        var selectActionBottomSheet by remember { mutableStateOf<ActionConfig?>(null) }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
+    val model: ConfigureSwipeActionsMviModel = getViewModel<ConfigureSwipeActionsViewModel>()
+    val uiState by model.uiState.collectAsState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val settingsRepository = remember { getSettingsRepository() }
+    val settings by settingsRepository.currentSettings.collectAsState()
+    val notificationCenter = remember { getNotificationCenter() }
+    var selectActionBottomSheet by remember { mutableStateOf<ActionConfig?>(null) }
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    scrollBehavior = scrollBehavior,
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = LocalStrings.current.settingsConfigureSwipeActions,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                scrollBehavior = scrollBehavior,
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.settingsConfigureSwipeActions,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                navigationIcon = {
+                    if (navigationCoordinator.canPop.value) {
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.pop()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = LocalStrings.current.actionGoBack,
+                            )
+                        }
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        Box(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).then(
+                    if (settings.hideNavigationBarWhileScrolling) {
+                        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
                     },
-                    navigationIcon = {
-                        if (navigationCoordinator.canPop.value) {
-                            IconButton(
+                ),
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+            ) {
+                // posts
+                item {
+                    SettingsHeader(
+                        title = LocalStrings.current.exploreResultTypePosts,
+                        icon = Icons.AutoMirrored.Default.Article,
+                        rightButton = @Composable {
+                            TextButton(
+                                contentPadding =
+                                PaddingValues(
+                                    horizontal = Spacing.xs,
+                                    vertical = Spacing.xxs,
+                                ),
                                 onClick = {
-                                    navigationCoordinator.popScreen()
+                                    model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsPosts)
                                 },
                             ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = LocalStrings.current.actionGoBack,
-                                )
-                            }
-                        }
-                    },
-                )
-            },
-        ) { padding ->
-            Box(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).then(
-                        if (settings.hideNavigationBarWhileScrolling) {
-                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                        } else {
-                            Modifier
-                        },
-                    ),
-            ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                ) {
-                    // posts
-                    item {
-                        SettingsHeader(
-                            title = LocalStrings.current.exploreResultTypePosts,
-                            icon = Icons.AutoMirrored.Default.Article,
-                            rightButton = @Composable {
-                                TextButton(
-                                    contentPadding =
-                                    PaddingValues(
-                                        horizontal = Spacing.xs,
-                                        vertical = Spacing.xxs,
-                                    ),
-                                    onClick = {
-                                        model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsPosts)
-                                    },
-                                ) {
-                                    Text(
-                                        text = LocalStrings.current.buttonReset,
-                                        style = MaterialTheme.typography.labelSmall,
-                                    )
-                                }
-                            },
-                        )
-                    }
-                    item {
-                        Row(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = Spacing.xxs,
-                                    horizontal = Spacing.s,
-                                ),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = LocalStrings.current.configureActionsSideStart,
-                            )
-                        }
-                    }
-                    itemsIndexed(uiState.actionsOnSwipeToStartPosts) { idx, action ->
-                        ConfigureActionItem(
-                            icon =
-                            when (idx) {
-                                1 -> Icons.Default.KeyboardDoubleArrowLeft
-                                else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
-                            },
-                            iconContentDescription =
-                            when (idx) {
-                                1 -> LocalStrings.current.swipeActionStartTwo
-                                else -> LocalStrings.current.swipeActionStartOne
-                            },
-                            action = action,
-                            options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Remove,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                            onSelectOption = { optionId ->
-                                when (optionId) {
-                                    OptionId.Remove -> {
-                                        model.reduce(
-                                            ConfigureSwipeActionsMviModel.Intent.DeleteActionPosts(
-                                                value = action,
-                                                direction = ActionOnSwipeDirection.ToStart,
-                                            ),
-                                        )
-                                    }
-
-                                    else -> Unit
-                                }
-                            },
-                        )
-                    }
-                    if (uiState.availableOptionsPosts.isNotEmpty() && uiState.actionsOnSwipeToStartPosts.size < 2) {
-                        item {
-                            ConfigureAddAction {
-                                selectActionBottomSheet =
-                                    ActionConfig(
-                                        direction = ActionOnSwipeDirection.ToStart,
-                                        target = ActionOnSwipeTarget.Posts,
-                                    )
-                            }
-                        }
-                    }
-                    item {
-                        Row(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = Spacing.xxs,
-                                    horizontal = Spacing.s,
-                                ),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = LocalStrings.current.configureActionsSideEnd,
-                            )
-                        }
-                    }
-                    itemsIndexed(uiState.actionsOnSwipeToEndPosts) { idx, action ->
-                        ConfigureActionItem(
-                            icon =
-                            when (idx) {
-                                1 -> Icons.Default.KeyboardDoubleArrowRight
-                                else -> Icons.AutoMirrored.Default.KeyboardArrowRight
-                            },
-                            iconContentDescription =
-                            when (idx) {
-                                1 -> LocalStrings.current.swipeActionEndTwo
-                                else -> LocalStrings.current.swipeActionEndOne
-                            },
-                            action = action,
-                            options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Remove,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                            onSelectOption = { optionId ->
-                                when (optionId) {
-                                    OptionId.Remove -> {
-                                        model.reduce(
-                                            ConfigureSwipeActionsMviModel.Intent.DeleteActionPosts(
-                                                value = action,
-                                                direction = ActionOnSwipeDirection.ToEnd,
-                                            ),
-                                        )
-                                    }
-
-                                    else -> Unit
-                                }
-                            },
-                        )
-                    }
-                    if (uiState.availableOptionsPosts.isNotEmpty() && uiState.actionsOnSwipeToEndPosts.size < 2) {
-                        item {
-                            ConfigureAddAction {
-                                selectActionBottomSheet =
-                                    ActionConfig(
-                                        direction = ActionOnSwipeDirection.ToEnd,
-                                        target = ActionOnSwipeTarget.Posts,
-                                    )
-                            }
-                        }
-                    }
-                    item {
-                        Spacer(modifier = Modifier.height(Spacing.interItem))
-                    }
-
-                    // comments
-                    item {
-                        SettingsHeader(
-                            title = LocalStrings.current.exploreResultTypeComments,
-                            icon = Icons.AutoMirrored.Default.Message,
-                            rightButton = @Composable {
-                                TextButton(
-                                    contentPadding =
-                                    PaddingValues(
-                                        horizontal = Spacing.xs,
-                                        vertical = Spacing.xxs,
-                                    ),
-                                    onClick = {
-                                        model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsComments)
-                                    },
-                                ) {
-                                    Text(
-                                        text = LocalStrings.current.buttonReset,
-                                        style = MaterialTheme.typography.labelSmall,
-                                    )
-                                }
-                            },
-                        )
-                    }
-                    item {
-                        Row(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = Spacing.xxs,
-                                    horizontal = Spacing.s,
-                                ),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = LocalStrings.current.configureActionsSideStart,
-                            )
-                        }
-                    }
-                    itemsIndexed(uiState.actionsOnSwipeToStartComments) { idx, action ->
-                        ConfigureActionItem(
-                            icon =
-                            when (idx) {
-                                1 -> Icons.Default.KeyboardDoubleArrowLeft
-                                else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
-                            },
-                            iconContentDescription =
-                            when (idx) {
-                                1 -> LocalStrings.current.swipeActionStartTwo
-                                else -> LocalStrings.current.swipeActionStartOne
-                            },
-                            action = action,
-                            options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Remove,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                            onSelectOption = { optionId ->
-                                when (optionId) {
-                                    OptionId.Remove -> {
-                                        model.reduce(
-                                            ConfigureSwipeActionsMviModel.Intent.DeleteActionComments(
-                                                value = action,
-                                                direction = ActionOnSwipeDirection.ToStart,
-                                            ),
-                                        )
-                                    }
-
-                                    else -> Unit
-                                }
-                            },
-                        )
-                    }
-                    if (uiState.availableOptionsComments.isNotEmpty() &&
-                        uiState.actionsOnSwipeToStartComments.size < 2
-                    ) {
-                        item {
-                            ConfigureAddAction {
-                                selectActionBottomSheet =
-                                    ActionConfig(
-                                        direction = ActionOnSwipeDirection.ToStart,
-                                        target = ActionOnSwipeTarget.Comments,
-                                    )
-                            }
-                        }
-                    }
-                    item {
-                        Row(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = Spacing.xxs,
-                                    horizontal = Spacing.s,
-                                ),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = LocalStrings.current.configureActionsSideEnd,
-                            )
-                        }
-                    }
-                    itemsIndexed(uiState.actionsOnSwipeToEndComments) { idx, action ->
-                        ConfigureActionItem(
-                            icon =
-                            when (idx) {
-                                1 -> Icons.Default.KeyboardDoubleArrowRight
-                                else -> Icons.AutoMirrored.Default.KeyboardArrowRight
-                            },
-                            iconContentDescription =
-                            when (idx) {
-                                1 -> LocalStrings.current.swipeActionEndTwo
-                                else -> LocalStrings.current.swipeActionEndOne
-                            },
-                            action = action,
-                            options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Remove,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                            onSelectOption = { optionId ->
-                                when (optionId) {
-                                    OptionId.Remove -> {
-                                        model.reduce(
-                                            ConfigureSwipeActionsMviModel.Intent.DeleteActionComments(
-                                                value = action,
-                                                direction = ActionOnSwipeDirection.ToEnd,
-                                            ),
-                                        )
-                                    }
-
-                                    else -> Unit
-                                }
-                            },
-                        )
-                    }
-                    if (uiState.availableOptionsComments.isNotEmpty() && uiState.actionsOnSwipeToEndComments.size < 2) {
-                        item {
-                            ConfigureAddAction {
-                                selectActionBottomSheet =
-                                    ActionConfig(
-                                        direction = ActionOnSwipeDirection.ToEnd,
-                                        target = ActionOnSwipeTarget.Comments,
-                                    )
-                            }
-                        }
-                    }
-                    item {
-                        Spacer(modifier = Modifier.height(Spacing.interItem))
-                    }
-
-                    // inbox
-                    item {
-                        SettingsHeader(
-                            title = LocalStrings.current.navigationInbox,
-                            icon = Icons.Default.Mail,
-                            rightButton = @Composable {
-                                TextButton(
-                                    contentPadding =
-                                    PaddingValues(
-                                        horizontal = Spacing.xs,
-                                        vertical = Spacing.xxs,
-                                    ),
-                                    onClick = {
-                                        model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsInbox)
-                                    },
-                                ) {
-                                    Text(
-                                        text = LocalStrings.current.buttonReset,
-                                        style = MaterialTheme.typography.labelSmall,
-                                    )
-                                }
-                            },
-                        )
-                    }
-                    item {
-                        Row(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = Spacing.xxs,
-                                    horizontal = Spacing.s,
-                                ),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = LocalStrings.current.configureActionsSideStart,
-                            )
-                        }
-                    }
-                    itemsIndexed(uiState.actionsOnSwipeToStartInbox) { idx, action ->
-                        ConfigureActionItem(
-                            icon =
-                            when (idx) {
-                                1 -> Icons.Default.KeyboardDoubleArrowLeft
-                                else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
-                            },
-                            iconContentDescription =
-                            when (idx) {
-                                1 -> LocalStrings.current.swipeActionStartTwo
-                                else -> LocalStrings.current.swipeActionStartOne
-                            },
-                            action = action,
-                            options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Remove,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                            onSelectOption = { optionId ->
-                                when (optionId) {
-                                    OptionId.Remove -> {
-                                        model.reduce(
-                                            ConfigureSwipeActionsMviModel.Intent.DeleteActionInbox(
-                                                value = action,
-                                                direction = ActionOnSwipeDirection.ToStart,
-                                            ),
-                                        )
-                                    }
-
-                                    else -> Unit
-                                }
-                            },
-                        )
-                    }
-                    if (uiState.availableOptionsInbox.isNotEmpty() && uiState.actionsOnSwipeToStartInbox.size < 2) {
-                        item {
-                            ConfigureAddAction {
-                                selectActionBottomSheet =
-                                    ActionConfig(
-                                        direction = ActionOnSwipeDirection.ToStart,
-                                        target = ActionOnSwipeTarget.Inbox,
-                                    )
-                            }
-                        }
-                    }
-                    item {
-                        Row(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = Spacing.xxs,
-                                    horizontal = Spacing.s,
-                                ),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = LocalStrings.current.configureActionsSideEnd,
-                            )
-                        }
-                    }
-                    itemsIndexed(uiState.actionsOnSwipeToEndInbox) { idx, action ->
-                        ConfigureActionItem(
-                            icon =
-                            when (idx) {
-                                1 -> Icons.Default.KeyboardDoubleArrowRight
-                                else -> Icons.AutoMirrored.Default.KeyboardArrowRight
-                            },
-                            iconContentDescription =
-                            when (idx) {
-                                1 -> LocalStrings.current.swipeActionEndTwo
-                                else -> LocalStrings.current.swipeActionEndOne
-                            },
-                            action = action,
-                            options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Remove,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                            onSelectOption = { optionId ->
-                                when (optionId) {
-                                    OptionId.Remove -> {
-                                        model.reduce(
-                                            ConfigureSwipeActionsMviModel.Intent.DeleteActionInbox(
-                                                value = action,
-                                                direction = ActionOnSwipeDirection.ToEnd,
-                                            ),
-                                        )
-                                    }
-
-                                    else -> Unit
-                                }
-                            },
-                        )
-                    }
-                    if (uiState.availableOptionsInbox.isNotEmpty() && uiState.actionsOnSwipeToEndInbox.size < 2) {
-                        item {
-                            ConfigureAddAction {
-                                selectActionBottomSheet =
-                                    ActionConfig(
-                                        direction = ActionOnSwipeDirection.ToEnd,
-                                        target = ActionOnSwipeTarget.Inbox,
-                                    )
-                            }
-                        }
-                    }
-
-                    item {
-                        Spacer(modifier = Modifier.height(Spacing.xxxl))
-                    }
-                }
-            }
-        }
-
-        selectActionBottomSheet?.also { config ->
-            val values =
-                when (config.target) {
-                    ActionOnSwipeTarget.Comments -> uiState.availableOptionsComments
-                    ActionOnSwipeTarget.Inbox -> uiState.availableOptionsInbox
-                    ActionOnSwipeTarget.Posts -> uiState.availableOptionsPosts
-                }
-            CustomModalBottomSheet(
-                title = LocalStrings.current.selectActionTitle,
-                items =
-                values.map { value ->
-                    CustomModalBottomSheetItem(
-                        label = value.toReadableName(),
-                        trailingContent = {
-                            val icon = value.toIcon()
-                            if (icon != null) {
-                                Icon(
-                                    modifier = Modifier.size(IconSize.m).then(value.toModifier()),
-                                    imageVector = icon,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onBackground,
+                                Text(
+                                    text = LocalStrings.current.buttonReset,
+                                    style = MaterialTheme.typography.labelSmall,
                                 )
                             }
                         },
                     )
-                },
-                onSelect = { index ->
-                    selectActionBottomSheet = null
-                    if (index != null) {
-                        val value = values[index]
-                        notificationCenter.send(
-                            NotificationCenterEvent.ActionsOnSwipeSelected(
-                                value = value,
-                                direction = config.direction,
-                                target = config.target,
+                }
+                item {
+                    Row(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = Spacing.s,
                             ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalStrings.current.configureActionsSideStart,
                         )
                     }
-                },
-            )
+                }
+                itemsIndexed(uiState.actionsOnSwipeToStartPosts) { idx, action ->
+                    ConfigureActionItem(
+                        icon =
+                        when (idx) {
+                            1 -> Icons.Default.KeyboardDoubleArrowLeft
+                            else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                        },
+                        iconContentDescription =
+                        when (idx) {
+                            1 -> LocalStrings.current.swipeActionStartTwo
+                            else -> LocalStrings.current.swipeActionStartOne
+                        },
+                        action = action,
+                        options =
+                        buildList {
+                            this +=
+                                Option(
+                                    OptionId.Remove,
+                                    LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
+                            when (optionId) {
+                                OptionId.Remove -> {
+                                    model.reduce(
+                                        ConfigureSwipeActionsMviModel.Intent.DeleteActionPosts(
+                                            value = action,
+                                            direction = ActionOnSwipeDirection.ToStart,
+                                        ),
+                                    )
+                                }
+
+                                else -> Unit
+                            }
+                        },
+                    )
+                }
+                if (uiState.availableOptionsPosts.isNotEmpty() && uiState.actionsOnSwipeToStartPosts.size < 2) {
+                    item {
+                        ConfigureAddAction {
+                            selectActionBottomSheet =
+                                ActionConfig(
+                                    direction = ActionOnSwipeDirection.ToStart,
+                                    target = ActionOnSwipeTarget.Posts,
+                                )
+                        }
+                    }
+                }
+                item {
+                    Row(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = Spacing.s,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalStrings.current.configureActionsSideEnd,
+                        )
+                    }
+                }
+                itemsIndexed(uiState.actionsOnSwipeToEndPosts) { idx, action ->
+                    ConfigureActionItem(
+                        icon =
+                        when (idx) {
+                            1 -> Icons.Default.KeyboardDoubleArrowRight
+                            else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                        },
+                        iconContentDescription =
+                        when (idx) {
+                            1 -> LocalStrings.current.swipeActionEndTwo
+                            else -> LocalStrings.current.swipeActionEndOne
+                        },
+                        action = action,
+                        options =
+                        buildList {
+                            this +=
+                                Option(
+                                    OptionId.Remove,
+                                    LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
+                            when (optionId) {
+                                OptionId.Remove -> {
+                                    model.reduce(
+                                        ConfigureSwipeActionsMviModel.Intent.DeleteActionPosts(
+                                            value = action,
+                                            direction = ActionOnSwipeDirection.ToEnd,
+                                        ),
+                                    )
+                                }
+
+                                else -> Unit
+                            }
+                        },
+                    )
+                }
+                if (uiState.availableOptionsPosts.isNotEmpty() && uiState.actionsOnSwipeToEndPosts.size < 2) {
+                    item {
+                        ConfigureAddAction {
+                            selectActionBottomSheet =
+                                ActionConfig(
+                                    direction = ActionOnSwipeDirection.ToEnd,
+                                    target = ActionOnSwipeTarget.Posts,
+                                )
+                        }
+                    }
+                }
+                item {
+                    Spacer(modifier = Modifier.height(Spacing.interItem))
+                }
+
+                // comments
+                item {
+                    SettingsHeader(
+                        title = LocalStrings.current.exploreResultTypeComments,
+                        icon = Icons.AutoMirrored.Default.Message,
+                        rightButton = @Composable {
+                            TextButton(
+                                contentPadding =
+                                PaddingValues(
+                                    horizontal = Spacing.xs,
+                                    vertical = Spacing.xxs,
+                                ),
+                                onClick = {
+                                    model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsComments)
+                                },
+                            ) {
+                                Text(
+                                    text = LocalStrings.current.buttonReset,
+                                    style = MaterialTheme.typography.labelSmall,
+                                )
+                            }
+                        },
+                    )
+                }
+                item {
+                    Row(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = Spacing.s,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalStrings.current.configureActionsSideStart,
+                        )
+                    }
+                }
+                itemsIndexed(uiState.actionsOnSwipeToStartComments) { idx, action ->
+                    ConfigureActionItem(
+                        icon =
+                        when (idx) {
+                            1 -> Icons.Default.KeyboardDoubleArrowLeft
+                            else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                        },
+                        iconContentDescription =
+                        when (idx) {
+                            1 -> LocalStrings.current.swipeActionStartTwo
+                            else -> LocalStrings.current.swipeActionStartOne
+                        },
+                        action = action,
+                        options =
+                        buildList {
+                            this +=
+                                Option(
+                                    OptionId.Remove,
+                                    LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
+                            when (optionId) {
+                                OptionId.Remove -> {
+                                    model.reduce(
+                                        ConfigureSwipeActionsMviModel.Intent.DeleteActionComments(
+                                            value = action,
+                                            direction = ActionOnSwipeDirection.ToStart,
+                                        ),
+                                    )
+                                }
+
+                                else -> Unit
+                            }
+                        },
+                    )
+                }
+                if (uiState.availableOptionsComments.isNotEmpty() &&
+                    uiState.actionsOnSwipeToStartComments.size < 2
+                ) {
+                    item {
+                        ConfigureAddAction {
+                            selectActionBottomSheet =
+                                ActionConfig(
+                                    direction = ActionOnSwipeDirection.ToStart,
+                                    target = ActionOnSwipeTarget.Comments,
+                                )
+                        }
+                    }
+                }
+                item {
+                    Row(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = Spacing.s,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalStrings.current.configureActionsSideEnd,
+                        )
+                    }
+                }
+                itemsIndexed(uiState.actionsOnSwipeToEndComments) { idx, action ->
+                    ConfigureActionItem(
+                        icon =
+                        when (idx) {
+                            1 -> Icons.Default.KeyboardDoubleArrowRight
+                            else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                        },
+                        iconContentDescription =
+                        when (idx) {
+                            1 -> LocalStrings.current.swipeActionEndTwo
+                            else -> LocalStrings.current.swipeActionEndOne
+                        },
+                        action = action,
+                        options =
+                        buildList {
+                            this +=
+                                Option(
+                                    OptionId.Remove,
+                                    LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
+                            when (optionId) {
+                                OptionId.Remove -> {
+                                    model.reduce(
+                                        ConfigureSwipeActionsMviModel.Intent.DeleteActionComments(
+                                            value = action,
+                                            direction = ActionOnSwipeDirection.ToEnd,
+                                        ),
+                                    )
+                                }
+
+                                else -> Unit
+                            }
+                        },
+                    )
+                }
+                if (uiState.availableOptionsComments.isNotEmpty() && uiState.actionsOnSwipeToEndComments.size < 2) {
+                    item {
+                        ConfigureAddAction {
+                            selectActionBottomSheet =
+                                ActionConfig(
+                                    direction = ActionOnSwipeDirection.ToEnd,
+                                    target = ActionOnSwipeTarget.Comments,
+                                )
+                        }
+                    }
+                }
+                item {
+                    Spacer(modifier = Modifier.height(Spacing.interItem))
+                }
+
+                // inbox
+                item {
+                    SettingsHeader(
+                        title = LocalStrings.current.navigationInbox,
+                        icon = Icons.Default.Mail,
+                        rightButton = @Composable {
+                            TextButton(
+                                contentPadding =
+                                PaddingValues(
+                                    horizontal = Spacing.xs,
+                                    vertical = Spacing.xxs,
+                                ),
+                                onClick = {
+                                    model.reduce(ConfigureSwipeActionsMviModel.Intent.ResetActionsInbox)
+                                },
+                            ) {
+                                Text(
+                                    text = LocalStrings.current.buttonReset,
+                                    style = MaterialTheme.typography.labelSmall,
+                                )
+                            }
+                        },
+                    )
+                }
+                item {
+                    Row(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = Spacing.s,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalStrings.current.configureActionsSideStart,
+                        )
+                    }
+                }
+                itemsIndexed(uiState.actionsOnSwipeToStartInbox) { idx, action ->
+                    ConfigureActionItem(
+                        icon =
+                        when (idx) {
+                            1 -> Icons.Default.KeyboardDoubleArrowLeft
+                            else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                        },
+                        iconContentDescription =
+                        when (idx) {
+                            1 -> LocalStrings.current.swipeActionStartTwo
+                            else -> LocalStrings.current.swipeActionStartOne
+                        },
+                        action = action,
+                        options =
+                        buildList {
+                            this +=
+                                Option(
+                                    OptionId.Remove,
+                                    LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
+                            when (optionId) {
+                                OptionId.Remove -> {
+                                    model.reduce(
+                                        ConfigureSwipeActionsMviModel.Intent.DeleteActionInbox(
+                                            value = action,
+                                            direction = ActionOnSwipeDirection.ToStart,
+                                        ),
+                                    )
+                                }
+
+                                else -> Unit
+                            }
+                        },
+                    )
+                }
+                if (uiState.availableOptionsInbox.isNotEmpty() && uiState.actionsOnSwipeToStartInbox.size < 2) {
+                    item {
+                        ConfigureAddAction {
+                            selectActionBottomSheet =
+                                ActionConfig(
+                                    direction = ActionOnSwipeDirection.ToStart,
+                                    target = ActionOnSwipeTarget.Inbox,
+                                )
+                        }
+                    }
+                }
+                item {
+                    Row(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = Spacing.xxs,
+                                horizontal = Spacing.s,
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = LocalStrings.current.configureActionsSideEnd,
+                        )
+                    }
+                }
+                itemsIndexed(uiState.actionsOnSwipeToEndInbox) { idx, action ->
+                    ConfigureActionItem(
+                        icon =
+                        when (idx) {
+                            1 -> Icons.Default.KeyboardDoubleArrowRight
+                            else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                        },
+                        iconContentDescription =
+                        when (idx) {
+                            1 -> LocalStrings.current.swipeActionEndTwo
+                            else -> LocalStrings.current.swipeActionEndOne
+                        },
+                        action = action,
+                        options =
+                        buildList {
+                            this +=
+                                Option(
+                                    OptionId.Remove,
+                                    LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
+                            when (optionId) {
+                                OptionId.Remove -> {
+                                    model.reduce(
+                                        ConfigureSwipeActionsMviModel.Intent.DeleteActionInbox(
+                                            value = action,
+                                            direction = ActionOnSwipeDirection.ToEnd,
+                                        ),
+                                    )
+                                }
+
+                                else -> Unit
+                            }
+                        },
+                    )
+                }
+                if (uiState.availableOptionsInbox.isNotEmpty() && uiState.actionsOnSwipeToEndInbox.size < 2) {
+                    item {
+                        ConfigureAddAction {
+                            selectActionBottomSheet =
+                                ActionConfig(
+                                    direction = ActionOnSwipeDirection.ToEnd,
+                                    target = ActionOnSwipeTarget.Inbox,
+                                )
+                        }
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(Spacing.xxxl))
+                }
+            }
         }
+    }
+
+    selectActionBottomSheet?.also { config ->
+        val values =
+            when (config.target) {
+                ActionOnSwipeTarget.Comments -> uiState.availableOptionsComments
+                ActionOnSwipeTarget.Inbox -> uiState.availableOptionsInbox
+                ActionOnSwipeTarget.Posts -> uiState.availableOptionsPosts
+            }
+        CustomModalBottomSheet(
+            title = LocalStrings.current.selectActionTitle,
+            items =
+            values.map { value ->
+                CustomModalBottomSheetItem(
+                    label = value.toReadableName(),
+                    trailingContent = {
+                        val icon = value.toIcon()
+                        if (icon != null) {
+                            Icon(
+                                modifier = Modifier.size(IconSize.m).then(value.toModifier()),
+                                imageVector = icon,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
+                    },
+                )
+            },
+            onSelect = { index ->
+                selectActionBottomSheet = null
+                if (index != null) {
+                    val value = values[index]
+                    notificationCenter.send(
+                        NotificationCenterEvent.ActionsOnSwipeSelected(
+                            value = value,
+                            direction = config.direction,
+                            target = config.target,
+                        ),
+                    )
+                }
+            },
+        )
     }
 }

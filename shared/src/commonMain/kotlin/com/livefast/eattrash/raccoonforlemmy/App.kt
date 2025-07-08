@@ -19,7 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.PredictiveBackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -27,8 +29,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.toSize
-import cafe.adriel.voyager.navigator.CurrentScreen
-import cafe.adriel.voyager.navigator.Navigator
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toCommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toPostLayout
@@ -39,15 +41,17 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getAppColorRepos
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.DraggableSideMenu
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.ProvideStrings
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getL10nManager
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.ComposeEvent
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.DefaultNavigationAdapter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.Destination
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DrawerEvent
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.SideMenuEvents
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getBottomNavItemsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInts
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getAccountRepository
@@ -58,10 +62,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getCustomUriHandler
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler.ProvideCustomUriHandler
-import com.livefast.eattrash.raccoonforlemmy.main.MainScreen
+import com.livefast.eattrash.raccoonforlemmy.navigation.buildNavigationGraph
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.content.ModalDrawerContent
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.di.getSubscriptionsCache
-import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail.MultiCommunityScreen
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
@@ -71,7 +74,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.kodein.di.compose.withDI
 
-@OptIn(FlowPreview::class)
+@OptIn(FlowPreview::class, ExperimentalComposeUiApi::class)
 @Composable
 fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
     val accountRepository = remember { getAccountRepository() }
@@ -87,7 +90,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val drawerCoordinator = remember { getDrawerCoordinator() }
     val drawerGesturesEnabled by drawerCoordinator.gesturesEnabled.collectAsState()
-    val detailOpener = remember { getDetailOpener() }
+    val mainRouter = remember { getMainRouter() }
     val l10nManager = remember { getL10nManager() }
     val langState by l10nManager.lang.collectAsState()
     var screenWidth by remember { mutableStateOf(0f) }
@@ -99,6 +102,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
     val bottomNavItemsRepository = remember { getBottomNavItemsRepository() }
     val fallbackUriHandler = LocalUriHandler.current
     val customUriHandler = remember { getCustomUriHandler(fallbackUriHandler) }
+    val navController = rememberNavController()
 
     LaunchedEffect(settingsRepository) {
         val lastActiveAccount = accountRepository.getActive()
@@ -153,6 +157,9 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
     }
 
     LaunchedEffect(navigationCoordinator) {
+        val adapter = DefaultNavigationAdapter(navController)
+        navigationCoordinator.setRootNavigator(adapter)
+
         navigationCoordinator.deepLinkUrl
             .debounce(750)
             .filterNotNull()
@@ -164,13 +171,13 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
             .onEach { event ->
                 when (event) {
                     is ComposeEvent.WithText ->
-                        detailOpener.openCreatePost(
+                        mainRouter.openCreatePost(
                             initialText = event.text,
                             forceCommunitySelection = true,
                         )
 
                     is ComposeEvent.WithUrl ->
-                        detailOpener.openCreatePost(
+                        mainRouter.openCreatePost(
                             initialUrl = event.url,
                             forceCommunitySelection = true,
                         )
@@ -182,9 +189,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
             .onEach { evt ->
                 when (evt) {
                     is SideMenuEvents.Open -> {
-                        sideMenuContent = @Composable {
-                            evt.screen.Content()
-                        }
+                        sideMenuContent = evt.content
                     }
 
                     SideMenuEvents.Close -> {
@@ -229,12 +234,12 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
                     }
 
                     is DrawerEvent.OpenCommunity -> {
-                        detailOpener.openCommunityDetail(community = evt.community)
+                        mainRouter.openCommunityDetail(community = evt.community)
                     }
 
                     is DrawerEvent.OpenMultiCommunity -> {
-                        evt.community.id?.also {
-                            navigationCoordinator.pushScreen(MultiCommunityScreen(it))
+                        evt.community.id?.also { id ->
+                            mainRouter.openMultiCommunity(id)
                         }
                     }
 
@@ -258,79 +263,67 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
                             fontScale = uiFontScale,
                         ),
                 ) {
-                    Navigator(
-                        screen = MainScreen,
-                        onBackPressed = {
-                            // if the drawer is open, closes it
-                            if (drawerCoordinator.drawerOpened.value) {
-                                scope.launch {
-                                    drawerCoordinator.toggleDrawer()
-                                }
-                                return@Navigator false
-                            }
-                            // if the side menu is open, closes it
-                            if (navigationCoordinator.sideMenuOpened.value) {
-                                navigationCoordinator.closeSideMenu()
-                                return@Navigator false
-                            }
 
-                            // otherwise use the screen-provided callback
-                            val callback = navigationCoordinator.getCanGoBackCallback()
-                            callback?.let { it() } ?: true
+                    ModalNavigationDrawer(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .onGloballyPositioned {
+                                    screenWidth = it.size.toSize().width
+                                },
+                        drawerState = drawerState,
+                        gesturesEnabled = drawerGesturesEnabled,
+                        drawerContent = {
+                            ModalDrawerSheet {
+                                ModalDrawerContent()
+                            }
                         },
-                    ) { navigator ->
-                        LaunchedEffect(navigationCoordinator) {
-                            navigationCoordinator.setRootNavigator(navigator)
+                    ) {
+                        val canPop by drawerCoordinator.drawerOpened.collectAsState()
+                        PredictiveBackHandler(enabled = canPop) {
+                            // if the drawer is open, closes it
+                            scope.launch {
+                                drawerCoordinator.toggleDrawer()
+                            }
                         }
-                        ModalNavigationDrawer(
+                        NavHost(
+                            navController = navController,
+                            startDestination = Destination.Main,
+                        ) {
+                            buildNavigationGraph()
+                        }
+                    }
+
+                    // scrim for draggable side menu
+                    AnimatedVisibility(
+                        modifier = Modifier.fillMaxSize(),
+                        visible = sideMenuOpened,
+                    ) {
+                        Surface(
                             modifier =
                                 Modifier
-                                    .fillMaxSize()
-                                    .onGloballyPositioned {
-                                        screenWidth = it.size.toSize().width
-                                    },
-                            drawerState = drawerState,
-                            gesturesEnabled = drawerGesturesEnabled,
-                            drawerContent = {
-                                ModalDrawerSheet {
-                                    Navigator(ModalDrawerContent())
-                                }
-                            },
+                                    .onClick(
+                                        onClick = {
+                                            navigationCoordinator.closeSideMenu()
+                                        },
+                                    ),
+                            color = DrawerDefaults.scrimColor,
                         ) {
-                            CurrentScreen()
+                            Box(modifier = Modifier.fillMaxSize())
                         }
-
-                        // scrim for draggable side menu
-                        AnimatedVisibility(
-                            modifier = Modifier.fillMaxSize(),
-                            visible = sideMenuOpened,
-                        ) {
-                            Surface(
-                                modifier =
-                                    Modifier
-                                        .onClick(
-                                            onClick = {
-                                                navigationCoordinator.closeSideMenu()
-                                            },
-                                        ),
-                                color = DrawerDefaults.scrimColor,
-                            ) {
-                                Box(modifier = Modifier.fillMaxSize())
-                            }
-                        }
-
-                        // draggable side menu
-                        DraggableSideMenu(
-                            availableWidth = screenWidth.toLocalDp(),
-                            opened = sideMenuOpened,
-                            onDismiss = {
-                                navigationCoordinator.closeSideMenu()
-                            },
-                            content = {
-                                sideMenuContent?.invoke()
-                            },
-                        )
                     }
+
+                    // draggable side menu
+                    DraggableSideMenu(
+                        availableWidth = screenWidth.toLocalDp(),
+                        opened = sideMenuOpened,
+                        onDismiss = {
+                            navigationCoordinator.closeSideMenu()
+                        },
+                        content = {
+                            sideMenuContent?.invoke()
+                        },
+                    )
                 }
             }
         }

@@ -59,7 +59,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeActionCard
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommentCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
@@ -71,6 +70,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -90,7 +90,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.uniqueIdentifier
 import com.livefast.eattrash.raccoonforlemmy.unit.explore.components.ExploreTopBar
 import com.livefast.eattrash.raccoonforlemmy.unit.explore.di.ExploreMviModelParams
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -129,7 +128,7 @@ fun ExploreScreen(
     val defaultReplyColor = MaterialTheme.colorScheme.secondary
     val defaultSaveColor = MaterialTheme.colorScheme.secondaryContainer
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
-    val detailOpener = remember { getDetailOpener() }
+    val mainRouter = remember { getMainRouter() }
     val connection = navigationCoordinator.getBottomBarScrollConnection()
     val scope = rememberCoroutineScope()
     val notificationCenter = remember { getNotificationCenter() }
@@ -186,8 +185,8 @@ fun ExploreScreen(
     }
 
     Scaffold(
-        modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
         topBar = {
             ExploreTopBar(
                 topAppBarState = topAppBarState,
@@ -213,7 +212,7 @@ fun ExploreScreen(
                     }
                 },
                 onBack = {
-                    navigationCoordinator.popScreen()
+                    navigationCoordinator.pop()
                 },
             )
         },
@@ -296,7 +295,7 @@ fun ExploreScreen(
                                     modifier =
                                     Modifier.fillMaxWidth().onClick(
                                         onClick = {
-                                            detailOpener.openCommunityDetail(
+                                            mainRouter.openCommunityDetail(
                                                 community = result.model,
                                                 otherInstance = otherInstanceName,
                                             )
@@ -381,7 +380,7 @@ fun ExploreScreen(
                                                 replyColor
                                                     ?: defaultReplyColor,
                                                 onTriggered = {
-                                                    detailOpener.openReply(
+                                                    mainRouter.openReply(
                                                         originalPost = result.model,
                                                     )
                                                 },
@@ -446,7 +445,7 @@ fun ExploreScreen(
                                             botTagColor = uiState.botTagColor,
                                             meTagColor = uiState.meTagColor,
                                             onClick = {
-                                                detailOpener.openPostDetail(
+                                                mainRouter.openPostDetail(
                                                     post = result.model,
                                                     otherInstance = otherInstanceName,
                                                 )
@@ -465,7 +464,7 @@ fun ExploreScreen(
                                                     !isOnOtherInstance
                                             },
                                             onOpenCommunity = { community, instance ->
-                                                detailOpener.openCommunityDetail(
+                                                mainRouter.openCommunityDetail(
                                                     community = community,
                                                     otherInstance =
                                                     instance.takeIf {
@@ -474,7 +473,7 @@ fun ExploreScreen(
                                                 )
                                             },
                                             onOpenCreator = { user, instance ->
-                                                detailOpener.openUserDetail(
+                                                mainRouter.openUserDetail(
                                                     user = user,
                                                     otherInstance =
                                                     instance.takeIf {
@@ -503,26 +502,22 @@ fun ExploreScreen(
                                                 )
                                             }.takeIf { uiState.isLogged },
                                             onOpenImage = { url ->
-                                                navigationCoordinator.pushScreen(
-                                                    ZoomableImageScreen(
-                                                        url = url,
-                                                        source =
-                                                        result.model.community
-                                                            ?.readableHandle
-                                                            .orEmpty(),
-                                                    ),
+                                                mainRouter.openImage(
+                                                    url = url,
+                                                    source =
+                                                    result.model.community
+                                                        ?.readableHandle
+                                                        .orEmpty(),
                                                 )
                                             },
                                             onOpenVideo = { url ->
-                                                navigationCoordinator.pushScreen(
-                                                    ZoomableImageScreen(
-                                                        url = url,
-                                                        isVideo = true,
-                                                        source =
-                                                        result.model.community
-                                                            ?.readableHandle
-                                                            .orEmpty(),
-                                                    ),
+                                                mainRouter.openImage(
+                                                    url = url,
+                                                    isVideo = true,
+                                                    source =
+                                                    result.model.community
+                                                        ?.readableHandle
+                                                        .orEmpty(),
                                                 )
                                             },
                                         )
@@ -597,7 +592,7 @@ fun ExploreScreen(
                                                 replyColor
                                                     ?: defaultReplyColor,
                                                 onTriggered = {
-                                                    detailOpener.openPostDetail(
+                                                    mainRouter.openPostDetail(
                                                         post = PostModel(id = result.model.postId),
                                                         highlightCommentId = result.model.id,
                                                         otherInstance = otherInstanceName,
@@ -662,7 +657,7 @@ fun ExploreScreen(
                                             botTagColor = uiState.botTagColor,
                                             meTagColor = uiState.meTagColor,
                                             onClick = {
-                                                detailOpener.openPostDetail(
+                                                mainRouter.openPostDetail(
                                                     post = PostModel(id = result.model.postId),
                                                     highlightCommentId = result.model.id,
                                                     otherInstance = otherInstanceName,
@@ -704,7 +699,7 @@ fun ExploreScreen(
                                                 )
                                             }.takeIf { uiState.isLogged },
                                             onOpenCommunity = { community, instance ->
-                                                detailOpener.openCommunityDetail(
+                                                mainRouter.openCommunityDetail(
                                                     community = community,
                                                     otherInstance =
                                                     instance.takeIf {
@@ -713,7 +708,7 @@ fun ExploreScreen(
                                                 )
                                             },
                                             onOpenCreator = { user, instance ->
-                                                detailOpener.openUserDetail(
+                                                mainRouter.openUserDetail(
                                                     user = user,
                                                     otherInstance =
                                                     instance.takeIf {
@@ -735,7 +730,7 @@ fun ExploreScreen(
                                     modifier =
                                     Modifier.fillMaxWidth().onClick(
                                         onClick = {
-                                            detailOpener.openUserDetail(
+                                            mainRouter.openUserDetail(
                                                 user = result.model,
                                                 otherInstance = otherInstanceName,
                                             )

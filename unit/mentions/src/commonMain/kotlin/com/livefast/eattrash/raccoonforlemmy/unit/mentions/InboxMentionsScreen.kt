@@ -36,19 +36,18 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeActionCard
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.InboxCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.InboxCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.InboxCardType
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -59,7 +58,7 @@ fun InboxMentionsScreen(modifier: Modifier = Modifier) {
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = remember { getNavigationCoordinator() }
     val lazyListState = rememberLazyListState()
-    val detailOpener = remember { getDetailOpener() }
+    val mainRouter = remember { getMainRouter() }
     val themeRepository = remember { getThemeRepository() }
     val upVoteColor by themeRepository.upVoteColor.collectAsState()
     val downVoteColor by themeRepository.downVoteColor.collectAsState()
@@ -93,7 +92,7 @@ fun InboxMentionsScreen(modifier: Modifier = Modifier) {
                     }
 
                     is InboxMentionsMviModel.Effect.OpenDetail ->
-                        detailOpener.openPostDetail(
+                        mainRouter.openPostDetail(
                             post = effect.post,
                             highlightCommentId = effect.commentId,
                         )
@@ -240,23 +239,21 @@ fun InboxMentionsScreen(modifier: Modifier = Modifier) {
                                 )
                             },
                             onOpenCreator = { user, instance ->
-                                detailOpener.openUserDetail(
+                                mainRouter.openUserDetail(
                                     user = user,
                                     otherInstance = instance,
                                 )
                             },
                             onOpenCommunity = { community ->
-                                detailOpener.openCommunityDetail(community = community)
+                                mainRouter.openCommunityDetail(community = community)
                             },
                             onImageClick = { url ->
-                                navigationCoordinator.pushScreen(
-                                    ZoomableImageScreen(
-                                        url = url,
-                                        source =
-                                        mention.post.community
-                                            ?.readableHandle
-                                            .orEmpty(),
-                                    ),
+                                mainRouter.openImage(
+                                    url = url,
+                                    source =
+                                    mention.post.community
+                                        ?.readableHandle
+                                        .orEmpty(),
                                 )
                             },
                             onUpVote = {
@@ -268,7 +265,7 @@ fun InboxMentionsScreen(modifier: Modifier = Modifier) {
                                 )
                             },
                             onReply = {
-                                detailOpener.openReply(
+                                mainRouter.openReply(
                                     originalPost = mention.post,
                                     originalComment = mention.comment,
                                 )

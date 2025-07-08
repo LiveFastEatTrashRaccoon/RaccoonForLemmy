@@ -23,5 +23,4 @@ internal object LicenceUrls {
     const val REORDERABLE = "https://github.com/Calvin-LL/Reorderable/blob/main/LICENSE"
     const val SQLCIPHER = "https://www.zetetic.net/sqlcipher/license/"
     const val SQLDELIGHT = "https://github.com/cashapp/sqldelight/blob/master/LICENSE.txt"
-    const val VOYAGER = "https://github.com/adrielcafe/voyager/blob/main/LICENSE.md"
 }

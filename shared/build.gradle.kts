@@ -13,9 +13,8 @@ kotlin {
                 implementation(compose.components.resources)
 
                 implementation(libs.compose.multiplatform.media.player)
+                implementation(libs.compose.ui.backhandler)
                 implementation(libs.kodein.compose)
-                implementation(libs.voyager.navigator)
-                implementation(libs.voyager.core)
                 implementation(libs.androidx.navigation.compose)
 
                 implementation(projects.core.api)
@@ -23,8 +22,6 @@ kotlin {
                 implementation(projects.core.architecture)
                 implementation(projects.core.di)
                 implementation(projects.core.commonui.components)
-                implementation(projects.core.commonui.detailopener.api)
-                implementation(projects.core.commonui.detailopener.impl)
                 implementation(projects.core.commonui.lemmyui)
                 implementation(projects.core.l10n)
                 implementation(projects.core.navigation)
@@ -96,7 +93,13 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidUnitTest by getting
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.mockk)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(projects.core.testutils)
+            }
+        }
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting

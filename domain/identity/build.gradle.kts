@@ -15,7 +15,6 @@ kotlin {
                 implementation(projects.core.api)
                 implementation(projects.core.appearance)
                 implementation(projects.core.di)
-                implementation(projects.core.commonui.detailopener.api)
                 implementation(projects.core.navigation)
                 implementation(projects.core.notifications)
                 implementation(projects.core.persistence)

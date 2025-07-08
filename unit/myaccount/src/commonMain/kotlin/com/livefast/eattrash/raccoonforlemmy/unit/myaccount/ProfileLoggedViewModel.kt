@@ -31,7 +31,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -73,7 +72,6 @@ class ProfileLoggedViewModel(
 
             @OptIn(FlowPreview::class)
             identityRepository.isLogged
-                .drop(1)
                 .debounce(500)
                 .onEach { logged ->
                     if (logged == true) {

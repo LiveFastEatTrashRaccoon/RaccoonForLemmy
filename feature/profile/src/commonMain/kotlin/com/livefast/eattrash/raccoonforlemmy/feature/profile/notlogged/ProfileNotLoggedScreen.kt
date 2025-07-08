@@ -17,13 +17,12 @@ import androidx.compose.ui.Modifier
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginScreen
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 
 @Composable
 fun ProfileNotLoggedScreen(modifier: Modifier = Modifier) {
     val model: ProfileNotLoggedMviModel = getViewModel<ProfileNotLoggedViewModel>()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val mainRouter = remember { getMainRouter() }
     val uiState by model.uiState.collectAsState()
 
     Column(
@@ -53,7 +52,7 @@ fun ProfileNotLoggedScreen(modifier: Modifier = Modifier) {
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {
-                    navigationCoordinator.pushScreen(LoginScreen())
+                    mainRouter.openLogin()
                 },
             ) {
                 Text(LocalStrings.current.profileButtonLogin)

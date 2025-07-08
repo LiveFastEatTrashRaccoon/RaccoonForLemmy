@@ -40,7 +40,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
@@ -56,203 +55,202 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.time.Duration.Companion.seconds
 
-class BanUserScreen(
-    private val userId: Long,
-    private val communityId: Long,
-    private val newValue: Boolean,
-    private val postId: Long? = null,
-    private val commentId: Long? = null,
-) : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: BanUserMviModel =
-            getViewModel<BanUserViewModel>(
-                BanUserMviModelParams(
-                    userId = userId,
-                    communityId = communityId,
-                    newValue = newValue,
-                    postId = postId ?: 0L,
-                    commentId = commentId ?: 0L,
-                ),
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BanUserScreen(
+    userId: Long,
+    communityId: Long,
+    newValue: Boolean,
+    modifier: Modifier = Modifier,
+    postId: Long? = null,
+    commentId: Long? = null,
+) {
+    val model: BanUserMviModel =
+        getViewModel<BanUserViewModel>(
+            BanUserMviModelParams(
+                userId = userId,
+                communityId = communityId,
+                newValue = newValue,
+                postId = postId ?: 0L,
+                commentId = commentId ?: 0L,
+            ),
+        )
+    val uiState by model.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val genericError = LocalStrings.current.messageGenericError
+    val successMessage = LocalStrings.current.messageOperationSuccessful
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(model) {
+        model.effects
+            .onEach {
+                when (it) {
+                    is BanUserMviModel.Effect.Failure -> {
+                        snackbarHostState.showSnackbar(it.message ?: genericError)
+                    }
+
+                    BanUserMviModel.Effect.Success -> {
+                        navigationCoordinator.showGlobalMessage(message = successMessage, delay = 1.seconds)
+                        navigationCoordinator.pop()
+                    }
+                }
+            }.launchIn(this)
+    }
+
+    Scaffold(
+        modifier = modifier.navigationBarsPadding().safeImePadding(),
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navigationCoordinator.pop()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = LocalStrings.current.buttonClose,
+                        )
+                    }
+                },
+                title = {
+                    val title =
+                        if (newValue) {
+                            LocalStrings.current.modActionBan
+                        } else {
+                            LocalStrings.current.modActionAllow
+                        }
+                    Text(
+                        text = title,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            focusManager.clearFocus()
+                            model.reduce(BanUserMviModel.Intent.Submit)
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.Send,
+                            contentDescription = LocalStrings.current.actionSend,
+                        )
+                    }
+                },
             )
-        val uiState by model.uiState.collectAsState()
-        val snackbarHostState = remember { SnackbarHostState() }
-        val genericError = LocalStrings.current.messageGenericError
-        val successMessage = LocalStrings.current.messageOperationSuccessful
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
-        val focusManager = LocalFocusManager.current
-
-        LaunchedEffect(model) {
-            model.effects
-                .onEach {
-                    when (it) {
-                        is BanUserMviModel.Effect.Failure -> {
-                            snackbarHostState.showSnackbar(it.message ?: genericError)
-                        }
-
-                        BanUserMviModel.Effect.Success -> {
-                            navigationCoordinator.showGlobalMessage(message = successMessage, delay = 1.seconds)
-                            navigationCoordinator.popScreen()
-                        }
-                    }
-                }.launchIn(this)
-        }
-
-        Scaffold(
-            modifier = Modifier.navigationBarsPadding().safeImePadding(),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                navigationCoordinator.popScreen()
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = LocalStrings.current.buttonClose,
-                            )
-                        }
-                    },
-                    title = {
-                        val title =
-                            if (newValue) {
-                                LocalStrings.current.modActionBan
-                            } else {
-                                LocalStrings.current.modActionAllow
-                            }
-                        Text(
-                            text = title,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    actions = {
-                        IconButton(
-                            onClick = {
-                                focusManager.clearFocus()
-                                model.reduce(BanUserMviModel.Intent.Submit)
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.Send,
-                                contentDescription = LocalStrings.current.actionSend,
-                            )
-                        }
-                    },
-                )
-            },
-            snackbarHost = {
-                SnackbarHost(snackbarHostState) { data ->
-                    Snackbar(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        snackbarData = data,
-                    )
-                }
-            },
-        ) { padding ->
-            Column(
-                modifier =
-                Modifier
-                    .padding(padding)
-                    .consumeWindowInsets(padding)
-                    .safeImePadding(),
-                verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                val focusRequester = remember { FocusRequester() }
-                TextField(
-                    modifier =
-                    Modifier
-                        .focusRequester(focusRequester)
-                        .heightIn(min = 300.dp, max = 500.dp)
-                        .fillMaxWidth(),
-                    colors =
-                    TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                    ),
-                    label = {
-                        Text(text = LocalStrings.current.banReasonPlaceholder)
-                    },
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    value = uiState.text,
-                    keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        autoCorrectEnabled = true,
-                    ),
-                    onValueChange = { value ->
-                        model.reduce(BanUserMviModel.Intent.SetText(value))
-                    },
-                    isError = uiState.textError != null,
-                    supportingText = {
-                        val error = uiState.textError
-                        if (error != null) {
-                            Text(
-                                text = error.toReadableMessage(),
-                                color = MaterialTheme.colorScheme.error,
-                            )
-                        }
-                    },
-                )
-
-                if (uiState.targetBanValue) {
-                    // it is a ban (as opposed to unban)
-                    SettingsSwitchRow(
-                        title = LocalStrings.current.banItemPermanent,
-                        value = uiState.permanent,
-                        onChangeValue = { value ->
-                            model.reduce(BanUserMviModel.Intent.ChangePermanent(value))
-                        },
-                    )
-
-                    if (!uiState.permanent) {
-                        SettingsIntValueRow(
-                            title = LocalStrings.current.banItemDurationDays,
-                            value = uiState.days,
-                            onIncrement = {
-                                model.reduce(BanUserMviModel.Intent.IncrementDays)
-                            },
-                            onDecrement = {
-                                model.reduce(BanUserMviModel.Intent.DecrementDays)
-                            },
-                        )
-                    }
-
-                    SettingsSwitchRow(
-                        title = LocalStrings.current.banItemRemoveData,
-                        value = uiState.removeData,
-                        onChangeValue = { value ->
-                            model.reduce(BanUserMviModel.Intent.ChangeRemoveData(value))
-                        },
-                    )
-                }
-
-                Spacer(Modifier.height(Spacing.xxl))
-            }
-
-            if (uiState.loading) {
-                ProgressHud()
-            }
-
-            SnackbarHost(
-                modifier = Modifier.padding(bottom = Spacing.xxxl),
-                hostState = snackbarHostState,
-            ) { data ->
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
                 Snackbar(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     snackbarData = data,
                 )
             }
+        },
+    ) { padding ->
+        Column(
+            modifier =
+            Modifier
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .safeImePadding(),
+            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            val focusRequester = remember { FocusRequester() }
+            TextField(
+                modifier =
+                Modifier
+                    .focusRequester(focusRequester)
+                    .heightIn(min = 300.dp, max = 500.dp)
+                    .fillMaxWidth(),
+                colors =
+                TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                ),
+                label = {
+                    Text(text = LocalStrings.current.banReasonPlaceholder)
+                },
+                textStyle = MaterialTheme.typography.bodyMedium,
+                value = uiState.text,
+                keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    autoCorrectEnabled = true,
+                ),
+                onValueChange = { value ->
+                    model.reduce(BanUserMviModel.Intent.SetText(value))
+                },
+                isError = uiState.textError != null,
+                supportingText = {
+                    val error = uiState.textError
+                    if (error != null) {
+                        Text(
+                            text = error.toReadableMessage(),
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
+                },
+            )
+
+            if (uiState.targetBanValue) {
+                // it is a ban (as opposed to unban)
+                SettingsSwitchRow(
+                    title = LocalStrings.current.banItemPermanent,
+                    value = uiState.permanent,
+                    onChangeValue = { value ->
+                        model.reduce(BanUserMviModel.Intent.ChangePermanent(value))
+                    },
+                )
+
+                if (!uiState.permanent) {
+                    SettingsIntValueRow(
+                        title = LocalStrings.current.banItemDurationDays,
+                        value = uiState.days,
+                        onIncrement = {
+                            model.reduce(BanUserMviModel.Intent.IncrementDays)
+                        },
+                        onDecrement = {
+                            model.reduce(BanUserMviModel.Intent.DecrementDays)
+                        },
+                    )
+                }
+
+                SettingsSwitchRow(
+                    title = LocalStrings.current.banItemRemoveData,
+                    value = uiState.removeData,
+                    onChangeValue = { value ->
+                        model.reduce(BanUserMviModel.Intent.ChangeRemoveData(value))
+                    },
+                )
+            }
+
+            Spacer(Modifier.height(Spacing.xxl))
+        }
+
+        if (uiState.loading) {
+            ProgressHud()
+        }
+
+        SnackbarHost(
+            modifier = Modifier.padding(bottom = Spacing.xxxl),
+            hostState = snackbarHostState,
+        ) { data ->
+            Snackbar(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                snackbarData = data,
+            )
         }
     }
 }

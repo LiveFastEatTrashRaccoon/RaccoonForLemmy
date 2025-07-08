@@ -34,8 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
@@ -50,25 +48,17 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.feature.profile.menu.ProfileSideMenuScreen
+import com.livefast.eattrash.raccoonforlemmy.feature.profile.menu.ProfileSideMenu
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.drafts.DraftsScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.editcommunity.EditCommunityScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsType
-import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.toInt
-import com.livefast.eattrash.raccoonforlemmy.unit.login.LoginScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.modlog.ModlogScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedMviModel
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedViewModel
-import com.livefast.eattrash.raccoonforlemmy.unit.reportlist.ReportListScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -86,6 +76,7 @@ fun ProfileMainScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val drawerCoordinator = remember { getDrawerCoordinator() }
     val navigationCoordinator = remember { getNavigationCoordinator() }
+    val mainRouter = remember { getMainRouter() }
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val connection = navigationCoordinator.getBottomBarScrollConnection()
@@ -103,24 +94,15 @@ fun ProfileMainScreen(
                 val action = it.value.toModeratorZoneAction()
                 when (action) {
                     ModeratorZoneAction.GlobalModLog -> {
-                        navigationCoordinator.pushScreen(ModlogScreen())
+                        mainRouter.openModlog()
                     }
 
                     ModeratorZoneAction.GlobalReports -> {
-                        navigationCoordinator.pushScreen(ReportListScreen())
+                        mainRouter.openReports()
                     }
 
                     ModeratorZoneAction.ModeratedContents -> {
-                        val screen = object : Screen {
-                            override val key: ScreenKey =
-                                "FilteredContentsScreen+${FilteredContentsType.Moderated.toInt()}"
-
-                            @Composable
-                            override fun Content() {
-                                FilteredContentsScreen(type = FilteredContentsType.Moderated.toInt())
-                            }
-                        }
-                        navigationCoordinator.pushScreen(screen)
+                        mainRouter.openModeratedContents()
                     }
                 }
             }.launchIn(this)
@@ -134,36 +116,19 @@ fun ProfileMainScreen(
                     }
 
                     NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions -> {
-                        navigationCoordinator.pushScreen(ManageSubscriptionsScreen())
+                        mainRouter.openManageSubscriptions()
                     }
 
                     NotificationCenterEvent.ProfileSideMenuAction.Bookmarks -> {
-                        val screen = object : Screen {
-                            override val key: ScreenKey =
-                                "FilteredContentsScreen-${FilteredContentsType.Bookmarks.toInt()}"
-
-                            @Composable
-                            override fun Content() {
-                                FilteredContentsScreen(type = FilteredContentsType.Bookmarks.toInt())
-                            }
-                        }
-                        navigationCoordinator.pushScreen(screen)
+                        mainRouter.openBookmarks()
                     }
 
                     NotificationCenterEvent.ProfileSideMenuAction.Drafts -> {
-                        navigationCoordinator.pushScreen(DraftsScreen())
+                        mainRouter.openDrafts()
                     }
 
                     NotificationCenterEvent.ProfileSideMenuAction.Votes -> {
-                        val screen = object : Screen {
-                            override val key: ScreenKey = "FilteredContentsScreen-${FilteredContentsType.Votes.toInt()}"
-
-                            @Composable
-                            override fun Content() {
-                                FilteredContentsScreen(type = FilteredContentsType.Votes.toInt())
-                            }
-                        }
-                        navigationCoordinator.pushScreen(screen)
+                        mainRouter.openVotes()
                     }
 
                     NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone -> {
@@ -175,15 +140,15 @@ fun ProfileMainScreen(
                     }
 
                     NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity -> {
-                        navigationCoordinator.pushScreen(EditCommunityScreen())
+                        mainRouter.openEditCommunity()
                     }
                 }
             }.launchIn(this)
     }
 
     Scaffold(
-        modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 windowInsets = topAppBarState.toWindowInsets(),
@@ -213,9 +178,7 @@ fun ProfileMainScreen(
                     if (uiState.logged == true) {
                         IconButton(
                             onClick = {
-                                navigationCoordinator.openSideMenu(
-                                    ProfileSideMenuScreen(),
-                                )
+                                navigationCoordinator.openSideMenu { ProfileSideMenu() }
                             },
                         ) {
                             Icon(
@@ -348,7 +311,7 @@ fun ProfileMainScreen(
             onDismiss = { openLogin ->
                 manageAccountsBottomSheetOpened = false
                 if (openLogin) {
-                    navigationCoordinator.pushScreen(LoginScreen())
+                    mainRouter.openLogin()
                 }
             },
         )
