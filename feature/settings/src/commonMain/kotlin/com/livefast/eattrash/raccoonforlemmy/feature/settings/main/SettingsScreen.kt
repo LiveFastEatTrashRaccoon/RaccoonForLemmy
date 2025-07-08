@@ -41,8 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.buildAnnotatedString
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
@@ -58,6 +56,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.Locales
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.toLanguageFlag
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.toLanguageName
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -67,18 +66,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
-import com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced.AdvancedSettingsScreen
-import com.livefast.eattrash.raccoonforlemmy.feature.settings.colors.SettingsColorAndFontScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.about.AboutDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.accountsettings.AccountSettingsScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.configurecontentview.ConfigureContentViewScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.FilteredContentsType
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.toInt
-import com.livefast.eattrash.raccoonforlemmy.unit.manageban.ManageBanScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.medialist.MediaListScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.usertags.list.UserTagsScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -96,6 +85,7 @@ fun SettingsScreen(
     val notificationCenter = remember { getNotificationCenter() }
     val drawerCoordinator = remember { getDrawerCoordinator() }
     val navigationCoordinator = remember { getNavigationCoordinator() }
+    val mainRouter = remember { getMainRouter() }
     var infoDialogOpened by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
@@ -114,8 +104,8 @@ fun SettingsScreen(
     }
 
     Scaffold(
-        modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 windowInsets = topAppBarState.toWindowInsets(),
@@ -124,7 +114,7 @@ fun SettingsScreen(
                     if (navigationCoordinator.canPop.value) {
                         IconButton(
                             onClick = {
-                                navigationCoordinator.popScreen()
+                                navigationCoordinator.pop()
                             },
                         ) {
                             Icon(
@@ -193,7 +183,7 @@ fun SettingsScreen(
                     title = LocalStrings.current.settingsColorsAndFonts,
                     disclosureIndicator = true,
                     onTap = {
-                        navigationCoordinator.pushScreen(SettingsColorAndFontScreen())
+                        mainRouter.openColorAndFont()
                     },
                 )
 
@@ -202,7 +192,7 @@ fun SettingsScreen(
                     title = LocalStrings.current.settingsConfigureContent,
                     disclosureIndicator = true,
                     onTap = {
-                        navigationCoordinator.pushScreen(ConfigureContentViewScreen())
+                        mainRouter.openConfigureContentView()
                     },
                 )
 
@@ -253,8 +243,7 @@ fun SettingsScreen(
                         title = LocalStrings.current.settingsConfigureSwipeActions,
                         disclosureIndicator = true,
                         onTap = {
-                            val screen = ConfigureSwipeActionsScreen()
-                            navigationCoordinator.pushScreen(screen)
+                            mainRouter.openConfigureSwipeActions()
                         },
                     )
                 }
@@ -273,8 +262,7 @@ fun SettingsScreen(
                     title = LocalStrings.current.settingsAdvanced,
                     disclosureIndicator = true,
                     onTap = {
-                        val screen = AdvancedSettingsScreen()
-                        navigationCoordinator.pushScreen(screen)
+                        mainRouter.openAdvancedSettings()
                     },
                 )
 
@@ -289,8 +277,7 @@ fun SettingsScreen(
                         title = LocalStrings.current.settingsWebPreferences,
                         disclosureIndicator = true,
                         onTap = {
-                            val screen = AccountSettingsScreen()
-                            navigationCoordinator.pushScreen(screen)
+                            mainRouter.openAccountSettings()
                         },
                     )
 
@@ -300,7 +287,7 @@ fun SettingsScreen(
                             title = LocalStrings.current.settingsMediaList,
                             disclosureIndicator = true,
                             onTap = {
-                                navigationCoordinator.pushScreen(MediaListScreen())
+                                mainRouter.openMediaList()
                             },
                         )
                     }
@@ -310,8 +297,7 @@ fun SettingsScreen(
                         title = LocalStrings.current.settingsManageBan,
                         disclosureIndicator = true,
                         onTap = {
-                            val screen = ManageBanScreen()
-                            navigationCoordinator.pushScreen(screen)
+                            mainRouter.openManageBans()
                         },
                     )
 
@@ -320,18 +306,7 @@ fun SettingsScreen(
                             title = LocalStrings.current.settingsHiddenPosts,
                             disclosureIndicator = true,
                             onTap = {
-                                val screen = object : Screen {
-                                    override val key: ScreenKey =
-                                        "FilteredContentsScreen-${FilteredContentsType.Hidden.toInt()}"
-
-                                    @Composable
-                                    override fun Content() {
-                                        FilteredContentsScreen(
-                                            type = FilteredContentsType.Hidden.toInt(),
-                                        )
-                                    }
-                                }
-                                navigationCoordinator.pushScreen(screen)
+                                mainRouter.openHidden()
                             },
                         )
                     }
@@ -341,7 +316,7 @@ fun SettingsScreen(
                         title = LocalStrings.current.userTagsTitle,
                         disclosureIndicator = true,
                         onTap = {
-                            navigationCoordinator.pushScreen(UserTagsScreen())
+                            mainRouter.openUserTags()
                         },
                     )
                 }
@@ -407,7 +382,7 @@ fun SettingsScreen(
     }
 
     if (infoDialogOpened) {
-        AboutDialog().Content()
+        AboutDialog()
     }
 
     if (defaultListingTypeBottomSheetOpened) {

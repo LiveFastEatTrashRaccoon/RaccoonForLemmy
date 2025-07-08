@@ -80,8 +80,8 @@ fun InboxScreen(modifier: Modifier = Modifier, model: InboxMviModel = getViewMod
     }
 
     Scaffold(
-        modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 windowInsets = topAppBarState.toWindowInsets(),
