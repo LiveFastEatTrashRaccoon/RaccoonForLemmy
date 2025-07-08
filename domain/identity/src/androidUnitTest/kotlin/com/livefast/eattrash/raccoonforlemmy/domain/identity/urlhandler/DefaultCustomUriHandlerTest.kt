@@ -1,7 +1,7 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler
 
 import androidx.compose.ui.platform.UriHandler
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.DetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.MainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
@@ -41,7 +41,7 @@ class DefaultCustomUriHandlerTest {
         mockk {
             coEvery { process(any()) } returns false
         }
-    private val detailOpener: DetailOpener = mockk(relaxUnitFun = true)
+    private val mainRouter: MainRouter = mockk(relaxUnitFun = true)
     private val customTabsHelper: CustomTabsHelper = mockk(relaxUnitFun = true)
     private val sut =
         DefaultCustomUriHandler(
@@ -51,7 +51,7 @@ class DefaultCustomUriHandlerTest {
             userProcessor = userProcessor,
             postProcessor = postProcessor,
             commentProcessor = commentProcessor,
-            detailOpener = detailOpener,
+            mainRouter = mainRouter,
             customTabsHelper = customTabsHelper,
             dispatcher = dispatcherTestRule.dispatcher,
         )
@@ -70,7 +70,7 @@ class DefaultCustomUriHandlerTest {
             postProcessor wasNot Called
             commentProcessor wasNot Called
             fallbackHandler wasNot Called
-            detailOpener wasNot Called
+            mainRouter wasNot Called
             customTabsHelper wasNot Called
         }
     }
@@ -89,7 +89,7 @@ class DefaultCustomUriHandlerTest {
             postProcessor wasNot Called
             commentProcessor wasNot Called
             fallbackHandler wasNot Called
-            detailOpener wasNot Called
+            mainRouter wasNot Called
             customTabsHelper wasNot Called
         }
     }
@@ -108,7 +108,7 @@ class DefaultCustomUriHandlerTest {
         verify {
             commentProcessor wasNot Called
             fallbackHandler wasNot Called
-            detailOpener wasNot Called
+            mainRouter wasNot Called
             customTabsHelper wasNot Called
         }
     }
@@ -127,7 +127,7 @@ class DefaultCustomUriHandlerTest {
         }
         verify {
             fallbackHandler wasNot Called
-            detailOpener wasNot Called
+            mainRouter wasNot Called
             customTabsHelper wasNot Called
         }
     }
@@ -144,7 +144,7 @@ class DefaultCustomUriHandlerTest {
         }
         verify {
             fallbackHandler.openUri(URL)
-            detailOpener wasNot Called
+            mainRouter wasNot Called
             customTabsHelper wasNot Called
         }
     }
@@ -164,7 +164,7 @@ class DefaultCustomUriHandlerTest {
         }
         verify {
             fallbackHandler wasNot Called
-            detailOpener.openWebInternal(URL)
+            mainRouter.openWebInternal(URL)
             customTabsHelper wasNot Called
         }
     }
@@ -184,7 +184,7 @@ class DefaultCustomUriHandlerTest {
         }
         verify {
             fallbackHandler wasNot Called
-            detailOpener wasNot Called
+            mainRouter wasNot Called
             customTabsHelper.handle(URL)
         }
     }

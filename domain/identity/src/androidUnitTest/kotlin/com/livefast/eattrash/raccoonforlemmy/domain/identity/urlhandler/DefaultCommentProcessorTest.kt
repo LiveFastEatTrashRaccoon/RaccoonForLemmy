@@ -1,6 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler
 
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.DetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.MainRouter
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -31,13 +31,13 @@ class DefaultCommentProcessorTest {
         mockk {
             coEvery { get(any(), any(), any()) } returns null
         }
-    private val detailOpener: DetailOpener = mockk(relaxUnitFun = true)
+    private val mainRouter: MainRouter = mockk(relaxUnitFun = true)
     private val sut =
         DefaultCommentProcessor(
             identityRepository = identityRepository,
             commentRepository = commentRepository,
             postRepository = postRepository,
-            detailOpener = detailOpener,
+            mainRouter = mainRouter,
         )
 
     @Test
@@ -60,7 +60,7 @@ class DefaultCommentProcessorTest {
         }
         verify {
             identityRepository.authToken
-            detailOpener.openPostDetail(
+            mainRouter.openPostDetail(
                 post = postItem,
                 highlightCommentId = item.id,
             )
@@ -84,7 +84,7 @@ class DefaultCommentProcessorTest {
         }
         verify {
             identityRepository.authToken
-            detailOpener wasNot Called
+            mainRouter wasNot Called
         }
     }
 

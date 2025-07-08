@@ -1,6 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler
 
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.DetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.MainRouter
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommentRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
@@ -10,7 +10,7 @@ internal class DefaultCommentProcessor(
     private val identityRepository: IdentityRepository,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository,
-    private val detailOpener: DetailOpener,
+    private val mainRouter: MainRouter,
 ) : CommentProcessor {
     override suspend fun process(url: String): Boolean = withTimeoutOrNull(2500) {
         val auth = identityRepository.authToken.value
@@ -28,7 +28,7 @@ internal class DefaultCommentProcessor(
                 )
             }
         if (post != null) {
-            detailOpener.openPostDetail(
+            mainRouter.openPostDetail(
                 post = post,
                 highlightCommentId = resolved.id,
             )

@@ -66,7 +66,7 @@ val identityModule =
                     identityRepository = instance(),
                     postRepository = instance(),
                     commentRepository = instance(),
-                    detailOpener = instance(),
+                    mainRouter = instance(),
                 )
             }
         }
@@ -75,7 +75,7 @@ val identityModule =
                 DefaultCommunityProcessor(
                     identityRepository = instance(),
                     communityRepository = instance(),
-                    detailOpener = instance(),
+                    mainRouter = instance(),
                     urlDecoder = instance(),
                 )
             }
@@ -89,7 +89,7 @@ val identityModule =
                     userProcessor = instance(),
                     postProcessor = instance(),
                     commentProcessor = instance(),
-                    detailOpener = instance(),
+                    mainRouter = instance(),
                     customTabsHelper = instance(),
                 )
             }
@@ -99,7 +99,7 @@ val identityModule =
                 DefaultPostProcessor(
                     identityRepository = instance(),
                     postRepository = instance(),
-                    detailOpener = instance(),
+                    mainRouter = instance(),
                     urlDecoder = instance(),
                 )
             }
@@ -114,7 +114,7 @@ val identityModule =
                 DefaultUserProcessor(
                     identityRepository = instance(),
                     userRepository = instance(),
-                    detailOpener = instance(),
+                    mainRouter = instance(),
                     urlDecoder = instance(),
                 )
             }

@@ -1,6 +1,6 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler
 
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.DetailOpener
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.MainRouter
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRepository
@@ -25,7 +25,7 @@ class DefaultCommunityProcessorTest {
         mockk {
             coEvery { getResolved(any(), any()) } returns null
         }
-    private val detailOpener: DetailOpener = mockk(relaxUnitFun = true)
+    private val mainRouter: MainRouter = mockk(relaxUnitFun = true)
     private val urlDecoder: UrlDecoder =
         mockk {
             every { getCommunity(any()) } returns null
@@ -34,7 +34,7 @@ class DefaultCommunityProcessorTest {
         DefaultCommunityProcessor(
             identityRepository = identityRepository,
             communityRepository = communityRepository,
-            detailOpener = detailOpener,
+            mainRouter = mainRouter,
             urlDecoder = urlDecoder,
         )
 
@@ -52,7 +52,7 @@ class DefaultCommunityProcessorTest {
         verify {
             identityRepository.authToken
             urlDecoder wasNot Called
-            detailOpener.openCommunityDetail(item)
+            mainRouter.openCommunityDetail(item)
         }
     }
 
@@ -70,7 +70,7 @@ class DefaultCommunityProcessorTest {
         }
         verify {
             identityRepository.authToken
-            detailOpener.openCommunityDetail(item)
+            mainRouter.openCommunityDetail(item)
         }
     }
 
@@ -85,7 +85,7 @@ class DefaultCommunityProcessorTest {
         }
         verify {
             identityRepository.authToken
-            detailOpener wasNot Called
+            mainRouter wasNot Called
         }
     }
 
