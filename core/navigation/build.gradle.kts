@@ -12,7 +12,6 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kodein)
             implementation(libs.stately.common)
-            implementation(libs.voyager.navigator)
             implementation(libs.androidx.navigation.compose)
 
             implementation(projects.core.di)

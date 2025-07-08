@@ -11,7 +11,6 @@ kotlin {
             dependencies {
                 implementation(libs.kodein)
                 implementation(libs.reorderable)
-                implementation(libs.voyager.core)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)

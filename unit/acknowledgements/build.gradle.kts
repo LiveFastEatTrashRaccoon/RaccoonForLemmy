@@ -12,7 +12,6 @@ kotlin {
             dependencies {
                 implementation(libs.kodein)
                 implementation(libs.ktor.client.core)
-                implementation(libs.voyager.core)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)

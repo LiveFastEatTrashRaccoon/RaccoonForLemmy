@@ -27,7 +27,6 @@ kotlin {
                 implementation(projects.core.utils)
 
                 implementation(projects.domain.lemmy.data)
-                implementation(projects.core.commonui.detailopener.api)
             }
         }
     }
