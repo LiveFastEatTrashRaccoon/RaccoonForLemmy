@@ -63,7 +63,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingAc
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeActionCard
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
@@ -73,6 +72,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -86,15 +86,12 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
-import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.components.ModdedCommentCard
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.components.ModdedCommentPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.di.FilteredContentsMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
-import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -116,7 +113,7 @@ fun FilteredContentsScreen(
     val drawerCoordinator = remember { getDrawerCoordinator() }
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
-    val detailOpener = remember { getDetailOpener() }
+    val mainRouter = remember { getMainRouter() }
     val notificationCenter = remember { getNotificationCenter() }
     var rawContent by remember { mutableStateOf<Any?>(null) }
     val themeRepository = remember { getThemeRepository() }
@@ -157,7 +154,7 @@ fun FilteredContentsScreen(
                     }
 
                     is FilteredContentsMviModel.Effect.OpenDetail ->
-                        detailOpener.openPostDetail(
+                        mainRouter.openPostDetail(
                             post = PostModel(id = effect.postId),
                             highlightCommentId = effect.commentId,
                             isMod = true,
@@ -175,8 +172,8 @@ fun FilteredContentsScreen(
     }
 
     Scaffold(
-        modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 windowInsets = topAppBarState.toWindowInsets(),
@@ -185,7 +182,7 @@ fun FilteredContentsScreen(
                     if (navigationCoordinator.canPop.value) {
                         IconButton(
                             onClick = {
-                                navigationCoordinator.popScreen()
+                                navigationCoordinator.pop()
                             },
                         ) {
                             Icon(
@@ -442,7 +439,7 @@ fun FilteredContentsScreen(
                                         },
                                         backgroundColor = replyColor ?: defaultReplyColor,
                                         onTriggered = {
-                                            detailOpener.openReply(originalPost = post)
+                                            mainRouter.openReply(originalPost = post)
                                         },
                                     )
 
@@ -501,13 +498,13 @@ fun FilteredContentsScreen(
                                         )
                                     },
                                     onOpenCommunity = { community, instance ->
-                                        detailOpener.openCommunityDetail(
+                                        mainRouter.openCommunityDetail(
                                             community,
                                             instance,
                                         )
                                     },
                                     onOpenCreator = { user, instance ->
-                                        detailOpener.openUserDetail(user, instance)
+                                        mainRouter.openUserDetail(user, instance)
                                     },
                                     onUpVote = {
                                         model.reduce(
@@ -534,20 +531,16 @@ fun FilteredContentsScreen(
                                         )
                                     },
                                     onOpenImage = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                source = post.community?.readableHandle.orEmpty(),
-                                            ),
+                                        mainRouter.openImage(
+                                            url = url,
+                                            source = post.community?.readableHandle.orEmpty(),
                                         )
                                     },
                                     onOpenVideo = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                isVideo = true,
-                                                source = post.community?.readableHandle.orEmpty(),
-                                            ),
+                                        mainRouter.openImage(
+                                            url = url,
+                                            isVideo = true,
+                                            source = post.community?.readableHandle.orEmpty(),
                                         )
                                     },
                                     options =
@@ -652,46 +645,38 @@ fun FilteredContentsScreen(
                                                 )
 
                                             OptionId.Remove -> {
-                                                val screen =
-                                                    ModerateWithReasonScreen(
-                                                        actionId = ModerateWithReasonAction.RemovePost.toInt(),
-                                                        contentId = post.id,
-                                                    )
-                                                navigationCoordinator.pushScreen(screen)
+                                                mainRouter.openModerateWithReason(
+                                                    actionId = ModerateWithReasonAction.RemovePost.toInt(),
+                                                    contentId = post.id,
+                                                )
                                             }
 
                                             OptionId.BanUser -> {
                                                 post.creator?.id?.also { userId ->
                                                     post.community?.id?.also { communityId ->
-                                                        val screen =
-                                                            BanUserScreen(
-                                                                userId = userId,
-                                                                communityId = communityId,
-                                                                newValue = post.creator?.banned != true,
-                                                                postId = post.id,
-                                                            )
-                                                        navigationCoordinator.pushScreen(screen)
+                                                        mainRouter.openBanUser(
+                                                            userId = userId,
+                                                            communityId = communityId,
+                                                            newValue = post.creator?.banned != true,
+                                                            postId = post.id,
+                                                        )
                                                     }
                                                 }
                                             }
 
                                             OptionId.Purge -> {
-                                                val screen =
-                                                    ModerateWithReasonScreen(
-                                                        actionId = ModerateWithReasonAction.PurgePost.toInt(),
-                                                        contentId = post.id,
-                                                    )
-                                                navigationCoordinator.pushScreen(screen)
+                                                mainRouter.openModerateWithReason(
+                                                    actionId = ModerateWithReasonAction.PurgePost.toInt(),
+                                                    contentId = post.id,
+                                                )
                                             }
 
                                             OptionId.PurgeCreator -> {
                                                 post.creator?.id?.also { userId ->
-                                                    val screen =
-                                                        ModerateWithReasonScreen(
-                                                            actionId = ModerateWithReasonAction.PurgeUser.toInt(),
-                                                            contentId = userId,
-                                                        )
-                                                    navigationCoordinator.pushScreen(screen)
+                                                    mainRouter.openModerateWithReason(
+                                                        actionId = ModerateWithReasonAction.PurgeUser.toInt(),
+                                                        contentId = userId,
+                                                    )
                                                 }
                                             }
 
@@ -791,7 +776,7 @@ fun FilteredContentsScreen(
                                         },
                                         backgroundColor = replyColor ?: defaultReplyColor,
                                         onTriggered = {
-                                            detailOpener.openReply(
+                                            mainRouter.openReply(
                                                 originalPost = PostModel(comment.postId),
                                                 originalComment = comment,
                                             )
@@ -839,7 +824,7 @@ fun FilteredContentsScreen(
                                     downVoteEnabled = uiState.downVoteEnabled,
                                     isCurrentUser = comment.creator?.id == uiState.currentUserId,
                                     onOpenUser = { user, instance ->
-                                        detailOpener.openUserDetail(user, instance)
+                                        mainRouter.openUserDetail(user, instance)
                                     },
                                     onOpen = {
                                         model.reduce(
@@ -869,7 +854,7 @@ fun FilteredContentsScreen(
                                         )
                                     },
                                     onReply = {
-                                        detailOpener.openReply(
+                                        mainRouter.openReply(
                                             originalPost = PostModel(id = comment.postId),
                                             originalComment = comment,
                                         )
@@ -933,12 +918,10 @@ fun FilteredContentsScreen(
                                     onSelectOption = { optionId ->
                                         when (optionId) {
                                             OptionId.Remove -> {
-                                                val screen =
-                                                    ModerateWithReasonScreen(
-                                                        actionId = ModerateWithReasonAction.RemoveComment.toInt(),
-                                                        contentId = comment.id,
-                                                    )
-                                                navigationCoordinator.pushScreen(screen)
+                                                mainRouter.openModerateWithReason(
+                                                    actionId = ModerateWithReasonAction.RemoveComment.toInt(),
+                                                    contentId = comment.id,
+                                                )
                                             }
 
                                             OptionId.SeeRaw -> {
@@ -955,37 +938,29 @@ fun FilteredContentsScreen(
                                             OptionId.BanUser -> {
                                                 comment.creator?.id?.also { userId ->
                                                     comment.community?.id?.also { communityId ->
-                                                        val screen =
-                                                            BanUserScreen(
-                                                                userId = userId,
-                                                                communityId = communityId,
-                                                                newValue = comment.creator?.banned != true,
-                                                                commentId = comment.id,
-                                                            )
-                                                        navigationCoordinator.pushScreen(
-                                                            screen,
+                                                        mainRouter.openBanUser(
+                                                            userId = userId,
+                                                            communityId = communityId,
+                                                            newValue = comment.creator?.banned != true,
+                                                            commentId = comment.id,
                                                         )
                                                     }
                                                 }
                                             }
 
                                             OptionId.Purge -> {
-                                                val screen =
-                                                    ModerateWithReasonScreen(
-                                                        actionId = ModerateWithReasonAction.PurgeComment.toInt(),
-                                                        contentId = comment.id,
-                                                    )
-                                                navigationCoordinator.pushScreen(screen)
+                                                mainRouter.openModerateWithReason(
+                                                    actionId = ModerateWithReasonAction.PurgeComment.toInt(),
+                                                    contentId = comment.id,
+                                                )
                                             }
 
                                             OptionId.PurgeCreator -> {
                                                 comment.creator?.id?.also { userId ->
-                                                    val screen =
-                                                        ModerateWithReasonScreen(
-                                                            actionId = ModerateWithReasonAction.PurgeUser.toInt(),
-                                                            contentId = userId,
-                                                        )
-                                                    navigationCoordinator.pushScreen(screen)
+                                                    mainRouter.openModerateWithReason(
+                                                        actionId = ModerateWithReasonAction.PurgeUser.toInt(),
+                                                        contentId = userId,
+                                                    )
                                                 }
                                             }
 
@@ -1044,7 +1019,7 @@ fun FilteredContentsScreen(
                     onQuote = { quotation ->
                         rawContent = null
                         if (quotation != null) {
-                            detailOpener.openReply(
+                            mainRouter.openReply(
                                 originalPost = content,
                                 initialText =
                                 buildString {
@@ -1071,7 +1046,7 @@ fun FilteredContentsScreen(
                     onQuote = { quotation ->
                         rawContent = null
                         if (quotation != null) {
-                            detailOpener.openReply(
+                            mainRouter.openReply(
                                 originalPost = PostModel(id = content.postId),
                                 originalComment = content,
                                 initialText =

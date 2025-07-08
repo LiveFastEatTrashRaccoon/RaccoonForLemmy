@@ -53,14 +53,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenu
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItemPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.MultiCommunityItem
@@ -68,381 +66,376 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.Destination
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.detail.MultiCommunityScreen
-import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.editor.MultiCommunityEditorScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ManageSubscriptionsScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: ManageSubscriptionsMviModel = getViewModel<ManageSubscriptionsViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val navigatorCoordinator = remember { getNavigationCoordinator() }
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val lazyListState = rememberLazyListState()
-        val scope = rememberCoroutineScope()
-        val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
-        val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
-        val detailOpener = remember { getDetailOpener() }
-        val focusManager = LocalFocusManager.current
-        val keyboardScrollConnection =
-            remember {
-                object : NestedScrollConnection {
-                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                        focusManager.clearFocus()
-                        return Offset.Zero
-                    }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ManageSubscriptionsScreen(modifier: Modifier = Modifier) {
+    val model: ManageSubscriptionsMviModel = getViewModel<ManageSubscriptionsViewModel>()
+    val uiState by model.uiState.collectAsState()
+    val navigatorCoordinator = remember { getNavigationCoordinator() }
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val lazyListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
+    val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
+    val mainRouter = remember { getMainRouter() }
+    val focusManager = LocalFocusManager.current
+    val keyboardScrollConnection =
+        remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                    focusManager.clearFocus()
+                    return Offset.Zero
                 }
             }
-        var multiCommunityIdToDelete by remember { mutableStateOf<Long?>(null) }
-        val snackbarHostState = remember { SnackbarHostState() }
-        val successMessage = LocalStrings.current.messageOperationSuccessful
+        }
+    var multiCommunityIdToDelete by remember { mutableStateOf<Long?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val successMessage = LocalStrings.current.messageOperationSuccessful
 
-        LaunchedEffect(model) {
-            model.effects
-                .onEach { event ->
-                    when (event) {
-                        ManageSubscriptionsMviModel.Effect.BackToTop -> {
-                            runCatching {
-                                lazyListState.scrollToItem(0)
-                                topAppBarState.heightOffset = 0f
-                                topAppBarState.contentOffset = 0f
-                            }
-                        }
-
-                        ManageSubscriptionsMviModel.Effect.Success -> {
-                            snackbarHostState.showSnackbar(successMessage)
+    LaunchedEffect(model) {
+        model.effects
+            .onEach { event ->
+                when (event) {
+                    ManageSubscriptionsMviModel.Effect.BackToTop -> {
+                        runCatching {
+                            lazyListState.scrollToItem(0)
+                            topAppBarState.heightOffset = 0f
+                            topAppBarState.contentOffset = 0f
                         }
                     }
-                }.launchIn(this)
-        }
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = LocalStrings.current.navigationDrawerTitleSubscriptions,
-                            style = MaterialTheme.typography.titleMedium,
+                    ManageSubscriptionsMviModel.Effect.Success -> {
+                        snackbarHostState.showSnackbar(successMessage)
+                    }
+                }
+            }.launchIn(this)
+    }
+
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.navigationDrawerTitleSubscriptions,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navigatorCoordinator.pop()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = LocalStrings.current.actionGoBack,
                         )
-                    },
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                navigatorCoordinator.popScreen()
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = LocalStrings.current.actionGoBack,
-                            )
-                        }
-                    },
-                )
-            },
-            floatingActionButton = {
-                AnimatedVisibility(
-                    visible = isFabVisible,
-                    enter =
-                    slideInVertically(
-                        initialOffsetY = { it * 2 },
-                    ),
-                    exit =
-                    slideOutVertically(
-                        targetOffsetY = { it * 2 },
-                    ),
-                ) {
-                    FloatingActionButtonMenu(
-                        items =
-                        buildList {
-                            this +=
-                                FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.ExpandLess,
-                                    text = LocalStrings.current.actionBackToTop,
-                                    onSelected = {
-                                        scope.launch {
-                                            runCatching {
-                                                lazyListState.scrollToItem(0)
-                                                topAppBarState.heightOffset = 0f
-                                                topAppBarState.contentOffset = 0f
-                                            }
-                                        }
-                                    },
-                                )
-                        },
-                    )
-                }
-            },
-            snackbarHost = {
-                SnackbarHost(snackbarHostState) { data ->
-                    Snackbar(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        snackbarData = data,
-                    )
-                }
-            },
-        ) { padding ->
-            Column(
-                modifier =
-                Modifier.padding(
-                    top = padding.calculateTopPadding(),
-                ),
-            ) {
-                SearchField(
-                    modifier =
-                    Modifier
-                        .padding(
-                            horizontal = Spacing.s,
-                            vertical = Spacing.s,
-                        ).fillMaxWidth(),
-                    hint = LocalStrings.current.exploreSearchPlaceholder,
-                    value = uiState.searchText,
-                    onValueChange = { value ->
-                        model.reduce(ManageSubscriptionsMviModel.Intent.SetSearch(value))
-                    },
-                    onClear = {
-                        model.reduce(ManageSubscriptionsMviModel.Intent.SetSearch(""))
-                    },
-                )
-
-                PullToRefreshBox(
-                    modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .nestedScroll(fabNestedScrollConnection)
-                        .nestedScroll(keyboardScrollConnection),
-                    isRefreshing = uiState.refreshing,
-                    onRefresh = {
-                        model.reduce(ManageSubscriptionsMviModel.Intent.Refresh)
-                    },
-                ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        state = lazyListState,
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                    ) {
-                        item {
-                            Row(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(vertical = Spacing.xs),
-                                    text = LocalStrings.current.manageSubscriptionsHeaderMulticommunities,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                )
-                                Spacer(modifier = Modifier.weight(1f))
-                                IconButton(
-                                    onClick = {
-                                        navigatorCoordinator.pushScreen(MultiCommunityEditorScreen())
-                                    },
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.AddCircle,
-                                        contentDescription = LocalStrings.current.buttonAdd,
-                                    )
-                                }
-                            }
-                        }
-                        items(uiState.multiCommunities) { community ->
-                            MultiCommunityItem(
-                                modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .background(MaterialTheme.colorScheme.background)
-                                    .onClick(
-                                        onClick = {
-                                            community.id?.also {
-                                                navigatorCoordinator.pushScreen(
-                                                    MultiCommunityScreen(it),
-                                                )
-                                            }
-                                        },
-                                    ),
-                                community = community,
-                                autoLoadImages = uiState.autoLoadImages,
-                                options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Edit,
-                                            LocalStrings.current.postActionEdit,
-                                        )
-                                    this +=
-                                        Option(
-                                            OptionId.Delete,
-                                            LocalStrings.current.commentActionDelete,
-                                        )
-                                },
-                                onSelectOption = { optionId ->
-                                    when (optionId) {
-                                        OptionId.Edit -> {
-                                            navigatorCoordinator.pushScreen(
-                                                MultiCommunityEditorScreen(community.id),
-                                            )
-                                        }
-
-                                        OptionId.Delete -> {
-                                            community.id?.also {
-                                                multiCommunityIdToDelete = it
-                                            }
-                                        }
-
-                                        else -> Unit
-                                    }
-                                },
-                            )
-                        }
-                        item {
-                            Row(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Text(
-                                    modifier = Modifier.padding(vertical = Spacing.xs),
-                                    text = LocalStrings.current.manageSubscriptionsHeaderSubscriptions,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                )
-                            }
-                        }
-                        if (uiState.initial) {
-                            items(5) {
-                                CommunityItemPlaceholder()
-                            }
-                        }
-                        items(uiState.communities) { community ->
-                            CommunityItem(
-                                modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .background(MaterialTheme.colorScheme.background)
-                                    .onClick(
-                                        onClick = {
-                                            detailOpener.openCommunityDetail(community = community)
-                                        },
-                                    ),
-                                community = community,
-                                autoLoadImages = uiState.autoLoadImages,
-                                showFavorite = true,
-                                options =
-                                buildList {
-                                    this +=
-                                        Option(
-                                            OptionId.Unsubscribe,
-                                            LocalStrings.current.communityActionUnsubscribe,
-                                        )
-                                    this +=
-                                        Option(
-                                            OptionId.Favorite,
-                                            if (community.favorite) {
-                                                LocalStrings.current.communityActionRemoveFavorite
-                                            } else {
-                                                LocalStrings.current.communityActionAddFavorite
-                                            },
-                                        )
-                                },
-                                onSelectOption = { optionId ->
-                                    when (optionId) {
-                                        OptionId.Unsubscribe -> {
-                                            model.reduce(
-                                                ManageSubscriptionsMviModel.Intent.Unsubscribe(
-                                                    community.id,
-                                                ),
-                                            )
-                                        }
-
-                                        OptionId.Favorite -> {
-                                            model.reduce(
-                                                ManageSubscriptionsMviModel.Intent.ToggleFavorite(
-                                                    community.id,
-                                                ),
-                                            )
-                                        }
-
-                                        else -> Unit
-                                    }
-                                },
-                            )
-                        }
-
-                        if (uiState.multiCommunities.isEmpty() && uiState.communities.isEmpty() && !uiState.initial) {
-                            item {
-                                Text(
-                                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
-                                    textAlign = TextAlign.Center,
-                                    text = LocalStrings.current.messageEmptyList,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onBackground,
-                                )
-                            }
-                        }
-
-                        item {
-                            if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                                model.reduce(ManageSubscriptionsMviModel.Intent.LoadNextPage)
-                            }
-                            if (uiState.loading && !uiState.refreshing) {
-                                Box(
-                                    modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.size(25.dp),
-                                        color = MaterialTheme.colorScheme.primary,
-                                    )
-                                }
-                            }
-                        }
                     }
-                }
-            }
-        }
-
-        multiCommunityIdToDelete?.also { itemId ->
-            AlertDialog(
-                onDismissRequest = {
-                    multiCommunityIdToDelete = null
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            multiCommunityIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            model.reduce(
-                                ManageSubscriptionsMviModel.Intent.DeleteMultiCommunity(
-                                    itemId,
-                                ),
-                            )
-                            multiCommunityIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
                 },
             )
+        },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = isFabVisible,
+                enter =
+                slideInVertically(
+                    initialOffsetY = { it * 2 },
+                ),
+                exit =
+                slideOutVertically(
+                    targetOffsetY = { it * 2 },
+                ),
+            ) {
+                FloatingActionButtonMenu(
+                    items =
+                    buildList {
+                        this +=
+                            FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ExpandLess,
+                                text = LocalStrings.current.actionBackToTop,
+                                onSelected = {
+                                    scope.launch {
+                                        runCatching {
+                                            lazyListState.scrollToItem(0)
+                                            topAppBarState.heightOffset = 0f
+                                            topAppBarState.contentOffset = 0f
+                                        }
+                                    }
+                                },
+                            )
+                    },
+                )
+            }
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    snackbarData = data,
+                )
+            }
+        },
+    ) { padding ->
+        Column(
+            modifier =
+            Modifier.padding(
+                top = padding.calculateTopPadding(),
+            ),
+        ) {
+            SearchField(
+                modifier =
+                Modifier
+                    .padding(
+                        horizontal = Spacing.s,
+                        vertical = Spacing.s,
+                    ).fillMaxWidth(),
+                hint = LocalStrings.current.exploreSearchPlaceholder,
+                value = uiState.searchText,
+                onValueChange = { value ->
+                    model.reduce(ManageSubscriptionsMviModel.Intent.SetSearch(value))
+                },
+                onClear = {
+                    model.reduce(ManageSubscriptionsMviModel.Intent.SetSearch(""))
+                },
+            )
+
+            PullToRefreshBox(
+                modifier =
+                Modifier
+                    .fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .nestedScroll(fabNestedScrollConnection)
+                    .nestedScroll(keyboardScrollConnection),
+                isRefreshing = uiState.refreshing,
+                onRefresh = {
+                    model.reduce(ManageSubscriptionsMviModel.Intent.Refresh)
+                },
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = lazyListState,
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                ) {
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(vertical = Spacing.xs),
+                                text = LocalStrings.current.manageSubscriptionsHeaderMulticommunities,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            IconButton(
+                                onClick = {
+                                    mainRouter.openEditMultiCommunity()
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AddCircle,
+                                    contentDescription = LocalStrings.current.buttonAdd,
+                                )
+                            }
+                        }
+                    }
+                    items(uiState.multiCommunities) { community ->
+                        MultiCommunityItem(
+                            modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background)
+                                .onClick(
+                                    onClick = {
+                                        community.id?.also {
+                                            navigatorCoordinator.push(Destination.MultiCommunity(it))
+                                        }
+                                    },
+                                ),
+                            community = community,
+                            autoLoadImages = uiState.autoLoadImages,
+                            options =
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Edit,
+                                        LocalStrings.current.postActionEdit,
+                                    )
+                                this +=
+                                    Option(
+                                        OptionId.Delete,
+                                        LocalStrings.current.commentActionDelete,
+                                    )
+                            },
+                            onSelectOption = { optionId ->
+                                when (optionId) {
+                                    OptionId.Edit -> {
+                                        mainRouter.openEditMultiCommunity(community.id)
+                                    }
+
+                                    OptionId.Delete -> {
+                                        community.id?.also {
+                                            multiCommunityIdToDelete = it
+                                        }
+                                    }
+
+                                    else -> Unit
+                                }
+                            },
+                        )
+                    }
+                    item {
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(vertical = Spacing.xs),
+                                text = LocalStrings.current.manageSubscriptionsHeaderSubscriptions,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
+                    }
+                    if (uiState.initial) {
+                        items(5) {
+                            CommunityItemPlaceholder()
+                        }
+                    }
+                    items(uiState.communities) { community ->
+                        CommunityItem(
+                            modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.background)
+                                .onClick(
+                                    onClick = {
+                                        mainRouter.openCommunityDetail(community = community)
+                                    },
+                                ),
+                            community = community,
+                            autoLoadImages = uiState.autoLoadImages,
+                            showFavorite = true,
+                            options =
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Unsubscribe,
+                                        LocalStrings.current.communityActionUnsubscribe,
+                                    )
+                                this +=
+                                    Option(
+                                        OptionId.Favorite,
+                                        if (community.favorite) {
+                                            LocalStrings.current.communityActionRemoveFavorite
+                                        } else {
+                                            LocalStrings.current.communityActionAddFavorite
+                                        },
+                                    )
+                            },
+                            onSelectOption = { optionId ->
+                                when (optionId) {
+                                    OptionId.Unsubscribe -> {
+                                        model.reduce(
+                                            ManageSubscriptionsMviModel.Intent.Unsubscribe(
+                                                community.id,
+                                            ),
+                                        )
+                                    }
+
+                                    OptionId.Favorite -> {
+                                        model.reduce(
+                                            ManageSubscriptionsMviModel.Intent.ToggleFavorite(
+                                                community.id,
+                                            ),
+                                        )
+                                    }
+
+                                    else -> Unit
+                                }
+                            },
+                        )
+                    }
+
+                    if (uiState.multiCommunities.isEmpty() && uiState.communities.isEmpty() && !uiState.initial) {
+                        item {
+                            Text(
+                                modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
+                                textAlign = TextAlign.Center,
+                                text = LocalStrings.current.messageEmptyList,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onBackground,
+                            )
+                        }
+                    }
+
+                    item {
+                        if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                            model.reduce(ManageSubscriptionsMviModel.Intent.LoadNextPage)
+                        }
+                        if (uiState.loading && !uiState.refreshing) {
+                            Box(
+                                modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(25.dp),
+                                    color = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    multiCommunityIdToDelete?.also { itemId ->
+        AlertDialog(
+            onDismissRequest = {
+                multiCommunityIdToDelete = null
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        multiCommunityIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonCancel)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        model.reduce(
+                            ManageSubscriptionsMviModel.Intent.DeleteMultiCommunity(
+                                itemId,
+                            ),
+                        )
+                        multiCommunityIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonConfirm)
+                }
+            },
+            text = {
+                Text(text = LocalStrings.current.messageAreYouSure)
+            },
+        )
     }
 }

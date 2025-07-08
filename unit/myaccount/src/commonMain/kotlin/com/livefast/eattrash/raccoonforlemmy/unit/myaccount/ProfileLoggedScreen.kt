@@ -47,7 +47,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ProgressHud
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSelector
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommentCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommentCardPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
@@ -60,6 +59,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -68,7 +68,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -88,7 +87,7 @@ fun ProfileLoggedScreen(
     val notificationCenter = remember { getNotificationCenter() }
     val navigationCoordinator = remember { getNavigationCoordinator() }
     var rawContent by remember { mutableStateOf<Any?>(null) }
-    val detailOpener = remember { getDetailOpener() }
+    val mainRouter = remember { getMainRouter() }
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     var postIdToDelete by remember { mutableStateOf<Long?>(null) }
@@ -123,7 +122,7 @@ fun ProfileLoggedScreen(
             .onEach { effect ->
                 when (effect) {
                     is ProfileLoggedMviModel.Effect.OpenDetail ->
-                        detailOpener.openPostDetail(
+                        mainRouter.openPostDetail(
                             post = PostModel(id = effect.postId),
                             highlightCommentId = effect.commentId,
                         )
@@ -232,11 +231,9 @@ fun ProfileLoggedScreen(
                                 user = user,
                                 autoLoadImages = uiState.autoLoadImages,
                                 onOpenImage = { url ->
-                                    navigationCoordinator.pushScreen(
-                                        ZoomableImageScreen(
-                                            url = url,
-                                            source = user.readableHandle,
-                                        ),
+                                    mainRouter.openImage(
+                                        url = url,
+                                        source = user.readableHandle,
                                     )
                                 },
                             )
@@ -316,26 +313,22 @@ fun ProfileLoggedScreen(
                                     )
                                 },
                                 onOpenCommunity = { community, instance ->
-                                    detailOpener.openCommunityDetail(community, instance)
+                                    mainRouter.openCommunityDetail(community, instance)
                                 },
                                 onOpenCreator = { user, instance ->
-                                    detailOpener.openUserDetail(user, instance)
+                                    mainRouter.openUserDetail(user, instance)
                                 },
                                 onOpenImage = { url ->
-                                    navigationCoordinator.pushScreen(
-                                        ZoomableImageScreen(
-                                            url = url,
-                                            source = post.community?.readableHandle.orEmpty(),
-                                        ),
+                                    mainRouter.openImage(
+                                        url = url,
+                                        source = post.community?.readableHandle.orEmpty(),
                                     )
                                 },
                                 onOpenVideo = { url ->
-                                    navigationCoordinator.pushScreen(
-                                        ZoomableImageScreen(
-                                            url = url,
-                                            isVideo = true,
-                                            source = post.community?.readableHandle.orEmpty(),
-                                        ),
+                                    mainRouter.openImage(
+                                        url = url,
+                                        isVideo = true,
+                                        source = post.community?.readableHandle.orEmpty(),
                                     )
                                 },
                                 onUpVote = {
@@ -402,7 +395,7 @@ fun ProfileLoggedScreen(
                                         }
 
                                         OptionId.Edit -> {
-                                            detailOpener.openCreatePost(
+                                            mainRouter.openCreatePost(
                                                 editedPost = post,
                                             )
                                         }
@@ -412,7 +405,7 @@ fun ProfileLoggedScreen(
                                         }
 
                                         OptionId.CrossPost -> {
-                                            detailOpener.openCreatePost(
+                                            mainRouter.openCreatePost(
                                                 crossPost = post,
                                                 forceCommunitySelection = true,
                                             )
@@ -496,15 +489,13 @@ fun ProfileLoggedScreen(
                                 indentAmount = 0,
                                 downVoteEnabled = uiState.downVoteEnabled,
                                 onImageClick = { url ->
-                                    navigationCoordinator.pushScreen(
-                                        ZoomableImageScreen(
-                                            url = url,
-                                            source = comment.community?.readableHandle.orEmpty(),
-                                        ),
+                                    mainRouter.openImage(
+                                        url = url,
+                                        source = comment.community?.readableHandle.orEmpty(),
                                     )
                                 },
                                 onOpenCommunity = { community, instance ->
-                                    detailOpener.openCommunityDetail(community, instance)
+                                    mainRouter.openCommunityDetail(community, instance)
                                 },
                                 onClick = {
                                     model.reduce(
@@ -515,7 +506,7 @@ fun ProfileLoggedScreen(
                                     )
                                 },
                                 onReply = {
-                                    detailOpener.openReply(
+                                    mainRouter.openReply(
                                         originalPost = PostModel(id = comment.postId),
                                         originalComment = comment,
                                     )
@@ -579,7 +570,7 @@ fun ProfileLoggedScreen(
                                         }
 
                                         OptionId.Edit -> {
-                                            detailOpener.openReply(
+                                            mainRouter.openReply(
                                                 originalPost = PostModel(id = comment.postId),
                                                 editedComment = comment,
                                             )
@@ -703,7 +694,7 @@ fun ProfileLoggedScreen(
                     onQuote = { quotation ->
                         rawContent = null
                         if (quotation != null) {
-                            detailOpener.openReply(
+                            mainRouter.openReply(
                                 originalPost = content,
                                 initialText =
                                 buildString {
@@ -730,7 +721,7 @@ fun ProfileLoggedScreen(
                     onQuote = { quotation ->
                         rawContent = null
                         if (quotation != null) {
-                            detailOpener.openReply(
+                            mainRouter.openReply(
                                 originalPost = PostModel(id = content.postId),
                                 originalComment = content,
                                 initialText =

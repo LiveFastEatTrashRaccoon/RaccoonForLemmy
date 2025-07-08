@@ -53,7 +53,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -63,7 +62,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingAc
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeActionCard
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
@@ -73,6 +71,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -87,471 +86,191 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
-import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.di.MultiCommunityMviModelParams
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class MultiCommunityScreen(private val communityId: Long) : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: MultiCommunityMviModel =
-            getViewModel<MultiCommunityViewModel>(MultiCommunityMviModelParams(communityId))
-        val uiState by model.uiState.collectAsState()
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val themeRepository = remember { getThemeRepository() }
-        val upVoteColor by themeRepository.upVoteColor.collectAsState()
-        val downVoteColor by themeRepository.downVoteColor.collectAsState()
-        val replyColor by themeRepository.replyColor.collectAsState()
-        val saveColor by themeRepository.saveColor.collectAsState()
-        val defaultUpvoteColor = MaterialTheme.colorScheme.primary
-        val defaultReplyColor = MaterialTheme.colorScheme.secondary
-        val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
-        val defaultSaveColor = MaterialTheme.colorScheme.secondaryContainer
-        val lazyListState = rememberLazyListState()
-        val scope = rememberCoroutineScope()
-        val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
-        val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
-        val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
-        val detailOpener = remember { getDetailOpener() }
-        val notificationCenter = remember { getNotificationCenter() }
-        val clipboardManager = LocalClipboardManager.current
-        var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
-        var sortBottomSheetOpened by remember { mutableStateOf(false) }
-        var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
+    val model: MultiCommunityMviModel =
+        getViewModel<MultiCommunityViewModel>(MultiCommunityMviModelParams(communityId))
+    val uiState by model.uiState.collectAsState()
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val themeRepository = remember { getThemeRepository() }
+    val upVoteColor by themeRepository.upVoteColor.collectAsState()
+    val downVoteColor by themeRepository.downVoteColor.collectAsState()
+    val replyColor by themeRepository.replyColor.collectAsState()
+    val saveColor by themeRepository.saveColor.collectAsState()
+    val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+    val defaultReplyColor = MaterialTheme.colorScheme.secondary
+    val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
+    val defaultSaveColor = MaterialTheme.colorScheme.secondaryContainer
+    val lazyListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
+    val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
+    val settingsRepository = remember { getSettingsRepository() }
+    val settings by settingsRepository.currentSettings.collectAsState()
+    val mainRouter = remember { getMainRouter() }
+    val notificationCenter = remember { getNotificationCenter() }
+    val clipboardManager = LocalClipboardManager.current
+    var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
+    var sortBottomSheetOpened by remember { mutableStateOf(false) }
+    var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
 
-        LaunchedEffect(model) {
-            model.effects
-                .onEach { effect ->
-                    when (effect) {
-                        MultiCommunityMviModel.Effect.BackToTop -> {
-                            runCatching {
-                                lazyListState.scrollToItem(0)
-                                topAppBarState.heightOffset = 0f
-                                topAppBarState.contentOffset = 0f
-                            }
+    LaunchedEffect(model) {
+        model.effects
+            .onEach { effect ->
+                when (effect) {
+                    MultiCommunityMviModel.Effect.BackToTop -> {
+                        runCatching {
+                            lazyListState.scrollToItem(0)
+                            topAppBarState.heightOffset = 0f
+                            topAppBarState.contentOffset = 0f
                         }
-
-                        is MultiCommunityMviModel.Effect.OpenDetail ->
-                            detailOpener.openPostDetail(effect.post)
                     }
-                }.launchIn(this)
-        }
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                val sortType = uiState.sortType
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    title = {
-                        Text(
-                            text = uiState.community.name,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.titleMedium,
+                    is MultiCommunityMviModel.Effect.OpenDetail ->
+                        mainRouter.openPostDetail(effect.post)
+                }
+            }.launchIn(this)
+    }
+
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
+        topBar = {
+            val sortType = uiState.sortType
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                title = {
+                    Text(
+                        text = uiState.community.name,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navigationCoordinator.pop()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = LocalStrings.current.actionGoBack,
                         )
-                    },
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
+                    }
+                },
+                actions = {
+                    val additionalLabel = sortType.getAdditionalLabel()
+                    if (additionalLabel.isNotEmpty()) {
+                        Text(
+                            text =
+                            buildString {
+                                append("(")
+                                append(additionalLabel)
+                                append(")")
+                            },
+                        )
+                        Spacer(modifier = Modifier.width(Spacing.xs))
+                    }
+                    if (sortType != null) {
                         IconButton(
                             onClick = {
-                                navigationCoordinator.popScreen()
+                                sortBottomSheetOpened = true
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = LocalStrings.current.actionGoBack,
+                                imageVector = sortType.toIcon(),
+                                contentDescription = sortType.toReadableName(),
                             )
-                        }
-                    },
-                    actions = {
-                        val additionalLabel = sortType.getAdditionalLabel()
-                        if (additionalLabel.isNotEmpty()) {
-                            Text(
-                                text =
-                                buildString {
-                                    append("(")
-                                    append(additionalLabel)
-                                    append(")")
-                                },
-                            )
-                            Spacer(modifier = Modifier.width(Spacing.xs))
-                        }
-                        if (sortType != null) {
-                            IconButton(
-                                onClick = {
-                                    sortBottomSheetOpened = true
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = sortType.toIcon(),
-                                    contentDescription = sortType.toReadableName(),
-                                )
-                            }
-                        }
-                    },
-                )
-            },
-            floatingActionButton = {
-                AnimatedVisibility(
-                    visible = isFabVisible,
-                    enter =
-                    slideInVertically(
-                        initialOffsetY = { it * 2 },
-                    ),
-                    exit =
-                    slideOutVertically(
-                        targetOffsetY = { it * 2 },
-                    ),
-                ) {
-                    FloatingActionButtonMenu(
-                        items =
-                        buildList {
-                            this +=
-                                FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.ExpandLess,
-                                    text = LocalStrings.current.actionBackToTop,
-                                    onSelected = {
-                                        scope.launch {
-                                            runCatching {
-                                                lazyListState.scrollToItem(0)
-                                                topAppBarState.heightOffset = 0f
-                                                topAppBarState.contentOffset = 0f
-                                            }
-                                        }
-                                    },
-                                )
-                            this +=
-                                FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.ClearAll,
-                                    text = LocalStrings.current.actionClearRead,
-                                    onSelected = {
-                                        model.reduce(MultiCommunityMviModel.Intent.ClearRead)
-                                        scope.launch {
-                                            runCatching {
-                                                lazyListState.scrollToItem(0)
-                                                topAppBarState.heightOffset = 0f
-                                                topAppBarState.contentOffset = 0f
-                                            }
-                                        }
-                                    },
-                                )
-                        },
-                    )
-                }
-            },
-        ) { padding ->
-            PullToRefreshBox(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).then(
-                        if (settings.hideNavigationBarWhileScrolling) {
-                            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                        } else {
-                            Modifier
-                        },
-                    ).nestedScroll(fabNestedScrollConnection),
-                isRefreshing = uiState.refreshing,
-                onRefresh = {
-                    model.reduce(MultiCommunityMviModel.Intent.Refresh)
-                },
-            ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    state = lazyListState,
-                ) {
-                    if (uiState.posts.isEmpty() && uiState.loading) {
-                        items(5) {
-                            PostCardPlaceholder(
-                                postLayout = uiState.postLayout,
-                            )
-                            if (uiState.postLayout != PostLayout.Card) {
-                                HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
-                            } else {
-                                Spacer(modifier = Modifier.height(Spacing.interItem))
-                            }
                         }
                     }
-                    items(
-                        items = uiState.posts,
-                        key = {
-                            it.id.toString() + (it.updateDate ?: it.publishDate)
-                        },
-                    ) { post ->
-                        LaunchedEffect(post.id) {
-                            if (settings.markAsReadWhileScrolling && !post.read) {
-                                model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
-                            }
-                        }
-
-                        @Composable
-                        fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> = mapNotNull {
-                            when (it) {
-                                ActionOnSwipe.UpVote ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            Icon(
-                                                modifier = VoteAction.UpVote.toModifier(),
-                                                imageVector = VoteAction.UpVote.toIcon(),
-                                                contentDescription = LocalStrings.current.actionUpvote,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = upVoteColor ?: defaultUpvoteColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                MultiCommunityMviModel.Intent.UpVotePost(post.id),
-                                            )
-                                        },
-                                    )
-
-                                ActionOnSwipe.DownVote ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            Icon(
-                                                modifier = VoteAction.DownVote.toModifier(),
-                                                imageVector = VoteAction.DownVote.toIcon(),
-                                                contentDescription = LocalStrings.current.actionDownvote,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = downVoteColor ?: defaultDownVoteColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                MultiCommunityMviModel.Intent.DownVotePost(
-                                                    post.id,
-                                                ),
-                                            )
-                                        },
-                                    ).takeIf { uiState.downVoteEnabled }
-
-                                ActionOnSwipe.Reply ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            Icon(
-                                                imageVector = Icons.AutoMirrored.Default.Reply,
-                                                contentDescription = LocalStrings.current.actionReply,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = replyColor ?: defaultReplyColor,
-                                        onTriggered = {
-                                            detailOpener.openReply(originalPost = post)
-                                        },
-                                    )
-
-                                ActionOnSwipe.Save ->
-                                    SwipeAction(
-                                        swipeContent = {
-                                            Icon(
-                                                imageVector = Icons.Default.Bookmark,
-                                                contentDescription = LocalStrings.current.actionAddToBookmarks,
-                                                tint = Color.White,
-                                            )
-                                        },
-                                        backgroundColor = saveColor ?: defaultSaveColor,
-                                        onTriggered = {
-                                            model.reduce(
-                                                MultiCommunityMviModel.Intent.SavePost(
-                                                    id = post.id,
-                                                ),
-                                            )
-                                        },
-                                    )
-
-                                else -> null
-                            }
-                        }
-
-                        SwipeActionCard(
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = uiState.swipeActionsEnabled,
-                            onGestureBegin = {
-                                model.reduce(MultiCommunityMviModel.Intent.HapticIndication)
-                            },
-                            swipeToStartActions = uiState.actionsOnSwipeToStartPosts.toSwipeActions(),
-                            swipeToEndActions =
-                            if (uiState.isLogged) {
-                                uiState.actionsOnSwipeToEndPosts.toSwipeActions()
-                            } else {
-                                emptyList()
-                            },
-                            content = {
-                                PostCard(
-                                    post = post,
-                                    postLayout = uiState.postLayout,
-                                    limitBodyHeight = true,
-                                    showBot = true,
-                                    isCurrentUser = post.creator?.id == uiState.currentUserId,
-                                    fullHeightImage = uiState.fullHeightImages,
-                                    fullWidthImage = uiState.fullWidthImages,
-                                    voteFormat = uiState.voteFormat,
-                                    autoLoadImages = uiState.autoLoadImages,
-                                    preferNicknames = uiState.preferNicknames,
-                                    showScores = uiState.showScores,
-                                    blurNsfw = uiState.blurNsfw,
-                                    fadeRead = uiState.fadeReadPosts,
-                                    showUnreadComments = uiState.showUnreadComments,
-                                    downVoteEnabled = uiState.downVoteEnabled,
-                                    botTagColor = uiState.botTagColor,
-                                    meTagColor = uiState.meTagColor,
-                                    onClick = {
-                                        model.reduce(
-                                            MultiCommunityMviModel.Intent.WillOpenDetail(post.id),
-                                        )
-                                    },
-                                    onDoubleClick =
-                                    {
-                                        model.reduce(
-                                            MultiCommunityMviModel.Intent.UpVotePost(
-                                                id = post.id,
-                                                feedback = true,
-                                            ),
-                                        )
-                                    }.takeIf { uiState.swipeActionsEnabled },
-                                    onOpenCommunity = { community, instance ->
-                                        detailOpener.openCommunityDetail(community, instance)
-                                    },
-                                    onOpenCreator = { user, instance ->
-                                        detailOpener.openUserDetail(user, instance)
-                                    },
-                                    onUpVote = {
-                                        model.reduce(
-                                            MultiCommunityMviModel.Intent.UpVotePost(id = post.id),
-                                        )
-                                    },
-                                    onDownVote = {
-                                        model.reduce(
-                                            MultiCommunityMviModel.Intent.DownVotePost(id = post.id),
-                                        )
-                                    },
-                                    onSave = {
-                                        model.reduce(
-                                            MultiCommunityMviModel.Intent.SavePost(id = post.id),
-                                        )
-                                    },
-                                    onReply = {
-                                        model.reduce(
-                                            MultiCommunityMviModel.Intent.WillOpenDetail(post.id),
-                                        )
-                                    },
-                                    onOpenImage = { url ->
-                                        model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                source = post.community?.readableHandle.orEmpty(),
-                                            ),
-                                        )
-                                    },
-                                    onOpenVideo = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                isVideo = true,
-                                                source = post.community?.readableHandle.orEmpty(),
-                                            ),
-                                        )
-                                    },
-                                    options =
-                                    buildList {
-                                        this +=
-                                            Option(
-                                                OptionId.Share,
-                                                LocalStrings.current.postActionShare,
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.Copy,
-                                                LocalStrings.current.actionCopyClipboard,
-                                            )
-                                        if (uiState.currentUserId != null) {
-                                            this +=
-                                                Option(
-                                                    OptionId.ToggleRead,
-                                                    LocalStrings.current.actionToggleRead,
-                                                )
-                                            this +=
-                                                Option(
-                                                    OptionId.Hide,
-                                                    LocalStrings.current.postActionHide,
-                                                )
-                                            this +=
-                                                Option(
-                                                    OptionId.Report,
-                                                    LocalStrings.current.postActionReport,
-                                                )
+                },
+            )
+        },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = isFabVisible,
+                enter =
+                slideInVertically(
+                    initialOffsetY = { it * 2 },
+                ),
+                exit =
+                slideOutVertically(
+                    targetOffsetY = { it * 2 },
+                ),
+            ) {
+                FloatingActionButtonMenu(
+                    items =
+                    buildList {
+                        this +=
+                            FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ExpandLess,
+                                text = LocalStrings.current.actionBackToTop,
+                                onSelected = {
+                                    scope.launch {
+                                        runCatching {
+                                            lazyListState.scrollToItem(0)
+                                            topAppBarState.heightOffset = 0f
+                                            topAppBarState.contentOffset = 0f
                                         }
-                                    },
-                                    onSelectOption = { optionId ->
-                                        when (optionId) {
-                                            OptionId.Report -> {
-                                                val screen =
-                                                    ModerateWithReasonScreen(
-                                                        actionId = ModerateWithReasonAction.ReportPost.toInt(),
-                                                        contentId = post.id,
-                                                    )
-                                                navigationCoordinator.pushScreen(screen)
-                                            }
-
-                                            OptionId.Hide ->
-                                                model.reduce(
-                                                    MultiCommunityMviModel.Intent.Hide(
-                                                        post.id,
-                                                    ),
-                                                )
-
-                                            OptionId.ToggleRead -> {
-                                                model.reduce(
-                                                    MultiCommunityMviModel.Intent.ToggleRead(post.id),
-                                                )
-                                            }
-
-                                            OptionId.Share -> {
-                                                val urls =
-                                                    listOfNotNull(
-                                                        post.originalUrl,
-                                                        "https://${uiState.instance}/post/${post.id}",
-                                                    ).distinct()
-                                                if (urls.size == 1) {
-                                                    model.reduce(
-                                                        MultiCommunityMviModel.Intent.Share(
-                                                            urls.first(),
-                                                        ),
-                                                    )
-                                                } else {
-                                                    shareBottomSheetUrls = urls
-                                                }
-                                            }
-
-                                            OptionId.Copy -> {
-                                                val texts =
-                                                    listOfNotNull(
-                                                        post.title.takeIf { it.isNotBlank() },
-                                                        post.text.takeIf { it.isNotBlank() },
-                                                    ).distinct()
-                                                if (texts.size == 1) {
-                                                    clipboardManager.setText(AnnotatedString(texts.first()))
-                                                } else {
-                                                    copyPostBottomSheet = post
-                                                }
-                                            }
-
-                                            else -> Unit
+                                    }
+                                },
+                            )
+                        this +=
+                            FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ClearAll,
+                                text = LocalStrings.current.actionClearRead,
+                                onSelected = {
+                                    model.reduce(MultiCommunityMviModel.Intent.ClearRead)
+                                    scope.launch {
+                                        runCatching {
+                                            lazyListState.scrollToItem(0)
+                                            topAppBarState.heightOffset = 0f
+                                            topAppBarState.contentOffset = 0f
                                         }
-                                    },
-                                )
-                            },
+                                    }
+                                },
+                            )
+                    },
+                )
+            }
+        },
+    ) { padding ->
+        PullToRefreshBox(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).then(
+                    if (settings.hideNavigationBarWhileScrolling) {
+                        Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
+                    },
+                ).nestedScroll(fabNestedScrollConnection),
+            isRefreshing = uiState.refreshing,
+            onRefresh = {
+                model.reduce(MultiCommunityMviModel.Intent.Refresh)
+            },
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = lazyListState,
+            ) {
+                if (uiState.posts.isEmpty() && uiState.loading) {
+                    items(5) {
+                        PostCardPlaceholder(
+                            postLayout = uiState.postLayout,
                         )
                         if (uiState.postLayout != PostLayout.Card) {
                             HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
@@ -559,129 +278,400 @@ class MultiCommunityScreen(private val communityId: Long) : Screen {
                             Spacer(modifier = Modifier.height(Spacing.interItem))
                         }
                     }
-                    item {
-                        if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                            if (settings.infiniteScrollEnabled) {
-                                model.reduce(MultiCommunityMviModel.Intent.LoadNextPage)
-                            } else {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
-                                    horizontalArrangement = Arrangement.Center,
-                                ) {
-                                    Button(
-                                        onClick = {
-                                            model.reduce(MultiCommunityMviModel.Intent.LoadNextPage)
-                                        },
-                                    ) {
-                                        Text(
-                                            text = LocalStrings.current.postListLoadMorePosts,
-                                            style = MaterialTheme.typography.labelSmall,
+                }
+                items(
+                    items = uiState.posts,
+                    key = {
+                        it.id.toString() + (it.updateDate ?: it.publishDate)
+                    },
+                ) { post ->
+                    LaunchedEffect(post.id) {
+                        if (settings.markAsReadWhileScrolling && !post.read) {
+                            model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
+                        }
+                    }
+
+                    @Composable
+                    fun List<ActionOnSwipe>.toSwipeActions(): List<SwipeAction> = mapNotNull {
+                        when (it) {
+                            ActionOnSwipe.UpVote ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        Icon(
+                                            modifier = VoteAction.UpVote.toModifier(),
+                                            imageVector = VoteAction.UpVote.toIcon(),
+                                            contentDescription = LocalStrings.current.actionUpvote,
+                                            tint = Color.White,
                                         )
+                                    },
+                                    backgroundColor = upVoteColor ?: defaultUpvoteColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            MultiCommunityMviModel.Intent.UpVotePost(post.id),
+                                        )
+                                    },
+                                )
+
+                            ActionOnSwipe.DownVote ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        Icon(
+                                            modifier = VoteAction.DownVote.toModifier(),
+                                            imageVector = VoteAction.DownVote.toIcon(),
+                                            contentDescription = LocalStrings.current.actionDownvote,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = downVoteColor ?: defaultDownVoteColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            MultiCommunityMviModel.Intent.DownVotePost(
+                                                post.id,
+                                            ),
+                                        )
+                                    },
+                                ).takeIf { uiState.downVoteEnabled }
+
+                            ActionOnSwipe.Reply ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        Icon(
+                                            imageVector = Icons.AutoMirrored.Default.Reply,
+                                            contentDescription = LocalStrings.current.actionReply,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = replyColor ?: defaultReplyColor,
+                                    onTriggered = {
+                                        mainRouter.openReply(originalPost = post)
+                                    },
+                                )
+
+                            ActionOnSwipe.Save ->
+                                SwipeAction(
+                                    swipeContent = {
+                                        Icon(
+                                            imageVector = Icons.Default.Bookmark,
+                                            contentDescription = LocalStrings.current.actionAddToBookmarks,
+                                            tint = Color.White,
+                                        )
+                                    },
+                                    backgroundColor = saveColor ?: defaultSaveColor,
+                                    onTriggered = {
+                                        model.reduce(
+                                            MultiCommunityMviModel.Intent.SavePost(
+                                                id = post.id,
+                                            ),
+                                        )
+                                    },
+                                )
+
+                            else -> null
+                        }
+                    }
+
+                    SwipeActionCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = uiState.swipeActionsEnabled,
+                        onGestureBegin = {
+                            model.reduce(MultiCommunityMviModel.Intent.HapticIndication)
+                        },
+                        swipeToStartActions = uiState.actionsOnSwipeToStartPosts.toSwipeActions(),
+                        swipeToEndActions =
+                        if (uiState.isLogged) {
+                            uiState.actionsOnSwipeToEndPosts.toSwipeActions()
+                        } else {
+                            emptyList()
+                        },
+                        content = {
+                            PostCard(
+                                post = post,
+                                postLayout = uiState.postLayout,
+                                limitBodyHeight = true,
+                                showBot = true,
+                                isCurrentUser = post.creator?.id == uiState.currentUserId,
+                                fullHeightImage = uiState.fullHeightImages,
+                                fullWidthImage = uiState.fullWidthImages,
+                                voteFormat = uiState.voteFormat,
+                                autoLoadImages = uiState.autoLoadImages,
+                                preferNicknames = uiState.preferNicknames,
+                                showScores = uiState.showScores,
+                                blurNsfw = uiState.blurNsfw,
+                                fadeRead = uiState.fadeReadPosts,
+                                showUnreadComments = uiState.showUnreadComments,
+                                downVoteEnabled = uiState.downVoteEnabled,
+                                botTagColor = uiState.botTagColor,
+                                meTagColor = uiState.meTagColor,
+                                onClick = {
+                                    model.reduce(
+                                        MultiCommunityMviModel.Intent.WillOpenDetail(post.id),
+                                    )
+                                },
+                                onDoubleClick =
+                                {
+                                    model.reduce(
+                                        MultiCommunityMviModel.Intent.UpVotePost(
+                                            id = post.id,
+                                            feedback = true,
+                                        ),
+                                    )
+                                }.takeIf { uiState.swipeActionsEnabled },
+                                onOpenCommunity = { community, instance ->
+                                    mainRouter.openCommunityDetail(community, instance)
+                                },
+                                onOpenCreator = { user, instance ->
+                                    mainRouter.openUserDetail(user, instance)
+                                },
+                                onUpVote = {
+                                    model.reduce(
+                                        MultiCommunityMviModel.Intent.UpVotePost(id = post.id),
+                                    )
+                                },
+                                onDownVote = {
+                                    model.reduce(
+                                        MultiCommunityMviModel.Intent.DownVotePost(id = post.id),
+                                    )
+                                },
+                                onSave = {
+                                    model.reduce(
+                                        MultiCommunityMviModel.Intent.SavePost(id = post.id),
+                                    )
+                                },
+                                onReply = {
+                                    model.reduce(
+                                        MultiCommunityMviModel.Intent.WillOpenDetail(post.id),
+                                    )
+                                },
+                                onOpenImage = { url ->
+                                    model.reduce(MultiCommunityMviModel.Intent.MarkAsRead(post.id))
+                                    mainRouter.openImage(
+                                        url = url,
+                                        source = post.community?.readableHandle.orEmpty(),
+                                    )
+                                },
+                                onOpenVideo = { url ->
+                                    mainRouter.openImage(
+                                        url = url,
+                                        isVideo = true,
+                                        source = post.community?.readableHandle.orEmpty(),
+                                    )
+                                },
+                                options =
+                                buildList {
+                                    this +=
+                                        Option(
+                                            OptionId.Share,
+                                            LocalStrings.current.postActionShare,
+                                        )
+                                    this +=
+                                        Option(
+                                            OptionId.Copy,
+                                            LocalStrings.current.actionCopyClipboard,
+                                        )
+                                    if (uiState.currentUserId != null) {
+                                        this +=
+                                            Option(
+                                                OptionId.ToggleRead,
+                                                LocalStrings.current.actionToggleRead,
+                                            )
+                                        this +=
+                                            Option(
+                                                OptionId.Hide,
+                                                LocalStrings.current.postActionHide,
+                                            )
+                                        this +=
+                                            Option(
+                                                OptionId.Report,
+                                                LocalStrings.current.postActionReport,
+                                            )
                                     }
+                                },
+                                onSelectOption = { optionId ->
+                                    when (optionId) {
+                                        OptionId.Report -> {
+                                            mainRouter.openModerateWithReason(
+                                                actionId = ModerateWithReasonAction.ReportPost.toInt(),
+                                                contentId = post.id,
+                                            )
+                                        }
+
+                                        OptionId.Hide ->
+                                            model.reduce(
+                                                MultiCommunityMviModel.Intent.Hide(
+                                                    post.id,
+                                                ),
+                                            )
+
+                                        OptionId.ToggleRead -> {
+                                            model.reduce(
+                                                MultiCommunityMviModel.Intent.ToggleRead(post.id),
+                                            )
+                                        }
+
+                                        OptionId.Share -> {
+                                            val urls =
+                                                listOfNotNull(
+                                                    post.originalUrl,
+                                                    "https://${uiState.instance}/post/${post.id}",
+                                                ).distinct()
+                                            if (urls.size == 1) {
+                                                model.reduce(
+                                                    MultiCommunityMviModel.Intent.Share(
+                                                        urls.first(),
+                                                    ),
+                                                )
+                                            } else {
+                                                shareBottomSheetUrls = urls
+                                            }
+                                        }
+
+                                        OptionId.Copy -> {
+                                            val texts =
+                                                listOfNotNull(
+                                                    post.title.takeIf { it.isNotBlank() },
+                                                    post.text.takeIf { it.isNotBlank() },
+                                                ).distinct()
+                                            if (texts.size == 1) {
+                                                clipboardManager.setText(AnnotatedString(texts.first()))
+                                            } else {
+                                                copyPostBottomSheet = post
+                                            }
+                                        }
+
+                                        else -> Unit
+                                    }
+                                },
+                            )
+                        },
+                    )
+                    if (uiState.postLayout != PostLayout.Card) {
+                        HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
+                    } else {
+                        Spacer(modifier = Modifier.height(Spacing.interItem))
+                    }
+                }
+                item {
+                    if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                        if (settings.infiniteScrollEnabled) {
+                            model.reduce(MultiCommunityMviModel.Intent.LoadNextPage)
+                        } else {
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(top = Spacing.s),
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
+                                Button(
+                                    onClick = {
+                                        model.reduce(MultiCommunityMviModel.Intent.LoadNextPage)
+                                    },
+                                ) {
+                                    Text(
+                                        text = LocalStrings.current.postListLoadMorePosts,
+                                        style = MaterialTheme.typography.labelSmall,
+                                    )
                                 }
                             }
                         }
-                        if (uiState.loading && !uiState.refreshing) {
-                            Box(
-                                modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(25.dp),
-                                    color = MaterialTheme.colorScheme.primary,
-                                )
-                            }
-                        }
                     }
-
-                    if (uiState.posts.isEmpty() && !uiState.initial) {
-                        item {
-                            Text(
-                                modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
-                                textAlign = TextAlign.Center,
-                                text = LocalStrings.current.messageEmptyList,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
+                    if (uiState.loading && !uiState.refreshing) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(25.dp),
+                                color = MaterialTheme.colorScheme.primary,
                             )
                         }
                     }
+                }
 
+                if (uiState.posts.isEmpty() && !uiState.initial) {
                     item {
-                        Spacer(modifier = Modifier.height(Spacing.xxxl))
+                        Text(
+                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
+                            textAlign = TextAlign.Center,
+                            text = LocalStrings.current.messageEmptyList,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
                     }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
             }
         }
+    }
 
-        shareBottomSheetUrls?.also { values ->
-            CustomModalBottomSheet(
-                title = LocalStrings.current.postActionShare,
-                items =
-                values.map { value ->
-                    CustomModalBottomSheetItem(label = value)
-                },
-                onSelect = { index ->
-                    shareBottomSheetUrls = null
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.Share(url = values[index]),
-                        )
-                    }
-                },
-            )
+    shareBottomSheetUrls?.also { values ->
+        CustomModalBottomSheet(
+            title = LocalStrings.current.postActionShare,
+            items =
+            values.map { value ->
+                CustomModalBottomSheetItem(label = value)
+            },
+            onSelect = { index ->
+                shareBottomSheetUrls = null
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.Share(url = values[index]),
+                    )
+                }
+            },
+        )
+    }
+
+    if (sortBottomSheetOpened) {
+        SortBottomSheet(
+            values = uiState.availableSortTypes,
+            expandTop = true,
+            onSelect = { value ->
+                sortBottomSheetOpened = false
+                if (value != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeSortType(
+                            value = value,
+                            screenKey = "multiCommunity",
+                        ),
+                    )
+                }
+            },
+        )
+    }
+
+    copyPostBottomSheet?.also { post ->
+        val titleCanBeCopied = post.title.isNotBlank()
+        val textCanBeCopied = post.text.isNotBlank()
+        val texts = mutableListOf<String>()
+        val values = mutableListOf<CustomModalBottomSheetItem>()
+        if (titleCanBeCopied) {
+            texts += post.title
+            values += CustomModalBottomSheetItem(label = LocalStrings.current.copyTitle)
         }
-
-        if (sortBottomSheetOpened) {
-            SortBottomSheet(
-                values = uiState.availableSortTypes,
-                expandTop = true,
-                onSelect = { value ->
-                    sortBottomSheetOpened = false
-                    if (value != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeSortType(
-                                value = value,
-                                screenKey = "multiCommunity",
-                            ),
-                        )
-                    }
-                },
-            )
-        }
-
-        copyPostBottomSheet?.also { post ->
-            val titleCanBeCopied = post.title.isNotBlank()
-            val textCanBeCopied = post.text.isNotBlank()
-            val texts = mutableListOf<String>()
-            val values = mutableListOf<CustomModalBottomSheetItem>()
+        if (textCanBeCopied) {
+            texts += post.text
+            values += CustomModalBottomSheetItem(label = LocalStrings.current.copyText)
             if (titleCanBeCopied) {
-                texts += post.title
-                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyTitle)
-            }
-            if (textCanBeCopied) {
-                texts += post.text
-                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyText)
-                if (titleCanBeCopied) {
-                    texts +=
-                        buildString {
-                            append(post.title)
-                            append("\n")
-                            append(post.text)
-                        }
-                    values += CustomModalBottomSheetItem(label = LocalStrings.current.copyBoth)
-                }
-            }
-            CustomModalBottomSheet(
-                title = LocalStrings.current.communityDetailBlock,
-                items = values,
-                onSelect = { index ->
-                    copyPostBottomSheet = null
-                    if (index != null) {
-                        val text = texts[index]
-                        clipboardManager.setText(AnnotatedString(text))
+                texts +=
+                    buildString {
+                        append(post.title)
+                        append("\n")
+                        append(post.text)
                     }
-                },
-            )
+                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyBoth)
+            }
         }
+        CustomModalBottomSheet(
+            title = LocalStrings.current.communityDetailBlock,
+            items = values,
+            onSelect = { index ->
+                copyPostBottomSheet = null
+                if (index != null) {
+                    val text = texts[index]
+                    clipboardManager.setText(AnnotatedString(text))
+                }
+            },
+        )
     }
 }

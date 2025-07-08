@@ -88,8 +88,6 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -101,7 +99,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingAc
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeActionCard
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CollapsedCommentCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommentCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommentCardPlaceholder
@@ -113,6 +110,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -131,1968 +129,1892 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
-import com.livefast.eattrash.raccoonforlemmy.unit.ban.BanUserScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
-import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.postdetail.di.PostDetailMviModelParams
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-class PostDetailScreen(
-    private val postId: Long,
-    private val otherInstance: String = "",
-    private val highlightCommentId: Long? = null,
-    private val isMod: Boolean = false,
-) : Screen {
-    override val key: ScreenKey
-        get() = super.key + postId.toString() + highlightCommentId.toString()
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: PostDetailMviModel =
-            getViewModel<PostDetailViewModel>(
-                PostDetailMviModelParams(
-                    postId = postId,
-                    otherInstance = otherInstance,
-                    highlightCommentId = highlightCommentId ?: 0L,
-                    isModerator = isMod,
-                ),
-            )
-        val uiState by model.uiState.collectAsState()
-        val isOnOtherInstance = remember { otherInstance.isNotEmpty() }
-        val otherInstanceName = remember { otherInstance }
-        val commentIdToHighlight = remember { highlightCommentId }
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
-        val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
-        val themeRepository = remember { getThemeRepository() }
-        val upVoteColor by themeRepository.upVoteColor.collectAsState()
-        val downVoteColor by themeRepository.downVoteColor.collectAsState()
-        val replyColor by themeRepository.replyColor.collectAsState()
-        val saveColor by themeRepository.saveColor.collectAsState()
-        val defaultUpvoteColor = MaterialTheme.colorScheme.primary
-        val defaultReplyColor = MaterialTheme.colorScheme.secondary
-        val defaultSaveColor = MaterialTheme.colorScheme.secondaryContainer
-        val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
-        val lazyListState = rememberLazyListState()
-        val scope = rememberCoroutineScope()
-        val snackbarHostState = remember { SnackbarHostState() }
-        var rawContent by remember { mutableStateOf<Any?>(null) }
-        val settingsRepository = remember { getSettingsRepository() }
-        val settings by settingsRepository.currentSettings.collectAsState()
-        val detailOpener = remember { getDetailOpener() }
-        val clipboardManager = LocalClipboardManager.current
-        val focusManager = LocalFocusManager.current
-        val keyboardScrollConnection =
-            remember {
-                object : NestedScrollConnection {
-                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                        focusManager.clearFocus()
-                        return Offset.Zero
-                    }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PostDetailScreen(
+    postId: Long,
+    modifier: Modifier = Modifier,
+    otherInstance: String = "",
+    highlightCommentId: Long? = null,
+    isMod: Boolean = false,
+) {
+    val model: PostDetailMviModel =
+        getViewModel<PostDetailViewModel>(
+            PostDetailMviModelParams(
+                postId = postId,
+                otherInstance = otherInstance,
+                highlightCommentId = highlightCommentId ?: 0L,
+                isModerator = isMod,
+            ),
+        )
+    val uiState by model.uiState.collectAsState()
+    val isOnOtherInstance = remember { otherInstance.isNotEmpty() }
+    val otherInstanceName = remember { otherInstance }
+    val commentIdToHighlight = remember { highlightCommentId }
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
+    val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
+    val themeRepository = remember { getThemeRepository() }
+    val upVoteColor by themeRepository.upVoteColor.collectAsState()
+    val downVoteColor by themeRepository.downVoteColor.collectAsState()
+    val replyColor by themeRepository.replyColor.collectAsState()
+    val saveColor by themeRepository.saveColor.collectAsState()
+    val defaultUpvoteColor = MaterialTheme.colorScheme.primary
+    val defaultReplyColor = MaterialTheme.colorScheme.secondary
+    val defaultSaveColor = MaterialTheme.colorScheme.secondaryContainer
+    val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
+    val lazyListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    var rawContent by remember { mutableStateOf<Any?>(null) }
+    val settingsRepository = remember { getSettingsRepository() }
+    val settings by settingsRepository.currentSettings.collectAsState()
+    val mainRouter = remember { getMainRouter() }
+    val clipboardManager = LocalClipboardManager.current
+    val focusManager = LocalFocusManager.current
+    val keyboardScrollConnection =
+        remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                    focusManager.clearFocus()
+                    return Offset.Zero
                 }
             }
-        var postToDelete by remember { mutableStateOf<Unit?>(null) }
-        var commentIdToDelete by remember { mutableStateOf<Long?>(null) }
-        val bottomNavigationInsetPx =
-            with(LocalDensity.current) {
-                WindowInsets.navigationBars.getBottom(this)
-            }
-        var bottomBarHeightPx by remember { mutableFloatStateOf(0f) }
-        var bottomBarOffsetHeightPx by remember { mutableFloatStateOf(0f) }
-        val bottomNavigationInset =
-            with(LocalDensity.current) {
-                bottomNavigationInsetPx.toDp()
-            }
-        val buttonBarScrollConnection =
-            remember {
-                object : NestedScrollConnection {
-                    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                        val delta = available.y
-                        val newOffset =
-                            (bottomBarOffsetHeightPx + delta).coerceIn(
-                                -(bottomBarHeightPx + bottomNavigationInsetPx),
-                                0f,
-                            )
-                        bottomBarOffsetHeightPx = newOffset
-                        return Offset.Zero
-                    }
-                }
-            }
-        val notificationCenter = remember { getNotificationCenter() }
-        var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
-        var sortBottomSheetOpened by remember { mutableStateOf(false) }
-        var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
-
-        LaunchedEffect(model) {
-            model.effects
-                .onEach { effect ->
-                    when (effect) {
-                        PostDetailMviModel.Effect.Close -> {
-                            navigationCoordinator.popScreen()
-                        }
-
-                        is PostDetailMviModel.Effect.ScrollToComment -> {
-                            runCatching {
-                                lazyListState.scrollToItem(effect.index)
-                            }
-                        }
-
-                        PostDetailMviModel.Effect.BackToTop -> {
-                            runCatching {
-                                lazyListState.scrollToItem(0)
-                                topAppBarState.heightOffset = 0f
-                                topAppBarState.contentOffset = 0f
-                            }
-                        }
-                    }
-                }.launchIn(this)
         }
-        LaunchedEffect(navigationCoordinator) {
-            navigationCoordinator.globalMessage
-                .onEach { message ->
-                    snackbarHostState.showSnackbar(
-                        message = message,
-                    )
-                }.launchIn(this)
+    var postToDelete by remember { mutableStateOf<Unit?>(null) }
+    var commentIdToDelete by remember { mutableStateOf<Long?>(null) }
+    val bottomNavigationInsetPx =
+        with(LocalDensity.current) {
+            WindowInsets.navigationBars.getBottom(this)
         }
-
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    scrollBehavior = scrollBehavior,
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = uiState.post.title,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.titleMedium,
+    var bottomBarHeightPx by remember { mutableFloatStateOf(0f) }
+    var bottomBarOffsetHeightPx by remember { mutableFloatStateOf(0f) }
+    val bottomNavigationInset =
+        with(LocalDensity.current) {
+            bottomNavigationInsetPx.toDp()
+        }
+    val buttonBarScrollConnection =
+        remember {
+            object : NestedScrollConnection {
+                override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                    val delta = available.y
+                    val newOffset =
+                        (bottomBarOffsetHeightPx + delta).coerceIn(
+                            -(bottomBarHeightPx + bottomNavigationInsetPx),
+                            0f,
                         )
-                    },
-                    actions = {
-                        uiState.sortType?.also { sortType ->
-                            IconButton(
-                                onClick = {
-                                    sortBottomSheetOpened = true
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = sortType.toIcon(),
-                                    contentDescription = sortType.toReadableName(),
-                                )
-                            }
-                        }
+                    bottomBarOffsetHeightPx = newOffset
+                    return Offset.Zero
+                }
+            }
+        }
+    val notificationCenter = remember { getNotificationCenter() }
+    var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
+    var sortBottomSheetOpened by remember { mutableStateOf(false) }
+    var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
 
-                        // options menu
-                        Box {
-                            val options =
-                                buildList {
+    LaunchedEffect(model) {
+        model.effects
+            .onEach { effect ->
+                when (effect) {
+                    PostDetailMviModel.Effect.Close -> {
+                        navigationCoordinator.pop()
+                    }
+
+                    is PostDetailMviModel.Effect.ScrollToComment -> {
+                        runCatching {
+                            lazyListState.scrollToItem(effect.index)
+                        }
+                    }
+
+                    PostDetailMviModel.Effect.BackToTop -> {
+                        runCatching {
+                            lazyListState.scrollToItem(0)
+                            topAppBarState.heightOffset = 0f
+                            topAppBarState.contentOffset = 0f
+                        }
+                    }
+                }
+            }.launchIn(this)
+    }
+    LaunchedEffect(navigationCoordinator) {
+        navigationCoordinator.globalMessage
+            .onEach { message ->
+                snackbarHostState.showSnackbar(
+                    message = message,
+                )
+            }.launchIn(this)
+    }
+
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                scrollBehavior = scrollBehavior,
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = uiState.post.title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                actions = {
+                    uiState.sortType?.also { sortType ->
+                        IconButton(
+                            onClick = {
+                                sortBottomSheetOpened = true
+                            },
+                        ) {
+                            Icon(
+                                imageVector = sortType.toIcon(),
+                                contentDescription = sortType.toReadableName(),
+                            )
+                        }
+                    }
+
+                    // options menu
+                    Box {
+                        val options =
+                            buildList {
+                                this +=
+                                    Option(
+                                        OptionId.Share,
+                                        LocalStrings.current.postActionShare,
+                                    )
+                                this +=
+                                    Option(
+                                        OptionId.Copy,
+                                        LocalStrings.current.actionCopyClipboard,
+                                    )
+                                this +=
+                                    Option(
+                                        OptionId.SeeRaw,
+                                        LocalStrings.current.postActionSeeRaw,
+                                    )
+                                if (uiState.isLogged && !isOnOtherInstance) {
                                     this +=
                                         Option(
-                                            OptionId.Share,
-                                            LocalStrings.current.postActionShare,
+                                            OptionId.CrossPost,
+                                            LocalStrings.current.postActionCrossPost,
                                         )
                                     this +=
                                         Option(
-                                            OptionId.Copy,
-                                            LocalStrings.current.actionCopyClipboard,
+                                            OptionId.Report,
+                                            LocalStrings.current.postActionReport,
+                                        )
+                                }
+                                if (uiState.post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
+                                    this +=
+                                        Option(
+                                            OptionId.Edit,
+                                            LocalStrings.current.postActionEdit,
+                                        )
+                                    if (uiState.post.deleted) {
+                                        this +=
+                                            Option(
+                                                OptionId.Restore,
+                                                LocalStrings.current.actionRestore,
+                                            )
+                                    } else {
+                                        this +=
+                                            Option(
+                                                OptionId.Delete,
+                                                LocalStrings.current.commentActionDelete,
+                                            )
+                                    }
+                                }
+                                if (uiState.isModerator) {
+                                    this +=
+                                        Option(
+                                            OptionId.FeaturePost,
+                                            if (uiState.post.featuredCommunity) {
+                                                LocalStrings.current.modActionUnmarkAsFeatured
+                                            } else {
+                                                LocalStrings.current.modActionMarkAsFeatured
+                                            },
                                         )
                                     this +=
                                         Option(
-                                            OptionId.SeeRaw,
-                                            LocalStrings.current.postActionSeeRaw,
+                                            OptionId.LockPost,
+                                            if (uiState.post.locked) {
+                                                LocalStrings.current.modActionUnlock
+                                            } else {
+                                                LocalStrings.current.modActionLock
+                                            },
                                         )
-                                    if (uiState.isLogged && !isOnOtherInstance) {
-                                        this +=
-                                            Option(
-                                                OptionId.CrossPost,
-                                                LocalStrings.current.postActionCrossPost,
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.Report,
-                                                LocalStrings.current.postActionReport,
-                                            )
-                                    }
-                                    if (uiState.post.creator?.id == uiState.currentUserId && !isOnOtherInstance) {
-                                        this +=
-                                            Option(
-                                                OptionId.Edit,
-                                                LocalStrings.current.postActionEdit,
-                                            )
-                                        if (uiState.post.deleted) {
+                                    this +=
+                                        Option(
+                                            OptionId.Remove,
+                                            LocalStrings.current.modActionRemove,
+                                        )
+                                    this +=
+                                        Option(
+                                            OptionId.BanUser,
+                                            if (uiState.post.creator?.banned == true) {
+                                                LocalStrings.current.modActionAllow
+                                            } else {
+                                                LocalStrings.current.modActionBan
+                                            },
+                                        )
+                                    uiState.post.creator?.id?.also { creatorId ->
+                                        if (uiState.currentUserId != creatorId) {
                                             this +=
                                                 Option(
-                                                    OptionId.Restore,
-                                                    LocalStrings.current.actionRestore,
-                                                )
-                                        } else {
-                                            this +=
-                                                Option(
-                                                    OptionId.Delete,
-                                                    LocalStrings.current.commentActionDelete,
-                                                )
-                                        }
-                                    }
-                                    if (uiState.isModerator) {
-                                        this +=
-                                            Option(
-                                                OptionId.FeaturePost,
-                                                if (uiState.post.featuredCommunity) {
-                                                    LocalStrings.current.modActionUnmarkAsFeatured
-                                                } else {
-                                                    LocalStrings.current.modActionMarkAsFeatured
-                                                },
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.LockPost,
-                                                if (uiState.post.locked) {
-                                                    LocalStrings.current.modActionUnlock
-                                                } else {
-                                                    LocalStrings.current.modActionLock
-                                                },
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.Remove,
-                                                LocalStrings.current.modActionRemove,
-                                            )
-                                        this +=
-                                            Option(
-                                                OptionId.BanUser,
-                                                if (uiState.post.creator?.banned == true) {
-                                                    LocalStrings.current.modActionAllow
-                                                } else {
-                                                    LocalStrings.current.modActionBan
-                                                },
-                                            )
-                                        uiState.post.creator?.id?.also { creatorId ->
-                                            if (uiState.currentUserId != creatorId) {
-                                                this +=
-                                                    Option(
-                                                        OptionId.AddMod,
-                                                        if (uiState.moderators.containsId(creatorId)) {
-                                                            LocalStrings.current.modActionRemoveMod
-                                                        } else {
-                                                            LocalStrings.current.modActionAddMod
-                                                        },
-                                                    )
-                                            }
-                                        }
-                                    }
-                                    if (uiState.isAdmin) {
-                                        this +=
-                                            Option(
-                                                OptionId.Purge,
-                                                LocalStrings.current.adminActionPurge,
-                                            )
-                                        uiState.post.creator?.also { creator ->
-                                            this +=
-                                                Option(
-                                                    OptionId.PurgeCreator,
-                                                    buildString {
-                                                        append(LocalStrings.current.adminActionPurge)
-                                                        append(" ")
-                                                        append(creator.readableName(uiState.preferNicknames))
+                                                    OptionId.AddMod,
+                                                    if (uiState.moderators.containsId(creatorId)) {
+                                                        LocalStrings.current.modActionRemoveMod
+                                                    } else {
+                                                        LocalStrings.current.modActionAddMod
                                                     },
                                                 )
                                         }
+                                    }
+                                }
+                                if (uiState.isAdmin) {
+                                    this +=
+                                        Option(
+                                            OptionId.Purge,
+                                            LocalStrings.current.adminActionPurge,
+                                        )
+                                    uiState.post.creator?.also { creator ->
                                         this +=
                                             Option(
-                                                OptionId.AdminFeaturePost,
-                                                if (uiState.post.featuredLocal) {
-                                                    LocalStrings.current.adminActionUnmarkAsFeatured
-                                                } else {
-                                                    LocalStrings.current.adminActionMarkAsFeatured
+                                                OptionId.PurgeCreator,
+                                                buildString {
+                                                    append(LocalStrings.current.adminActionPurge)
+                                                    append(" ")
+                                                    append(creator.readableName(uiState.preferNicknames))
                                                 },
                                             )
                                     }
                                     this +=
                                         Option(
-                                            OptionId.Search,
-                                            if (uiState.searching) {
-                                                LocalStrings.current.actionExitSearch
+                                            OptionId.AdminFeaturePost,
+                                            if (uiState.post.featuredLocal) {
+                                                LocalStrings.current.adminActionUnmarkAsFeatured
                                             } else {
-                                                buildString {
-                                                    append(LocalStrings.current.actionSearchInComments)
-                                                }
+                                                LocalStrings.current.adminActionMarkAsFeatured
                                             },
                                         )
                                 }
-                            var optionsExpanded by remember { mutableStateOf(false) }
-                            var optionsOffset by remember { mutableStateOf(Offset.Zero) }
-                            IconButton(
-                                modifier =
-                                Modifier
-                                    .onGloballyPositioned {
-                                        optionsOffset = it.positionInParent()
-                                    },
-                                onClick = {
-                                    optionsExpanded = true
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.MoreVert,
-                                    contentDescription = LocalStrings.current.actionOpenOptionMenu,
-                                )
-                            }
-
-                            CustomDropDown(
-                                expanded = optionsExpanded,
-                                onDismiss = {
-                                    optionsExpanded = false
-                                },
-                                offset =
-                                DpOffset(
-                                    x = optionsOffset.x.toLocalDp(),
-                                    y = optionsOffset.y.toLocalDp(),
-                                ),
-                            ) {
-                                options.forEach { option ->
-                                    DropdownMenuItem(
-                                        text = {
-                                            Text(option.text)
-                                        },
-                                        onClick = {
-                                            optionsExpanded = false
-                                            when (option.id) {
-                                                OptionId.Delete -> {
-                                                    postToDelete = Unit
-                                                }
-
-                                                OptionId.Edit -> {
-                                                    detailOpener.openCreatePost(editedPost = uiState.post)
-                                                }
-
-                                                OptionId.Report -> {
-                                                    val screen =
-                                                        ModerateWithReasonScreen(
-                                                            actionId = ModerateWithReasonAction.ReportPost.toInt(),
-                                                            contentId = uiState.post.id,
-                                                        )
-                                                    navigationCoordinator.pushScreen(screen)
-                                                }
-
-                                                OptionId.CrossPost -> {
-                                                    detailOpener.openCreatePost(
-                                                        crossPost = uiState.post,
-                                                        forceCommunitySelection = true,
-                                                    )
-                                                }
-
-                                                OptionId.SeeRaw -> {
-                                                    rawContent = uiState.post
-                                                }
-
-                                                OptionId.Share -> {
-                                                    val urls =
-                                                        listOfNotNull(
-                                                            uiState.post.originalUrl,
-                                                            "https://${uiState.instance}/post/${uiState.post.id}",
-                                                        ).distinct()
-                                                    if (urls.size == 1) {
-                                                        model.reduce(
-                                                            PostDetailMviModel.Intent.Share(
-                                                                urls.first(),
-                                                            ),
-                                                        )
-                                                    } else {
-                                                        shareBottomSheetUrls = urls
-                                                    }
-                                                }
-
-                                                OptionId.FeaturePost ->
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.ModFeaturePost,
-                                                    )
-
-                                                OptionId.AdminFeaturePost ->
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.AdminFeaturePost,
-                                                    )
-
-                                                OptionId.LockPost ->
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.ModLockPost,
-                                                    )
-
-                                                OptionId.Remove -> {
-                                                    val screen =
-                                                        ModerateWithReasonScreen(
-                                                            actionId = ModerateWithReasonAction.RemovePost.toInt(),
-                                                            contentId = uiState.post.id,
-                                                        )
-                                                    navigationCoordinator.pushScreen(screen)
-                                                }
-
-                                                OptionId.BanUser -> {
-                                                    uiState.post.creator?.id?.also { userId ->
-                                                        val screen =
-                                                            BanUserScreen(
-                                                                userId = userId,
-                                                                communityId =
-                                                                uiState.post.community?.id
-                                                                    ?: 0,
-                                                                newValue = uiState.post.creator?.banned != true,
-                                                                postId = uiState.post.id,
-                                                            )
-                                                        navigationCoordinator.pushScreen(screen)
-                                                    }
-                                                }
-
-                                                OptionId.AddMod -> {
-                                                    uiState.post.creator?.id?.also { userId ->
-                                                        model.reduce(
-                                                            PostDetailMviModel.Intent.ModToggleModUser(
-                                                                userId,
-                                                            ),
-                                                        )
-                                                    }
-                                                }
-
-                                                OptionId.Copy -> {
-                                                    val texts =
-                                                        listOfNotNull(
-                                                            uiState.post.title.takeIf { it.isNotBlank() },
-                                                            uiState.post.text.takeIf { it.isNotBlank() },
-                                                        ).distinct()
-                                                    if (texts.size == 1) {
-                                                        clipboardManager.setText(AnnotatedString(texts.first()))
-                                                    } else {
-                                                        copyPostBottomSheet = uiState.post
-                                                    }
-                                                }
-
-                                                OptionId.Search -> {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.ChangeSearching(
-                                                            !uiState.searching,
-                                                        ),
-                                                    )
-                                                }
-
-                                                OptionId.Purge -> {
-                                                    val screen =
-                                                        ModerateWithReasonScreen(
-                                                            actionId = ModerateWithReasonAction.PurgePost.toInt(),
-                                                            contentId = uiState.post.id,
-                                                        )
-                                                    navigationCoordinator.pushScreen(screen)
-                                                }
-
-                                                OptionId.PurgeCreator -> {
-                                                    uiState.post.creator?.id?.also { userId ->
-                                                        val screen =
-                                                            ModerateWithReasonScreen(
-                                                                actionId = ModerateWithReasonAction.PurgeUser.toInt(),
-                                                                contentId = userId,
-                                                            )
-                                                        navigationCoordinator.pushScreen(screen)
-                                                    }
-                                                }
-
-                                                OptionId.Restore -> {
-                                                    model.reduce(PostDetailMviModel.Intent.RestorePost)
-                                                }
-
-                                                else -> Unit
+                                this +=
+                                    Option(
+                                        OptionId.Search,
+                                        if (uiState.searching) {
+                                            LocalStrings.current.actionExitSearch
+                                        } else {
+                                            buildString {
+                                                append(LocalStrings.current.actionSearchInComments)
                                             }
                                         },
                                     )
-                                }
                             }
-                        }
-                    },
-                    navigationIcon = {
-                        if (navigationCoordinator.canPop.value) {
-                            IconButton(
-                                onClick = {
-                                    navigationCoordinator.popScreen()
+                        var optionsExpanded by remember { mutableStateOf(false) }
+                        var optionsOffset by remember { mutableStateOf(Offset.Zero) }
+                        IconButton(
+                            modifier =
+                            Modifier
+                                .onGloballyPositioned {
+                                    optionsOffset = it.positionInParent()
                                 },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = LocalStrings.current.actionGoBack,
+                            onClick = {
+                                optionsExpanded = true
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = LocalStrings.current.actionOpenOptionMenu,
+                            )
+                        }
+
+                        CustomDropDown(
+                            expanded = optionsExpanded,
+                            onDismiss = {
+                                optionsExpanded = false
+                            },
+                            offset =
+                            DpOffset(
+                                x = optionsOffset.x.toLocalDp(),
+                                y = optionsOffset.y.toLocalDp(),
+                            ),
+                        ) {
+                            options.forEach { option ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(option.text)
+                                    },
+                                    onClick = {
+                                        optionsExpanded = false
+                                        when (option.id) {
+                                            OptionId.Delete -> {
+                                                postToDelete = Unit
+                                            }
+
+                                            OptionId.Edit -> {
+                                                mainRouter.openCreatePost(editedPost = uiState.post)
+                                            }
+
+                                            OptionId.Report -> {
+                                                mainRouter.openModerateWithReason(
+                                                    actionId = ModerateWithReasonAction.ReportPost.toInt(),
+                                                    contentId = uiState.post.id,
+                                                )
+                                            }
+
+                                            OptionId.CrossPost -> {
+                                                mainRouter.openCreatePost(
+                                                    crossPost = uiState.post,
+                                                    forceCommunitySelection = true,
+                                                )
+                                            }
+
+                                            OptionId.SeeRaw -> {
+                                                rawContent = uiState.post
+                                            }
+
+                                            OptionId.Share -> {
+                                                val urls =
+                                                    listOfNotNull(
+                                                        uiState.post.originalUrl,
+                                                        "https://${uiState.instance}/post/${uiState.post.id}",
+                                                    ).distinct()
+                                                if (urls.size == 1) {
+                                                    model.reduce(PostDetailMviModel.Intent.Share(urls.first()))
+                                                } else {
+                                                    shareBottomSheetUrls = urls
+                                                }
+                                            }
+
+                                            OptionId.FeaturePost ->
+                                                model.reduce(PostDetailMviModel.Intent.ModFeaturePost)
+
+                                            OptionId.AdminFeaturePost ->
+                                                model.reduce(PostDetailMviModel.Intent.AdminFeaturePost)
+
+                                            OptionId.LockPost ->
+                                                model.reduce(PostDetailMviModel.Intent.ModLockPost)
+
+                                            OptionId.Remove -> {
+                                                mainRouter.openModerateWithReason(
+                                                    actionId = ModerateWithReasonAction.RemovePost.toInt(),
+                                                    contentId = uiState.post.id,
+                                                )
+                                            }
+
+                                            OptionId.BanUser -> {
+                                                uiState.post.creator?.id?.also { userId ->
+                                                    mainRouter.openBanUser(
+                                                        userId = userId,
+                                                        communityId = uiState.post.community?.id ?: 0,
+                                                        newValue = uiState.post.creator?.banned != true,
+                                                        postId = uiState.post.id,
+                                                    )
+                                                }
+                                            }
+
+                                            OptionId.AddMod -> {
+                                                uiState.post.creator?.id?.also { userId ->
+                                                    model.reduce(PostDetailMviModel.Intent.ModToggleModUser(userId))
+                                                }
+                                            }
+
+                                            OptionId.Copy -> {
+                                                val texts =
+                                                    listOfNotNull(
+                                                        uiState.post.title.takeIf { it.isNotBlank() },
+                                                        uiState.post.text.takeIf { it.isNotBlank() },
+                                                    ).distinct()
+                                                if (texts.size == 1) {
+                                                    clipboardManager.setText(AnnotatedString(texts.first()))
+                                                } else {
+                                                    copyPostBottomSheet = uiState.post
+                                                }
+                                            }
+
+                                            OptionId.Search -> {
+                                                model.reduce(
+                                                    PostDetailMviModel.Intent.ChangeSearching(
+                                                        !uiState.searching,
+                                                    ),
+                                                )
+                                            }
+
+                                            OptionId.Purge -> {
+                                                mainRouter.openModerateWithReason(
+                                                    actionId = ModerateWithReasonAction.PurgePost.toInt(),
+                                                    contentId = uiState.post.id,
+                                                )
+                                            }
+
+                                            OptionId.PurgeCreator -> {
+                                                uiState.post.creator?.id?.also { userId ->
+                                                    mainRouter.openModerateWithReason(
+                                                        actionId = ModerateWithReasonAction.PurgeUser.toInt(),
+                                                        contentId = userId,
+                                                    )
+                                                }
+                                            }
+
+                                            OptionId.Restore -> {
+                                                model.reduce(PostDetailMviModel.Intent.RestorePost)
+                                            }
+
+                                            else -> Unit
+                                        }
+                                    },
                                 )
                             }
+                        }
+                    }
+                },
+                navigationIcon = {
+                    if (navigationCoordinator.canPop.value) {
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.pop()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = LocalStrings.current.actionGoBack,
+                            )
+                        }
+                    }
+                },
+            )
+        },
+        floatingActionButton = {
+            AnimatedVisibility(
+                visible = isFabVisible,
+                enter =
+                slideInVertically(
+                    initialOffsetY = { it * 2 },
+                ),
+                exit =
+                slideOutVertically(
+                    targetOffsetY = { it * 2 },
+                ),
+            ) {
+                FloatingActionButtonMenu(
+                    modifier =
+                    Modifier.then(
+                        if (uiState.enableButtonsToScrollBetweenComments) {
+                            Modifier.padding(
+                                bottom = Spacing.s + bottomNavigationInset,
+                            )
+                        } else {
+                            Modifier
+                        },
+                    ),
+                    items =
+                    buildList {
+                        this +=
+                            FloatingActionButtonMenuItem(
+                                icon = Icons.Default.ExpandLess,
+                                text = LocalStrings.current.actionBackToTop,
+                                onSelected = {
+                                    scope.launch {
+                                        runCatching {
+                                            lazyListState.scrollToItem(0)
+                                            topAppBarState.heightOffset = 0f
+                                            topAppBarState.contentOffset = 0f
+                                        }
+                                    }
+                                },
+                            )
+                        if (uiState.isLogged && !isOnOtherInstance) {
+                            this +=
+                                FloatingActionButtonMenuItem(
+                                    icon = Icons.AutoMirrored.Default.Reply,
+                                    text = LocalStrings.current.actionReply,
+                                    onSelected = {
+                                        mainRouter.openReply(
+                                            originalPost = uiState.post,
+                                        )
+                                    },
+                                )
                         }
                     },
                 )
-            },
-            floatingActionButton = {
-                AnimatedVisibility(
-                    visible = isFabVisible,
-                    enter =
-                    slideInVertically(
-                        initialOffsetY = { it * 2 },
+            }
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    snackbarData = data,
+                )
+            }
+        },
+    ) { padding ->
+        if (uiState.isLogged && uiState.currentUserId == null) {
+            return@Scaffold
+        }
+        Box(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ),
+        ) {
+            Column(
+                modifier =
+                Modifier
+                    .then(
+                        if (uiState.enableButtonsToScrollBetweenComments) {
+                            Modifier.nestedScroll(buttonBarScrollConnection)
+                        } else {
+                            Modifier
+                        },
                     ),
-                    exit =
-                    slideOutVertically(
-                        targetOffsetY = { it * 2 },
-                    ),
-                ) {
-                    FloatingActionButtonMenu(
+            ) {
+                if (uiState.searching) {
+                    SearchField(
                         modifier =
-                        Modifier.then(
-                            if (uiState.enableButtonsToScrollBetweenComments) {
-                                Modifier.padding(
-                                    bottom = Spacing.s + bottomNavigationInset,
-                                )
-                            } else {
-                                Modifier
-                            },
-                        ),
-                        items =
-                        buildList {
-                            this +=
-                                FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.ExpandLess,
-                                    text = LocalStrings.current.actionBackToTop,
-                                    onSelected = {
-                                        scope.launch {
-                                            runCatching {
-                                                lazyListState.scrollToItem(0)
-                                                topAppBarState.heightOffset = 0f
-                                                topAppBarState.contentOffset = 0f
-                                            }
-                                        }
-                                    },
-                                )
-                            if (uiState.isLogged && !isOnOtherInstance) {
-                                this +=
-                                    FloatingActionButtonMenuItem(
-                                        icon = Icons.AutoMirrored.Default.Reply,
-                                        text = LocalStrings.current.actionReply,
-                                        onSelected = {
-                                            detailOpener.openReply(
-                                                originalPost = uiState.post,
-                                            )
-                                        },
-                                    )
-                            }
+                        Modifier
+                            .padding(
+                                horizontal = Spacing.xs,
+                                vertical = Spacing.s,
+                            ).fillMaxWidth(),
+                        hint = LocalStrings.current.exploreSearchPlaceholder,
+                        value = uiState.searchText,
+                        onValueChange = { value ->
+                            model.reduce(PostDetailMviModel.Intent.SetSearch(value))
+                        },
+                        onClear = {
+                            model.reduce(PostDetailMviModel.Intent.SetSearch(""))
                         },
                     )
                 }
-            },
-            snackbarHost = {
-                SnackbarHost(snackbarHostState) { data ->
-                    Snackbar(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        snackbarData = data,
-                    )
-                }
-            },
-        ) { padding ->
-            if (uiState.isLogged && uiState.currentUserId == null) {
-                return@Scaffold
-            }
-            Box(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ),
-            ) {
-                Column(
+
+                PullToRefreshBox(
                     modifier =
                     Modifier
                         .then(
-                            if (uiState.enableButtonsToScrollBetweenComments) {
-                                Modifier.nestedScroll(buttonBarScrollConnection)
+                            if (settings.hideNavigationBarWhileScrolling) {
+                                Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
                             } else {
                                 Modifier
                             },
-                        ),
+                        ).nestedScroll(fabNestedScrollConnection)
+                        .nestedScroll(keyboardScrollConnection),
+                    isRefreshing = uiState.refreshing,
+                    onRefresh = {
+                        model.reduce(PostDetailMviModel.Intent.Refresh)
+                    },
                 ) {
-                    if (uiState.searching) {
-                        SearchField(
-                            modifier =
-                            Modifier
-                                .padding(
-                                    horizontal = Spacing.xs,
-                                    vertical = Spacing.s,
-                                ).fillMaxWidth(),
-                            hint = LocalStrings.current.exploreSearchPlaceholder,
-                            value = uiState.searchText,
-                            onValueChange = { value ->
-                                model.reduce(PostDetailMviModel.Intent.SetSearch(value))
-                            },
-                            onClear = {
-                                model.reduce(PostDetailMviModel.Intent.SetSearch(""))
-                            },
-                        )
-                    }
-
-                    PullToRefreshBox(
-                        modifier =
-                        Modifier
-                            .then(
-                                if (settings.hideNavigationBarWhileScrolling) {
-                                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                                } else {
-                                    Modifier
-                                },
-                            ).nestedScroll(fabNestedScrollConnection)
-                            .nestedScroll(keyboardScrollConnection),
-                        isRefreshing = uiState.refreshing,
-                        onRefresh = {
-                            model.reduce(PostDetailMviModel.Intent.Refresh)
-                        },
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        state = lazyListState,
                     ) {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            state = lazyListState,
-                        ) {
-                            item {
-                                if (uiState.post.title.isNotEmpty()) {
-                                    PostCard(
-                                        post = uiState.post,
-                                        isFromModerator =
-                                        uiState.post.creator?.id.let { creatorId ->
-                                            uiState.isModerator &&
-                                                uiState.moderators.containsId(
-                                                    creatorId,
-                                                )
-                                        },
-                                        postLayout =
-                                        if (uiState.postLayout == PostLayout.Card) {
-                                            uiState.postLayout
-                                        } else {
-                                            PostLayout.Full
-                                        },
-                                        fullHeightImage = uiState.fullHeightImages,
-                                        fullWidthImage = uiState.fullWidthImages,
-                                        includeFullBody = true,
-                                        showBot = true,
-                                        isCurrentUser = uiState.post.creator?.id == uiState.currentUserId,
-                                        voteFormat = uiState.voteFormat,
-                                        autoLoadImages = uiState.autoLoadImages,
-                                        preferNicknames = uiState.preferNicknames,
-                                        showScores = uiState.showScores,
-                                        actionButtonsActive = uiState.isLogged,
-                                        blurNsfw = false,
-                                        downVoteEnabled = uiState.downVoteEnabled,
-                                        highlightText = uiState.searchText,
-                                        botTagColor = uiState.botTagColor,
-                                        meTagColor = uiState.meTagColor,
-                                        onOpenCommunity = { community, instance ->
-                                            detailOpener.openCommunityDetail(community, instance)
-                                        },
-                                        onOpenCreator = { user, instance ->
-                                            detailOpener.openUserDetail(user, instance)
-                                        },
-                                        onUpVote = {
-                                            if (uiState.isLogged && !isOnOtherInstance) {
-                                                model.reduce(
-                                                    PostDetailMviModel.Intent.UpVotePost(),
-                                                )
-                                            }
-                                        },
-                                        onDownVote = {
-                                            if (uiState.isLogged && !isOnOtherInstance) {
-                                                model.reduce(
-                                                    PostDetailMviModel.Intent.DownVotePost(),
-                                                )
-                                            }
-                                        },
-                                        onSave = {
-                                            model.reduce(
-                                                PostDetailMviModel.Intent.SavePost(
-                                                    post = uiState.post,
-                                                ),
+                        item {
+                            if (uiState.post.title.isNotEmpty()) {
+                                PostCard(
+                                    post = uiState.post,
+                                    isFromModerator =
+                                    uiState.post.creator?.id.let { creatorId ->
+                                        uiState.isModerator &&
+                                            uiState.moderators.containsId(
+                                                creatorId,
                                             )
-                                        },
-                                        onReply = {
-                                            if (uiState.isLogged && !isOnOtherInstance) {
-                                                detailOpener.openReply(
-                                                    originalPost = uiState.post,
-                                                )
-                                            }
-                                        },
-                                        onOpenImage = { url ->
-                                            navigationCoordinator.pushScreen(
-                                                ZoomableImageScreen(
-                                                    url = url,
-                                                    source =
-                                                    uiState.post.community
-                                                        ?.readableHandle
-                                                        .orEmpty(),
-                                                ),
-                                            )
-                                        },
-                                        onOpenVideo = { url ->
-                                            navigationCoordinator.pushScreen(
-                                                ZoomableImageScreen(
-                                                    url = url,
-                                                    isVideo = true,
-                                                    source =
-                                                    uiState.post.community
-                                                        ?.readableHandle
-                                                        .orEmpty(),
-                                                ),
-                                            )
-                                        },
-                                    )
-                                    if (uiState.postLayout != PostLayout.Card) {
-                                        HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
+                                    },
+                                    postLayout =
+                                    if (uiState.postLayout == PostLayout.Card) {
+                                        uiState.postLayout
                                     } else {
-                                        Spacer(modifier = Modifier.height(Spacing.interItem))
-                                    }
+                                        PostLayout.Full
+                                    },
+                                    fullHeightImage = uiState.fullHeightImages,
+                                    fullWidthImage = uiState.fullWidthImages,
+                                    includeFullBody = true,
+                                    showBot = true,
+                                    isCurrentUser = uiState.post.creator?.id == uiState.currentUserId,
+                                    voteFormat = uiState.voteFormat,
+                                    autoLoadImages = uiState.autoLoadImages,
+                                    preferNicknames = uiState.preferNicknames,
+                                    showScores = uiState.showScores,
+                                    actionButtonsActive = uiState.isLogged,
+                                    blurNsfw = false,
+                                    downVoteEnabled = uiState.downVoteEnabled,
+                                    highlightText = uiState.searchText,
+                                    botTagColor = uiState.botTagColor,
+                                    meTagColor = uiState.meTagColor,
+                                    onOpenCommunity = { community, instance ->
+                                        mainRouter.openCommunityDetail(community, instance)
+                                    },
+                                    onOpenCreator = { user, instance ->
+                                        mainRouter.openUserDetail(user, instance)
+                                    },
+                                    onUpVote = {
+                                        if (uiState.isLogged && !isOnOtherInstance) {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.UpVotePost(),
+                                            )
+                                        }
+                                    },
+                                    onDownVote = {
+                                        if (uiState.isLogged && !isOnOtherInstance) {
+                                            model.reduce(
+                                                PostDetailMviModel.Intent.DownVotePost(),
+                                            )
+                                        }
+                                    },
+                                    onSave = {
+                                        model.reduce(
+                                            PostDetailMviModel.Intent.SavePost(
+                                                post = uiState.post,
+                                            ),
+                                        )
+                                    },
+                                    onReply = {
+                                        if (uiState.isLogged && !isOnOtherInstance) {
+                                            mainRouter.openReply(
+                                                originalPost = uiState.post,
+                                            )
+                                        }
+                                    },
+                                    onOpenImage = { url ->
+                                        mainRouter.openImage(
+                                            url = url,
+                                            source =
+                                            uiState.post.community
+                                                ?.readableHandle
+                                                .orEmpty(),
+                                        )
+                                    },
+                                    onOpenVideo = { url ->
+                                        mainRouter.openImage(
+                                            url = url,
+                                            isVideo = true,
+                                            source =
+                                            uiState.post.community
+                                                ?.readableHandle
+                                                .orEmpty(),
+                                        )
+                                    },
+                                )
+                                if (uiState.postLayout != PostLayout.Card) {
+                                    HorizontalDivider(modifier = Modifier.padding(vertical = Spacing.interItem))
+                                } else {
+                                    Spacer(modifier = Modifier.height(Spacing.interItem))
                                 }
                             }
-                            if (uiState.post.crossPosts.isNotEmpty()) {
-                                item {
-                                    FlowRow(
-                                        modifier =
-                                        Modifier.padding(
-                                            top = Spacing.xxs,
-                                            bottom = Spacing.s,
-                                            start = Spacing.s,
-                                            end = Spacing.s,
-                                        ),
-                                        horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                                    ) {
-                                        Text(
-                                            text = LocalStrings.current.postDetailCrossPosts,
-                                            style = MaterialTheme.typography.bodyMedium,
-                                        )
-                                        uiState.post.crossPosts.forEachIndexed { index, crossPost ->
-                                            val community = crossPost.community
-                                            if (community != null) {
-                                                val string =
-                                                    buildAnnotatedString {
-                                                        withStyle(
-                                                            SpanStyle(textDecoration = TextDecoration.Underline),
-                                                        ) {
-                                                            append(community.readableName(uiState.preferNicknames))
-                                                        }
-                                                        if (index < uiState.post.crossPosts.lastIndex) {
-                                                            append(", ")
-                                                        }
+                        }
+                        if (uiState.post.crossPosts.isNotEmpty()) {
+                            item {
+                                FlowRow(
+                                    modifier =
+                                    Modifier.padding(
+                                        top = Spacing.xxs,
+                                        bottom = Spacing.s,
+                                        start = Spacing.s,
+                                        end = Spacing.s,
+                                    ),
+                                    horizontalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                                ) {
+                                    Text(
+                                        text = LocalStrings.current.postDetailCrossPosts,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+                                    uiState.post.crossPosts.forEachIndexed { index, crossPost ->
+                                        val community = crossPost.community
+                                        if (community != null) {
+                                            val string =
+                                                buildAnnotatedString {
+                                                    withStyle(
+                                                        SpanStyle(textDecoration = TextDecoration.Underline),
+                                                    ) {
+                                                        append(community.readableName(uiState.preferNicknames))
                                                     }
-                                                Text(
-                                                    modifier =
-                                                    Modifier.onClick(
-                                                        onClick = {
-                                                            val post =
-                                                                PostModel(
-                                                                    id = crossPost.id,
-                                                                    community = community,
-                                                                )
-                                                            detailOpener.openPostDetail(
-                                                                post = post,
-                                                                otherInstance = otherInstanceName,
+                                                    if (index < uiState.post.crossPosts.lastIndex) {
+                                                        append(", ")
+                                                    }
+                                                }
+                                            Text(
+                                                modifier =
+                                                Modifier.onClick(
+                                                    onClick = {
+                                                        val post =
+                                                            PostModel(
+                                                                id = crossPost.id,
+                                                                community = community,
                                                             )
-                                                        },
-                                                    ),
-                                                    text = string,
-                                                    style = MaterialTheme.typography.bodyMedium,
-                                                )
-                                            }
+                                                        mainRouter.openPostDetail(
+                                                            post = post,
+                                                            otherInstance = otherInstanceName,
+                                                        )
+                                                    },
+                                                ),
+                                                text = string,
+                                                style = MaterialTheme.typography.bodyMedium,
+                                            )
                                         }
                                     }
                                 }
                             }
-                            if (uiState.comments.isEmpty() && uiState.loading && uiState.initial) {
-                                items(5) {
-                                    CommentCardPlaceholder()
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(vertical = Spacing.xxxs),
-                                        thickness = 0.25.dp,
-                                    )
-                                }
+                        }
+                        if (uiState.comments.isEmpty() && uiState.loading && uiState.initial) {
+                            items(5) {
+                                CommentCardPlaceholder()
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                    thickness = 0.25.dp,
+                                )
                             }
-                            items(
-                                items = uiState.comments.filter { it.visible },
-                                key = { c -> c.id.toString() + (c.updateDate ?: c.publishDate) },
-                            ) { comment ->
-                                Column {
-                                    AnimatedContent(
-                                        targetState = comment.expanded,
-                                        transitionSpec = {
-                                            fadeIn(animationSpec = tween(250)).togetherWith(fadeOut())
-                                        },
-                                    ) {
-                                        @Composable
-                                        fun List<ActionOnSwipe>.toSwipeActions(canEdit: Boolean): List<SwipeAction> =
-                                            mapNotNull {
-                                                when (it) {
-                                                    ActionOnSwipe.UpVote ->
-                                                        SwipeAction(
-                                                            swipeContent = {
-                                                                Icon(
-                                                                    modifier = VoteAction.UpVote.toModifier(),
-                                                                    imageVector = VoteAction.UpVote.toIcon(),
-                                                                    contentDescription =
-                                                                    LocalStrings.current.actionUpvote,
-                                                                    tint = Color.White,
-                                                                )
-                                                            },
-                                                            backgroundColor =
-                                                            upVoteColor
-                                                                ?: defaultUpvoteColor,
-                                                            onTriggered = {
-                                                                model.reduce(
-                                                                    PostDetailMviModel.Intent.UpVoteComment(
-                                                                        comment.id,
-                                                                    ),
-                                                                )
-                                                            },
-                                                        )
-
-                                                    ActionOnSwipe.DownVote ->
-                                                        SwipeAction(
-                                                            swipeContent = {
-                                                                Icon(
-                                                                    modifier = VoteAction.DownVote.toModifier(),
-                                                                    imageVector = VoteAction.DownVote.toIcon(),
-                                                                    contentDescription =
-                                                                    LocalStrings.current.actionDownvote,
-                                                                    tint = Color.White,
-                                                                )
-                                                            },
-                                                            backgroundColor =
-                                                            downVoteColor
-                                                                ?: defaultDownVoteColor,
-                                                            onTriggered = {
-                                                                model.reduce(
-                                                                    PostDetailMviModel.Intent.DownVoteComment(
-                                                                        comment.id,
-                                                                    ),
-                                                                )
-                                                            },
-                                                        ).takeIf { uiState.downVoteEnabled }
-
-                                                    ActionOnSwipe.Reply ->
-                                                        SwipeAction(
-                                                            swipeContent = {
-                                                                Icon(
-                                                                    imageVector = Icons.AutoMirrored.Default.Reply,
-                                                                    contentDescription =
-                                                                    LocalStrings.current.actionReply,
-                                                                    tint = Color.White,
-                                                                )
-                                                            },
-                                                            backgroundColor =
-                                                            replyColor
-                                                                ?: defaultReplyColor,
-                                                            onTriggered = {
-                                                                detailOpener.openReply(
-                                                                    originalPost = uiState.post,
-                                                                    originalComment = comment,
-                                                                )
-                                                            },
-                                                        )
-
-                                                    ActionOnSwipe.Save ->
-                                                        SwipeAction(
-                                                            swipeContent = {
-                                                                Icon(
-                                                                    imageVector = Icons.Default.Bookmark,
-                                                                    contentDescription =
-                                                                    LocalStrings.current.actionAddToBookmarks,
-                                                                    tint = Color.White,
-                                                                )
-                                                            },
-                                                            backgroundColor =
-                                                            saveColor
-                                                                ?: defaultSaveColor,
-                                                            onTriggered = {
-                                                                model.reduce(
-                                                                    PostDetailMviModel.Intent.SaveComment(
-                                                                        commentId = comment.id,
-                                                                    ),
-                                                                )
-                                                            },
-                                                        )
-
-                                                    ActionOnSwipe.Edit ->
-                                                        SwipeAction(
-                                                            swipeContent = {
-                                                                Icon(
-                                                                    imageVector = Icons.Default.Edit,
-                                                                    contentDescription =
-                                                                    LocalStrings.current.postActionEdit,
-                                                                    tint = Color.White,
-                                                                )
-                                                            },
-                                                            backgroundColor = MaterialTheme.colorScheme.tertiary,
-                                                            onTriggered = {
-                                                                detailOpener.openReply(
-                                                                    originalPost = PostModel(id = comment.postId),
-                                                                    originalComment =
-                                                                    comment.parentId?.let { parentId ->
-                                                                        CommentModel(id = parentId)
-                                                                    },
-                                                                    editedComment = comment,
-                                                                )
-                                                            },
-                                                        ).takeIf { canEdit }
-
-                                                    else -> null
-                                                }
-                                            }
-
-                                        if (comment.expanded) {
-                                            SwipeActionCard(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                enabled = uiState.swipeActionsEnabled,
-                                                onGestureBegin = {
-                                                    model.reduce(PostDetailMviModel.Intent.HapticIndication)
-                                                },
-                                                swipeToStartActions =
-                                                uiState.actionsOnSwipeToStartComments.toSwipeActions(
-                                                    canEdit = comment.creator?.id == uiState.currentUserId,
-                                                ),
-                                                swipeToEndActions =
-                                                if (uiState.isLogged && !isOnOtherInstance) {
-                                                    uiState.actionsOnSwipeToEndComments.toSwipeActions(
-                                                        canEdit = comment.creator?.id == uiState.currentUserId,
-                                                    )
-                                                } else {
-                                                    emptyList()
-                                                },
-                                                content = {
-                                                    val commentTs =
-                                                        with(comment) {
-                                                            updateDate ?: publishDate
-                                                        }?.toTimestamp()
-                                                    val lastSeenTs = uiState.lastSeenTimestamp
-                                                    val isAfterLastSeenTs = commentTs != null &&
-                                                        lastSeenTs != null &&
-                                                        commentTs > lastSeenTs
-                                                    val backgroundModifier =
-                                                        when {
-                                                            commentIdToHighlight == comment.id ||
-                                                                (commentIdToHighlight == null && isAfterLastSeenTs)
-                                                            ->
-                                                                Modifier.background(
-                                                                    MaterialTheme.colorScheme
-                                                                        .surfaceColorAtElevation(
-                                                                            5.dp,
-                                                                        ).copy(alpha = 0.75f),
-                                                                )
-
-                                                            else -> Modifier
-                                                        }
-                                                    CommentCard(
-                                                        modifier =
-                                                        Modifier
-                                                            .background(MaterialTheme.colorScheme.background)
-                                                            .then(backgroundModifier),
-                                                        comment = comment,
-                                                        isOp = comment.creator?.id == uiState.post.creator?.id,
-                                                        showBot = true,
-                                                        isCurrentUser = comment.creator?.id == uiState.currentUserId,
-                                                        isMod =
-                                                        comment.creator?.id.let { id ->
-                                                            uiState.moderators.containsId(id)
+                        }
+                        items(
+                            items = uiState.comments.filter { it.visible },
+                            key = { c -> c.id.toString() + (c.updateDate ?: c.publishDate) },
+                        ) { comment ->
+                            Column {
+                                AnimatedContent(
+                                    targetState = comment.expanded,
+                                    transitionSpec = {
+                                        fadeIn(animationSpec = tween(250)).togetherWith(fadeOut())
+                                    },
+                                ) {
+                                    @Composable
+                                    fun List<ActionOnSwipe>.toSwipeActions(canEdit: Boolean): List<SwipeAction> =
+                                        mapNotNull {
+                                            when (it) {
+                                                ActionOnSwipe.UpVote ->
+                                                    SwipeAction(
+                                                        swipeContent = {
+                                                            Icon(
+                                                                modifier = VoteAction.UpVote.toModifier(),
+                                                                imageVector = VoteAction.UpVote.toIcon(),
+                                                                contentDescription =
+                                                                LocalStrings.current.actionUpvote,
+                                                                tint = Color.White,
+                                                            )
                                                         },
-                                                        isAdmin =
-                                                        comment.creator?.let { user ->
-                                                            // comparison must be done by handle because
-                                                            // IDs vary from one instance to another
-                                                            uiState.admins.any { admin ->
-                                                                admin.readableHandle == user.readableHandle
-                                                            }
-                                                        } ?: false,
-                                                        indentAmount = uiState.commentIndentAmount,
-                                                        barThickness = uiState.commentBarThickness,
-                                                        voteFormat = uiState.voteFormat,
-                                                        autoLoadImages = uiState.autoLoadImages,
-                                                        preferNicknames = uiState.preferNicknames,
-                                                        showScores = uiState.showScores,
-                                                        actionButtonsActive = uiState.isLogged,
-                                                        downVoteEnabled = uiState.downVoteEnabled,
-                                                        highlightText = uiState.searchText,
-                                                        adminTagColor = uiState.adminTagColor,
-                                                        botTagColor = uiState.botTagColor,
-                                                        meTagColor = uiState.meTagColor,
-                                                        modTagColor = uiState.modTagColor,
-                                                        opTagColor = uiState.opTagColor,
-                                                        onToggleExpand = {
+                                                        backgroundColor =
+                                                        upVoteColor
+                                                            ?: defaultUpvoteColor,
+                                                        onTriggered = {
                                                             model.reduce(
-                                                                PostDetailMviModel.Intent.ToggleExpandComment(
+                                                                PostDetailMviModel.Intent.UpVoteComment(
                                                                     comment.id,
                                                                 ),
                                                             )
                                                         },
-                                                        onDoubleClick =
-                                                        {
-                                                            model.reduce(
-                                                                PostDetailMviModel.Intent.UpVoteComment(
-                                                                    commentId = comment.id,
-                                                                    feedback = true,
-                                                                ),
+                                                    )
+
+                                                ActionOnSwipe.DownVote ->
+                                                    SwipeAction(
+                                                        swipeContent = {
+                                                            Icon(
+                                                                modifier = VoteAction.DownVote.toModifier(),
+                                                                imageVector = VoteAction.DownVote.toIcon(),
+                                                                contentDescription =
+                                                                LocalStrings.current.actionDownvote,
+                                                                tint = Color.White,
                                                             )
-                                                        }.takeIf { uiState.doubleTapActionEnabled },
-                                                        onUpVote =
-                                                        {
-                                                            model.reduce(
-                                                                PostDetailMviModel.Intent.UpVoteComment(
-                                                                    commentId = comment.id,
-                                                                ),
-                                                            )
-                                                        }.takeIf { uiState.isLogged && !isOnOtherInstance },
-                                                        onDownVote =
-                                                        {
+                                                        },
+                                                        backgroundColor =
+                                                        downVoteColor
+                                                            ?: defaultDownVoteColor,
+                                                        onTriggered = {
                                                             model.reduce(
                                                                 PostDetailMviModel.Intent.DownVoteComment(
-                                                                    commentId = comment.id,
+                                                                    comment.id,
                                                                 ),
                                                             )
-                                                        }.takeIf { uiState.isLogged && !isOnOtherInstance },
-                                                        onSave =
-                                                        {
+                                                        },
+                                                    ).takeIf { uiState.downVoteEnabled }
+
+                                                ActionOnSwipe.Reply ->
+                                                    SwipeAction(
+                                                        swipeContent = {
+                                                            Icon(
+                                                                imageVector = Icons.AutoMirrored.Default.Reply,
+                                                                contentDescription =
+                                                                LocalStrings.current.actionReply,
+                                                                tint = Color.White,
+                                                            )
+                                                        },
+                                                        backgroundColor =
+                                                        replyColor
+                                                            ?: defaultReplyColor,
+                                                        onTriggered = {
+                                                            mainRouter.openReply(
+                                                                originalPost = uiState.post,
+                                                                originalComment = comment,
+                                                            )
+                                                        },
+                                                    )
+
+                                                ActionOnSwipe.Save ->
+                                                    SwipeAction(
+                                                        swipeContent = {
+                                                            Icon(
+                                                                imageVector = Icons.Default.Bookmark,
+                                                                contentDescription =
+                                                                LocalStrings.current.actionAddToBookmarks,
+                                                                tint = Color.White,
+                                                            )
+                                                        },
+                                                        backgroundColor =
+                                                        saveColor
+                                                            ?: defaultSaveColor,
+                                                        onTriggered = {
                                                             model.reduce(
                                                                 PostDetailMviModel.Intent.SaveComment(
                                                                     commentId = comment.id,
                                                                 ),
                                                             )
-                                                        }.takeIf { uiState.isLogged && !isOnOtherInstance },
-                                                        onReply = {
-                                                            if (uiState.isLogged && !isOnOtherInstance) {
-                                                                detailOpener.openReply(
-                                                                    originalPost = uiState.post,
-                                                                    originalComment = comment,
-                                                                )
-                                                            }
-                                                        },
-                                                        onOpenCreator = { user, instance ->
-                                                            detailOpener.openUserDetail(
-                                                                user,
-                                                                instance,
-                                                            )
-                                                        },
-                                                        onOpenCommunity = { community, instance ->
-                                                            detailOpener.openCommunityDetail(
-                                                                community,
-                                                                instance,
-                                                            )
-                                                        },
-                                                        onImageClick = { url ->
-                                                            navigationCoordinator.pushScreen(
-                                                                ZoomableImageScreen(
-                                                                    url = url,
-                                                                    source =
-                                                                    uiState.post.community
-                                                                        ?.readableHandle
-                                                                        .orEmpty(),
-                                                                ),
-                                                            )
-                                                        },
-                                                        options = buildList {
-                                                            this +=
-                                                                Option(
-                                                                    OptionId.Share,
-                                                                    LocalStrings.current.postActionShare,
-                                                                )
-                                                            this +=
-                                                                Option(
-                                                                    OptionId.SeeRaw,
-                                                                    LocalStrings.current.postActionSeeRaw,
-                                                                )
-                                                            this +=
-                                                                Option(
-                                                                    OptionId.Report,
-                                                                    LocalStrings.current.postActionReport,
-                                                                )
-                                                            if (comment.creator?.id == uiState.currentUserId) {
-                                                                this +=
-                                                                    Option(
-                                                                        OptionId.Edit,
-                                                                        LocalStrings.current.postActionEdit,
-                                                                    )
-                                                                if (comment.deleted) {
-                                                                    this +=
-                                                                        Option(
-                                                                            OptionId.Restore,
-                                                                            LocalStrings.current.actionRestore,
-                                                                        )
-                                                                } else {
-                                                                    this +=
-                                                                        Option(
-                                                                            OptionId.Delete,
-                                                                            LocalStrings.current.commentActionDelete,
-                                                                        )
-                                                                }
-                                                            }
-                                                            if (uiState.isModerator) {
-                                                                this +=
-                                                                    Option(
-                                                                        OptionId.DistinguishComment,
-                                                                        if (comment.distinguished) {
-                                                                            LocalStrings
-                                                                                .current
-                                                                                .modActionUnmarkAsDistinguished
-                                                                        } else {
-                                                                            LocalStrings
-                                                                                .current
-                                                                                .modActionMarkAsDistinguished
-                                                                        },
-                                                                    )
-                                                                this +=
-                                                                    Option(
-                                                                        OptionId.Remove,
-                                                                        LocalStrings.current.modActionRemove,
-                                                                    )
-                                                                this +=
-                                                                    Option(
-                                                                        OptionId.BanUser,
-                                                                        if (comment.creator?.banned == true) {
-                                                                            LocalStrings.current.modActionAllow
-                                                                        } else {
-                                                                            LocalStrings.current.modActionBan
-                                                                        },
-                                                                    )
-                                                                comment.creator?.id?.also { creatorId ->
-                                                                    if (uiState.currentUserId != creatorId) {
-                                                                        this +=
-                                                                            Option(
-                                                                                OptionId.AddMod,
-                                                                                if (uiState.moderators.containsId(
-                                                                                        creatorId,
-                                                                                    )
-                                                                                ) {
-                                                                                    LocalStrings
-                                                                                        .current
-                                                                                        .modActionRemoveMod
-                                                                                } else {
-                                                                                    LocalStrings
-                                                                                        .current
-                                                                                        .modActionAddMod
-                                                                                },
-                                                                            )
-                                                                    }
-                                                                }
-                                                            }
-                                                            if (uiState.isAdmin) {
-                                                                this +=
-                                                                    Option(
-                                                                        OptionId.Purge,
-                                                                        LocalStrings.current.adminActionPurge,
-                                                                    )
-                                                                comment.creator?.also { creator ->
-                                                                    this +=
-                                                                        Option(
-                                                                            OptionId.PurgeCreator,
-                                                                            buildString {
-                                                                                append(
-                                                                                    LocalStrings
-                                                                                        .current
-                                                                                        .adminActionPurge,
-                                                                                )
-                                                                                append(" ")
-                                                                                append(
-                                                                                    creator.readableName(
-                                                                                        uiState.preferNicknames,
-                                                                                    ),
-                                                                                )
-                                                                            },
-                                                                        )
-                                                                }
-                                                            }
-                                                        },
-                                                        onSelectOption = { optionId ->
-                                                            when (optionId) {
-                                                                OptionId.Delete -> {
-                                                                    commentIdToDelete = comment.id
-                                                                }
-
-                                                                OptionId.Edit -> {
-                                                                    detailOpener.openReply(
-                                                                        originalPost = PostModel(id = comment.postId),
-                                                                        originalComment =
-                                                                        comment.parentId?.let {
-                                                                            CommentModel(id = it)
-                                                                        },
-                                                                        editedComment = comment,
-                                                                    )
-                                                                }
-
-                                                                OptionId.Report -> {
-                                                                    val screen =
-                                                                        ModerateWithReasonScreen(
-                                                                            actionId =
-                                                                            ModerateWithReasonAction
-                                                                                .ReportComment
-                                                                                .toInt(),
-                                                                            contentId = comment.id,
-                                                                        )
-                                                                    navigationCoordinator.pushScreen(
-                                                                        screen,
-                                                                    )
-                                                                }
-
-                                                                OptionId.SeeRaw -> {
-                                                                    rawContent = comment
-                                                                }
-
-                                                                OptionId.DistinguishComment ->
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.ModDistinguishComment(
-                                                                            comment.id,
-                                                                        ),
-                                                                    )
-
-                                                                OptionId.Remove -> {
-                                                                    val screen =
-                                                                        ModerateWithReasonScreen(
-                                                                            actionId =
-                                                                            ModerateWithReasonAction
-                                                                                .RemoveComment
-                                                                                .toInt(),
-                                                                            contentId = comment.id,
-                                                                        )
-                                                                    navigationCoordinator.pushScreen(
-                                                                        screen,
-                                                                    )
-                                                                }
-
-                                                                OptionId.BanUser -> {
-                                                                    comment.creator?.id?.also { userId ->
-                                                                        val screen =
-                                                                            BanUserScreen(
-                                                                                userId = userId,
-                                                                                communityId =
-                                                                                uiState.post.community?.id ?: 0,
-                                                                                newValue =
-                                                                                comment.creator?.banned != true,
-                                                                                commentId = comment.id,
-                                                                            )
-                                                                        navigationCoordinator.pushScreen(
-                                                                            screen,
-                                                                        )
-                                                                    }
-                                                                }
-
-                                                                OptionId.AddMod -> {
-                                                                    comment.creator?.id?.also { userId ->
-                                                                        model.reduce(
-                                                                            PostDetailMviModel.Intent.ModToggleModUser(
-                                                                                userId,
-                                                                            ),
-                                                                        )
-                                                                    }
-                                                                }
-
-                                                                OptionId.Purge -> {
-                                                                    val screen =
-                                                                        ModerateWithReasonScreen(
-                                                                            actionId =
-                                                                            ModerateWithReasonAction
-                                                                                .PurgeComment
-                                                                                .toInt(),
-                                                                            contentId = comment.id,
-                                                                        )
-                                                                    navigationCoordinator.pushScreen(
-                                                                        screen,
-                                                                    )
-                                                                }
-
-                                                                OptionId.PurgeCreator -> {
-                                                                    comment.creator?.id?.also { userId ->
-                                                                        val screen =
-                                                                            ModerateWithReasonScreen(
-                                                                                actionId =
-                                                                                ModerateWithReasonAction
-                                                                                    .PurgeUser
-                                                                                    .toInt(),
-                                                                                contentId = userId,
-                                                                            )
-                                                                        navigationCoordinator.pushScreen(
-                                                                            screen,
-                                                                        )
-                                                                    }
-                                                                }
-
-                                                                OptionId.Share -> {
-                                                                    val urls =
-                                                                        listOfNotNull(
-                                                                            comment.originalUrl,
-                                                                            buildString {
-                                                                                append("https://")
-                                                                                append(uiState.instance)
-                                                                                append("/comment/")
-                                                                                append(comment.id)
-                                                                            },
-                                                                        ).distinct()
-                                                                    if (urls.size == 1) {
-                                                                        model.reduce(
-                                                                            PostDetailMviModel.Intent.Share(
-                                                                                urls.first(),
-                                                                            ),
-                                                                        )
-                                                                    } else {
-                                                                        shareBottomSheetUrls = urls
-                                                                    }
-                                                                }
-
-                                                                OptionId.Restore -> {
-                                                                    model.reduce(
-                                                                        PostDetailMviModel.Intent.RestoreComment(
-                                                                            comment.id,
-                                                                        ),
-                                                                    )
-                                                                }
-
-                                                                else -> Unit
-                                                            }
                                                         },
                                                     )
-                                                },
-                                            )
-                                        } else {
-                                            CollapsedCommentCard(
-                                                comment = comment,
-                                                isOp = comment.creator?.id == uiState.post.creator?.id,
-                                                showBot = true,
-                                                isCurrentUser = comment.creator?.id == uiState.currentUserId,
-                                                isMod =
-                                                comment.creator?.id.let { id ->
-                                                    uiState.moderators.containsId(id)
-                                                },
-                                                voteFormat = uiState.voteFormat,
-                                                autoLoadImages = uiState.autoLoadImages,
-                                                showScores = uiState.showScores,
-                                                actionButtonsActive = uiState.isLogged,
-                                                indentAmount = uiState.commentIndentAmount,
-                                                barThickness = uiState.commentBarThickness,
-                                                onToggleExpand = {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.ToggleExpandComment(
-                                                            comment.id,
-                                                        ),
-                                                    )
-                                                },
-                                                onUpVote = {
-                                                    if (uiState.isLogged && !isOnOtherInstance) {
+
+                                                ActionOnSwipe.Edit ->
+                                                    SwipeAction(
+                                                        swipeContent = {
+                                                            Icon(
+                                                                imageVector = Icons.Default.Edit,
+                                                                contentDescription =
+                                                                LocalStrings.current.postActionEdit,
+                                                                tint = Color.White,
+                                                            )
+                                                        },
+                                                        backgroundColor = MaterialTheme.colorScheme.tertiary,
+                                                        onTriggered = {
+                                                            mainRouter.openReply(
+                                                                originalPost = PostModel(id = comment.postId),
+                                                                originalComment =
+                                                                comment.parentId?.let { parentId ->
+                                                                    CommentModel(id = parentId)
+                                                                },
+                                                                editedComment = comment,
+                                                            )
+                                                        },
+                                                    ).takeIf { canEdit }
+
+                                                else -> null
+                                            }
+                                        }
+
+                                    if (comment.expanded) {
+                                        SwipeActionCard(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            enabled = uiState.swipeActionsEnabled,
+                                            onGestureBegin = {
+                                                model.reduce(PostDetailMviModel.Intent.HapticIndication)
+                                            },
+                                            swipeToStartActions =
+                                            uiState.actionsOnSwipeToStartComments.toSwipeActions(
+                                                canEdit = comment.creator?.id == uiState.currentUserId,
+                                            ),
+                                            swipeToEndActions =
+                                            if (uiState.isLogged && !isOnOtherInstance) {
+                                                uiState.actionsOnSwipeToEndComments.toSwipeActions(
+                                                    canEdit = comment.creator?.id == uiState.currentUserId,
+                                                )
+                                            } else {
+                                                emptyList()
+                                            },
+                                            content = {
+                                                val commentTs =
+                                                    with(comment) {
+                                                        updateDate ?: publishDate
+                                                    }?.toTimestamp()
+                                                val lastSeenTs = uiState.lastSeenTimestamp
+                                                val isAfterLastSeenTs = commentTs != null &&
+                                                    lastSeenTs != null &&
+                                                    commentTs > lastSeenTs
+                                                val backgroundModifier =
+                                                    when {
+                                                        commentIdToHighlight == comment.id ||
+                                                            (commentIdToHighlight == null && isAfterLastSeenTs)
+                                                        ->
+                                                            Modifier.background(
+                                                                MaterialTheme.colorScheme
+                                                                    .surfaceColorAtElevation(
+                                                                        5.dp,
+                                                                    ).copy(alpha = 0.75f),
+                                                            )
+
+                                                        else -> Modifier
+                                                    }
+                                                CommentCard(
+                                                    modifier =
+                                                    Modifier
+                                                        .background(MaterialTheme.colorScheme.background)
+                                                        .then(backgroundModifier),
+                                                    comment = comment,
+                                                    isOp = comment.creator?.id == uiState.post.creator?.id,
+                                                    showBot = true,
+                                                    isCurrentUser = comment.creator?.id == uiState.currentUserId,
+                                                    isMod =
+                                                    comment.creator?.id.let { id ->
+                                                        uiState.moderators.containsId(id)
+                                                    },
+                                                    isAdmin =
+                                                    comment.creator?.let { user ->
+                                                        // comparison must be done by handle because
+                                                        // IDs vary from one instance to another
+                                                        uiState.admins.any { admin ->
+                                                            admin.readableHandle == user.readableHandle
+                                                        }
+                                                    } ?: false,
+                                                    indentAmount = uiState.commentIndentAmount,
+                                                    barThickness = uiState.commentBarThickness,
+                                                    voteFormat = uiState.voteFormat,
+                                                    autoLoadImages = uiState.autoLoadImages,
+                                                    preferNicknames = uiState.preferNicknames,
+                                                    showScores = uiState.showScores,
+                                                    actionButtonsActive = uiState.isLogged,
+                                                    downVoteEnabled = uiState.downVoteEnabled,
+                                                    highlightText = uiState.searchText,
+                                                    adminTagColor = uiState.adminTagColor,
+                                                    botTagColor = uiState.botTagColor,
+                                                    meTagColor = uiState.meTagColor,
+                                                    modTagColor = uiState.modTagColor,
+                                                    opTagColor = uiState.opTagColor,
+                                                    onToggleExpand = {
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.ToggleExpandComment(
+                                                                comment.id,
+                                                            ),
+                                                        )
+                                                    },
+                                                    onDoubleClick =
+                                                    {
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.UpVoteComment(
+                                                                commentId = comment.id,
+                                                                feedback = true,
+                                                            ),
+                                                        )
+                                                    }.takeIf { uiState.doubleTapActionEnabled },
+                                                    onUpVote =
+                                                    {
                                                         model.reduce(
                                                             PostDetailMviModel.Intent.UpVoteComment(
                                                                 commentId = comment.id,
                                                             ),
                                                         )
-                                                    }
-                                                },
-                                                onDownVote = {
-                                                    if (uiState.isLogged && !isOnOtherInstance) {
+                                                    }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                                    onDownVote =
+                                                    {
                                                         model.reduce(
                                                             PostDetailMviModel.Intent.DownVoteComment(
                                                                 commentId = comment.id,
                                                             ),
                                                         )
-                                                    }
-                                                },
-                                                onSave = {
-                                                    if (uiState.isLogged && !isOnOtherInstance) {
+                                                    }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                                    onSave =
+                                                    {
                                                         model.reduce(
                                                             PostDetailMviModel.Intent.SaveComment(
                                                                 commentId = comment.id,
                                                             ),
                                                         )
-                                                    }
-                                                },
-                                                onReply = {
-                                                    if (uiState.isLogged && !isOnOtherInstance) {
-                                                        detailOpener.openReply(
-                                                            originalPost = uiState.post,
-                                                            originalComment = comment,
-                                                        )
-                                                    }
-                                                },
-                                                onOpenCreator = { user ->
-                                                    detailOpener.openUserDetail(
-                                                        user,
-                                                        otherInstanceName,
-                                                    )
-                                                },
-                                                options =
-                                                buildList {
-                                                    this +=
-                                                        Option(
-                                                            OptionId.SeeRaw,
-                                                            LocalStrings.current.postActionSeeRaw,
-                                                        )
-                                                    this +=
-                                                        Option(
-                                                            OptionId.Report,
-                                                            LocalStrings.current.postActionReport,
-                                                        )
-                                                    if (comment.creator?.id == uiState.currentUserId) {
-                                                        this +=
-                                                            Option(
-                                                                OptionId.Edit,
-                                                                LocalStrings.current.postActionEdit,
+                                                    }.takeIf { uiState.isLogged && !isOnOtherInstance },
+                                                    onReply = {
+                                                        if (uiState.isLogged && !isOnOtherInstance) {
+                                                            mainRouter.openReply(
+                                                                originalPost = uiState.post,
+                                                                originalComment = comment,
                                                             )
-                                                        if (comment.deleted) {
-                                                            this +=
-                                                                Option(
-                                                                    OptionId.Restore,
-                                                                    LocalStrings.current.actionRestore,
-                                                                )
-                                                        } else {
-                                                            this +=
-                                                                Option(
-                                                                    OptionId.Delete,
-                                                                    LocalStrings.current.commentActionDelete,
-                                                                )
                                                         }
-                                                    }
-                                                    if (uiState.isModerator) {
+                                                    },
+                                                    onOpenCreator = { user, instance ->
+                                                        mainRouter.openUserDetail(
+                                                            user,
+                                                            instance,
+                                                        )
+                                                    },
+                                                    onOpenCommunity = { community, instance ->
+                                                        mainRouter.openCommunityDetail(
+                                                            community,
+                                                            instance,
+                                                        )
+                                                    },
+                                                    onImageClick = { url ->
+                                                        mainRouter.openImage(
+                                                            url = url,
+                                                            source =
+                                                            uiState.post.community
+                                                                ?.readableHandle
+                                                                .orEmpty(),
+                                                        )
+                                                    },
+                                                    options = buildList {
                                                         this +=
                                                             Option(
-                                                                OptionId.DistinguishComment,
-                                                                if (comment.distinguished) {
-                                                                    LocalStrings
-                                                                        .current
-                                                                        .modActionUnmarkAsDistinguished
-                                                                } else {
-                                                                    LocalStrings
-                                                                        .current
-                                                                        .modActionMarkAsDistinguished
-                                                                },
+                                                                OptionId.Share,
+                                                                LocalStrings.current.postActionShare,
                                                             )
                                                         this +=
                                                             Option(
-                                                                OptionId.Remove,
-                                                                LocalStrings
-                                                                    .current
-                                                                    .modActionRemove,
+                                                                OptionId.SeeRaw,
+                                                                LocalStrings.current.postActionSeeRaw,
                                                             )
                                                         this +=
                                                             Option(
-                                                                OptionId.BanUser,
-                                                                if (comment.creator?.banned == true) {
-                                                                    LocalStrings.current.modActionAllow
-                                                                } else {
-                                                                    LocalStrings.current.modActionBan
-                                                                },
+                                                                OptionId.Report,
+                                                                LocalStrings.current.postActionReport,
                                                             )
-                                                        comment.creator?.id?.also { creatorId ->
-                                                            if (uiState.currentUserId != creatorId) {
+                                                        if (comment.creator?.id == uiState.currentUserId) {
+                                                            this +=
+                                                                Option(
+                                                                    OptionId.Edit,
+                                                                    LocalStrings.current.postActionEdit,
+                                                                )
+                                                            if (comment.deleted) {
                                                                 this +=
                                                                     Option(
-                                                                        OptionId.AddMod,
-                                                                        if (uiState.moderators.containsId(
-                                                                                creatorId,
+                                                                        OptionId.Restore,
+                                                                        LocalStrings.current.actionRestore,
+                                                                    )
+                                                            } else {
+                                                                this +=
+                                                                    Option(
+                                                                        OptionId.Delete,
+                                                                        LocalStrings.current.commentActionDelete,
+                                                                    )
+                                                            }
+                                                        }
+                                                        if (uiState.isModerator) {
+                                                            this +=
+                                                                Option(
+                                                                    OptionId.DistinguishComment,
+                                                                    if (comment.distinguished) {
+                                                                        LocalStrings
+                                                                            .current
+                                                                            .modActionUnmarkAsDistinguished
+                                                                    } else {
+                                                                        LocalStrings
+                                                                            .current
+                                                                            .modActionMarkAsDistinguished
+                                                                    },
+                                                                )
+                                                            this +=
+                                                                Option(
+                                                                    OptionId.Remove,
+                                                                    LocalStrings.current.modActionRemove,
+                                                                )
+                                                            this +=
+                                                                Option(
+                                                                    OptionId.BanUser,
+                                                                    if (comment.creator?.banned == true) {
+                                                                        LocalStrings.current.modActionAllow
+                                                                    } else {
+                                                                        LocalStrings.current.modActionBan
+                                                                    },
+                                                                )
+                                                            comment.creator?.id?.also { creatorId ->
+                                                                if (uiState.currentUserId != creatorId) {
+                                                                    this +=
+                                                                        Option(
+                                                                            OptionId.AddMod,
+                                                                            if (uiState.moderators.containsId(
+                                                                                    creatorId,
+                                                                                )
+                                                                            ) {
+                                                                                LocalStrings
+                                                                                    .current
+                                                                                    .modActionRemoveMod
+                                                                            } else {
+                                                                                LocalStrings
+                                                                                    .current
+                                                                                    .modActionAddMod
+                                                                            },
+                                                                        )
+                                                                }
+                                                            }
+                                                        }
+                                                        if (uiState.isAdmin) {
+                                                            this +=
+                                                                Option(
+                                                                    OptionId.Purge,
+                                                                    LocalStrings.current.adminActionPurge,
+                                                                )
+                                                            comment.creator?.also { creator ->
+                                                                this +=
+                                                                    Option(
+                                                                        OptionId.PurgeCreator,
+                                                                        buildString {
+                                                                            append(
+                                                                                LocalStrings
+                                                                                    .current
+                                                                                    .adminActionPurge,
                                                                             )
-                                                                        ) {
-                                                                            LocalStrings
-                                                                                .current
-                                                                                .modActionRemoveMod
-                                                                        } else {
-                                                                            LocalStrings.current.modActionAddMod
+                                                                            append(" ")
+                                                                            append(
+                                                                                creator.readableName(
+                                                                                    uiState.preferNicknames,
+                                                                                ),
+                                                                            )
                                                                         },
                                                                     )
                                                             }
                                                         }
-                                                    }
-                                                },
-                                                onSelectOption = { optionId ->
-                                                    when (optionId) {
-                                                        OptionId.Delete -> {
-                                                            commentIdToDelete = comment.id
-                                                        }
+                                                    },
+                                                    onSelectOption = { optionId ->
+                                                        when (optionId) {
+                                                            OptionId.Delete -> {
+                                                                commentIdToDelete = comment.id
+                                                            }
 
-                                                        OptionId.Edit -> {
-                                                            detailOpener.openReply(
-                                                                originalPost = PostModel(id = comment.postId),
-                                                                originalComment =
-                                                                comment.parentId?.let {
-                                                                    CommentModel(id = it)
-                                                                },
-                                                                editedComment = comment,
-                                                            )
-                                                        }
+                                                            OptionId.Edit -> {
+                                                                mainRouter.openReply(
+                                                                    originalPost = PostModel(id = comment.postId),
+                                                                    originalComment =
+                                                                    comment.parentId?.let {
+                                                                        CommentModel(id = it)
+                                                                    },
+                                                                    editedComment = comment,
+                                                                )
+                                                            }
 
-                                                        OptionId.Report -> {
-                                                            val screen =
-                                                                ModerateWithReasonScreen(
-                                                                    actionId = ModerateWithReasonAction
+                                                            OptionId.Report -> {
+                                                                mainRouter.openModerateWithReason(
+                                                                    actionId =
+                                                                    ModerateWithReasonAction
                                                                         .ReportComment
                                                                         .toInt(),
                                                                     contentId = comment.id,
                                                                 )
-                                                            navigationCoordinator.pushScreen(screen)
-                                                        }
+                                                            }
 
-                                                        OptionId.SeeRaw -> {
-                                                            rawContent = comment
-                                                        }
+                                                            OptionId.SeeRaw -> {
+                                                                rawContent = comment
+                                                            }
 
-                                                        OptionId.DistinguishComment ->
-                                                            model.reduce(
-                                                                PostDetailMviModel.Intent.ModDistinguishComment(
-                                                                    comment.id,
-                                                                ),
-                                                            )
+                                                            OptionId.DistinguishComment ->
+                                                                model.reduce(
+                                                                    PostDetailMviModel.Intent.ModDistinguishComment(
+                                                                        comment.id,
+                                                                    ),
+                                                                )
 
-                                                        OptionId.Remove -> {
-                                                            val screen =
-                                                                ModerateWithReasonScreen(
-                                                                    actionId = ModerateWithReasonAction
+                                                            OptionId.Remove -> {
+                                                                mainRouter.openModerateWithReason(
+                                                                    actionId =
+                                                                    ModerateWithReasonAction
                                                                         .RemoveComment
                                                                         .toInt(),
                                                                     contentId = comment.id,
                                                                 )
-                                                            navigationCoordinator.pushScreen(screen)
-                                                        }
+                                                            }
 
-                                                        OptionId.BanUser -> {
-                                                            comment.creator?.id?.also { userId ->
-                                                                val screen =
-                                                                    BanUserScreen(
+                                                            OptionId.BanUser -> {
+                                                                comment.creator?.id?.also { userId ->
+                                                                    mainRouter.openBanUser(
                                                                         userId = userId,
-                                                                        communityId =
-                                                                        uiState.post.community?.id
-                                                                            ?: 0,
+                                                                        communityId = uiState.post.community?.id ?: 0,
                                                                         newValue = comment.creator?.banned != true,
                                                                         commentId = comment.id,
                                                                     )
-                                                                navigationCoordinator.pushScreen(
-                                                                    screen,
+                                                                }
+                                                            }
+
+                                                            OptionId.AddMod -> {
+                                                                comment.creator?.id?.also { userId ->
+                                                                    model.reduce(
+                                                                        PostDetailMviModel.Intent.ModToggleModUser(
+                                                                            userId,
+                                                                        ),
+                                                                    )
+                                                                }
+                                                            }
+
+                                                            OptionId.Purge -> {
+                                                                mainRouter.openModerateWithReason(
+                                                                    actionId =
+                                                                    ModerateWithReasonAction.PurgeComment.toInt(),
+                                                                    contentId = comment.id,
                                                                 )
                                                             }
-                                                        }
 
-                                                        OptionId.AddMod -> {
-                                                            comment.creator?.id?.also { userId ->
+                                                            OptionId.PurgeCreator -> {
+                                                                comment.creator?.id?.also { userId ->
+                                                                    mainRouter.openModerateWithReason(
+                                                                        actionId =
+                                                                        ModerateWithReasonAction.PurgeUser.toInt(),
+                                                                        contentId = userId,
+                                                                    )
+                                                                }
+                                                            }
+
+                                                            OptionId.Share -> {
+                                                                val urls =
+                                                                    listOfNotNull(
+                                                                        comment.originalUrl,
+                                                                        buildString {
+                                                                            append("https://")
+                                                                            append(uiState.instance)
+                                                                            append("/comment/")
+                                                                            append(comment.id)
+                                                                        },
+                                                                    ).distinct()
+                                                                if (urls.size == 1) {
+                                                                    model.reduce(
+                                                                        PostDetailMviModel.Intent.Share(urls.first()),
+                                                                    )
+                                                                } else {
+                                                                    shareBottomSheetUrls = urls
+                                                                }
+                                                            }
+
+                                                            OptionId.Restore -> {
                                                                 model.reduce(
-                                                                    PostDetailMviModel.Intent.ModToggleModUser(
-                                                                        userId,
+                                                                    PostDetailMviModel.Intent.RestoreComment(
+                                                                        comment.id,
                                                                     ),
                                                                 )
                                                             }
-                                                        }
 
-                                                        OptionId.Restore -> {
+                                                            else -> Unit
+                                                        }
+                                                    },
+                                                )
+                                            },
+                                        )
+                                    } else {
+                                        CollapsedCommentCard(
+                                            comment = comment,
+                                            isOp = comment.creator?.id == uiState.post.creator?.id,
+                                            showBot = true,
+                                            isCurrentUser = comment.creator?.id == uiState.currentUserId,
+                                            isMod =
+                                            comment.creator?.id.let { id ->
+                                                uiState.moderators.containsId(id)
+                                            },
+                                            voteFormat = uiState.voteFormat,
+                                            autoLoadImages = uiState.autoLoadImages,
+                                            showScores = uiState.showScores,
+                                            actionButtonsActive = uiState.isLogged,
+                                            indentAmount = uiState.commentIndentAmount,
+                                            barThickness = uiState.commentBarThickness,
+                                            onToggleExpand = {
+                                                model.reduce(
+                                                    PostDetailMviModel.Intent.ToggleExpandComment(
+                                                        comment.id,
+                                                    ),
+                                                )
+                                            },
+                                            onUpVote = {
+                                                if (uiState.isLogged && !isOnOtherInstance) {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.UpVoteComment(
+                                                            commentId = comment.id,
+                                                        ),
+                                                    )
+                                                }
+                                            },
+                                            onDownVote = {
+                                                if (uiState.isLogged && !isOnOtherInstance) {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.DownVoteComment(
+                                                            commentId = comment.id,
+                                                        ),
+                                                    )
+                                                }
+                                            },
+                                            onSave = {
+                                                if (uiState.isLogged && !isOnOtherInstance) {
+                                                    model.reduce(
+                                                        PostDetailMviModel.Intent.SaveComment(
+                                                            commentId = comment.id,
+                                                        ),
+                                                    )
+                                                }
+                                            },
+                                            onReply = {
+                                                if (uiState.isLogged && !isOnOtherInstance) {
+                                                    mainRouter.openReply(
+                                                        originalPost = uiState.post,
+                                                        originalComment = comment,
+                                                    )
+                                                }
+                                            },
+                                            onOpenCreator = { user ->
+                                                mainRouter.openUserDetail(
+                                                    user,
+                                                    otherInstanceName,
+                                                )
+                                            },
+                                            options =
+                                            buildList {
+                                                this +=
+                                                    Option(
+                                                        OptionId.SeeRaw,
+                                                        LocalStrings.current.postActionSeeRaw,
+                                                    )
+                                                this +=
+                                                    Option(
+                                                        OptionId.Report,
+                                                        LocalStrings.current.postActionReport,
+                                                    )
+                                                if (comment.creator?.id == uiState.currentUserId) {
+                                                    this +=
+                                                        Option(
+                                                            OptionId.Edit,
+                                                            LocalStrings.current.postActionEdit,
+                                                        )
+                                                    if (comment.deleted) {
+                                                        this +=
+                                                            Option(
+                                                                OptionId.Restore,
+                                                                LocalStrings.current.actionRestore,
+                                                            )
+                                                    } else {
+                                                        this +=
+                                                            Option(
+                                                                OptionId.Delete,
+                                                                LocalStrings.current.commentActionDelete,
+                                                            )
+                                                    }
+                                                }
+                                                if (uiState.isModerator) {
+                                                    this +=
+                                                        Option(
+                                                            OptionId.DistinguishComment,
+                                                            if (comment.distinguished) {
+                                                                LocalStrings
+                                                                    .current
+                                                                    .modActionUnmarkAsDistinguished
+                                                            } else {
+                                                                LocalStrings
+                                                                    .current
+                                                                    .modActionMarkAsDistinguished
+                                                            },
+                                                        )
+                                                    this +=
+                                                        Option(
+                                                            OptionId.Remove,
+                                                            LocalStrings
+                                                                .current
+                                                                .modActionRemove,
+                                                        )
+                                                    this +=
+                                                        Option(
+                                                            OptionId.BanUser,
+                                                            if (comment.creator?.banned == true) {
+                                                                LocalStrings.current.modActionAllow
+                                                            } else {
+                                                                LocalStrings.current.modActionBan
+                                                            },
+                                                        )
+                                                    comment.creator?.id?.also { creatorId ->
+                                                        if (uiState.currentUserId != creatorId) {
+                                                            this +=
+                                                                Option(
+                                                                    OptionId.AddMod,
+                                                                    if (uiState.moderators.containsId(
+                                                                            creatorId,
+                                                                        )
+                                                                    ) {
+                                                                        LocalStrings
+                                                                            .current
+                                                                            .modActionRemoveMod
+                                                                    } else {
+                                                                        LocalStrings.current.modActionAddMod
+                                                                    },
+                                                                )
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            onSelectOption = { optionId ->
+                                                when (optionId) {
+                                                    OptionId.Delete -> {
+                                                        commentIdToDelete = comment.id
+                                                    }
+
+                                                    OptionId.Edit -> {
+                                                        mainRouter.openReply(
+                                                            originalPost = PostModel(id = comment.postId),
+                                                            originalComment =
+                                                            comment.parentId?.let {
+                                                                CommentModel(id = it)
+                                                            },
+                                                            editedComment = comment,
+                                                        )
+                                                    }
+
+                                                    OptionId.Report -> {
+                                                        mainRouter.openModerateWithReason(
+                                                            actionId = ModerateWithReasonAction
+                                                                .ReportComment
+                                                                .toInt(),
+                                                            contentId = comment.id,
+                                                        )
+                                                    }
+
+                                                    OptionId.SeeRaw -> {
+                                                        rawContent = comment
+                                                    }
+
+                                                    OptionId.DistinguishComment ->
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.ModDistinguishComment(
+                                                                comment.id,
+                                                            ),
+                                                        )
+
+                                                    OptionId.Remove -> {
+                                                        mainRouter.openModerateWithReason(
+                                                            actionId = ModerateWithReasonAction
+                                                                .RemoveComment
+                                                                .toInt(),
+                                                            contentId = comment.id,
+                                                        )
+                                                    }
+
+                                                    OptionId.BanUser -> {
+                                                        comment.creator?.id?.also { userId ->
+                                                            mainRouter.openBanUser(
+                                                                userId = userId,
+                                                                communityId = uiState.post.community?.id ?: 0,
+                                                                newValue = comment.creator?.banned != true,
+                                                                commentId = comment.id,
+                                                            )
+                                                        }
+                                                    }
+
+                                                    OptionId.AddMod -> {
+                                                        comment.creator?.id?.also { userId ->
                                                             model.reduce(
-                                                                PostDetailMviModel.Intent.RestoreComment(
-                                                                    comment.id,
+                                                                PostDetailMviModel.Intent.ModToggleModUser(
+                                                                    userId,
                                                                 ),
                                                             )
                                                         }
-
-                                                        else -> Unit
                                                     }
+
+                                                    OptionId.Restore -> {
+                                                        model.reduce(
+                                                            PostDetailMviModel.Intent.RestoreComment(
+                                                                comment.id,
+                                                            ),
+                                                        )
+                                                    }
+
+                                                    else -> Unit
+                                                }
+                                            },
+                                        )
+                                    }
+                                }
+
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = Spacing.xxxs),
+                                    thickness = 0.25.dp,
+                                )
+
+                                // load more button
+                                if (comment.loadMoreButtonVisible && comment.expanded) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.Center,
+                                    ) {
+                                        Button(
+                                            onClick = {
+                                                model.reduce(
+                                                    PostDetailMviModel.Intent.FetchMoreComments(
+                                                        parentId = comment.id,
+                                                    ),
+                                                )
+                                            },
+                                        ) {
+                                            Text(
+                                                text =
+                                                buildString {
+                                                    append(LocalStrings.current.postDetailLoadMoreComments)
+                                                    comment.comments
+                                                        ?.takeIf { it > 0 }
+                                                        ?.also { count ->
+                                                            append(" (")
+                                                            append(count)
+                                                            append(")")
+                                                        }
                                                 },
+                                                style = MaterialTheme.typography.labelSmall,
                                             )
                                         }
                                     }
-
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(vertical = Spacing.xxxs),
-                                        thickness = 0.25.dp,
+                                }
+                            }
+                        }
+                        item {
+                            if (
+                                !uiState.initial &&
+                                !uiState.loading &&
+                                !uiState.refreshing &&
+                                uiState.canFetchMore
+                            ) {
+                                model.reduce(PostDetailMviModel.Intent.LoadNextPage)
+                            }
+                            if (uiState.loading && !uiState.refreshing) {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.size(25.dp),
+                                        color = MaterialTheme.colorScheme.primary,
                                     )
-
-                                    // load more button
-                                    if (comment.loadMoreButtonVisible && comment.expanded) {
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.Center,
-                                        ) {
+                                }
+                            }
+                        }
+                        if (uiState.comments.isEmpty() && !uiState.loading && !uiState.initial) {
+                            item {
+                                Column {
+                                    if (uiState.post.comments == 0) {
+                                        Text(
+                                            modifier =
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = Spacing.xs),
+                                            textAlign = TextAlign.Center,
+                                            text = LocalStrings.current.messageEmptyComments,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onBackground,
+                                        )
+                                    } else if (uiState.searching) {
+                                        Text(
+                                            modifier =
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = Spacing.xs),
+                                            textAlign = TextAlign.Center,
+                                            text = LocalStrings.current.messageEmptyList,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onBackground,
+                                        )
+                                    } else {
+                                        Text(
+                                            modifier =
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = Spacing.xs),
+                                            textAlign = TextAlign.Center,
+                                            text = LocalStrings.current.messageErrorLoadingComments,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onBackground,
+                                        )
+                                        Row {
+                                            Spacer(modifier = Modifier.weight(1f))
                                             Button(
                                                 onClick = {
-                                                    model.reduce(
-                                                        PostDetailMviModel.Intent.FetchMoreComments(
-                                                            parentId = comment.id,
-                                                        ),
-                                                    )
+                                                    model.reduce(PostDetailMviModel.Intent.Refresh)
                                                 },
                                             ) {
                                                 Text(
-                                                    text =
-                                                    buildString {
-                                                        append(LocalStrings.current.postDetailLoadMoreComments)
-                                                        comment.comments
-                                                            ?.takeIf { it > 0 }
-                                                            ?.also { count ->
-                                                                append(" (")
-                                                                append(count)
-                                                                append(")")
-                                                            }
-                                                    },
-                                                    style = MaterialTheme.typography.labelSmall,
+                                                    text = LocalStrings.current.buttonRetry,
                                                 )
                                             }
+                                            Spacer(modifier = Modifier.weight(1f))
                                         }
                                     }
                                 }
                             }
-                            item {
-                                if (
-                                    !uiState.initial &&
-                                    !uiState.loading &&
-                                    !uiState.refreshing &&
-                                    uiState.canFetchMore
-                                ) {
-                                    model.reduce(PostDetailMviModel.Intent.LoadNextPage)
-                                }
-                                if (uiState.loading && !uiState.refreshing) {
-                                    Box(
-                                        modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                        contentAlignment = Alignment.Center,
-                                    ) {
-                                        CircularProgressIndicator(
-                                            modifier = Modifier.size(25.dp),
-                                            color = MaterialTheme.colorScheme.primary,
-                                        )
-                                    }
-                                }
-                            }
-                            if (uiState.comments.isEmpty() && !uiState.loading && !uiState.initial) {
-                                item {
-                                    Column {
-                                        if (uiState.post.comments == 0) {
-                                            Text(
-                                                modifier =
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(top = Spacing.xs),
-                                                textAlign = TextAlign.Center,
-                                                text = LocalStrings.current.messageEmptyComments,
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                color = MaterialTheme.colorScheme.onBackground,
-                                            )
-                                        } else if (uiState.searching) {
-                                            Text(
-                                                modifier =
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(top = Spacing.xs),
-                                                textAlign = TextAlign.Center,
-                                                text = LocalStrings.current.messageEmptyList,
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                color = MaterialTheme.colorScheme.onBackground,
-                                            )
-                                        } else {
-                                            Text(
-                                                modifier =
-                                                Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(top = Spacing.xs),
-                                                textAlign = TextAlign.Center,
-                                                text = LocalStrings.current.messageErrorLoadingComments,
-                                                style = MaterialTheme.typography.bodyMedium,
-                                                color = MaterialTheme.colorScheme.onBackground,
-                                            )
-                                            Row {
-                                                Spacer(modifier = Modifier.weight(1f))
-                                                Button(
-                                                    onClick = {
-                                                        model.reduce(PostDetailMviModel.Intent.Refresh)
-                                                    },
-                                                ) {
-                                                    Text(
-                                                        text = LocalStrings.current.buttonRetry,
-                                                    )
-                                                }
-                                                Spacer(modifier = Modifier.weight(1f))
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            item {
-                                Spacer(modifier = Modifier.height(Spacing.xxxl))
-                            }
+                        }
+                        item {
+                            Spacer(modifier = Modifier.height(Spacing.xxxl))
                         }
                     }
                 }
+            }
 
-                if (uiState.enableButtonsToScrollBetweenComments) {
-                    Row(
+            if (uiState.enableButtonsToScrollBetweenComments) {
+                Row(
+                    modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .onGloballyPositioned {
+                            if (bottomBarHeightPx == 0f) {
+                                bottomBarHeightPx = it.size.toSize().height
+                            }
+                        }.padding(bottom = bottomNavigationInset)
+                        .offset {
+                            IntOffset(
+                                x = 0,
+                                y = -bottomBarOffsetHeightPx.roundToInt(),
+                            )
+                        }.background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.45f)),
+                ) {
+                    if (uiState.isNavigationSupported) {
+                        Icon(
+                            modifier =
+                            Modifier
+                                .weight(1f)
+                                .padding(vertical = Spacing.s)
+                                .onClick(
+                                    onClick = {
+                                        model.reduce(PostDetailMviModel.Intent.NavigatePrevious)
+                                    },
+                                ),
+                            imageVector = Icons.AutoMirrored.Default.NavigateBefore,
+                            contentDescription = LocalStrings.current.actionNavigateToPreviousPost,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                        )
+                    }
+                    Icon(
                         modifier =
                         Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
-                            .onGloballyPositioned {
-                                if (bottomBarHeightPx == 0f) {
-                                    bottomBarHeightPx = it.size.toSize().height
-                                }
-                            }.padding(bottom = bottomNavigationInset)
-                            .offset {
-                                IntOffset(
-                                    x = 0,
-                                    y = -bottomBarOffsetHeightPx.roundToInt(),
-                                )
-                            }.background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.45f)),
-                    ) {
-                        if (uiState.isNavigationSupported) {
-                            Icon(
-                                modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .padding(vertical = Spacing.s)
-                                    .onClick(
-                                        onClick = {
-                                            model.reduce(PostDetailMviModel.Intent.NavigatePrevious)
-                                        },
-                                    ),
-                                imageVector = Icons.AutoMirrored.Default.NavigateBefore,
-                                contentDescription = LocalStrings.current.actionNavigateToPreviousPost,
-                                tint = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                        Icon(
-                            modifier =
-                            Modifier
-                                .weight(1f)
-                                .padding(vertical = Spacing.s)
-                                .onClick(
-                                    onClick = {
-                                        val idx = lazyListState.firstVisibleItemIndex
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.NavigatePreviousComment(idx),
-                                        )
-                                    },
-                                ),
-                            imageVector = Icons.Default.KeyboardArrowUp,
-                            contentDescription = LocalStrings.current.actionNavigateToPreviousComment,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                        Icon(
-                            modifier =
-                            Modifier
-                                .weight(1f)
-                                .padding(vertical = Spacing.s)
-                                .onClick(
-                                    onClick = {
-                                        val idx = lazyListState.firstVisibleItemIndex
-                                        model.reduce(
-                                            PostDetailMviModel.Intent.NavigateNextComment(idx),
-                                        )
-                                    },
-                                ),
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = LocalStrings.current.actionNavigateToNextComment,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                        if (uiState.isNavigationSupported) {
-                            Icon(
-                                modifier =
-                                Modifier
-                                    .weight(1f)
-                                    .padding(vertical = Spacing.s)
-                                    .onClick(
-                                        onClick = {
-                                            model.reduce(PostDetailMviModel.Intent.NavigateNext)
-                                        },
-                                    ),
-                                imageVector = Icons.AutoMirrored.Default.NavigateNext,
-                                contentDescription = LocalStrings.current.actionNavigateToNextPost,
-                                tint = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        if (rawContent != null) {
-            when (val content = rawContent) {
-                is PostModel -> {
-                    RawContentDialog(
-                        title = content.title,
-                        publishDate = content.publishDate,
-                        updateDate = content.updateDate,
-                        url = content.url,
-                        text = content.text,
-                        upVotes = content.upvotes,
-                        downVotes = content.downvotes,
-                        isLogged = uiState.isLogged,
-                        onDismiss = {
-                            rawContent = null
-                        },
-                        onQuote = { quotation ->
-                            rawContent = null
-                            if (quotation != null) {
-                                detailOpener.openReply(
-                                    originalPost = content,
-                                    initialText =
-                                    buildString {
-                                        append("> ")
-                                        append(quotation)
-                                        append("\n\n")
-                                    },
-                                )
-                            }
-                        },
-                    )
-                }
-
-                is CommentModel -> {
-                    RawContentDialog(
-                        text = content.text,
-                        isLogged = uiState.isLogged,
-                        upVotes = content.upvotes,
-                        downVotes = content.downvotes,
-                        publishDate = content.publishDate,
-                        updateDate = content.updateDate,
-                        onDismiss = {
-                            rawContent = null
-                        },
-                        onQuote = { quotation ->
-                            rawContent = null
-                            if (quotation != null) {
-                                detailOpener.openReply(
-                                    originalPost = uiState.post,
-                                    originalComment = content,
-                                    initialText =
-                                    buildString {
-                                        append("> ")
-                                        append(quotation)
-                                        append("\n\n")
-                                    },
-                                )
-                            }
-                        },
-                    )
-                }
-            }
-        }
-
-        postToDelete?.also {
-            AlertDialog(
-                onDismissRequest = {
-                    postToDelete = null
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            postToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            model.reduce(PostDetailMviModel.Intent.DeletePost)
-                            postToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
-                },
-            )
-        }
-        commentIdToDelete?.also { itemId ->
-            AlertDialog(
-                onDismissRequest = {
-                    commentIdToDelete = null
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            commentIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            model.reduce(PostDetailMviModel.Intent.DeleteComment(itemId))
-                            commentIdToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
-                },
-            )
-        }
-
-        shareBottomSheetUrls?.also { values ->
-            CustomModalBottomSheet(
-                title = LocalStrings.current.postActionShare,
-                items =
-                values.map { value ->
-                    CustomModalBottomSheetItem(label = value)
-                },
-                onSelect = { index ->
-                    shareBottomSheetUrls = null
-                    if (index != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.Share(url = values[index]),
-                        )
-                    }
-                },
-            )
-        }
-
-        if (sortBottomSheetOpened) {
-            SortBottomSheet(
-                values = uiState.availableSortTypes,
-                expandTop = false,
-                onSelect = { value ->
-                    sortBottomSheetOpened = false
-                    if (value != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeCommentSortType(
-                                value = value,
-                                screenKey = null,
+                            .weight(1f)
+                            .padding(vertical = Spacing.s)
+                            .onClick(
+                                onClick = {
+                                    val idx = lazyListState.firstVisibleItemIndex
+                                    model.reduce(
+                                        PostDetailMviModel.Intent.NavigatePreviousComment(idx),
+                                    )
+                                },
                             ),
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        contentDescription = LocalStrings.current.actionNavigateToPreviousComment,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                    )
+                    Icon(
+                        modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(vertical = Spacing.s)
+                            .onClick(
+                                onClick = {
+                                    val idx = lazyListState.firstVisibleItemIndex
+                                    model.reduce(
+                                        PostDetailMviModel.Intent.NavigateNextComment(idx),
+                                    )
+                                },
+                            ),
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = LocalStrings.current.actionNavigateToNextComment,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                    )
+                    if (uiState.isNavigationSupported) {
+                        Icon(
+                            modifier =
+                            Modifier
+                                .weight(1f)
+                                .padding(vertical = Spacing.s)
+                                .onClick(
+                                    onClick = {
+                                        model.reduce(PostDetailMviModel.Intent.NavigateNext)
+                                    },
+                                ),
+                            imageVector = Icons.AutoMirrored.Default.NavigateNext,
+                            contentDescription = LocalStrings.current.actionNavigateToNextPost,
+                            tint = MaterialTheme.colorScheme.onBackground,
                         )
                     }
-                },
-            )
-        }
-
-        copyPostBottomSheet?.also { post ->
-            val titleCanBeCopied = post.title.isNotBlank()
-            val textCanBeCopied = post.text.isNotBlank()
-            val texts = mutableListOf<String>()
-            val values = mutableListOf<CustomModalBottomSheetItem>()
-            if (titleCanBeCopied) {
-                texts += post.title
-                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyTitle)
-            }
-            if (textCanBeCopied) {
-                texts += post.text
-                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyText)
-                if (titleCanBeCopied) {
-                    texts +=
-                        buildString {
-                            append(post.title)
-                            append("\n")
-                            append(post.text)
-                        }
-                    values += CustomModalBottomSheetItem(label = LocalStrings.current.copyBoth)
                 }
             }
-            CustomModalBottomSheet(
-                title = LocalStrings.current.actionCopyClipboard,
-                items = values,
-                onSelect = { index ->
-                    copyPostBottomSheet = null
-                    if (index != null) {
-                        val text = texts[index]
-                        clipboardManager.setText(AnnotatedString(text))
-                    }
-                },
-            )
         }
+    }
+
+    if (rawContent != null) {
+        when (val content = rawContent) {
+            is PostModel -> {
+                RawContentDialog(
+                    title = content.title,
+                    publishDate = content.publishDate,
+                    updateDate = content.updateDate,
+                    url = content.url,
+                    text = content.text,
+                    upVotes = content.upvotes,
+                    downVotes = content.downvotes,
+                    isLogged = uiState.isLogged,
+                    onDismiss = {
+                        rawContent = null
+                    },
+                    onQuote = { quotation ->
+                        rawContent = null
+                        if (quotation != null) {
+                            mainRouter.openReply(
+                                originalPost = content,
+                                initialText =
+                                buildString {
+                                    append("> ")
+                                    append(quotation)
+                                    append("\n\n")
+                                },
+                            )
+                        }
+                    },
+                )
+            }
+
+            is CommentModel -> {
+                RawContentDialog(
+                    text = content.text,
+                    isLogged = uiState.isLogged,
+                    upVotes = content.upvotes,
+                    downVotes = content.downvotes,
+                    publishDate = content.publishDate,
+                    updateDate = content.updateDate,
+                    onDismiss = {
+                        rawContent = null
+                    },
+                    onQuote = { quotation ->
+                        rawContent = null
+                        if (quotation != null) {
+                            mainRouter.openReply(
+                                originalPost = uiState.post,
+                                originalComment = content,
+                                initialText =
+                                buildString {
+                                    append("> ")
+                                    append(quotation)
+                                    append("\n\n")
+                                },
+                            )
+                        }
+                    },
+                )
+            }
+        }
+    }
+
+    postToDelete?.also {
+        AlertDialog(
+            onDismissRequest = {
+                postToDelete = null
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        postToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonCancel)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        model.reduce(PostDetailMviModel.Intent.DeletePost)
+                        postToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonConfirm)
+                }
+            },
+            text = {
+                Text(text = LocalStrings.current.messageAreYouSure)
+            },
+        )
+    }
+    commentIdToDelete?.also { itemId ->
+        AlertDialog(
+            onDismissRequest = {
+                commentIdToDelete = null
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        commentIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonCancel)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        model.reduce(PostDetailMviModel.Intent.DeleteComment(itemId))
+                        commentIdToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonConfirm)
+                }
+            },
+            text = {
+                Text(text = LocalStrings.current.messageAreYouSure)
+            },
+        )
+    }
+
+    shareBottomSheetUrls?.also { values ->
+        CustomModalBottomSheet(
+            title = LocalStrings.current.postActionShare,
+            items =
+            values.map { value ->
+                CustomModalBottomSheetItem(label = value)
+            },
+            onSelect = { index ->
+                shareBottomSheetUrls = null
+                if (index != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.Share(url = values[index]),
+                    )
+                }
+            },
+        )
+    }
+
+    if (sortBottomSheetOpened) {
+        SortBottomSheet(
+            values = uiState.availableSortTypes,
+            expandTop = false,
+            onSelect = { value ->
+                sortBottomSheetOpened = false
+                if (value != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeCommentSortType(
+                            value = value,
+                            screenKey = null,
+                        ),
+                    )
+                }
+            },
+        )
+    }
+
+    copyPostBottomSheet?.also { post ->
+        val titleCanBeCopied = post.title.isNotBlank()
+        val textCanBeCopied = post.text.isNotBlank()
+        val texts = mutableListOf<String>()
+        val values = mutableListOf<CustomModalBottomSheetItem>()
+        if (titleCanBeCopied) {
+            texts += post.title
+            values += CustomModalBottomSheetItem(label = LocalStrings.current.copyTitle)
+        }
+        if (textCanBeCopied) {
+            texts += post.text
+            values += CustomModalBottomSheetItem(label = LocalStrings.current.copyText)
+            if (titleCanBeCopied) {
+                texts +=
+                    buildString {
+                        append(post.title)
+                        append("\n")
+                        append(post.text)
+                    }
+                values += CustomModalBottomSheetItem(label = LocalStrings.current.copyBoth)
+            }
+        }
+        CustomModalBottomSheet(
+            title = LocalStrings.current.actionCopyClipboard,
+            items = values,
+            onSelect = { index ->
+                copyPostBottomSheet = null
+                if (index != null) {
+                    val text = texts[index]
+                    clipboardManager.setText(AnnotatedString(text))
+                }
+            },
+        )
     }
 }

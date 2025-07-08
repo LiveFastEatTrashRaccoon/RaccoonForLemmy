@@ -32,8 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -41,10 +39,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.DetailInfoItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
@@ -53,218 +51,210 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.components.ModeratedCommunityCell
 import com.livefast.eattrash.raccoonforlemmy.unit.userinfo.di.UserInfoMMviModelParams
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.launch
 
-class UserInfoScreen(private val userId: Long, private val username: String, private val otherInstance: String) :
-    Screen {
-    override val key: ScreenKey
-        get() = super.key + userId.toString()
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserInfoScreen(userId: Long, username: String, otherInstance: String, modifier: Modifier = Modifier) {
+    val model: UserInfoMviModel =
+        getViewModel<UserInfoViewModel>(
+            UserInfoMMviModelParams(
+                userId = userId,
+                username = username,
+                otherInstance = otherInstance,
+            ),
+        )
+    val uiState by model.uiState.collectAsState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val scope = rememberCoroutineScope()
+    val mainRouter = remember { getMainRouter() }
+    val themeRepository = remember { getThemeRepository() }
+    val family by themeRepository.contentFontFamily.collectAsState()
+    val typography = family.toTypography()
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: UserInfoMviModel =
-            getViewModel<UserInfoViewModel>(
-                UserInfoMMviModelParams(
-                    userId = userId,
-                    username = username,
-                    otherInstance = otherInstance,
+    Scaffold(
+        modifier = modifier,
+        contentColor = MaterialTheme.colorScheme.onBackground,
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+        topBar = {
+            val title = uiState.user.readableName(uiState.preferNicknames)
+            TopAppBar(
+                colors =
+                TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
                 ),
+                title = {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                },
+                actions = {
+                    Icon(
+                        modifier =
+                        Modifier.padding(end = Spacing.s).onClick(
+                            onClick = {
+                                navigationCoordinator.closeSideMenu()
+                            },
+                        ),
+                        imageVector = Icons.Default.Close,
+                        contentDescription = LocalStrings.current.actionCloseSideMenu,
+                        tint = MaterialTheme.colorScheme.onBackground,
+                    )
+                },
             )
-        val uiState by model.uiState.collectAsState()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val scope = rememberCoroutineScope()
-        val detailOpener = remember { getDetailOpener() }
-        val themeRepository = remember { getThemeRepository() }
-        val family by themeRepository.contentFontFamily.collectAsState()
-        val typography = family.toTypography()
-
-        Scaffold(
-            contentColor = MaterialTheme.colorScheme.onBackground,
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-            topBar = {
-                val title = uiState.user.readableName(uiState.preferNicknames)
-                TopAppBar(
-                    colors =
-                    TopAppBarDefaults.topAppBarColors().copy(
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-                    ),
-                    title = {
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    },
-                    actions = {
-                        Icon(
-                            modifier =
-                            Modifier.padding(end = Spacing.s).onClick(
-                                onClick = {
-                                    navigationCoordinator.closeSideMenu()
-                                },
-                            ),
-                            imageVector = Icons.Default.Close,
-                            contentDescription = LocalStrings.current.actionCloseSideMenu,
-                            tint = MaterialTheme.colorScheme.onBackground,
-                        )
-                    },
-                )
-            },
-        ) { padding ->
-            LazyColumn(
-                modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                        start = Spacing.m,
-                        end = Spacing.m,
-                    ),
-                verticalArrangement = Arrangement.spacedBy(Spacing.s),
-            ) {
-                item {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                    ) {
-                        SelectionContainer {
-                            DetailInfoItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                icon = Icons.Default.AlternateEmail,
-                                title = uiState.user.readableHandle,
-                            )
-                        }
+        },
+    ) { padding ->
+        LazyColumn(
+            modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(
+                    top = padding.calculateTopPadding(),
+                    start = Spacing.m,
+                    end = Spacing.m,
+                ),
+            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+        ) {
+            item {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                ) {
+                    SelectionContainer {
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.Default.Cake,
-                            title = uiState.user.accountAge.prettifyDate(),
+                            icon = Icons.Default.AlternateEmail,
+                            title = uiState.user.readableHandle,
                         )
-                        uiState.user.score?.also { score ->
-                            DetailInfoItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                icon = Icons.AutoMirrored.Default.Article,
-                                title = LocalStrings.current.communityInfoPosts,
-                                value =
-                                score.postScore.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
-                            )
-                            DetailInfoItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                icon = Icons.AutoMirrored.Default.Reply,
-                                title = LocalStrings.current.communityInfoComments,
-                                value =
-                                score.commentScore.getPrettyNumber(
-                                    thousandLabel = LocalStrings.current.profileThousandShort,
-                                    millionLabel = LocalStrings.current.profileMillionShort,
-                                ),
-                            )
-                        }
-                        if (uiState.isAdmin) {
-                            DetailInfoItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                icon = Icons.Default.Shield,
-                                title = LocalStrings.current.userInfoAdmin,
-                            )
-                        }
                     }
-                }
-                uiState.user.displayName.takeIf { it.isNotEmpty() }?.also { name ->
-                    item {
-                        Text(
+                    DetailInfoItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Icons.Default.Cake,
+                        title = uiState.user.accountAge.prettifyDate(),
+                    )
+                    uiState.user.score?.also { score ->
+                        DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
-                            text = name,
-                            textAlign = TextAlign.Center,
-                            style = typography.titleMedium,
+                            icon = Icons.AutoMirrored.Default.Article,
+                            title = LocalStrings.current.communityInfoPosts,
+                            value =
+                            score.postScore.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
+                        )
+                        DetailInfoItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            icon = Icons.AutoMirrored.Default.Reply,
+                            title = LocalStrings.current.communityInfoComments,
+                            value =
+                            score.commentScore.getPrettyNumber(
+                                thousandLabel = LocalStrings.current.profileThousandShort,
+                                millionLabel = LocalStrings.current.profileMillionShort,
+                            ),
+                        )
+                    }
+                    if (uiState.isAdmin) {
+                        DetailInfoItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            icon = Icons.Default.Shield,
+                            title = LocalStrings.current.userInfoAdmin,
                         )
                     }
                 }
-                uiState.user.bio?.takeIf { it.isNotEmpty() }?.also { biography ->
-                    item {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                        ) {
-                            Text(
-                                text = LocalStrings.current.settingsWebBio,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
-                            )
-                            CustomizedContent(ContentFontClass.Body) {
-                                PostCardBody(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    text = biography,
-                                    onOpenImage = { url ->
-                                        scope.launch {
-                                            navigationCoordinator.pushScreen(
-                                                ZoomableImageScreen(
-                                                    url = url,
-                                                    source = uiState.user.readableHandle,
-                                                ),
-                                            )
-                                        }
-                                    },
-                                )
-                            }
-                        }
-                    }
+            }
+            uiState.user.displayName.takeIf { it.isNotEmpty() }?.also { name ->
+                item {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = name,
+                        textAlign = TextAlign.Center,
+                        style = typography.titleMedium,
+                    )
                 }
-
-                uiState.user.matrixUserId?.also { matrixUserId ->
-                    item {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                        ) {
-                            Text(
-                                text = LocalStrings.current.settingsWebMatrix,
-                                style = MaterialTheme.typography.labelMedium,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
-                            )
-                            CustomizedContent(ContentFontClass.AncillaryText) {
-                                SelectionContainer {
-                                    Text(
-                                        text = matrixUserId,
-                                        style =
-                                        MaterialTheme.typography.bodyMedium.copy(
-                                            fontFamily = FontFamily.Monospace,
-                                        ),
-                                        color = MaterialTheme.colorScheme.onBackground,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (uiState.moderatedCommunities.isNotEmpty()) {
-                    item {
+            }
+            uiState.user.bio?.takeIf { it.isNotEmpty() }?.also { biography ->
+                item {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                    ) {
                         Text(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    top = Spacing.s,
-                                    bottom = Spacing.xs,
-                                ),
-                            text = LocalStrings.current.userInfoModerates,
+                            text = LocalStrings.current.settingsWebBio,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
                         )
-                        LazyRow(
-                            modifier = Modifier.padding(top = Spacing.xxs),
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                        ) {
-                            items(
-                                count = uiState.moderatedCommunities.size,
-                            ) { idx ->
-                                val community = uiState.moderatedCommunities[idx]
-                                ModeratedCommunityCell(
-                                    autoLoadImages = uiState.autoLoadImages,
-                                    community = community,
-                                    onOpenCommunity = { _ ->
-                                        detailOpener.openCommunityDetail(community)
-                                    },
+                        CustomizedContent(ContentFontClass.Body) {
+                            PostCardBody(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = biography,
+                                onOpenImage = { url ->
+                                    scope.launch {
+                                        mainRouter.openImage(
+                                            url = url,
+                                            source = uiState.user.readableHandle,
+                                        )
+                                    }
+                                },
+                            )
+                        }
+                    }
+                }
+            }
+
+            uiState.user.matrixUserId?.also { matrixUserId ->
+                item {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+                    ) {
+                        Text(
+                            text = LocalStrings.current.settingsWebMatrix,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
+                        )
+                        CustomizedContent(ContentFontClass.AncillaryText) {
+                            SelectionContainer {
+                                Text(
+                                    text = matrixUserId,
+                                    style =
+                                    MaterialTheme.typography.bodyMedium.copy(
+                                        fontFamily = FontFamily.Monospace,
+                                    ),
+                                    color = MaterialTheme.colorScheme.onBackground,
                                 )
                             }
+                        }
+                    }
+                }
+            }
+
+            if (uiState.moderatedCommunities.isNotEmpty()) {
+                item {
+                    Text(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = Spacing.s,
+                                bottom = Spacing.xs,
+                            ),
+                        text = LocalStrings.current.userInfoModerates,
+                    )
+                    LazyRow(
+                        modifier = Modifier.padding(top = Spacing.xxs),
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                    ) {
+                        items(
+                            count = uiState.moderatedCommunities.size,
+                        ) { idx ->
+                            val community = uiState.moderatedCommunities[idx]
+                            ModeratedCommunityCell(
+                                autoLoadImages = uiState.autoLoadImages,
+                                community = community,
+                                onOpenCommunity = { _ ->
+                                    mainRouter.openCommunityDetail(community)
+                                },
+                            )
                         }
                     }
                 }

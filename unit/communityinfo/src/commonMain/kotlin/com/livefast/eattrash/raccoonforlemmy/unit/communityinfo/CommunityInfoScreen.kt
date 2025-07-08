@@ -34,16 +34,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.ScreenKey
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.DetailInfoItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
@@ -51,201 +49,195 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.unit.communityinfo.components.ModeratorCell
 import com.livefast.eattrash.raccoonforlemmy.unit.communityinfo.di.CommunityInfoMviModelParams
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 
-class CommunityInfoScreen(
-    private val communityId: Long,
-    private val communityName: String = "",
-    private val otherInstance: String = "",
-) : Screen {
-    override val key: ScreenKey
-        get() = super.key + communityId.toString()
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CommunityInfoScreen(
+    communityId: Long,
+    modifier: Modifier = Modifier,
+    communityName: String = "",
+    otherInstance: String = "",
+) {
+    val model: CommunityInfoMviModel =
+        getViewModel<CommunityInfoViewModel>(
+            CommunityInfoMviModelParams(
+                communityId = communityId,
+                communityName = communityName,
+                otherInstance = otherInstance,
+            ),
+        )
+    val uiState by model.uiState.collectAsState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val mainRouter = remember { getMainRouter() }
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: CommunityInfoMviModel =
-            getViewModel<CommunityInfoViewModel>(
-                CommunityInfoMviModelParams(
-                    communityId = communityId,
-                    communityName = communityName,
-                    otherInstance = otherInstance,
+    Scaffold(
+        modifier = modifier,
+        contentColor = MaterialTheme.colorScheme.onBackground,
+        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
+        topBar = {
+            val title = uiState.community.readableName(uiState.preferNicknames)
+            TopAppBar(
+                colors =
+                TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
                 ),
-            )
-        val uiState by model.uiState.collectAsState()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val detailOpener = remember { getDetailOpener() }
-
-        Scaffold(
-            contentColor = MaterialTheme.colorScheme.onBackground,
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-            topBar = {
-                val title = uiState.community.readableName(uiState.preferNicknames)
-                TopAppBar(
-                    colors =
-                    TopAppBarDefaults.topAppBarColors().copy(
-                        containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp),
-                    ),
-                    title = {
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                    },
-                    actions = {
-                        IconButton(
-                            onClick = {
-                                navigationCoordinator.closeSideMenu()
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = LocalStrings.current.buttonClose,
-                            )
-                        }
-                    },
-                )
-            },
-        ) { padding ->
-            LazyColumn(
-                modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                        start = Spacing.m,
-                        end = Spacing.m,
-                    ),
-                verticalArrangement = Arrangement.spacedBy(Spacing.s),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                item {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                title = {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground,
+                    )
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            navigationCoordinator.closeSideMenu()
+                        },
                     ) {
-                        SelectionContainer {
-                            DetailInfoItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                icon = Icons.Default.AlternateEmail,
-                                title = uiState.community.readableHandle,
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = LocalStrings.current.buttonClose,
+                        )
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        LazyColumn(
+            modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(
+                    top = padding.calculateTopPadding(),
+                    start = Spacing.m,
+                    end = Spacing.m,
+                ),
+            verticalArrangement = Arrangement.spacedBy(Spacing.s),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            item {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+                ) {
+                    SelectionContainer {
+                        DetailInfoItem(
+                            modifier = Modifier.fillMaxWidth(),
+                            icon = Icons.Default.AlternateEmail,
+                            title = uiState.community.readableHandle,
+                        )
+                    }
+                    DetailInfoItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Icons.Default.Cake,
+                        title =
+                        uiState.community.creationDate
+                            ?.prettifyDate()
+                            .orEmpty(),
+                    )
+                    DetailInfoItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Icons.AutoMirrored.Default.Article,
+                        title = LocalStrings.current.communityInfoPosts,
+                        value =
+                        uiState.community.posts.getPrettyNumber(
+                            thousandLabel = LocalStrings.current.profileThousandShort,
+                            millionLabel = LocalStrings.current.profileMillionShort,
+                        ),
+                    )
+                    DetailInfoItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Icons.AutoMirrored.Default.Reply,
+                        title = LocalStrings.current.communityInfoComments,
+                        value =
+                        uiState.community.comments.getPrettyNumber(
+                            thousandLabel = LocalStrings.current.profileThousandShort,
+                            millionLabel = LocalStrings.current.profileMillionShort,
+                        ),
+                    )
+                    DetailInfoItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Icons.Default.Group,
+                        title = LocalStrings.current.communityInfoSubscribers,
+                        value =
+                        uiState.community.subscribers.getPrettyNumber(
+                            thousandLabel = LocalStrings.current.profileThousandShort,
+                            millionLabel = LocalStrings.current.profileMillionShort,
+                        ),
+                    )
+                    DetailInfoItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Icons.Default.CalendarViewMonth,
+                        title = LocalStrings.current.communityInfoMonthlyActiveUsers,
+                        value =
+                        uiState.community.monthlyActiveUsers.getPrettyNumber(
+                            thousandLabel = LocalStrings.current.profileThousandShort,
+                            millionLabel = LocalStrings.current.profileMillionShort,
+                        ),
+                    )
+                    DetailInfoItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Icons.Default.CalendarViewWeek,
+                        title = LocalStrings.current.communityInfoWeeklyActiveUsers,
+                        value =
+                        uiState.community.weeklyActiveUsers.getPrettyNumber(
+                            thousandLabel = LocalStrings.current.profileThousandShort,
+                            millionLabel = LocalStrings.current.profileMillionShort,
+                        ),
+                    )
+                    DetailInfoItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        icon = Icons.Default.CalendarViewDay,
+                        title = LocalStrings.current.communityInfoDailyActiveUsers,
+                        value =
+                        uiState.community.dailyActiveUsers.getPrettyNumber(
+                            thousandLabel = LocalStrings.current.profileThousandShort,
+                            millionLabel = LocalStrings.current.profileMillionShort,
+                        ),
+                    )
+                }
+            }
+            if (uiState.moderators.isNotEmpty()) {
+                item {
+                    Text(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                top = Spacing.s,
+                                bottom = Spacing.xs,
+                            ),
+                        text = LocalStrings.current.communityInfoModerators,
+                    )
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
+                    ) {
+                        items(
+                            count = uiState.moderators.size,
+                        ) { idx ->
+                            val user = uiState.moderators[idx]
+                            ModeratorCell(
+                                autoLoadImages = uiState.autoLoadImages,
+                                user = user,
+                                onOpenUser = { _ ->
+                                    mainRouter.openUserDetail(user, "")
+                                },
                             )
                         }
-                        DetailInfoItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.Default.Cake,
-                            title =
-                            uiState.community.creationDate
-                                ?.prettifyDate()
-                                .orEmpty(),
-                        )
-                        DetailInfoItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.AutoMirrored.Default.Article,
-                            title = LocalStrings.current.communityInfoPosts,
-                            value =
-                            uiState.community.posts.getPrettyNumber(
-                                thousandLabel = LocalStrings.current.profileThousandShort,
-                                millionLabel = LocalStrings.current.profileMillionShort,
-                            ),
-                        )
-                        DetailInfoItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.AutoMirrored.Default.Reply,
-                            title = LocalStrings.current.communityInfoComments,
-                            value =
-                            uiState.community.comments.getPrettyNumber(
-                                thousandLabel = LocalStrings.current.profileThousandShort,
-                                millionLabel = LocalStrings.current.profileMillionShort,
-                            ),
-                        )
-                        DetailInfoItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.Default.Group,
-                            title = LocalStrings.current.communityInfoSubscribers,
-                            value =
-                            uiState.community.subscribers.getPrettyNumber(
-                                thousandLabel = LocalStrings.current.profileThousandShort,
-                                millionLabel = LocalStrings.current.profileMillionShort,
-                            ),
-                        )
-                        DetailInfoItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.Default.CalendarViewMonth,
-                            title = LocalStrings.current.communityInfoMonthlyActiveUsers,
-                            value =
-                            uiState.community.monthlyActiveUsers.getPrettyNumber(
-                                thousandLabel = LocalStrings.current.profileThousandShort,
-                                millionLabel = LocalStrings.current.profileMillionShort,
-                            ),
-                        )
-                        DetailInfoItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.Default.CalendarViewWeek,
-                            title = LocalStrings.current.communityInfoWeeklyActiveUsers,
-                            value =
-                            uiState.community.weeklyActiveUsers.getPrettyNumber(
-                                thousandLabel = LocalStrings.current.profileThousandShort,
-                                millionLabel = LocalStrings.current.profileMillionShort,
-                            ),
-                        )
-                        DetailInfoItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.Default.CalendarViewDay,
-                            title = LocalStrings.current.communityInfoDailyActiveUsers,
-                            value =
-                            uiState.community.dailyActiveUsers.getPrettyNumber(
-                                thousandLabel = LocalStrings.current.profileThousandShort,
-                                millionLabel = LocalStrings.current.profileMillionShort,
-                            ),
-                        )
                     }
                 }
-                if (uiState.moderators.isNotEmpty()) {
-                    item {
-                        Text(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    top = Spacing.s,
-                                    bottom = Spacing.xs,
-                                ),
-                            text = LocalStrings.current.communityInfoModerators,
-                        )
-                        LazyRow(
-                            horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                        ) {
-                            items(
-                                count = uiState.moderators.size,
-                            ) { idx ->
-                                val user = uiState.moderators[idx]
-                                ModeratorCell(
-                                    autoLoadImages = uiState.autoLoadImages,
-                                    user = user,
-                                    onOpenUser = { _ ->
-                                        detailOpener.openUserDetail(user, "")
-                                    },
-                                )
-                            }
-                        }
-                    }
-                }
-                item {
-                    CustomizedContent(ContentFontClass.Body) {
-                        PostCardBody(
-                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.m),
-                            text = uiState.community.description,
-                            onOpenImage = { url ->
-                                navigationCoordinator.pushScreen(
-                                    ZoomableImageScreen(
-                                        url = url,
-                                        source = uiState.community.readableHandle,
-                                    ),
-                                )
-                            },
-                        )
-                    }
+            }
+            item {
+                CustomizedContent(ContentFontClass.Body) {
+                    PostCardBody(
+                        modifier = Modifier.fillMaxWidth().padding(top = Spacing.m),
+                        text = uiState.community.description,
+                        onOpenImage = { url ->
+                            mainRouter.openImage(
+                                url = url,
+                                source = uiState.community.readableHandle,
+                            )
+                        },
+                    )
                 }
             }
         }

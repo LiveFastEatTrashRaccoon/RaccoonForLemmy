@@ -176,16 +176,6 @@ class LicencesViewModel :
                             subtitle = "SQLDelight generates typesafe Kotlin APIs from your SQL statements",
                             url = LicenceUrls.SQLDELIGHT,
                         )
-                    this +=
-                        LicenceItem(
-                            type = LicenceItemType.Library,
-                            title = "Voyager",
-                            subtitle = """
-                                    A multiplatform navigation library built for, and seamlessly integrated with,
-                                    Jetpack Compose
-                            """.trimIndent(),
-                            url = LicenceUrls.VOYAGER,
-                        )
                 },
             )
         }

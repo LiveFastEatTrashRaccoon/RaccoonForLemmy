@@ -69,7 +69,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingAc
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FloatingActionButtonMenuItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SwipeActionCard
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.BlockActionType
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
@@ -83,6 +82,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
@@ -99,12 +99,10 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonAction
-import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.ModerateWithReasonScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.moderatewithreason.toInt
 import com.livefast.eattrash.raccoonforlemmy.unit.postlist.components.PostsTopBar
 import com.livefast.eattrash.raccoonforlemmy.unit.rawcontent.RawContentDialog
 import com.livefast.eattrash.raccoonforlemmy.unit.selectinstance.SelectInstanceBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -138,7 +136,7 @@ fun PostListScreen(
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val keepScreenOn = rememberKeepScreenOn()
-    val detailOpener = remember { getDetailOpener() }
+    val mainRouter = remember { getMainRouter() }
     val connection = navigationCoordinator.getBottomBarScrollConnection()
     val bottomNavigationInset =
         with(LocalDensity.current) {
@@ -191,7 +189,7 @@ fun PostListScreen(
                     }
 
                     is PostListMviModel.Effect.OpenDetail ->
-                        detailOpener.openPostDetail(effect.post)
+                        mainRouter.openPostDetail(effect.post)
                 }
             }.launchIn(this)
     }
@@ -204,8 +202,8 @@ fun PostListScreen(
     }
 
     Scaffold(
-        modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
         topBar = {
             PostsTopBar(
                 currentInstance = uiState.instance,
@@ -308,7 +306,7 @@ fun PostListScreen(
                                     icon = Icons.Default.Create,
                                     text = LocalStrings.current.actionCreatePost,
                                     onSelected = {
-                                        detailOpener.openCreatePost(
+                                        mainRouter.openCreatePost(
                                             forceCommunitySelection = true,
                                         )
                                     },
@@ -431,7 +429,7 @@ fun PostListScreen(
                                         },
                                         backgroundColor = replyColor ?: defaultReplyColor,
                                         onTriggered = {
-                                            detailOpener.openReply(originalPost = post)
+                                            mainRouter.openReply(originalPost = post)
                                         },
                                     )
 
@@ -465,7 +463,7 @@ fun PostListScreen(
                                         },
                                         backgroundColor = MaterialTheme.colorScheme.tertiary,
                                         onTriggered = {
-                                            detailOpener.openCreatePost(editedPost = post)
+                                            mainRouter.openCreatePost(editedPost = post)
                                         },
                                     ).takeIf { canEdit }
 
@@ -517,13 +515,13 @@ fun PostListScreen(
                                         )
                                     }.takeIf { uiState.doubleTapActionEnabled && uiState.isLogged },
                                     onOpenCommunity = { community, instance ->
-                                        detailOpener.openCommunityDetail(
+                                        mainRouter.openCommunityDetail(
                                             community = community,
                                             otherInstance = instance,
                                         )
                                     },
                                     onOpenCreator = { user, instance ->
-                                        detailOpener.openUserDetail(
+                                        mainRouter.openUserDetail(
                                             user = user,
                                             otherInstance = instance,
                                         )
@@ -558,20 +556,16 @@ fun PostListScreen(
                                     },
                                     onOpenImage = { url ->
                                         model.reduce(PostListMviModel.Intent.MarkAsRead(post.id))
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                source = post.community?.readableHandle.orEmpty(),
-                                            ),
+                                        mainRouter.openImage(
+                                            url = url,
+                                            source = post.community?.readableHandle.orEmpty(),
                                         )
                                     },
                                     onOpenVideo = { url ->
-                                        navigationCoordinator.pushScreen(
-                                            ZoomableImageScreen(
-                                                url = url,
-                                                isVideo = true,
-                                                source = post.community?.readableHandle.orEmpty(),
-                                            ),
+                                        mainRouter.openImage(
+                                            url = url,
+                                            isVideo = true,
+                                            source = post.community?.readableHandle.orEmpty(),
                                         )
                                     },
                                     options =
@@ -640,20 +634,18 @@ fun PostListScreen(
                                             }
 
                                             OptionId.Edit -> {
-                                                detailOpener.openCreatePost(editedPost = post)
+                                                mainRouter.openCreatePost(editedPost = post)
                                             }
 
                                             OptionId.Report -> {
-                                                val screen =
-                                                    ModerateWithReasonScreen(
-                                                        actionId = ModerateWithReasonAction.ReportPost.toInt(),
-                                                        contentId = post.id,
-                                                    )
-                                                navigationCoordinator.pushScreen(screen)
+                                                mainRouter.openModerateWithReason(
+                                                    actionId = ModerateWithReasonAction.ReportPost.toInt(),
+                                                    contentId = post.id,
+                                                )
                                             }
 
                                             OptionId.CrossPost -> {
-                                                detailOpener.openCreatePost(
+                                                mainRouter.openCreatePost(
                                                     crossPost = post,
                                                     forceCommunitySelection = true,
                                                 )
@@ -868,7 +860,7 @@ fun PostListScreen(
                     onQuote = { quotation ->
                         rawContent = null
                         if (quotation != null) {
-                            detailOpener.openReply(
+                            mainRouter.openReply(
                                 originalPost = content,
                                 initialText =
                                 buildString {

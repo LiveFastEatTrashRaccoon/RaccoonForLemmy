@@ -27,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
@@ -39,101 +38,100 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.unit.usertags.di.UserTagDetailMviModelParams
 
-class UserTagDetailScreen(private val id: Long) : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: UserTagDetailMviModel = getViewModel<UserTagDetailViewModel>(UserTagDetailMviModelParams(id))
-        val uiState by model.uiState.collectAsState()
-        val navigatorCoordinator = remember { getNavigationCoordinator() }
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserTagDetailScreen(id: Long, modifier: Modifier = Modifier) {
+    val model: UserTagDetailMviModel = getViewModel<UserTagDetailViewModel>(UserTagDetailMviModelParams(id))
+    val uiState by model.uiState.collectAsState()
+    val navigatorCoordinator = remember { getNavigationCoordinator() }
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = uiState.tag?.name.orEmpty(),
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                navigatorCoordinator.popScreen()
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = LocalStrings.current.actionGoBack,
-                            )
-                        }
-                    },
-                )
-            },
-        ) { padding ->
-            PullToRefreshBox(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).fillMaxSize()
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
-                isRefreshing = uiState.refreshing,
-                onRefresh = {
-                    model.reduce(UserTagDetailMviModel.Intent.Refresh)
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = uiState.tag?.name.orEmpty(),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
                 },
-            ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
-                ) {
-                    if (uiState.initial) {
-                        items(5) {
-                            CommunityItemPlaceholder()
-                        }
-                    }
-                    items(uiState.users) { user ->
-                        UserTagMemberItem(
-                            member = user,
-                            options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        id = OptionId.Delete,
-                                        text = LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                            onSelectOption = { optionId ->
-                                when (optionId) {
-                                    OptionId.Delete ->
-                                        model.reduce(
-                                            UserTagDetailMviModel.Intent.Remove(user.username),
-                                        )
-
-                                    else -> Unit
-                                }
-                            },
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navigatorCoordinator.pop()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
-                    if (uiState.users.isEmpty()) {
-                        item {
-                            Text(
-                                modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
-                                textAlign = TextAlign.Center,
-                                text = LocalStrings.current.messageEmptyList,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
-                            )
-                        }
+                },
+            )
+        },
+    ) { padding ->
+        PullToRefreshBox(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            isRefreshing = uiState.refreshing,
+            onRefresh = {
+                model.reduce(UserTagDetailMviModel.Intent.Refresh)
+            },
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xxs),
+            ) {
+                if (uiState.initial) {
+                    items(5) {
+                        CommunityItemPlaceholder()
                     }
+                }
+                items(uiState.users) { user ->
+                    UserTagMemberItem(
+                        member = user,
+                        options =
+                        buildList {
+                            this +=
+                                Option(
+                                    id = OptionId.Delete,
+                                    text = LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
+                            when (optionId) {
+                                OptionId.Delete ->
+                                    model.reduce(
+                                        UserTagDetailMviModel.Intent.Remove(user.username),
+                                    )
+
+                                else -> Unit
+                            }
+                        },
+                    )
+                }
+                if (uiState.users.isEmpty()) {
                     item {
-                        Spacer(modifier = Modifier.height(Spacing.xxxl))
+                        Text(
+                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
+                            textAlign = TextAlign.Center,
+                            text = LocalStrings.current.messageEmptyList,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
                     }
+                }
+                item {
+                    Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
             }
         }

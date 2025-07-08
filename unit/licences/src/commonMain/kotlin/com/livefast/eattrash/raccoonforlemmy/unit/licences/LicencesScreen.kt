@@ -27,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
@@ -36,74 +35,73 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.unit.licences.components.LicenceItem
 
-class LicencesScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: LicencesMviModel = getViewModel<LicencesViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val uriHandler = LocalUriHandler.current
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LicencesScreen(modifier: Modifier = Modifier) {
+    val model: LicencesMviModel = getViewModel<LicencesViewModel>()
+    val uiState by model.uiState.collectAsState()
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val uriHandler = LocalUriHandler.current
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    scrollBehavior = scrollBehavior,
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = LocalStrings.current.settingsAboutLicences,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                    },
-                    navigationIcon = {
-                        if (navigationCoordinator.canPop.value) {
-                            IconButton(
-                                onClick = {
-                                    navigationCoordinator.popScreen()
-                                },
-                            ) {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                    contentDescription = LocalStrings.current.actionGoBack,
-                                )
-                            }
-                        }
-                    },
-                )
-            },
-        ) { padding ->
-            LazyColumn(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-            ) {
-                items(uiState.items) { item ->
-                    LicenceItem(
-                        item = item,
-                        modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .onClick(
-                                onClick = {
-                                    if (item.url.isNotBlank()) {
-                                        uriHandler.openUri(item.url)
-                                    }
-                                },
-                            ),
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                scrollBehavior = scrollBehavior,
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.settingsAboutLicences,
+                        style = MaterialTheme.typography.titleMedium,
                     )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(Spacing.xxxl))
-                }
+                },
+                navigationIcon = {
+                    if (navigationCoordinator.canPop.value) {
+                        IconButton(
+                            onClick = {
+                                navigationCoordinator.pop()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                contentDescription = LocalStrings.current.actionGoBack,
+                            )
+                        }
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        LazyColumn(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).nestedScroll(scrollBehavior.nestedScrollConnection)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+        ) {
+            items(uiState.items) { item ->
+                LicenceItem(
+                    item = item,
+                    modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .onClick(
+                            onClick = {
+                                if (item.url.isNotBlank()) {
+                                    uriHandler.openUri(item.url)
+                                }
+                            },
+                        ),
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(Spacing.xxxl))
             }
         }
     }

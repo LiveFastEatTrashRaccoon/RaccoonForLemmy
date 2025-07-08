@@ -26,12 +26,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.detailopener.api.getDetailOpener
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.otherUser
-import com.livefast.eattrash.raccoonforlemmy.unit.chat.InboxChatScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.components.ChatCard
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.components.ChatCardPlaceholder
 import kotlinx.coroutines.flow.launchIn
@@ -43,8 +42,8 @@ fun InboxMessagesScreen(modifier: Modifier = Modifier) {
     val model: InboxMessagesMviModel = getViewModel<InboxMessagesViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = remember { getNavigationCoordinator() }
+    val mainRouter = remember { getMainRouter() }
     val lazyListState = rememberLazyListState()
-    val detailOpener = remember { getDetailOpener() }
 
     LaunchedEffect(navigationCoordinator) {
         navigationCoordinator.onDoubleTabSelection
@@ -114,14 +113,12 @@ fun InboxMessagesScreen(modifier: Modifier = Modifier) {
                     lastMessage = chat.content.orEmpty(),
                     lastMessageDate = chat.publishDate,
                     onOpenUser = { user ->
-                        detailOpener.openUserDetail(user, "")
+                        mainRouter.openUserDetail(user, "")
                     },
                     onOpen = {
                         val userId = chat.otherUser(uiState.currentUserId)?.id
                         if (userId != null) {
-                            navigationCoordinator.pushScreen(
-                                InboxChatScreen(userId),
-                            )
+                            mainRouter.openChat(userId)
                         }
                     },
                 )

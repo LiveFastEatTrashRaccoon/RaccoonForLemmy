@@ -41,210 +41,207 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.MediaModel
 import com.livefast.eattrash.raccoonforlemmy.unit.medialist.components.MediaItem
 import com.livefast.eattrash.raccoonforlemmy.unit.medialist.components.MediaItemPlaceholder
-import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.ZoomableImageScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class MediaListScreen : Screen {
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val model: MediaListMviModel = getViewModel<MediaListViewModel>()
-        val uiState by model.uiState.collectAsState()
-        val topAppBarState = rememberTopAppBarState()
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-        val navigationCoordinator = remember { getNavigationCoordinator() }
-        val snackbarHostState = remember { SnackbarHostState() }
-        val successMessage = LocalStrings.current.messageOperationSuccessful
-        val failureMessage = LocalStrings.current.messageGenericError
-        var itemToDelete by remember { mutableStateOf<MediaModel?>(null) }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MediaListScreen(modifier: Modifier = Modifier) {
+    val model: MediaListMviModel = getViewModel<MediaListViewModel>()
+    val uiState by model.uiState.collectAsState()
+    val topAppBarState = rememberTopAppBarState()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
+    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val mainRouter = remember { getMainRouter() }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val successMessage = LocalStrings.current.messageOperationSuccessful
+    val failureMessage = LocalStrings.current.messageGenericError
+    var itemToDelete by remember { mutableStateOf<MediaModel?>(null) }
 
-        LaunchedEffect(model) {
-            model.effects
-                .onEach { event ->
-                    when (event) {
-                        MediaListMviModel.Effect.Success -> {
-                            snackbarHostState.showSnackbar(successMessage)
-                        }
-
-                        is MediaListMviModel.Effect.Failure -> {
-                            snackbarHostState.showSnackbar(event.message ?: failureMessage)
-                        }
+    LaunchedEffect(model) {
+        model.effects
+            .onEach { event ->
+                when (event) {
+                    MediaListMviModel.Effect.Success -> {
+                        snackbarHostState.showSnackbar(successMessage)
                     }
-                }.launchIn(this)
-        }
 
-        Scaffold(
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-            topBar = {
-                TopAppBar(
-                    windowInsets = topAppBarState.toWindowInsets(),
-                    title = {
-                        Text(
-                            modifier = Modifier.padding(horizontal = Spacing.s),
-                            text = LocalStrings.current.settingsMediaList,
-                            style = MaterialTheme.typography.titleMedium,
+                    is MediaListMviModel.Effect.Failure -> {
+                        snackbarHostState.showSnackbar(event.message ?: failureMessage)
+                    }
+                }
+            }.launchIn(this)
+    }
+
+    Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = modifier,
+        topBar = {
+            TopAppBar(
+                windowInsets = topAppBarState.toWindowInsets(),
+                title = {
+                    Text(
+                        modifier = Modifier.padding(horizontal = Spacing.s),
+                        text = LocalStrings.current.settingsMediaList,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                },
+                scrollBehavior = scrollBehavior,
+                navigationIcon = {
+                    IconButton(
+                        onClick = {
+                            navigationCoordinator.pop()
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = LocalStrings.current.actionGoBack,
                         )
-                    },
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                navigationCoordinator.popScreen()
-                            },
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = LocalStrings.current.actionGoBack,
-                            )
-                        }
-                    },
+                    }
+                },
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState) { data ->
+                Snackbar(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    snackbarData = data,
                 )
+            }
+        },
+    ) { padding ->
+        PullToRefreshBox(
+            modifier =
+            Modifier
+                .padding(
+                    top = padding.calculateTopPadding(),
+                ).nestedScroll(scrollBehavior.nestedScrollConnection)
+                .fillMaxSize(),
+            isRefreshing = uiState.refreshing,
+            onRefresh = {
+                model.reduce(MediaListMviModel.Intent.Refresh)
             },
-            snackbarHost = {
-                SnackbarHost(snackbarHostState) { data ->
-                    Snackbar(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        snackbarData = data,
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+            ) {
+                if (uiState.initial) {
+                    items(5) {
+                        MediaItemPlaceholder()
+                    }
+                }
+
+                items(uiState.media) { media ->
+                    MediaItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        media = media,
+                        instance = uiState.currentInstance,
+                        postLayout = uiState.postLayout,
+                        autoloadImages = uiState.autoloadImages,
+                        fullWidthImage = uiState.fullWidthImages,
+                        fullHeightImage = uiState.fullHeightImages,
+                        onOpenFullScreen = { url ->
+                            mainRouter.openImage(
+                                url = url,
+                                isVideo = true,
+                            )
+                        },
+                        options =
+                        buildList {
+                            this +=
+                                Option(
+                                    OptionId.Delete,
+                                    LocalStrings.current.commentActionDelete,
+                                )
+                        },
+                        onSelectOption = { optionId ->
+                            when (optionId) {
+                                OptionId.Delete -> {
+                                    itemToDelete = media
+                                }
+
+                                else -> Unit
+                            }
+                        },
                     )
                 }
-            },
-        ) { padding ->
-            PullToRefreshBox(
-                modifier =
-                Modifier
-                    .padding(
-                        top = padding.calculateTopPadding(),
-                    ).nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .fillMaxSize(),
-                isRefreshing = uiState.refreshing,
-                onRefresh = {
-                    model.reduce(MediaListMviModel.Intent.Refresh)
-                },
-            ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-                ) {
-                    if (uiState.initial) {
-                        items(5) {
-                            MediaItemPlaceholder()
-                        }
+
+                item {
+                    if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
+                        model.reduce(MediaListMviModel.Intent.LoadNextPage)
                     }
-
-                    items(uiState.media) { media ->
-                        MediaItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            media = media,
-                            instance = uiState.currentInstance,
-                            postLayout = uiState.postLayout,
-                            autoloadImages = uiState.autoloadImages,
-                            fullWidthImage = uiState.fullWidthImages,
-                            fullHeightImage = uiState.fullHeightImages,
-                            onOpenFullScreen = { url ->
-                                navigationCoordinator.pushScreen(
-                                    ZoomableImageScreen(
-                                        url = url,
-                                        isVideo = true,
-                                    ),
-                                )
-                            },
-                            options =
-                            buildList {
-                                this +=
-                                    Option(
-                                        OptionId.Delete,
-                                        LocalStrings.current.commentActionDelete,
-                                    )
-                            },
-                            onSelectOption = { optionId ->
-                                when (optionId) {
-                                    OptionId.Delete -> {
-                                        itemToDelete = media
-                                    }
-
-                                    else -> Unit
-                                }
-                            },
-                        )
-                    }
-
-                    item {
-                        if (!uiState.initial && !uiState.loading && !uiState.refreshing && uiState.canFetchMore) {
-                            model.reduce(MediaListMviModel.Intent.LoadNextPage)
-                        }
-                        if (!uiState.initial && uiState.loading && !uiState.refreshing) {
-                            Box(
-                                modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(25.dp),
-                                    color = MaterialTheme.colorScheme.primary,
-                                )
-                            }
-                        }
-                    }
-
-                    if (!uiState.initial && uiState.media.isEmpty()) {
-                        item {
-                            Text(
-                                modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
-                                textAlign = TextAlign.Center,
-                                text = LocalStrings.current.messageEmptyList,
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onBackground,
+                    if (!uiState.initial && uiState.loading && !uiState.refreshing) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(Spacing.xs),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(25.dp),
+                                color = MaterialTheme.colorScheme.primary,
                             )
                         }
                     }
+                }
 
+                if (!uiState.initial && uiState.media.isEmpty()) {
                     item {
-                        Spacer(modifier = Modifier.height(Spacing.xxxl))
+                        Text(
+                            modifier = Modifier.fillMaxWidth().padding(top = Spacing.xs),
+                            textAlign = TextAlign.Center,
+                            text = LocalStrings.current.messageEmptyList,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
                     }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(Spacing.xxxl))
                 }
             }
         }
+    }
 
-        itemToDelete?.also { media ->
-            AlertDialog(
-                onDismissRequest = {
-                    itemToDelete = null
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            itemToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonCancel)
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            model.reduce(MediaListMviModel.Intent.Delete(media))
-                            itemToDelete = null
-                        },
-                    ) {
-                        Text(text = LocalStrings.current.buttonConfirm)
-                    }
-                },
-                text = {
-                    Text(text = LocalStrings.current.messageAreYouSure)
-                },
-            )
-        }
+    itemToDelete?.also { media ->
+        AlertDialog(
+            onDismissRequest = {
+                itemToDelete = null
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        itemToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonCancel)
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        model.reduce(MediaListMviModel.Intent.Delete(media))
+                        itemToDelete = null
+                    },
+                ) {
+                    Text(text = LocalStrings.current.buttonConfirm)
+                }
+            },
+            text = {
+                Text(text = LocalStrings.current.messageAreYouSure)
+            },
+        )
     }
 }
