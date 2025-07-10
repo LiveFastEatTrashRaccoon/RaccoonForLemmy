@@ -6,12 +6,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 internal class DefaultApiConfigurationRepository(
@@ -21,27 +16,17 @@ internal class DefaultApiConfigurationRepository(
 ) : ApiConfigurationRepository {
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
 
+    private suspend fun getInitialInstance(): String =
+        keyStore.get(KEY_LAST_INSTANCE, "").takeIf { it.isNotEmpty() } ?: serviceProvider.defaultInstance
+
     init {
         scope.launch {
-            val instance =
-                keyStore.get(KEY_LAST_INSTANCE, "")
-                    .takeIf { it.isNotEmpty() } ?: serviceProvider.currentInstance
-            changeInstance(instance)
+            val initialValue = getInitialInstance()
+            changeInstance(initialValue)
         }
     }
 
-    override val instance =
-        channelFlow {
-            while (isActive) {
-                val value = serviceProvider.currentInstance
-                trySend(value)
-                delay(1_000)
-            }
-        }.distinctUntilChanged().stateIn(
-            scope = scope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = "",
-        )
+    override val instance = MutableStateFlow(serviceProvider.defaultInstance)
 
     override fun changeInstance(value: String) {
         scope.launch {
