@@ -30,11 +30,10 @@ internal class DefaultServiceProvider(
     private val factory: HttpClientEngine,
     private val appInfoRepository: AppInfoRepository,
 ) : ServiceProvider {
-    companion object {
-        private const val DEFAULT_INSTANCE = "lemmy.world"
-    }
 
-    override var currentInstance: String = DEFAULT_INSTANCE
+    override val defaultInstance: String get() = DEFAULT_INSTANCE
+
+    override var currentInstance: String = defaultInstance
 
     override lateinit var v3: V3
 
@@ -111,5 +110,9 @@ internal class DefaultServiceProvider(
                 v3.site.get()
             }.getOrNull()
         return site?.version.orEmpty()
+    }
+
+    companion object {
+        private const val DEFAULT_INSTANCE = "lemmy.world"
     }
 }
