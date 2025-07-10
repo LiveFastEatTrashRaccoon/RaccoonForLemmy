@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase
 
-import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInts
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
@@ -12,6 +11,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Communi
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLastSeenDateRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
@@ -19,7 +19,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelp
 internal class DefaultSwitchAccountUseCase(
     private val identityRepository: IdentityRepository,
     private val accountRepository: AccountRepository,
-    private val serviceProvider: ServiceProvider,
+    private val apiConfigurationRepository: ApiConfigurationRepository,
     private val notificationCenter: NotificationCenter,
     private val settingsRepository: SettingsRepository,
     private val communitySortRepository: CommunitySortRepository,
@@ -34,8 +34,7 @@ internal class DefaultSwitchAccountUseCase(
         val accountId = account.id ?: return
         val jwt = account.jwt.takeIf { it.isNotEmpty() } ?: return
         val instance = account.instance.takeIf { it.isNotEmpty() } ?: return
-        val oldActiveAccountId =
-            accountRepository.getActive()?.id.takeIf { it != accountId } ?: return
+        val oldActiveAccountId = accountRepository.getActive()?.id.takeIf { it != accountId } ?: return
 
         accountRepository.setActive(oldActiveAccountId, false)
         accountRepository.setActive(accountId, true)
@@ -47,7 +46,7 @@ internal class DefaultSwitchAccountUseCase(
         postLastSeenDateRepository.clear()
         communityPreferredLanguageRepository.clear()
 
-        serviceProvider.changeInstance(instance)
+        apiConfigurationRepository.changeInstance(instance)
 
         identityRepository.storeToken(jwt)
         identityRepository.refreshLoggedState()

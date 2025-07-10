@@ -15,9 +15,11 @@ class DefaultApiConfigurationRepositoryTest {
     @get:Rule
     val dispatcherTestRule = DispatcherTestRule()
 
+    private val initialInstance = "lemmy.world"
+    private val newInstance = "feddit.it"
     private val serviceProvider =
         mockk<ServiceProvider>(relaxUnitFun = true) {
-            every { currentInstance } returns "lemmy.world"
+            every { defaultInstance } returns initialInstance
         }
     private val keyStore =
         mockk<TemporaryKeyStore>(relaxUnitFun = true) {
@@ -33,13 +35,13 @@ class DefaultApiConfigurationRepositoryTest {
     @Test
     fun whenChangeInstance_thenValueIsUpdated() {
         val resBefore = sut.instance.value
-        assertEquals("", resBefore)
+        assertEquals(initialInstance, resBefore)
 
-        sut.changeInstance("feddit.it")
+        sut.changeInstance(newInstance)
 
         coVerify {
-            serviceProvider.changeInstance("feddit.it")
-            keyStore.save(any(), "feddit.it")
+            serviceProvider.changeInstance(newInstance)
+            keyStore.save(any(), newInstance)
         }
     }
 }

@@ -1,12 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.di
 
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.bindViewModel
-import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsMviModel
 import com.livefast.eattrash.raccoonforlemmy.unit.managesubscriptions.ManageSubscriptionsViewModel
 import org.kodein.di.DI
-import org.kodein.di.bind
 import org.kodein.di.instance
-import org.kodein.di.provider
 
 val manageSubscriptionsModule =
     DI.Module("ManageSubscriptionsModule") {

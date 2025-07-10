@@ -9,6 +9,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import kotlin.test.Test
@@ -53,11 +54,12 @@ class DefaultAccountRepositoryTest {
     @Test
     fun givenExitingAccounts_whenObserveAll_thenResultIsAsExpected() = runTest {
         val accounts = listOf(createFakeEntity())
-        every { query.executeAsList() } returns accounts
+        every { dao.observeAll() } returns flowOf(accounts)
 
         sut.observeAll().test {
             val res = awaitItem()
             assertTrue(res.size == 1)
+            cancelAndConsumeRemainingEvents()
         }
     }
 
