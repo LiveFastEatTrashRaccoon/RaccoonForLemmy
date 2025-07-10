@@ -3,11 +3,8 @@ package com.livefast.eattrash.raccoonforlemmy.core.persistence.repository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.AccountEntity
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.dao.AccountDao
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.AccountModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.flow.map
 
 internal class DefaultAccountRepository(private val dao: AccountDao) : AccountRepository {
     override suspend fun getAll(): List<AccountModel> = dao
@@ -15,12 +12,8 @@ internal class DefaultAccountRepository(private val dao: AccountDao) : AccountRe
         .executeAsList()
         .map { it.toModel() }
 
-    override fun observeAll(): Flow<List<AccountModel>> = channelFlow {
-        while (isActive) {
-            send(getAll())
-            delay(1000)
-        }
-    }.distinctUntilChanged()
+    override fun observeAll(): Flow<List<AccountModel>> =
+        dao.observeAll().map { result -> result.map { entity -> entity.toModel() } }
 
     override suspend fun getBy(username: String, instance: String): AccountModel? = dao
         .getBy(username.lowercase(), instance.lowercase())
