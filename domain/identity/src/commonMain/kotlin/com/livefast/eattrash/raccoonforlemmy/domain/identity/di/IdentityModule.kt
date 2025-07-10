@@ -167,7 +167,7 @@ val identityModule =
                 DefaultSwitchAccountUseCase(
                     identityRepository = instance(),
                     accountRepository = instance(),
-                    serviceProvider = instance("default"),
+                    apiConfigurationRepository = instance(),
                     notificationCenter = instance(),
                     settingsRepository = instance(),
                     communitySortRepository = instance(),

@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase
 
-import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
@@ -13,6 +12,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.PostLas
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSortRepository
 import com.livefast.eattrash.raccoonforlemmy.core.testutils.DispatcherTestRule
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserTagHelper
@@ -30,7 +30,7 @@ class DefaultSwitchAccountUseCaseTest {
     private val identityRepository = mockk<IdentityRepository>(relaxUnitFun = true)
     private val accountRepository = mockk<AccountRepository>(relaxUnitFun = true)
     private val settingsRepository = mockk<SettingsRepository>(relaxUnitFun = true)
-    private val serviceProvider = mockk<ServiceProvider>(relaxUnitFun = true)
+    private val apiConfigurationRepository = mockk<ApiConfigurationRepository>(relaxUnitFun = true)
     private val notificationCenter = mockk<NotificationCenter>(relaxUnitFun = true)
     private val communitySortRepository = mockk<CommunitySortRepository>(relaxUnitFun = true)
     private val communityPreferredLanguageRepository =
@@ -47,8 +47,8 @@ class DefaultSwitchAccountUseCaseTest {
         DefaultSwitchAccountUseCase(
             identityRepository = identityRepository,
             accountRepository = accountRepository,
+            apiConfigurationRepository = apiConfigurationRepository,
             settingsRepository = settingsRepository,
-            serviceProvider = serviceProvider,
             notificationCenter = notificationCenter,
             communitySortRepository = communitySortRepository,
             communityPreferredLanguageRepository = communityPreferredLanguageRepository,
@@ -104,7 +104,7 @@ class DefaultSwitchAccountUseCaseTest {
             notificationCenter.send(ofType(NotificationCenterEvent.Logout::class))
             identityRepository.storeToken("new-token")
             identityRepository.refreshLoggedState()
-            serviceProvider.changeInstance("new-instance")
+            apiConfigurationRepository.changeInstance("new-instance")
             userTagHelper.clear()
             userSortRepository.clear()
             postLastSeenDateRepository.clear()
