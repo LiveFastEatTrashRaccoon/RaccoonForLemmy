@@ -3,6 +3,7 @@ package com.livefast.eattrash.raccoonforlemmy.core.appearance.theme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
+import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamicColorScheme
 
 internal class DefaultColorSchemeProvider : ColorSchemeProvider {
@@ -21,6 +22,7 @@ internal class DefaultColorSchemeProvider : ColorSchemeProvider {
                         seedColor = customSeed,
                         isDark = true,
                         isAmoled = false,
+                        style = PALETTE_STYLE,
                     )
                 } else {
                     DarkColors
@@ -33,6 +35,7 @@ internal class DefaultColorSchemeProvider : ColorSchemeProvider {
                         seedColor = customSeed,
                         isDark = true,
                         isAmoled = true,
+                        style = PALETTE_STYLE,
                     )
                 } else {
                     BlackColors
@@ -45,6 +48,7 @@ internal class DefaultColorSchemeProvider : ColorSchemeProvider {
                         seedColor = customSeed,
                         isDark = false,
                         isAmoled = false,
+                        style = PALETTE_STYLE,
                     )
                 } else {
                     if (isSystemInDarkTheme) {
@@ -56,3 +60,5 @@ internal class DefaultColorSchemeProvider : ColorSchemeProvider {
             }
         }
 }
+
+private val PALETTE_STYLE = PaletteStyle.Expressive
