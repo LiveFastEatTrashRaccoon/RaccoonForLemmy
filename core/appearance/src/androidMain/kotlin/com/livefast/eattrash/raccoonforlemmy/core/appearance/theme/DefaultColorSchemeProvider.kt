@@ -102,4 +102,4 @@ internal class DefaultColorSchemeProvider(
         }
 }
 
-private val PALETTE_STYLE = PaletteStyle.Rainbow
+private val PALETTE_STYLE = PaletteStyle.Expressive
