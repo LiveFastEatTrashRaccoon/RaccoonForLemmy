@@ -29,7 +29,10 @@ internal val appConfigModule =
         }
         bind<AppConfigDataSource>(tag = "remote") {
             singleton {
-                RemoteAppConfigDataSource()
+                RemoteAppConfigDataSource(
+                    engine = instance(),
+                    json = instance(),
+                )
             }
         }
     }

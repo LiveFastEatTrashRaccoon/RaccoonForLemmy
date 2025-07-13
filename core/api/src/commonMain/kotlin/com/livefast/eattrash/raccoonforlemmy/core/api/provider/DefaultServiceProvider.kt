@@ -29,6 +29,7 @@ import kotlinx.serialization.json.Json
 internal class DefaultServiceProvider(
     private val factory: HttpClientEngine,
     private val appInfoRepository: AppInfoRepository,
+    private val json: Json,
 ) : ServiceProvider {
 
     override val defaultInstance: String get() = DEFAULT_INSTANCE
@@ -74,12 +75,7 @@ internal class DefaultServiceProvider(
                     }
                 }
                 install(ContentNegotiation) {
-                    json(
-                        Json {
-                            isLenient = true
-                            ignoreUnknownKeys = true
-                        },
-                    )
+                    json(json)
                 }
             }
         val serviceArgs = ServiceCreationArgs(baseUrl, client)
