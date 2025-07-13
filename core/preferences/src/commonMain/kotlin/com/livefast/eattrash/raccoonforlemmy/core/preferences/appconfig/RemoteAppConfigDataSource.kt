@@ -1,6 +1,5 @@
 package com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig
 
-import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
@@ -9,10 +8,9 @@ import io.ktor.client.statement.bodyAsText
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-internal class RemoteAppConfigDataSource(factory: HttpClientEngine = provideHttpClientEngine()) :
-    AppConfigDataSource {
+internal class RemoteAppConfigDataSource(engine: HttpClientEngine, private val json: Json) : AppConfigDataSource {
     private val client: HttpClient =
-        HttpClient(factory) {
+        HttpClient(engine) {
             install(HttpTimeout) {
                 requestTimeoutMillis = 600_000
                 connectTimeoutMillis = 30_000
@@ -21,11 +19,10 @@ internal class RemoteAppConfigDataSource(factory: HttpClientEngine = provideHttp
         }
 
     override suspend fun get(): AppConfig = runCatching {
-        client.request(JSON_URL).run {
-            val text = bodyAsText()
-            val dto = Json.decodeFromString<AppConfigDto>(text)
-            dto.toModel()
-        }
+        val response = client.request(JSON_URL)
+        val text = response.bodyAsText()
+        val dto = json.decodeFromString<AppConfigDto>(text)
+        dto.toModel()
     }.also {
         it.exceptionOrNull()?.also { e ->
             e.printStackTrace()
