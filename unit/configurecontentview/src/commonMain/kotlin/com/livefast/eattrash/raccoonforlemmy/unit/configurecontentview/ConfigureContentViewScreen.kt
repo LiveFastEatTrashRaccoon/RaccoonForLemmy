@@ -418,7 +418,7 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
                 if (value != null) {
                     notificationCenter.send(
                         NotificationCenterEvent.SelectNumberBottomSheetClosed(
-                            value = value.takeIf { it > 0 },
+                            value = value.coerceAtMost(0),
                             type = SelectNumberBottomSheetType.PostBodyMaxLines.toInt(),
                         ),
                     )
