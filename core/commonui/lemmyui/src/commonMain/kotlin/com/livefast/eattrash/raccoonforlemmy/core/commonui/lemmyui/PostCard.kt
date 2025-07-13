@@ -581,6 +581,7 @@ private fun ExtendedPost(
 ) {
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
+    val maxLines = settings.postBodyMaxLines.takeIf { limitBodyHeight }
     val uriHandler = LocalUriHandler.current
     var textSelection by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -749,7 +750,7 @@ private fun ExtendedPost(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = ancillaryTextAlpha),
                         )
-                    } else {
+                    } else if (!limitBodyHeight || (maxLines ?: 0) > 0) {
                         CustomizedContent(ContentFontClass.Body) {
                             PostCardBody(
                                 modifier =
@@ -761,7 +762,7 @@ private fun ExtendedPost(
                                         end = Spacing.s,
                                     ),
                                 text = post.text,
-                                maxLines = settings.postBodyMaxLines.takeIf { limitBodyHeight },
+                                maxLines = maxLines,
                                 autoLoadImages = autoLoadImages,
                                 markRead = markRead,
                                 highlightText = highlightText,
