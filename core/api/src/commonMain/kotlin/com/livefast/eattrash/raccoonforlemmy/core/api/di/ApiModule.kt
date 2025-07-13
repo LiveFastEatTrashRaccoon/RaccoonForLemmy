@@ -27,6 +27,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.service.v4.SiteServiceV4
 import com.livefast.eattrash.raccoonforlemmy.core.utils.network.provideHttpClientEngine
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
+import kotlinx.serialization.json.Json
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.factory
@@ -40,6 +41,14 @@ val apiModule =
         bind<HttpClientEngine> {
             singleton {
                 provideHttpClientEngine()
+            }
+        }
+        bind<Json> {
+            singleton {
+                Json {
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                }
             }
         }
         bind<AuthServiceV3> {
@@ -102,6 +111,7 @@ val apiModule =
                 DefaultServiceProvider(
                     factory = instance(),
                     appInfoRepository = instance(),
+                    json = instance(),
                 )
             }
         }
@@ -110,6 +120,7 @@ val apiModule =
                 DefaultServiceProvider(
                     factory = instance(),
                     appInfoRepository = instance(),
+                    json = instance(),
                 )
             }
         }
