@@ -56,6 +56,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -177,10 +178,8 @@ fun ModalDrawerContent(modifier: Modifier = Modifier) {
                                             focusManager.clearFocus()
                                             navigationCoordinator.popUntilRoot()
                                             coordinator.toggleDrawer()
-                                            delay(50)
-                                            coordinator.sendEvent(
-                                                DrawerEvent.ChangeListingType(listingType),
-                                            )
+                                            delay(DELAY_EVENT)
+                                            coordinator.sendEvent(DrawerEvent.ChangeListingType(listingType))
                                         }
                                     },
                                 )
@@ -196,8 +195,7 @@ fun ModalDrawerContent(modifier: Modifier = Modifier) {
                                             focusManager.clearFocus()
                                             navigationCoordinator.popUntilRoot()
                                             coordinator.toggleDrawer()
-                                            delay(50)
-
+                                            delay(DELAY_SETTINGS_EVENT)
                                             coordinator.sendEvent(DrawerEvent.OpenSettings)
                                         }
                                     },
@@ -313,10 +311,8 @@ fun ModalDrawerContent(modifier: Modifier = Modifier) {
                                     coordinator.toggleDrawer()
                                     navigationCoordinator.popUntilRoot()
                                     coordinator.toggleDrawer()
-                                    delay(50)
-                                    coordinator.sendEvent(
-                                        DrawerEvent.ChangeListingType(listingType),
-                                    )
+                                    delay(DELAY_EVENT)
+                                    coordinator.sendEvent(DrawerEvent.ChangeListingType(listingType))
                                 }
                             },
                         )
@@ -332,8 +328,7 @@ fun ModalDrawerContent(modifier: Modifier = Modifier) {
                                 focusManager.clearFocus()
                                 navigationCoordinator.popUntilRoot()
                                 coordinator.toggleDrawer()
-                                delay(50)
-
+                                delay(DELAY_SETTINGS_EVENT)
                                 coordinator.sendEvent(DrawerEvent.OpenSettings)
                             }
                         },
@@ -366,3 +361,6 @@ fun ModalDrawerContent(modifier: Modifier = Modifier) {
         )
     }
 }
+
+private val DELAY_EVENT = 50.milliseconds
+private val DELAY_SETTINGS_EVENT = 300.milliseconds
