@@ -28,6 +28,8 @@ sealed interface NotificationCenterEvent {
 
     data class ChangeCommentSortType(val value: SortType, val screenKey: String?) : NotificationCenterEvent
 
+    data class ChangeCommentSortTypeProfile(val value: SortType, val screenKey: String?) : NotificationCenterEvent
+
     data class ChangeFeedType(val value: ListingType, val screenKey: String?) : NotificationCenterEvent
 
     data class ChangeInboxType(val unreadOnly: Boolean) : NotificationCenterEvent
