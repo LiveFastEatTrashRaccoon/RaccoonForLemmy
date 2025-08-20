@@ -94,6 +94,13 @@ class SettingsViewModel(
                     }
                 }.launchIn(this)
             notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeCommentSortTypeProfile::class)
+                .onEach { evt ->
+                    if (evt.screenKey == "settings") {
+                        changeDefaultCommentSortTypeProfile(evt.value)
+                    }
+                }.launchIn(this)
+            notificationCenter
                 .subscribe(NotificationCenterEvent.ChangeUrlOpeningMode::class)
                 .onEach { evt ->
                     changeUrlOpeningMode(evt.value.toUrlOpeningMode())
@@ -107,6 +114,8 @@ class SettingsViewModel(
                 it.copy(
                     availableSortTypesForPosts = availableSortTypesForPosts,
                     availableSortTypesForComments = availableSortTypesForComments,
+                    // Top is not supported for user comments
+                    availableSortTypesForCommentsInProfile = availableSortTypesForComments - SortType.Top.Generic,
                     supportsHiddenPosts = supportsHiddenPosts,
                     supportsMediaList = supportsMediaList,
                 )
@@ -118,6 +127,7 @@ class SettingsViewModel(
                     defaultListingType = settings.defaultListingType.toListingType(),
                     defaultPostSortType = settings.defaultPostSortType.toSortType(),
                     defaultCommentSortType = settings.defaultCommentSortType.toSortType(),
+                    defaultCommentSortTypeProfile = settings.defaultCommentSortTypeProfile.toSortType(),
                     includeNsfw = settings.includeNsfw,
                     blurNsfw = settings.blurNsfw,
                     urlOpeningMode = settings.urlOpeningMode.toUrlOpeningMode(),
@@ -179,6 +189,17 @@ class SettingsViewModel(
             val settings =
                 settingsRepository.currentSettings.value.copy(
                     defaultCommentSortType = value.toInt(),
+                )
+            saveSettings(settings)
+        }
+    }
+
+    private fun changeDefaultCommentSortTypeProfile(value: SortType) {
+        viewModelScope.launch {
+            updateState { it.copy(defaultCommentSortTypeProfile = value) }
+            val settings =
+                settingsRepository.currentSettings.value.copy(
+                    defaultCommentSortTypeProfile = value.toInt(),
                 )
             saveSettings(settings)
         }
@@ -251,6 +272,7 @@ class SettingsViewModel(
                     defaultListingType = settings.defaultListingType.toListingType(),
                     defaultPostSortType = settings.defaultPostSortType.toSortType(),
                     defaultCommentSortType = settings.defaultCommentSortType.toSortType(),
+                    defaultCommentSortTypeProfile = settings.defaultCommentSortTypeProfile.toSortType(),
                 )
             }
         }

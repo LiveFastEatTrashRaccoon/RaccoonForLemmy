@@ -94,6 +94,7 @@ fun SettingsScreen(
     var languageBottomSheetOpened by remember { mutableStateOf(false) }
     var sortPostBottomSheetOpened by remember { mutableStateOf(false) }
     var sortCommentsBottomSheetOpened by remember { mutableStateOf(false) }
+    var sortCommentsProfileBottomSheetOpened by remember { mutableStateOf(false) }
 
     LaunchedEffect(notificationCenter) {
         notificationCenter
@@ -225,6 +226,13 @@ fun SettingsScreen(
                     value = uiState.defaultCommentSortType.toReadableName(),
                     onTap = {
                         sortCommentsBottomSheetOpened = true
+                    },
+                )
+                SettingsRow(
+                    title = LocalStrings.current.settingsDefaultCommentSortTypeProfile,
+                    value = uiState.defaultCommentSortTypeProfile.toReadableName(),
+                    onTap = {
+                        sortCommentsProfileBottomSheetOpened = true
                     },
                 )
 
@@ -510,6 +518,23 @@ fun SettingsScreen(
                 if (value != null) {
                     notificationCenter.send(
                         NotificationCenterEvent.ChangeCommentSortType(
+                            value = value,
+                            screenKey = "settings",
+                        ),
+                    )
+                }
+            },
+        )
+    }
+    if (sortCommentsProfileBottomSheetOpened) {
+        SortBottomSheet(
+            values = uiState.availableSortTypesForCommentsInProfile,
+            expandTop = false,
+            onSelect = { value ->
+                sortCommentsProfileBottomSheetOpened = false
+                if (value != null) {
+                    notificationCenter.send(
+                        NotificationCenterEvent.ChangeCommentSortTypeProfile(
                             value = value,
                             screenKey = "settings",
                         ),
