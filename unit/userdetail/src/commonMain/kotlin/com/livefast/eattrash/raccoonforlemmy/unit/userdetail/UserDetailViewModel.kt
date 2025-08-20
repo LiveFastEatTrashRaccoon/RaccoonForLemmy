@@ -217,7 +217,7 @@ class UserDetailViewModel(
                 val customPostSortType =
                     userSortRepository.getForPosts(userHandle)?.toSortType()
                 val defaultCommentSortType =
-                    settingsRepository.currentSettings.value.defaultCommentSortType
+                    settingsRepository.currentSettings.value.defaultCommentSortTypeProfile
                         .toSortType()
                 val customCommentSortType =
                     userSortRepository.getForComments(userHandle)?.toSortType()
@@ -362,7 +362,8 @@ class UserDetailViewModel(
             if (uiState.value.section == UserDetailSection.Posts) {
                 getSortTypesUseCase.getTypesForPosts(otherInstance = otherInstance)
             } else {
-                getSortTypesUseCase.getTypesForComments(otherInstance = otherInstance)
+                // Top is not supported for user comments
+                getSortTypesUseCase.getTypesForComments(otherInstance = otherInstance) - SortType.Top.Generic
             }
         updateState { it.copy(availableSortTypes = sortTypes) }
     }

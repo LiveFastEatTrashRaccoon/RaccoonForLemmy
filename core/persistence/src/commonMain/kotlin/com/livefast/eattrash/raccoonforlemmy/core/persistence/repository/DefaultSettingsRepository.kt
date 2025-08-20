@@ -28,6 +28,7 @@ private object KeyStoreKeys {
     const val DEFAULT_POST_SORT_TYPE = "defaultPostSortType"
     const val DEFAULT_INBOX_TYPE = "defaultInboxType"
     const val DEFAULT_COMMENT_SORT_TYPE = "defaultCommentSortType"
+    const val DEFAULT_COMMENT_SORT_TYPE_PROFILE = "defaultCommentSortTypeProfile"
     const val DEFAULT_EXPLORE_TYPE = "defaultExploreType"
     const val INCLUDE_NSFW = "includeNsfw"
     const val BLUR_NSFW = "blurNsfw"
@@ -87,6 +88,7 @@ internal class DefaultSettingsRepository(private val dao: SettingsDao, private v
             defaultListingType = settings.defaultListingType.toLong(),
             defaultPostSortType = settings.defaultPostSortType.toLong(),
             defaultCommentSortType = settings.defaultCommentSortType.toLong(),
+            defaultCommentSortTypeProfile = settings.defaultCommentSortTypeProfile.toLong(),
             defaultInboxType = settings.defaultInboxType.toLong(),
             includeNsfw = if (settings.includeNsfw) 1L else 0L,
             blurNsfw = if (settings.blurNsfw) 1L else 0L,
@@ -182,6 +184,7 @@ internal class DefaultSettingsRepository(private val dao: SettingsDao, private v
             defaultListingType = keyStore.get(KeyStoreKeys.DEFAULT_LISTING_TYPE, 2),
             defaultPostSortType = keyStore.get(KeyStoreKeys.DEFAULT_POST_SORT_TYPE, 1),
             defaultCommentSortType = keyStore.get(KeyStoreKeys.DEFAULT_COMMENT_SORT_TYPE, 3),
+            defaultCommentSortTypeProfile = keyStore.get(KeyStoreKeys.DEFAULT_COMMENT_SORT_TYPE_PROFILE, 3),
             defaultInboxType = keyStore.get(KeyStoreKeys.DEFAULT_INBOX_TYPE, 0),
             defaultExploreType = keyStore.get(KeyStoreKeys.DEFAULT_EXPLORE_TYPE, 2),
             includeNsfw = keyStore.get(KeyStoreKeys.INCLUDE_NSFW, false),
@@ -305,6 +308,10 @@ internal class DefaultSettingsRepository(private val dao: SettingsDao, private v
                 KeyStoreKeys.DEFAULT_COMMENT_SORT_TYPE,
                 settings.defaultCommentSortType,
             )
+            keyStore.save(
+                KeyStoreKeys.DEFAULT_COMMENT_SORT_TYPE_PROFILE,
+                settings.defaultCommentSortTypeProfile,
+            )
             keyStore.save(KeyStoreKeys.DEFAULT_INBOX_TYPE, settings.defaultInboxType)
             keyStore.save(KeyStoreKeys.DEFAULT_EXPLORE_TYPE, settings.defaultExploreType)
             keyStore.save(KeyStoreKeys.INCLUDE_NSFW, settings.includeNsfw)
@@ -402,6 +409,7 @@ internal class DefaultSettingsRepository(private val dao: SettingsDao, private v
                 defaultListingType = settings.defaultListingType.toLong(),
                 defaultPostSortType = settings.defaultPostSortType.toLong(),
                 defaultCommentSortType = settings.defaultCommentSortType.toLong(),
+                defaultCommentSortTypeProfile = settings.defaultCommentSortTypeProfile.toLong(),
                 defaultInboxType = settings.defaultInboxType.toLong(),
                 includeNsfw = if (settings.includeNsfw) 1L else 0L,
                 blurNsfw = if (settings.blurNsfw) 1L else 0L,
@@ -505,6 +513,7 @@ private fun GetBy.toModel() = SettingsModel(
     defaultListingType = defaultListingType.toInt(),
     defaultPostSortType = defaultPostSortType.toInt(),
     defaultCommentSortType = defaultCommentSortType.toInt(),
+    defaultCommentSortTypeProfile = defaultCommentSortTypeProfile.toInt(),
     defaultInboxType = defaultInboxType.toInt(),
     includeNsfw = includeNsfw != 0L,
     blurNsfw = blurNsfw != 0L,

@@ -396,6 +396,7 @@ interface Strings {
     val settingsContentFontSmallest: String @Composable get
     val settingsCustomSeedColor: String @Composable get
     val settingsDefaultCommentSortType: String @Composable get
+    val settingsDefaultCommentSortTypeProfile: String @Composable get
     val settingsDefaultExploreResultType: String @Composable get
     val settingsDefaultExploreType: String @Composable get
     val settingsDefaultInboxType: String @Composable get

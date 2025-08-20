@@ -401,6 +401,7 @@ import raccoonforlemmy.shared.generated.resources.settings_content_font_smaller
 import raccoonforlemmy.shared.generated.resources.settings_content_font_smallest
 import raccoonforlemmy.shared.generated.resources.settings_custom_seed_color
 import raccoonforlemmy.shared.generated.resources.settings_default_comment_sort_type
+import raccoonforlemmy.shared.generated.resources.settings_default_comment_sort_type_profile
 import raccoonforlemmy.shared.generated.resources.settings_default_explore_result_type
 import raccoonforlemmy.shared.generated.resources.settings_default_explore_type
 import raccoonforlemmy.shared.generated.resources.settings_default_inbox_type
@@ -1315,6 +1316,8 @@ internal class SharedStrings : Strings {
         @Composable get() = stringResource(Res.string.settings_custom_seed_color)
     override val settingsDefaultCommentSortType: String
         @Composable get() = stringResource(Res.string.settings_default_comment_sort_type)
+    override val settingsDefaultCommentSortTypeProfile: String
+        @Composable get() = stringResource(Res.string.settings_default_comment_sort_type_profile)
     override val settingsDefaultExploreResultType: String
         @Composable get() = stringResource(Res.string.settings_default_explore_result_type)
     override val settingsDefaultExploreType: String

@@ -319,7 +319,8 @@
     <string name="settings_content_font_smaller">Muy pequeño</string>
     <string name="settings_content_font_smallest">Extra pequeño</string>
     <string name="settings_custom_seed_color">Color de la interfaz</string>
-    <string name="settings_default_comment_sort_type">Ordenar comentarios</string>
+    <string name="settings_default_comment_sort_type">Ordenar comentarios (publicaciones)</string>
+    <string name="settings_default_comment_sort_type_profile">Ordenar comentarios (perfil usuario)</string>
     <string name="settings_default_explore_result_type">Tipo de resultado de búsqueda predeterminado para Descubre</string>
     <string name="settings_default_explore_type">Tipo de listado predeterminado para Descubre</string>
     <string name="settings_default_inbox_type">Mostrar por defecto</string>
