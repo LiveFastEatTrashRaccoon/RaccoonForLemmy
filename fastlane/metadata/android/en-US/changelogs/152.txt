@@ -1,0 +1,11 @@
+- fix: swipe threshold in dismissable cards
+- fix: bar inset color and IME padding
+- feat: allow zero length body in configure content
+- feat: separate comment sort for user profile
+- enhancement: add support to Material 3 Expressive
+- refactor: remove unnecessary dispatcher switches
+- refactor: new navigation
+- refactor: rewrite endpoint calls
+- refactor: add support for Lemmy 1.0.x
+- chore: update dependencies
+- chore: update l10n (fi, lv, pl, zh)
