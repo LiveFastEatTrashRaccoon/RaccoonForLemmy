@@ -21,7 +21,7 @@ inline fun <reified T : ViewModel> DI.Builder.bindViewModel(
     noinline block: NoArgBindingDI<*>.() -> T,
 ) {
     bind<T>(
-        tag = T::class.simpleName,
+        tag = T::class.diKey,
         overrides = overrides,
     ) {
         provider<Any, T> {
@@ -43,7 +43,7 @@ inline fun <reified A : ViewModelCreationArgs, reified T : ViewModel> DI.Builder
     noinline block: BindingDI<*>.(A) -> T,
 ) {
     bind<T>(
-        tag = T::class.simpleName,
+        tag = T::class.diKey,
         overrides = overrides,
     ) {
         factory<Any, ViewModelCreationArgs, T> { args: ViewModelCreationArgs ->
