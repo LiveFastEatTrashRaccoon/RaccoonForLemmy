@@ -48,13 +48,13 @@ internal class CustomViewModelFactory(private val injector: DI) : ViewModelProvi
         val argument = extras[VM_ARG_KEY]
         if (argument != null) {
             val model by injector.instance<ViewModelCreationArgs, ViewModel>(
-                tag = modelClass.simpleName,
+                tag = modelClass.diKey,
                 arg = argument,
             )
             return modelClass.cast(model)
         }
 
-        val model by injector.instance<ViewModel>(tag = modelClass.simpleName)
+        val model by injector.instance<ViewModel>(tag = modelClass.diKey)
         return modelClass.cast(model)
     }
 }
@@ -63,3 +63,9 @@ internal class CustomViewModelFactory(private val injector: DI) : ViewModelProvi
  * Key used to store the [ViewModelCreationArgs] in the [CreationExtras] to instantiate the [ViewModel].
  */
 val VM_ARG_KEY = object : CreationExtras.Key<ViewModelCreationArgs> {}
+
+/**
+ * Return the DI key to be used for a [ViewModel] for DI.
+ */
+val <T : ViewModel> KClass<T>.diKey: String?
+    get() = qualifiedName
