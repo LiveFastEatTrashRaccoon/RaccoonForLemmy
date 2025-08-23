@@ -65,6 +65,10 @@ interface AccountSettingsMviModel :
         data class DeleteAccount(val deleteContent: Boolean, val password: String) : Intent
 
         data object Submit : Intent
+
+        data class ChangeFeedType(val value: ListingType) : Intent
+
+        data class ChangeSortType(val value: SortType) : Intent
     }
 
     data class UiState(

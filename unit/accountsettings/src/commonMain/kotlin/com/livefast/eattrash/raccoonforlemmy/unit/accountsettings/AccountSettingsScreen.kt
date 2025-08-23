@@ -75,8 +75,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInf
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
@@ -109,7 +107,6 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
     val errorMessage = LocalStrings.current.messageGenericError
     val snackbarHostState = remember { SnackbarHostState() }
     val galleryHelper = remember { getGalleryHelper() }
-    val notificationCenter = remember { getNotificationCenter() }
     var openAvatarPicker by remember { mutableStateOf(false) }
     var openBannerPicker by remember { mutableStateOf(false) }
     var confirmBackWithUnsavedChangesDialog by remember { mutableStateOf(false) }
@@ -589,12 +586,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 defaultListingTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeFeedType(
-                            value = values[index],
-                            screenKey = "accountSettings",
-                        ),
-                    )
+                    model.reduce(AccountSettingsMviModel.Intent.ChangeFeedType(value = values[index]))
                 }
             },
         )
@@ -607,12 +599,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { value ->
                 sortBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSortType(
-                            value = value,
-                            screenKey = "accountSettings",
-                        ),
-                    )
+                    model.reduce(AccountSettingsMviModel.Intent.ChangeSortType(value = value))
                 }
             },
         )
