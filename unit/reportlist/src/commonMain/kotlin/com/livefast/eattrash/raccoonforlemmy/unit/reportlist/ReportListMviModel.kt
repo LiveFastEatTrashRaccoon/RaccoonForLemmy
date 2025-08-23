@@ -26,6 +26,8 @@ interface ReportListMviModel :
         data class ResolvePost(val id: Long) : Intent
 
         data class ResolveComment(val id: Long) : Intent
+
+        data class ChangeType(val unresolvedOnly: Boolean) : Intent
     }
 
     data class UiState(

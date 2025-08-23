@@ -19,7 +19,6 @@ val reportListModule =
                 themeRepository = instance(),
                 settingsRepository = instance(),
                 hapticFeedback = instance(),
-                notificationCenter = instance(),
             )
         }
     }

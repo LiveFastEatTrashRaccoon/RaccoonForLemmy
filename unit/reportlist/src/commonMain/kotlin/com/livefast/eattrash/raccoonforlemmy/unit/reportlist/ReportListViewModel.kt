@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -29,7 +27,6 @@ class ReportListViewModel(
     private val themeRepository: ThemeRepository,
     private val settingsRepository: SettingsRepository,
     private val hapticFeedback: HapticFeedback,
-    private val notificationCenter: NotificationCenter,
 ) : ViewModel(),
     MviModelDelegate<ReportListMviModel.Intent, ReportListMviModel.UiState, ReportListMviModel.Effect>
     by DefaultMviModelDelegate(initialState = ReportListMviModel.UiState()),
@@ -51,11 +48,6 @@ class ReportListViewModel(
                             swipeActionsEnabled = settings.enableSwipeActions,
                         )
                     }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeReportListType::class)
-                .onEach { evt ->
-                    changeUnresolvedOnly(evt.unresolvedOnly)
                 }.launchIn(this)
 
             if (uiState.value.initial) {
@@ -93,6 +85,7 @@ class ReportListViewModel(
                     }
 
             ReportListMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            is ReportListMviModel.Intent.ChangeType -> changeUnresolvedOnly(intent.unresolvedOnly)
         }
     }
 
