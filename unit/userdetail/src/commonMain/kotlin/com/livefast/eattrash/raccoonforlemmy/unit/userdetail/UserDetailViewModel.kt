@@ -113,38 +113,6 @@ class UserDetailViewModel(
                 .onEach { evt ->
                     handlePostUpdate(evt.model)
                 }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSortType::class)
-                .onEach { evt ->
-                    val userHandle = uiState.value.user.readableHandle
-                    if (evt.screenKey == userHandle) {
-                        val section = uiState.value.section
-                        if (evt.saveAsDefault) {
-                            when (section) {
-                                UserDetailSection.Comments ->
-                                    userSortRepository.saveForComments(
-                                        handle = userHandle,
-                                        value = evt.value.toInt(),
-                                    )
-
-                                UserDetailSection.Posts ->
-                                    userSortRepository.saveForPosts(
-                                        handle = userHandle,
-                                        value = evt.value.toInt(),
-                                    )
-                            }
-                        }
-                        applySortType(
-                            value = evt.value,
-                            section = section,
-                        )
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.Share::class)
-                .onEach { evt ->
-                    shareHelper.share(evt.url)
-                }.launchIn(this)
 
             lemmyValueCache.isDownVoteEnabled
                 .onEach { value ->
@@ -325,6 +293,29 @@ class UserDetailViewModel(
             is UserDetailMviModel.Intent.AddUserTag ->
                 addUserTag(name = intent.name, color = intent.color)
             is UserDetailMviModel.Intent.UpdateTags -> updateTags(intent.ids)
+            is UserDetailMviModel.Intent.ChangeSortType -> viewModelScope.launch {
+                val userHandle = uiState.value.user.readableHandle
+                val section = uiState.value.section
+                if (intent.saveAsDefault) {
+                    when (section) {
+                        UserDetailSection.Comments ->
+                            userSortRepository.saveForComments(
+                                handle = userHandle,
+                                value = intent.value.toInt(),
+                            )
+
+                        UserDetailSection.Posts ->
+                            userSortRepository.saveForPosts(
+                                handle = userHandle,
+                                value = intent.value.toInt(),
+                            )
+                    }
+                }
+                applySortType(
+                    value = intent.value,
+                    section = section,
+                )
+            }
         }
     }
 
