@@ -56,17 +56,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguageDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SliderBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconVariant
-import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.getPrettyDuration
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getFileSystemManager
@@ -654,10 +650,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 appIconBottomSheetOpened = false
                 if (index != null) {
-                    val value = values[index]
-                    notificationCenter.send(
-                        NotificationCenterEvent.AppIconVariantSelected(value.toInt()),
-                    )
+                    model.reduce(AdvancedSettingsMviModel.Intent.ChangeAppIconVariant(values[index]))
                 }
             },
         )
@@ -681,10 +674,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 barThemeBottomSheetOpened = false
                 if (index != null) {
-                    val value = values[index]
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSystemBarTheme(value),
-                    )
+                    model.reduce(AdvancedSettingsMviModel.Intent.ChangeSystemBarTheme(values[index]))
                 }
             },
         )
@@ -716,10 +706,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 zombieModeDurationBottomSheetOpened = false
                 if (index != null) {
-                    val value = values[index]
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeZombieInterval(value),
-                    )
+                    model.reduce(AdvancedSettingsMviModel.Intent.ChangeZombieInterval(values[index]))
                 }
             },
         )
@@ -753,9 +740,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
                 inboxCheckDurationBottomSheetOpened = false
                 if (index != null) {
                     val value = values[index]
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeInboxBackgroundCheckPeriod(value),
-                    )
+                    model.reduce(AdvancedSettingsMviModel.Intent.ChangeInboxBackgroundCheckPeriod(value))
                 }
             },
         )
@@ -776,9 +761,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 inboxTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeInboxType(unreadOnly = index == 0),
-                    )
+                    model.reduce(AdvancedSettingsMviModel.Intent.ChangeInboxType(unreadOnly = index == 0))
                 }
             },
         )
@@ -812,12 +795,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 exploreListingTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeFeedType(
-                            value = values[index],
-                            screenKey = "advancedSettings",
-                        ),
-                    )
+                    model.reduce(AdvancedSettingsMviModel.Intent.ChangeExploreFeedType(value = values[index]))
                 }
             },
         )
@@ -851,12 +829,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 exploreResultTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSearchResultType(
-                            value = values[index],
-                            screenKey = "advancedSettings",
-                        ),
-                    )
+                    model.reduce(AdvancedSettingsMviModel.Intent.ChangeExploreResultType(value = values[index]))
                 }
             },
         )
@@ -883,16 +856,13 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
 
     if (selectInboxPreviewMaxLinesBottomSheetOpened) {
         SelectNumberBottomSheet(
-            type = SelectNumberBottomSheetType.InboxPreviewMaxLines,
+            title = LocalStrings.current.settingsInboxPreviewMaxLines,
             initialValue = uiState.inboxPreviewMaxLines,
             onSelect = { value ->
                 selectInboxPreviewMaxLinesBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.SelectNumberBottomSheetClosed(
-                            value = value.takeIf { it > 0 },
-                            type = SelectNumberBottomSheetType.InboxPreviewMaxLines.toInt(),
-                        ),
+                    model.reduce(
+                        AdvancedSettingsMviModel.Intent.SelectInboxPreviewMaxLines(value = value.takeIf { it > 0 }),
                     )
                 }
             },
@@ -908,9 +878,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
             onSelect = { value ->
                 selectZombieModeAmount = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeZombieScrollAmount(value),
-                    )
+                    model.reduce(AdvancedSettingsMviModel.Intent.ChangeZombieScrollAmount(value))
                 }
             },
         )

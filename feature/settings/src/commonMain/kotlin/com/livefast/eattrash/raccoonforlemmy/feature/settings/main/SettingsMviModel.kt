@@ -15,6 +15,18 @@ interface SettingsMviModel : MviModel<SettingsMviModel.Intent, SettingsMviModel.
         data class ChangeEnableSwipeActions(val value: Boolean) : Intent
 
         data class ChangeCrashReportEnabled(val value: Boolean) : Intent
+
+        data class ChangeFeedType(val value: ListingType) : Intent
+
+        data class ChangePostSortType(val value: SortType) : Intent
+
+        data class ChangeCommentSortType(val value: SortType) : Intent
+
+        data class ChangeCommentSortTypeProfile(val value: SortType) : Intent
+
+        data class ChangeUrlOpeningMode(val value: UrlOpeningMode) : Intent
+
+        data class ChangeLanguage(val value: String) : Intent
     }
 
     data class UiState(

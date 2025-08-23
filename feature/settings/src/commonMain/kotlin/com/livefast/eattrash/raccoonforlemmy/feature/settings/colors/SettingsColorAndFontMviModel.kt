@@ -14,6 +14,18 @@ interface SettingsColorAndFontMviModel : MviModel<Intent, UiState, Effect> {
         data class ChangeDynamicColors(val value: Boolean) : Intent
 
         data class ChangeRandomColor(val value: Boolean) : Intent
+
+        data class ChangeTheme(val value: UiTheme) : Intent
+
+        data class ChangeCommentBarTheme(val value: CommentBarTheme) : Intent
+
+        data class ChangeFontFamily(val value: UiFontFamily) : Intent
+
+        data class ChangeFontSize(val value: Float) : Intent
+
+        data class ChangeThemeColor(val value: Color) : Intent
+
+        data class ChangeActionColor(val value: Color, val type: CustomColorType) : Intent
     }
 
     data class UiState(

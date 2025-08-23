@@ -30,7 +30,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,18 +57,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.toLanguageName
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
-import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.unit.about.AboutDialog
-import com.livefast.eattrash.raccoonforlemmy.unit.filteredcontents.toInt
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,14 +89,6 @@ fun SettingsScreen(
     var sortPostBottomSheetOpened by remember { mutableStateOf(false) }
     var sortCommentsBottomSheetOpened by remember { mutableStateOf(false) }
     var sortCommentsProfileBottomSheetOpened by remember { mutableStateOf(false) }
-
-    LaunchedEffect(notificationCenter) {
-        notificationCenter
-            .subscribe(NotificationCenterEvent.CloseDialog::class)
-            .onEach {
-                infoDialogOpened = false
-            }.launchIn(this)
-    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -390,7 +376,11 @@ fun SettingsScreen(
     }
 
     if (infoDialogOpened) {
-        AboutDialog()
+        AboutDialog(
+            onDismiss = {
+                infoDialogOpened = false
+            },
+        )
     }
 
     if (defaultListingTypeBottomSheetOpened) {
@@ -421,12 +411,7 @@ fun SettingsScreen(
             onSelect = { index ->
                 defaultListingTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeFeedType(
-                            value = values[index],
-                            screenKey = "settings",
-                        ),
-                    )
+                    model.reduce(SettingsMviModel.Intent.ChangeFeedType(value = values[index]))
                 }
             },
         )
@@ -450,11 +435,7 @@ fun SettingsScreen(
             onSelect = { index ->
                 urlOpeningBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeUrlOpeningMode(
-                            value = values[index].toInt(),
-                        ),
-                    )
+                    model.reduce(SettingsMviModel.Intent.ChangeUrlOpeningMode(value = values[index]))
                 }
             },
         )
@@ -481,11 +462,7 @@ fun SettingsScreen(
             onSelect = { index ->
                 languageBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeLanguage(
-                            value = values[index],
-                        ),
-                    )
+                    model.reduce(SettingsMviModel.Intent.ChangeLanguage(value = values[index]))
                 }
             },
         )
@@ -498,12 +475,7 @@ fun SettingsScreen(
             onSelect = { value ->
                 sortPostBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSortType(
-                            value = value,
-                            screenKey = "settings",
-                        ),
-                    )
+                    model.reduce(SettingsMviModel.Intent.ChangePostSortType(value = value))
                 }
             },
         )
@@ -516,12 +488,7 @@ fun SettingsScreen(
             onSelect = { value ->
                 sortCommentsBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeCommentSortType(
-                            value = value,
-                            screenKey = "settings",
-                        ),
-                    )
+                    model.reduce(SettingsMviModel.Intent.ChangeCommentSortType(value = value))
                 }
             },
         )
@@ -533,12 +500,7 @@ fun SettingsScreen(
             onSelect = { value ->
                 sortCommentsProfileBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeCommentSortTypeProfile(
-                            value = value,
-                            screenKey = "settings",
-                        ),
-                    )
+                    model.reduce(SettingsMviModel.Intent.ChangeCommentSortTypeProfile(value = value))
                 }
             },
         )
