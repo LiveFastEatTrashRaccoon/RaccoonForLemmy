@@ -172,25 +172,6 @@ class CommunityDetailViewModel(
                         )
                     }
                 }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSortType::class)
-                .onEach { evt ->
-                    val communityHandle = uiState.value.community.readableHandle
-                    if (evt.screenKey == communityHandle) {
-                        if (evt.saveAsDefault) {
-                            communitySortRepository.save(
-                                handle = communityHandle,
-                                value = evt.value.toInt(),
-                            )
-                        }
-                        applySortType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.Share::class)
-                .onEach { evt ->
-                    shareHelper.share(evt.url)
-                }.launchIn(this)
 
             uiState
                 .map { it.searchText }
@@ -375,6 +356,17 @@ class CommunityDetailViewModel(
                         setRead(post = post, read = !post.read)
                     }
                 }
+
+            is CommunityDetailMviModel.Intent.ChangeSortType -> viewModelScope.launch {
+                val communityHandle = uiState.value.community.readableHandle
+                if (intent.saveAsDefault) {
+                    communitySortRepository.save(
+                        handle = communityHandle,
+                        value = intent.value.toInt(),
+                    )
+                }
+                applySortType(intent.value)
+            }
         }
     }
 
@@ -645,11 +637,7 @@ class CommunityDetailViewModel(
                 )
             if (community != null) {
                 updateState { it.copy(community = community) }
-                notificationCenter.send(
-                    NotificationCenterEvent.CommunitySubscriptionChanged(
-                        community,
-                    ),
-                )
+                notificationCenter.send(NotificationCenterEvent.CommunitySubscriptionChanged(community))
             }
         }
     }

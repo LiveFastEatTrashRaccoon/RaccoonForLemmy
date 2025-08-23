@@ -80,6 +80,8 @@ interface CommunityDetailMviModel :
         data class RestorePost(val id: Long) : Intent
 
         data class ToggleRead(val id: Long) : Intent
+
+        data class ChangeSortType(val value: SortType, val saveAsDefault: Boolean = false) : Intent
     }
 
     data class UiState(

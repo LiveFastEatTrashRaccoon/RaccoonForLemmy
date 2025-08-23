@@ -100,8 +100,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
@@ -162,7 +160,6 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
     val settings by settingsRepository.currentSettings.collectAsState()
     val keepScreenOn = rememberKeepScreenOn()
     val mainRouter = remember { getMainRouter() }
-    val notificationCenter = remember { getNotificationCenter() }
     val clipboardManager = LocalClipboardManager.current
     val focusManager = LocalFocusManager.current
     val keyboardScrollConnection =
@@ -1524,9 +1521,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
             onSelect = { index ->
                 shareBottomSheetUrls = null
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.Share(url = values[index]),
-                    )
+                    model.reduce(CommunityDetailMviModel.Intent.Share(values[index]))
                 }
             },
         )
@@ -1541,10 +1536,9 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                 sortBottomSheetOpened = false
                 defaultSortBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSortType(
+                    model.reduce(
+                        CommunityDetailMviModel.Intent.ChangeSortType(
                             value = value,
-                            screenKey = uiState.community.readableHandle,
                             saveAsDefault = wasDefaultSortBottomSheetOpened,
                         ),
                     )
