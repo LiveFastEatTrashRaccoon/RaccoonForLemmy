@@ -43,6 +43,16 @@ interface PostListMviModel : MviModel<PostListMviModel.Intent, PostListMviModel.
         data class WillOpenDetail(val id: Long) : Intent
 
         data class ToggleRead(val id: Long) : Intent
+
+        data class ChangeFeedType(val value: ListingType) : Intent
+
+        data class ChangeSortType(val value: SortType) : Intent
+
+        data class BlockActionSelected(
+            val userId: Long? = null,
+            val communityId: Long? = null,
+            val instanceId: Long? = null,
+        ) : Intent
     }
 
     data class UiState(

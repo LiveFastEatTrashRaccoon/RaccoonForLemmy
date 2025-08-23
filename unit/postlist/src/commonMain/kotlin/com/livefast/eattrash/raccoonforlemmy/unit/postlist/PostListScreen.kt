@@ -934,12 +934,7 @@ fun PostListScreen(
             onSelect = { index ->
                 listingTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeFeedType(
-                            value = values[index],
-                            screenKey = "postList",
-                        ),
-                    )
+                    model.reduce(PostListMviModel.Intent.ChangeFeedType(value = values[index]))
                 }
             },
         )
@@ -955,9 +950,7 @@ fun PostListScreen(
             onSelect = { index ->
                 shareBottomSheetUrls = null
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.Share(url = values[index]),
-                    )
+                    model.reduce(PostListMviModel.Intent.Share(url = values[index]))
                 }
             },
         )
@@ -986,24 +979,24 @@ fun PostListScreen(
                 blockBottomSheetItems = null
                 if (index != null) {
                     val value = values[index]
-                    val event =
+                    val intent =
                         when (value.first) {
                             BlockActionType.Community ->
-                                NotificationCenterEvent.BlockActionSelected(
+                                PostListMviModel.Intent.BlockActionSelected(
                                     communityId = value.second,
                                 )
 
                             BlockActionType.Instance ->
-                                NotificationCenterEvent.BlockActionSelected(
+                                PostListMviModel.Intent.BlockActionSelected(
                                     instanceId = value.second,
                                 )
 
                             BlockActionType.User ->
-                                NotificationCenterEvent.BlockActionSelected(
+                                PostListMviModel.Intent.BlockActionSelected(
                                     userId = value.second,
                                 )
                         }
-                    notificationCenter.send(event)
+                    model.reduce(intent)
                 }
             },
         )
@@ -1016,12 +1009,7 @@ fun PostListScreen(
             onSelect = { value ->
                 sortBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSortType(
-                            value = value,
-                            screenKey = "postList",
-                        ),
-                    )
+                    model.reduce(PostListMviModel.Intent.ChangeSortType(value = value))
                 }
             },
         )
