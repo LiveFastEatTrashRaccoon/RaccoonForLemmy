@@ -41,7 +41,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
@@ -230,12 +229,7 @@ fun InstanceInfoScreen(url: String, modifier: Modifier = Modifier) {
             onSelect = { value ->
                 sortBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSortType(
-                            value = value,
-                            screenKey = "instanceInfo",
-                        ),
-                    )
+                    model.reduce(InstanceInfoMviModel.Intent.ChangeSortType(value))
                 }
             },
         )
