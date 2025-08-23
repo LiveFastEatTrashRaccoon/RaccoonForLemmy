@@ -4,6 +4,7 @@ import androidx.compose.runtime.Stable
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeTarget
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Effect
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.Intent
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ConfigureSwipeActionsMviModel.UiState
@@ -25,6 +26,12 @@ interface ConfigureSwipeActionsMviModel : MviModel<Intent, UiState, Effect> {
 
         data class DeleteActionInbox(val value: ActionOnSwipe, val direction: ActionOnSwipeDirection) :
             Intent
+
+        data class ActionSelected(
+            val value: ActionOnSwipe,
+            val direction: ActionOnSwipeDirection,
+            val target: ActionOnSwipeTarget,
+        ) : Intent
     }
 
     data class UiState(

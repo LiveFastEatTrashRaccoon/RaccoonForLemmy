@@ -52,7 +52,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeTarget
@@ -629,10 +628,9 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 selectActionBottomSheet = null
                 if (index != null) {
-                    val value = values[index]
-                    notificationCenter.send(
-                        NotificationCenterEvent.ActionsOnSwipeSelected(
-                            value = value,
+                    model.reduce(
+                        ConfigureSwipeActionsMviModel.Intent.ActionSelected(
+                            value = values[index],
                             direction = config.direction,
                             target = config.target,
                         ),
