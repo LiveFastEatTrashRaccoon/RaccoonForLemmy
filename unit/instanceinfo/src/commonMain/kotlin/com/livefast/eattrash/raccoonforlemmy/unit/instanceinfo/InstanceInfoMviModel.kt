@@ -12,6 +12,8 @@ interface InstanceInfoMviModel :
         data object Refresh : Intent
 
         data object LoadNextPage : Intent
+
+        data class ChangeSortType(val value: SortType) : Intent
     }
 
     data class UiState(

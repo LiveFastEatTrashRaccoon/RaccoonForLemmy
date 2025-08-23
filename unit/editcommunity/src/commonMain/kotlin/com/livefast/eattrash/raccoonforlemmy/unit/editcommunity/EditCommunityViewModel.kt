@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityVisibilityType
@@ -13,8 +11,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.CommunityRe
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.MediaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class EditCommunityViewModel(
@@ -22,22 +18,11 @@ class EditCommunityViewModel(
     private val identityRepository: IdentityRepository,
     private val communityRepository: CommunityRepository,
     private val mediaRepository: MediaRepository,
-    private val notificationCenter: NotificationCenter,
 ) : ViewModel(),
     MviModelDelegate<EditCommunityMviModel.Intent, EditCommunityMviModel.UiState, EditCommunityMviModel.Effect>
     by DefaultMviModelDelegate(initialState = EditCommunityMviModel.UiState()),
     EditCommunityMviModel {
     private var originalCommunity: CommunityModel? = null
-
-    init {
-        viewModelScope.launch {
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeCommunityVisibility::class)
-                .onEach { event ->
-                    updateVisibility(event.value)
-                }.launchIn(this)
-        }
-    }
 
     override fun reduce(intent: EditCommunityMviModel.Intent) {
         when (intent) {
@@ -105,6 +90,7 @@ class EditCommunityViewModel(
             }
 
             EditCommunityMviModel.Intent.Submit -> submit()
+            is EditCommunityMviModel.Intent.ChangeVisibility -> updateVisibility(intent.value)
         }
     }
 

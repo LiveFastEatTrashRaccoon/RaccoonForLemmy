@@ -35,28 +35,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-sealed interface SelectNumberBottomSheetType {
-    data object PostBodyMaxLines : SelectNumberBottomSheetType
-
-    data object InboxPreviewMaxLines : SelectNumberBottomSheetType
-}
-
-@Composable
-private fun SelectNumberBottomSheetType.toReadableTitle() = when (this) {
-    SelectNumberBottomSheetType.InboxPreviewMaxLines -> LocalStrings.current.settingsInboxPreviewMaxLines
-    SelectNumberBottomSheetType.PostBodyMaxLines -> LocalStrings.current.settingsPostBodyMaxLines
-}
-
-fun SelectNumberBottomSheetType.toInt() = when (this) {
-    SelectNumberBottomSheetType.InboxPreviewMaxLines -> 1
-    SelectNumberBottomSheetType.PostBodyMaxLines -> 0
-}
-
-fun Int.toSelectNumberBottomSheetType(): SelectNumberBottomSheetType = when (this) {
-    1 -> SelectNumberBottomSheetType.InboxPreviewMaxLines
-    else -> SelectNumberBottomSheetType.PostBodyMaxLines
-}
-
 private const val CUSTOM = -1
 private const val UNLIMITED = -2
 
@@ -64,7 +42,7 @@ private const val UNLIMITED = -2
 @Composable
 fun SelectNumberBottomSheet(
     initialValue: Int?,
-    type: SelectNumberBottomSheetType,
+    title: String,
     modifier: Modifier = Modifier,
     sheetScope: CoroutineScope = rememberCoroutineScope(),
     state: SheetState = rememberModalBottomSheetState(),
@@ -94,7 +72,7 @@ fun SelectNumberBottomSheet(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = type.toReadableTitle(),
+                text = title,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
             )

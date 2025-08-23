@@ -67,44 +67,6 @@ class SettingsViewModel(
                 .onEach {
                     handleLogout()
                 }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeLanguage::class)
-                .onEach { evt ->
-                    changeLanguage(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeFeedType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "settings") {
-                        changeDefaultListingType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSortType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "settings") {
-                        changeDefaultPostSortType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeCommentSortType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "settings") {
-                        changeDefaultCommentSortType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeCommentSortTypeProfile::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "settings") {
-                        changeDefaultCommentSortTypeProfile(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeUrlOpeningMode::class)
-                .onEach { evt ->
-                    changeUrlOpeningMode(evt.value.toUrlOpeningMode())
-                }.launchIn(this)
 
             val availableSortTypesForPosts = getSortTypesUseCase.getTypesForPosts()
             val availableSortTypesForComments = getSortTypesUseCase.getTypesForComments()
@@ -145,6 +107,12 @@ class SettingsViewModel(
             is SettingsMviModel.Intent.ChangeIncludeNsfw -> changeIncludeNsfw(intent.value)
             is SettingsMviModel.Intent.ChangeEnableSwipeActions -> changeEnableSwipeActions(intent.value)
             is SettingsMviModel.Intent.ChangeCrashReportEnabled -> changeCrashReportEnabled(intent.value)
+            is SettingsMviModel.Intent.ChangeCommentSortType -> changeDefaultCommentSortType(intent.value)
+            is SettingsMviModel.Intent.ChangeCommentSortTypeProfile -> changeDefaultCommentSortTypeProfile(intent.value)
+            is SettingsMviModel.Intent.ChangeFeedType -> changeDefaultListingType(intent.value)
+            is SettingsMviModel.Intent.ChangeLanguage -> changeLanguage(intent.value)
+            is SettingsMviModel.Intent.ChangePostSortType -> changeDefaultPostSortType(intent.value)
+            is SettingsMviModel.Intent.ChangeUrlOpeningMode -> changeUrlOpeningMode(intent.value)
         }
     }
 

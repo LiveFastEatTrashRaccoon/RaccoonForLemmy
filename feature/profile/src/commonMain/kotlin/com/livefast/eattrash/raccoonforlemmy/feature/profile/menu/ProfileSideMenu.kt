@@ -25,7 +25,17 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileSideMenu(modifier: Modifier = Modifier) {
+fun ProfileSideMenu(
+    onManageAccounts: () -> Unit,
+    onManageSubscriptions: () -> Unit,
+    onOpenBookmarks: () -> Unit,
+    onOpenDrafts: () -> Unit,
+    onOpenVotes: () -> Unit,
+    onModeratorZone: () -> Unit,
+    onCreateCommunity: () -> Unit,
+    onLogout: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val model: ProfileSideMenuMviModel = getViewModel<ProfileSideMenuViewModel>()
     val navigationCoordinator = remember { getNavigationCoordinator() }
     val uiState by model.uiState.collectAsState()
@@ -68,6 +78,14 @@ fun ProfileSideMenu(modifier: Modifier = Modifier) {
             isModerator = uiState.isModerator,
             canCreateCommunity = uiState.canCreateCommunity,
             isBookmarksVisible = uiState.isBookmarksVisible,
+            onManageAccounts = onManageAccounts,
+            onManageSubscriptions = onManageSubscriptions,
+            onOpenBookmarks = onOpenBookmarks,
+            onOpenDrafts = onOpenDrafts,
+            onOpenVotes = onOpenVotes,
+            onModeratorZone = onModeratorZone,
+            onCreateCommunity = onCreateCommunity,
+            onLogout = onLogout,
         )
     }
 }

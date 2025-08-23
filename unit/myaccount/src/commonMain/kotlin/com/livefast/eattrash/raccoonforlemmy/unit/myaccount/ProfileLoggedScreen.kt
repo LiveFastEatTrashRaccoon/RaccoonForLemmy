@@ -82,6 +82,7 @@ fun ProfileLoggedScreen(
     modifier: Modifier = Modifier,
     model: ProfileLoggedMviModel = getViewModel<ProfileLoggedViewModel>(),
     lazyListState: LazyListState = rememberLazyListState(),
+    onLogout: (() -> Unit)? = null,
 ) {
     val uiState by model.uiState.collectAsState()
     val notificationCenter = remember { getNotificationCenter() }
@@ -187,9 +188,7 @@ fun ProfileLoggedScreen(
                                         LinkAnnotation.Clickable(
                                             tag = AuthIssueAnnotations.ACTION_LOGIN,
                                             linkInteractionListener = {
-                                                notificationCenter.send(
-                                                    NotificationCenterEvent.ProfileSideMenuAction.Logout,
-                                                )
+                                                onLogout?.invoke()
                                             },
                                         ),
                                     )
@@ -807,9 +806,7 @@ fun ProfileLoggedScreen(
             onSelect = { index ->
                 shareBottomSheetUrls = null
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.Share(url = values[index]),
-                    )
+                    model.reduce(ProfileLoggedMviModel.Intent.Share(url = values[index]))
                 }
             },
         )

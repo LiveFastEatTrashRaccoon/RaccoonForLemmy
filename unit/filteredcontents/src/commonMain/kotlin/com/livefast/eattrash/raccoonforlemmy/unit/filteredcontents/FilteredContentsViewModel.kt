@@ -107,12 +107,6 @@ class FilteredContentsViewModel(
                     }
                 }.launchIn(this)
 
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangedLikedType::class)
-                .onEach { evt ->
-                    changeLiked(evt.value)
-                }.launchIn(this)
-
             if (uiState.value.initial) {
                 refresh(initial = true)
             }
@@ -229,6 +223,8 @@ class FilteredContentsViewModel(
                         ),
                     )
                 }
+
+            is FilteredContentsMviModel.Intent.ChangedLikedType -> changeLiked(value = intent.value)
         }
     }
 

@@ -172,30 +172,29 @@ class DefaultExplorePaginationManager(
     private fun List<SearchResult>.filterNsfw(includeNsfw: Boolean): List<SearchResult> = if (includeNsfw) {
         this
     } else {
-        filter { res ->
-            when (res) {
-                is SearchResult.Community -> !res.model.nsfw
-                is SearchResult.Post -> !res.model.nsfw
+        filter { result ->
+            when (result) {
+                is SearchResult.Community -> !result.model.nsfw
+                is SearchResult.Post -> !result.model.nsfw
                 is SearchResult.Comment -> true
                 is SearchResult.User -> true
-                else -> false
             }
         }
     }
 
-    private fun List<SearchResult>.filterDeleted(): List<SearchResult> = filter {
-        when (it) {
-            is SearchResult.Post -> !it.model.deleted
-            is SearchResult.Comment -> !it.model.deleted
+    private fun List<SearchResult>.filterDeleted(): List<SearchResult> = filter { result ->
+        when (result) {
+            is SearchResult.Post -> !result.model.deleted
+            is SearchResult.Comment -> !result.model.deleted
             else -> true
         }
     }
 
-    private fun List<SearchResult>.filterByUrlDomain(): List<SearchResult> = filter {
-        when (it) {
+    private fun List<SearchResult>.filterByUrlDomain(): List<SearchResult> = filter { result ->
+        when (result) {
             is SearchResult.Post -> {
                 blockedDomains?.takeIf { l -> l.isNotEmpty() }?.let { blockList ->
-                    blockList.none { domain -> it.model.url?.contains(domain) ?: true }
+                    blockList.none { domain -> result.model.url?.contains(domain) ?: true }
                 } ?: true
             }
 
@@ -203,12 +202,12 @@ class DefaultExplorePaginationManager(
         }
     }
 
-    private fun List<SearchResult>.filterByStopWords(): List<SearchResult> = filter {
-        when (it) {
+    private fun List<SearchResult>.filterByStopWords(): List<SearchResult> = filter { result ->
+        when (result) {
             is SearchResult.Post -> {
                 stopWords?.takeIf { l -> l.isNotEmpty() }?.let { stopWordList ->
                     stopWordList.none { domain ->
-                        it.model.title.contains(
+                        result.model.title.contains(
                             other = domain,
                             ignoreCase = true,
                         )
@@ -220,13 +219,13 @@ class DefaultExplorePaginationManager(
         }
     }
 
-    private suspend fun List<SearchResult>.withUserTags(): List<SearchResult> = map {
-        when (it) {
+    private suspend fun List<SearchResult>.withUserTags(): List<SearchResult> = map { result ->
+        when (result) {
             is SearchResult.Post ->
                 with(userTagHelper) {
-                    it.copy(
+                    result.copy(
                         model =
-                        it.model.let { post ->
+                        result.model.let { post ->
                             post.copy(creator = post.creator.withTags())
                         },
                     )
@@ -234,9 +233,9 @@ class DefaultExplorePaginationManager(
 
             is SearchResult.Comment ->
                 with(userTagHelper) {
-                    it.copy(
+                    result.copy(
                         model =
-                        it.model.let { comment ->
+                        result.model.let { comment ->
                             comment.copy(creator = comment.creator.withTags())
                         },
                     )
@@ -244,12 +243,12 @@ class DefaultExplorePaginationManager(
 
             is SearchResult.User ->
                 with(userTagHelper) {
-                    it.copy(
-                        model = it.model.withTags() ?: it.model,
+                    result.copy(
+                        model = result.model.withTags() ?: result.model,
                     )
                 }
 
-            else -> it
+            else -> result
         }
     }
 }

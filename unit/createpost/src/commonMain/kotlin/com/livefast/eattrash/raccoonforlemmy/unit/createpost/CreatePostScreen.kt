@@ -226,21 +226,6 @@ fun CreatePostScreen(
                 }
             }.launchIn(this)
     }
-    LaunchedEffect(notificationCenter) {
-        notificationCenter
-            .subscribe(NotificationCenterEvent.SelectCommunity::class)
-            .onEach { evt ->
-                model.reduce(CreatePostMviModel.Intent.SetCommunity(evt.model))
-                focusManager.clearFocus()
-            }.launchIn(this)
-        notificationCenter
-            .subscribe(NotificationCenterEvent.CloseDialog::class)
-            .onEach {
-                if (openSelectCommunity) {
-                    openSelectCommunity = false
-                }
-            }.launchIn(this)
-    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -682,7 +667,15 @@ fun CreatePostScreen(
         }
 
         if (openSelectCommunity) {
-            SelectCommunityDialog()
+            SelectCommunityDialog(
+                onSelect = { community ->
+                    if (community != null) {
+                        model.reduce(CreatePostMviModel.Intent.SetCommunity(community))
+                        focusManager.clearFocus()
+                    }
+                    openSelectCommunity = false
+                },
+            )
         }
     }
 }

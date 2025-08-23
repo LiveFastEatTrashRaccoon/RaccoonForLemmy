@@ -105,11 +105,6 @@ class ProfileLoggedViewModel(
                     handlePostUpdate(evt.model)
                 }.launchIn(this)
             notificationCenter
-                .subscribe(NotificationCenterEvent.Share::class)
-                .onEach { evt ->
-                    shareHelper.share(evt.url)
-                }.launchIn(this)
-            notificationCenter
                 .subscribe(NotificationCenterEvent.Logout::class)
                 .onEach {
                     delay(250)

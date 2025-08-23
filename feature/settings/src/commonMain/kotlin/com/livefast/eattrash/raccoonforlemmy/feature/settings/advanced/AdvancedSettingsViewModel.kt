@@ -9,8 +9,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRep
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.BarColorProvider
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toSelectNumberBottomSheetType
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
@@ -21,7 +19,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.usecase.ImportSett
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.appconfig.AppConfigStore
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconVariant
-import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toAppIconVariant
 import com.livefast.eattrash.raccoonforlemmy.core.utils.debug.AppInfoRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.fs.FileSystemManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.gallery.GalleryHelper
@@ -70,58 +67,6 @@ class AdvancedSettingsViewModel(
             identityRepository.isLogged
                 .onEach { logged ->
                     updateState { it.copy(isLogged = logged ?: false) }
-                }.launchIn(this)
-
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeZombieInterval::class)
-                .onEach { evt ->
-                    changeZombieModeInterval(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeFeedType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "advancedSettings") {
-                        changeExploreType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeZombieScrollAmount::class)
-                .onEach { evt ->
-                    changeZombieModeScrollAmount(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeInboxType::class)
-                .onEach { evt ->
-                    changeDefaultInboxUnreadOnly(evt.unreadOnly)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSystemBarTheme::class)
-                .onEach { evt ->
-                    changeSystemBarTheme(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeInboxBackgroundCheckPeriod::class)
-                .onEach { evt ->
-                    changeInboxBackgroundCheckPeriod(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.AppIconVariantSelected::class)
-                .onEach { evt ->
-                    changeAppIconVariant(evt.value.toAppIconVariant())
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.SelectNumberBottomSheetClosed::class)
-                .onEach { evt ->
-                    if (evt.type.toSelectNumberBottomSheetType() == SelectNumberBottomSheetType.InboxPreviewMaxLines) {
-                        changeInboxPreviewMaxLines(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSearchResultType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "advancedSettings") {
-                        changeExploreResultType(evt.value)
-                    }
                 }.launchIn(this)
 
             val isDebug = appInfoRepository.geInfo().isDebug
@@ -230,6 +175,18 @@ class AdvancedSettingsViewModel(
 
             is AdvancedSettingsMviModel.Intent.ChangeRestrictLocalUserSearch ->
                 changeRestrictLocalUserSearch(intent.value)
+
+            is AdvancedSettingsMviModel.Intent.ChangeAppIconVariant -> changeAppIconVariant(intent.value)
+            is AdvancedSettingsMviModel.Intent.ChangeExploreFeedType -> changeExploreType(intent.value)
+            is AdvancedSettingsMviModel.Intent.ChangeExploreResultType -> changeExploreResultType(intent.value)
+            is AdvancedSettingsMviModel.Intent.ChangeInboxBackgroundCheckPeriod ->
+                changeInboxBackgroundCheckPeriod(intent.value)
+
+            is AdvancedSettingsMviModel.Intent.ChangeInboxType -> changeDefaultInboxUnreadOnly(intent.unreadOnly)
+            is AdvancedSettingsMviModel.Intent.ChangeSystemBarTheme -> changeSystemBarTheme(intent.value)
+            is AdvancedSettingsMviModel.Intent.ChangeZombieInterval -> changeZombieModeInterval(intent.value)
+            is AdvancedSettingsMviModel.Intent.ChangeZombieScrollAmount -> changeZombieModeScrollAmount(intent.value)
+            is AdvancedSettingsMviModel.Intent.SelectInboxPreviewMaxLines -> changeInboxPreviewMaxLines(intent.value)
         }
     }
 

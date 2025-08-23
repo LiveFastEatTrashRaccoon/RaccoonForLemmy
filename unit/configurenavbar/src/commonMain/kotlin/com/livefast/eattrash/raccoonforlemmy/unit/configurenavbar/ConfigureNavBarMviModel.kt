@@ -17,6 +17,8 @@ interface ConfigureNavBarMviModel :
         data class Delete(val section: TabNavigationSection) : Intent
 
         data object Save : Intent
+
+        data class Add(val value: TabNavigationSection) : Intent
     }
 
     data class UiState(

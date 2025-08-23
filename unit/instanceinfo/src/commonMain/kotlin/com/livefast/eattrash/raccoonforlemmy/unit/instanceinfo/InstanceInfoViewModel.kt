@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.pagination.CommunityPaginationManager
@@ -20,7 +18,6 @@ class InstanceInfoViewModel(
     private val url: String,
     private val siteRepository: SiteRepository,
     private val settingsRepository: SettingsRepository,
-    private val notificationCenter: NotificationCenter,
     private val getSortTypesUseCase: GetSortTypesUseCase,
     private val communityPaginationManager: CommunityPaginationManager,
 ) : ViewModel(),
@@ -36,13 +33,6 @@ class InstanceInfoViewModel(
                             autoLoadImages = settings.autoLoadImages,
                             preferNicknames = settings.preferUserNicknames,
                         )
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSortType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "instanceInfo") {
-                        changeSortType(evt.value)
                     }
                 }.launchIn(this)
 
@@ -67,10 +57,11 @@ class InstanceInfoViewModel(
     override fun reduce(intent: InstanceInfoMviModel.Intent) {
         when (intent) {
             InstanceInfoMviModel.Intent.LoadNextPage -> loadNextPage()
-            InstanceInfoMviModel.Intent.Refresh ->
-                viewModelScope.launch {
-                    refresh()
-                }
+            InstanceInfoMviModel.Intent.Refresh -> viewModelScope.launch {
+                refresh()
+            }
+
+            is InstanceInfoMviModel.Intent.ChangeSortType -> changeSortType(intent.value)
         }
     }
 

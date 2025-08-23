@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase.LogoutUseCase
@@ -18,8 +17,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserReposit
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.usecase.GetSortTypesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class AccountSettingsViewModel(
@@ -38,21 +35,6 @@ class AccountSettingsViewModel(
 
     init {
         viewModelScope.launch {
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSortType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "accountSettings") {
-                        updateState { it.copy(defaultSortType = evt.value) }
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeFeedType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "accountSettings") {
-                        updateState { it.copy(defaultListingType = evt.value) }
-                    }
-                }.launchIn(this)
-
             if (accountSettings == null) {
                 refreshSettings()
                 val availableSortTypes = getSortTypesUseCase.getTypesForPosts()
@@ -204,6 +186,12 @@ class AccountSettingsViewModel(
                 )
 
             AccountSettingsMviModel.Intent.Submit -> submit()
+            is AccountSettingsMviModel.Intent.ChangeFeedType -> viewModelScope.launch {
+                updateState { it.copy(defaultListingType = intent.value) }
+            }
+            is AccountSettingsMviModel.Intent.ChangeSortType -> viewModelScope.launch {
+                updateState { it.copy(defaultSortType = intent.value) }
+            }
         }
     }
 

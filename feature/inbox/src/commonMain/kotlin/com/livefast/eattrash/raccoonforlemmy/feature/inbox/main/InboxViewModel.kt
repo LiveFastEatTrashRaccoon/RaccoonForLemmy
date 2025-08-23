@@ -46,11 +46,6 @@ class InboxViewModel(
                 }.launchIn(this)
 
             notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeInboxType::class)
-                .onEach { evt ->
-                    changeUnreadOnly(evt.unreadOnly)
-                }.launchIn(this)
-            notificationCenter
                 .subscribe(NotificationCenterEvent.ResetInbox::class)
                 .onEach {
                     onFirstLoad()
@@ -78,15 +73,16 @@ class InboxViewModel(
                 }
 
             InboxMviModel.Intent.ReadAll -> markAllRead()
+            is InboxMviModel.Intent.ChangeInboxType -> changeUnreadOnly(unreadOnly = intent.unreadOnly)
         }
     }
 
-    private fun changeUnreadOnly(value: Boolean) {
+    private fun changeUnreadOnly(unreadOnly: Boolean) {
         viewModelScope.launch {
             updateState {
-                it.copy(unreadOnly = value)
+                it.copy(unreadOnly = unreadOnly)
             }
-            coordinator.setUnreadOnly(value)
+            coordinator.setUnreadOnly(unreadOnly)
         }
     }
 

@@ -92,8 +92,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
@@ -147,7 +145,6 @@ fun UserDetailScreen(userId: Long, modifier: Modifier = Modifier, otherInstance:
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val mainRouter = remember { getMainRouter() }
-    val notificationCenter = remember { getNotificationCenter() }
     val clipboardManager = LocalClipboardManager.current
     var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
     var sortBottomSheetOpened by remember { mutableStateOf(false) }
@@ -1213,9 +1210,7 @@ fun UserDetailScreen(userId: Long, modifier: Modifier = Modifier, otherInstance:
             onSelect = { index ->
                 shareBottomSheetUrls = null
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.Share(url = values[index]),
-                    )
+                    model.reduce(UserDetailMviModel.Intent.Share(url = values[index]))
                 }
             },
         )
@@ -1230,10 +1225,9 @@ fun UserDetailScreen(userId: Long, modifier: Modifier = Modifier, otherInstance:
                 sortBottomSheetOpened = false
                 defaultSortBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSortType(
+                    model.reduce(
+                        UserDetailMviModel.Intent.ChangeSortType(
                             value = value,
-                            screenKey = uiState.user.readableHandle,
                             saveAsDefault = wasDefaultSortBottomSheetOpened,
                         ),
                     )

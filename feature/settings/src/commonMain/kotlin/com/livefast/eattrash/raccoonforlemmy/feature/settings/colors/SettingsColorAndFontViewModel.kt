@@ -13,7 +13,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ColorSchemePr
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -87,41 +86,6 @@ class SettingsColorAndFontViewModel(
                     updateState { it.copy(isLogged = logged ?: false) }
                 }.launchIn(this)
 
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeTheme::class)
-                .onEach { evt ->
-                    changeTheme(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeFontFamily::class)
-                .onEach { evt ->
-                    changeFontFamily(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeUiFontSize::class)
-                .onEach { evt ->
-                    changeUiFontScale(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeColor::class)
-                .onEach { evt ->
-                    changeCustomSeedColor(evt.color)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeCommentBarTheme::class)
-                .onEach { evt ->
-                    changeCommentBarTheme(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeActionColor::class)
-                .onEach { evt ->
-                    when (evt.actionType) {
-                        3 -> changeSaveColor(evt.color)
-                        2 -> changeReplyColor(evt.color)
-                        1 -> changeDownVoteColor(evt.color)
-                        else -> changeUpVoteColor(evt.color)
-                    }
-                }.launchIn(this)
             updateState {
                 it.copy(
                     supportsDynamicColors = colorSchemeProvider.supportsDynamicColors,
@@ -134,6 +98,20 @@ class SettingsColorAndFontViewModel(
         when (intent) {
             is Intent.ChangeDynamicColors -> changeDynamicColors(intent.value)
             is Intent.ChangeRandomColor -> changeRandomColor(intent.value)
+            is Intent.ChangeCommentBarTheme -> changeCommentBarTheme(intent.value)
+            is Intent.ChangeFontFamily -> changeFontFamily(intent.value)
+            is Intent.ChangeFontSize -> changeUiFontScale(intent.value)
+            is Intent.ChangeTheme -> changeTheme(intent.value)
+            is Intent.ChangeThemeColor -> changeCustomSeedColor(intent.value)
+            is Intent.ChangeActionColor -> {
+                when (intent.type) {
+                    CustomColorType.SaveColor -> changeSaveColor(intent.value)
+                    CustomColorType.ReplyColor -> changeReplyColor(intent.value)
+                    CustomColorType.DownvoteColor -> changeDownVoteColor(intent.value)
+                    CustomColorType.UpvoteColor -> changeUpVoteColor(intent.value)
+                    CustomColorType.None -> Unit
+                }
+            }
         }
     }
 

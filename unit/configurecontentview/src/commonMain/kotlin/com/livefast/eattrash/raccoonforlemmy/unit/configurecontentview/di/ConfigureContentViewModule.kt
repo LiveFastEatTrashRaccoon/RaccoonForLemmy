@@ -12,7 +12,6 @@ val configureContentViewModule =
                 themeRepository = instance(),
                 settingsRepository = instance(),
                 accountRepository = instance(),
-                notificationCenter = instance(),
                 lemmyValueCache = instance(),
             )
         }

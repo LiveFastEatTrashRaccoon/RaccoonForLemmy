@@ -52,12 +52,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitc
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +61,6 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
     val model: ConfigureContentViewMviModel = getViewModel<ConfigureContentViewViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = remember { getNavigationCoordinator() }
-    val notificationCenter = remember { getNotificationCenter() }
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val scrollState = rememberScrollState()
@@ -308,9 +303,7 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 voteFormatBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeVoteFormat(value = values[index]),
-                    )
+                    model.reduce(ConfigureContentViewMviModel.Intent.ChangeVoteFormat(value = values[index]))
                 }
             },
         )
@@ -332,9 +325,7 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 postLayoutBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangePostLayout(value = values[index]),
-                    )
+                    model.reduce(ConfigureContentViewMviModel.Intent.ChangePostLayout(value = values[index]))
                 }
             },
         )
@@ -364,8 +355,10 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 fontFamilyBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeContentFontFamily(items[index].toUiFontFamily()),
+                    model.reduce(
+                        ConfigureContentViewMviModel.Intent.ChangeContentFontFamily(
+                            value = items[index].toUiFontFamily(),
+                        ),
                     )
                 }
             },
@@ -398,8 +391,8 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 fontScaleClassBottomSheet = null
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeContentFontSize(
+                    model.reduce(
+                        ConfigureContentViewMviModel.Intent.ChangeContentFontSize(
                             value = items[index],
                             contentClass = contentClass,
                         ),
@@ -411,15 +404,14 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
 
     if (selectPostBodyMaxLinesBottomSheetOpened) {
         SelectNumberBottomSheet(
-            type = SelectNumberBottomSheetType.PostBodyMaxLines,
+            title = LocalStrings.current.settingsPostBodyMaxLines,
             initialValue = uiState.postBodyMaxLines,
             onSelect = { value ->
                 selectPostBodyMaxLinesBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.SelectNumberBottomSheetClosed(
+                    model.reduce(
+                        ConfigureContentViewMviModel.Intent.SelectPostBodyMaxLines(
                             value = value.coerceAtMost(0),
-                            type = SelectNumberBottomSheetType.PostBodyMaxLines.toInt(),
                         ),
                     )
                 }

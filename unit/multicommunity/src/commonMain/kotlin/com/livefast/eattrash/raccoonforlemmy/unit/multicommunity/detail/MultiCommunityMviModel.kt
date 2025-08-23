@@ -34,6 +34,8 @@ interface MultiCommunityMviModel :
         data class WillOpenDetail(val id: Long) : Intent
 
         data class ToggleRead(val id: Long) : Intent
+
+        data class ChangeSortType(val value: SortType) : Intent
     }
 
     data class UiState(

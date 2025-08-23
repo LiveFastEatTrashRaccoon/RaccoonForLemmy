@@ -6,6 +6,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.CommentBarThem
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontScales
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
 interface ConfigureContentViewMviModel :
@@ -24,6 +25,16 @@ interface ConfigureContentViewMviModel :
         data object IncrementCommentIndentAmount : Intent
 
         data object DecrementCommentIndentAmount : Intent
+
+        data class ChangeVoteFormat(val value: VoteFormat) : Intent
+
+        data class ChangePostLayout(val value: PostLayout) : Intent
+
+        data class ChangeContentFontFamily(val value: UiFontFamily) : Intent
+
+        data class ChangeContentFontSize(val value: Float, val contentClass: ContentFontClass) : Intent
+
+        data class SelectPostBodyMaxLines(val value: Int) : Intent
     }
 
     data class UiState(

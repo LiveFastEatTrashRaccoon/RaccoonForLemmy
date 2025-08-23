@@ -34,6 +34,12 @@ interface ExploreMviModel : MviModel<ExploreMviModel.Intent, ExploreMviModel.UiS
         data class SaveComment(val id: Long, val feedback: Boolean = false) : Intent
 
         data class ToggleSubscription(val communityId: Long) : Intent
+
+        data class ChangeFeedType(val value: ListingType) : Intent
+
+        data class ChangeSortType(val value: SortType) : Intent
+
+        data class ChangeSearchResultType(val value: SearchResultType) : Intent
     }
 
     data class UiState(

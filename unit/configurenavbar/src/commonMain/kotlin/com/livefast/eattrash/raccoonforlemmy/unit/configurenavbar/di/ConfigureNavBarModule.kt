@@ -14,7 +14,6 @@ val configureNavBarModule =
                 bottomNavItemsRepository = instance(),
                 settingsRepository = instance(),
                 hapticFeedback = instance(),
-                notificationCenter = instance(),
             )
         }
     }

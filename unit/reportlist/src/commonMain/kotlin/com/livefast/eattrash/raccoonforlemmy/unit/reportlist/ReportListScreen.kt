@@ -61,8 +61,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentReportModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -84,7 +82,6 @@ fun ReportListScreen(modifier: Modifier = Modifier, communityId: Long? = null) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val navigationCoordinator = remember { getNavigationCoordinator() }
-    val notificationCenter = remember { getNotificationCenter() }
     var rawContent by remember { mutableStateOf<Any?>(null) }
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
@@ -512,9 +509,7 @@ fun ReportListScreen(modifier: Modifier = Modifier, communityId: Long? = null) {
             onSelect = { index ->
                 reportTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeReportListType(unresolvedOnly = index == 0),
-                    )
+                    model.reduce(ReportListMviModel.Intent.ChangeType(unresolvedOnly = index == 0))
                 }
             },
         )

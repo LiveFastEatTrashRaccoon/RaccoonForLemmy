@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -32,22 +31,20 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchFiel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItemPlaceholder
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectCommunityDialog(modifier: Modifier = Modifier) {
+fun SelectCommunityDialog(onSelect: (CommunityModel?) -> Unit, modifier: Modifier = Modifier) {
     val model: SelectCommunityMviModel = getViewModel<SelectCommunityViewModel>()
     val uiState by model.uiState.collectAsState()
-    val notificationCenter = remember { getNotificationCenter() }
 
     BasicAlertDialog(
         modifier = modifier,
         onDismissRequest = {
             model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
-            notificationCenter.send(NotificationCenterEvent.CloseDialog)
+            onSelect(null)
         },
     ) {
         Column(
@@ -101,10 +98,7 @@ fun SelectCommunityDialog(modifier: Modifier = Modifier) {
                                 .background(MaterialTheme.colorScheme.background)
                                 .onClick(
                                     onClick = {
-                                        notificationCenter.send(
-                                            NotificationCenterEvent.SelectCommunity(community),
-                                        )
-                                        notificationCenter.send(NotificationCenterEvent.CloseDialog)
+                                        onSelect(community)
                                     },
                                 ),
                             autoLoadImages = uiState.autoLoadImages,
@@ -135,7 +129,7 @@ fun SelectCommunityDialog(modifier: Modifier = Modifier) {
             Button(
                 onClick = {
                     model.reduce(SelectCommunityMviModel.Intent.SetSearch(""))
-                    notificationCenter.send(NotificationCenterEvent.CloseDialog)
+                    onSelect(null)
                 },
             ) {
                 Text(text = LocalStrings.current.buttonClose)

@@ -15,7 +15,6 @@ val instanceInfoModule =
                 url = args.url,
                 siteRepository = instance(),
                 settingsRepository = instance(),
-                notificationCenter = instance(),
                 getSortTypesUseCase = instance(),
                 communityPaginationManager = instance(),
             )

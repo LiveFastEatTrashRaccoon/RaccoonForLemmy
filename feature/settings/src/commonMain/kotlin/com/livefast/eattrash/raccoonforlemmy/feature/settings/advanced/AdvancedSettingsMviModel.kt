@@ -2,6 +2,7 @@ package com.livefast.eattrash.raccoonforlemmy.feature.settings.advanced
 
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModel
+import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconVariant
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
@@ -52,6 +53,24 @@ interface AdvancedSettingsMviModel :
         data class ChangeEnableAlternateMarkdownRendering(val value: Boolean) : Intent
 
         data class ChangeRestrictLocalUserSearch(val value: Boolean) : Intent
+
+        data class SelectInboxPreviewMaxLines(val value: Int?) : Intent
+
+        data class ChangeZombieScrollAmount(val value: Float) : Intent
+
+        data class ChangeExploreResultType(val value: SearchResultType) : Intent
+
+        data class ChangeExploreFeedType(val value: ListingType) : Intent
+
+        data class ChangeInboxType(val unreadOnly: Boolean) : Intent
+
+        data class ChangeInboxBackgroundCheckPeriod(val value: Duration?) : Intent
+
+        data class ChangeZombieInterval(val value: Duration) : Intent
+
+        data class ChangeSystemBarTheme(val value: UiBarTheme) : Intent
+
+        data class ChangeAppIconVariant(val value: AppIconVariant) : Intent
     }
 
     data class UiState(

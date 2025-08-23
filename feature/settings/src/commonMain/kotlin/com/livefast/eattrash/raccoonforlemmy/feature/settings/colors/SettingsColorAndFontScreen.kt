@@ -68,7 +68,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import kotlinx.coroutines.delay
@@ -76,7 +75,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-internal enum class CustomColorType {
+enum class CustomColorType {
     UpvoteColor,
     DownvoteColor,
     ReplyColor,
@@ -313,9 +312,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 uiThemeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeTheme(items[index]),
-                    )
+                    model.reduce(SettingsColorAndFontMviModel.Intent.ChangeTheme(items[index]))
                 }
             },
         )
@@ -361,8 +358,8 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
                 customColorBottomSheetOpened = false
                 if (index != null) {
                     if (index in appColorRepository.getColors().indices) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeColor(
+                        model.reduce(
+                            SettingsColorAndFontMviModel.Intent.ChangeThemeColor(
                                 appColorRepository.getColors()[index].toColor(),
                             ),
                         )
@@ -383,7 +380,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
                     customColorPickerDialogOpened = false
                     customColorBottomSheetOpened = false
                     if (newColor != null) {
-                        notificationCenter.send(NotificationCenterEvent.ChangeColor(newColor))
+                        model.reduce(SettingsColorAndFontMviModel.Intent.ChangeThemeColor(newColor))
                     }
                 },
             )
@@ -477,33 +474,32 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
                 voteThemeBottomSheetOpened = false
                 if (index != null) {
                     if (index in items.indices) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeActionColor(
-                                color =
-                                when (customColorTypeSelection) {
-                                    CustomColorType.UpvoteColor -> {
-                                        items[index].toUpVoteColor()
-                                    }
+                        val intent = SettingsColorAndFontMviModel.Intent.ChangeActionColor(
+                            value =
+                            when (customColorTypeSelection) {
+                                CustomColorType.UpvoteColor -> {
+                                    items[index].toUpVoteColor()
+                                }
 
-                                    CustomColorType.DownvoteColor -> {
-                                        items[index].toDownVoteColor()
-                                    }
+                                CustomColorType.DownvoteColor -> {
+                                    items[index].toDownVoteColor()
+                                }
 
-                                    CustomColorType.ReplyColor -> {
-                                        items[index].toReplyColor()
-                                    }
+                                CustomColorType.ReplyColor -> {
+                                    items[index].toReplyColor()
+                                }
 
-                                    CustomColorType.SaveColor -> {
-                                        items[index].toSaveColor()
-                                    }
+                                CustomColorType.SaveColor -> {
+                                    items[index].toSaveColor()
+                                }
 
-                                    else -> {
-                                        Color.Unspecified
-                                    }
-                                },
-                                actionType = customColorTypeSelection.ordinal,
-                            ),
+                                else -> {
+                                    Color.Unspecified
+                                }
+                            },
+                            type = customColorTypeSelection,
                         )
+                        model.reduce(intent)
                         customColorTypeSelection = CustomColorType.None
                     } else {
                         customColorPickerDialogOpened = true
@@ -522,10 +518,10 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
                     customColorPickerDialogOpened = false
                     voteThemeBottomSheetOpened = false
                     if (newColor != null) {
-                        notificationCenter.send(
-                            NotificationCenterEvent.ChangeActionColor(
-                                color = newColor,
-                                actionType = customColorTypeSelection.ordinal,
+                        model.reduce(
+                            SettingsColorAndFontMviModel.Intent.ChangeActionColor(
+                                value = newColor,
+                                type = customColorTypeSelection,
                             ),
                         )
                     }
@@ -561,11 +557,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 commentBarColorsBottomSheetOpened = false
                 if (index != null && index in items.indices) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeCommentBarTheme(
-                            value = items[index],
-                        ),
-                    )
+                    model.reduce(SettingsColorAndFontMviModel.Intent.ChangeCommentBarTheme(value = items[index]))
                 }
             },
         )
@@ -595,9 +587,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 fontFamilyBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeFontFamily(items[index].toUiFontFamily()),
-                    )
+                    model.reduce(SettingsColorAndFontMviModel.Intent.ChangeFontFamily(items[index].toUiFontFamily()))
                 }
             },
         )
@@ -629,9 +619,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 fontScaleBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeUiFontSize(items[index]),
-                    )
+                    model.reduce(SettingsColorAndFontMviModel.Intent.ChangeFontSize(items[index]))
                 }
             },
         )

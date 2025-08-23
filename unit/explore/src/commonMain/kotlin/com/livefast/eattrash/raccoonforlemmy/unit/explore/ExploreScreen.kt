@@ -72,8 +72,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSectio
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
@@ -131,19 +129,10 @@ fun ExploreScreen(
     val mainRouter = remember { getMainRouter() }
     val connection = navigationCoordinator.getBottomBarScrollConnection()
     val scope = rememberCoroutineScope()
-    val notificationCenter = remember { getNotificationCenter() }
     val isOnOtherInstance = remember { otherInstance.isNotEmpty() }
     val otherInstanceName = remember { otherInstance }
     val snackbarHostState = remember { SnackbarHostState() }
     val errorMessage = LocalStrings.current.messageGenericError
-    val notificationEventKey =
-        buildString {
-            append("explore")
-            if (isOnOtherInstance) {
-                append("-")
-                append(otherInstanceName)
-            }
-        }
     val searchFocusRequester = remember { FocusRequester() }
     var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
     var resultTypeBottomSheetOpened by remember { mutableStateOf(false) }
@@ -808,11 +797,8 @@ fun ExploreScreen(
             onSelect = { index ->
                 listingTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeFeedType(
-                            value = values[index],
-                            screenKey = notificationEventKey,
-                        ),
+                    model.reduce(
+                        ExploreMviModel.Intent.ChangeFeedType(value = values[index]),
                     )
                 }
             },
@@ -847,12 +833,7 @@ fun ExploreScreen(
             onSelect = { index ->
                 resultTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSearchResultType(
-                            value = values[index],
-                            screenKey = notificationEventKey,
-                        ),
-                    )
+                    model.reduce(ExploreMviModel.Intent.ChangeSearchResultType(value = values[index]))
                 }
             },
         )
@@ -865,12 +846,7 @@ fun ExploreScreen(
             onSelect = { value ->
                 sortBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSortType(
-                            value = value,
-                            screenKey = notificationEventKey,
-                        ),
-                    )
+                    model.reduce(ExploreMviModel.Intent.ChangeSortType(value = value))
                 }
             },
         )

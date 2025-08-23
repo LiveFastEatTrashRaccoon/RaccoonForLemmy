@@ -69,6 +69,8 @@ interface PostDetailMviModel :
         data object RestorePost : Intent
 
         data class RestoreComment(val commentId: Long) : Intent
+
+        data class ChangeSortType(val value: SortType) : Intent
     }
 
     data class UiState(

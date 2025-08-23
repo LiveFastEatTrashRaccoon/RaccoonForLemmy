@@ -24,7 +24,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,8 +40,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.ModeratorZoneAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toIcon
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toInt
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toModeratorZoneAction
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
@@ -50,8 +47,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.menu.ProfileSideMenu
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedScreen
@@ -59,8 +54,6 @@ import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsB
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedMviModel
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.myaccount.ProfileLoggedViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,70 +74,10 @@ fun ProfileMainScreen(
     val settings by settingsRepository.currentSettings.collectAsState()
     val connection = navigationCoordinator.getBottomBarScrollConnection()
     val scope = rememberCoroutineScope()
-    val notificationCenter = remember { getNotificationCenter() }
     val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
     var logoutConfirmDialogOpened by remember { mutableStateOf(false) }
     var moderatorZoneBottomSheetOpened by remember { mutableStateOf(false) }
     var manageAccountsBottomSheetOpened by remember { mutableStateOf(false) }
-
-    LaunchedEffect(notificationCenter) {
-        notificationCenter
-            .subscribe(NotificationCenterEvent.ModeratorZoneActionSelected::class)
-            .onEach {
-                val action = it.value.toModeratorZoneAction()
-                when (action) {
-                    ModeratorZoneAction.GlobalModLog -> {
-                        mainRouter.openModlog()
-                    }
-
-                    ModeratorZoneAction.GlobalReports -> {
-                        mainRouter.openReports()
-                    }
-
-                    ModeratorZoneAction.ModeratedContents -> {
-                        mainRouter.openModeratedContents()
-                    }
-                }
-            }.launchIn(this)
-
-        notificationCenter
-            .subscribe(NotificationCenterEvent.ProfileSideMenuAction::class)
-            .onEach { evt ->
-                when (evt) {
-                    NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts -> {
-                        manageAccountsBottomSheetOpened = true
-                    }
-
-                    NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions -> {
-                        mainRouter.openManageSubscriptions()
-                    }
-
-                    NotificationCenterEvent.ProfileSideMenuAction.Bookmarks -> {
-                        mainRouter.openBookmarks()
-                    }
-
-                    NotificationCenterEvent.ProfileSideMenuAction.Drafts -> {
-                        mainRouter.openDrafts()
-                    }
-
-                    NotificationCenterEvent.ProfileSideMenuAction.Votes -> {
-                        mainRouter.openVotes()
-                    }
-
-                    NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone -> {
-                        moderatorZoneBottomSheetOpened = true
-                    }
-
-                    NotificationCenterEvent.ProfileSideMenuAction.Logout -> {
-                        logoutConfirmDialogOpened = true
-                    }
-
-                    NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity -> {
-                        mainRouter.openEditCommunity()
-                    }
-                }
-            }.launchIn(this)
-    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -178,7 +111,34 @@ fun ProfileMainScreen(
                     if (uiState.logged == true) {
                         IconButton(
                             onClick = {
-                                navigationCoordinator.openSideMenu { ProfileSideMenu() }
+                                navigationCoordinator.openSideMenu {
+                                    ProfileSideMenu(
+                                        onManageAccounts = {
+                                            manageAccountsBottomSheetOpened = true
+                                        },
+                                        onManageSubscriptions = {
+                                            mainRouter.openManageSubscriptions()
+                                        },
+                                        onOpenBookmarks = {
+                                            mainRouter.openBookmarks()
+                                        },
+                                        onOpenDrafts = {
+                                            mainRouter.openDrafts()
+                                        },
+                                        onOpenVotes = {
+                                            mainRouter.openVotes()
+                                        },
+                                        onModeratorZone = {
+                                            moderatorZoneBottomSheetOpened = true
+                                        },
+                                        onCreateCommunity = {
+                                            mainRouter.openEditCommunity()
+                                        },
+                                        onLogout = {
+                                            logoutConfirmDialogOpened = true
+                                        },
+                                    )
+                                }
                             },
                         ) {
                             Icon(
@@ -218,6 +178,9 @@ fun ProfileMainScreen(
                 true -> ProfileLoggedScreen(
                     model = loggedModel,
                     lazyListState = loggedLazyListState,
+                    onLogout = {
+                        logoutConfirmDialogOpened = true
+                    },
                 )
 
                 false -> ProfileNotLoggedScreen()
@@ -298,9 +261,19 @@ fun ProfileMainScreen(
             onSelect = { index ->
                 moderatorZoneBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ModeratorZoneActionSelected(values[index].toInt()),
-                    )
+                    when (values[index]) {
+                        ModeratorZoneAction.GlobalModLog -> {
+                            mainRouter.openModlog()
+                        }
+
+                        ModeratorZoneAction.GlobalReports -> {
+                            mainRouter.openReports()
+                        }
+
+                        ModeratorZoneAction.ModeratedContents -> {
+                            mainRouter.openModeratedContents()
+                        }
+                    }
                 }
             },
         )

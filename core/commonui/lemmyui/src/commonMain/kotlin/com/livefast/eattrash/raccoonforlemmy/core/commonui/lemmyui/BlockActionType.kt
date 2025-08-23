@@ -11,12 +11,6 @@ sealed interface BlockActionType {
     data object Instance : BlockActionType
 }
 
-fun Int.toBlockActionType(): BlockActionType = when (this) {
-    2 -> BlockActionType.Instance
-    1 -> BlockActionType.Community
-    else -> BlockActionType.User
-}
-
 @Composable
 fun BlockActionType.toReadableName(): String = when (this) {
     BlockActionType.Community -> LocalStrings.current.blockActionCommunity

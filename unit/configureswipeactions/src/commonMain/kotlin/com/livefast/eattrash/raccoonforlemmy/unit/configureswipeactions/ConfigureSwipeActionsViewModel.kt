@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeTarget
@@ -19,7 +17,6 @@ import kotlinx.coroutines.launch
 class ConfigureSwipeActionsViewModel(
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
-    private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
 ) : ViewModel(),
     MviModelDelegate<
@@ -35,30 +32,6 @@ class ConfigureSwipeActionsViewModel(
                 .onEach { value ->
                     updateState {
                         it.copy(downVoteEnabled = value)
-                    }
-                }.launchIn(this)
-
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ActionsOnSwipeSelected::class)
-                .onEach { evt ->
-                    when (evt.target) {
-                        ActionOnSwipeTarget.Posts ->
-                            addActionPosts(
-                                action = evt.value,
-                                direction = evt.direction,
-                            )
-
-                        ActionOnSwipeTarget.Comments ->
-                            addActionComments(
-                                action = evt.value,
-                                direction = evt.direction,
-                            )
-
-                        ActionOnSwipeTarget.Inbox ->
-                            addActionInbox(
-                                action = evt.value,
-                                direction = evt.direction,
-                            )
                     }
                 }.launchIn(this)
 
@@ -89,6 +62,37 @@ class ConfigureSwipeActionsViewModel(
             ConfigureSwipeActionsMviModel.Intent.ResetActionsComments -> resetActionsComments()
             ConfigureSwipeActionsMviModel.Intent.ResetActionsInbox -> resetActionsInbox()
             ConfigureSwipeActionsMviModel.Intent.ResetActionsPosts -> resetActionsPosts()
+            is ConfigureSwipeActionsMviModel.Intent.ActionSelected -> handleActionSelected(
+                action = intent.value,
+                direction = intent.direction,
+                target = intent.target,
+            )
+        }
+    }
+
+    private fun handleActionSelected(
+        action: ActionOnSwipe,
+        direction: ActionOnSwipeDirection,
+        target: ActionOnSwipeTarget,
+    ) {
+        when (target) {
+            ActionOnSwipeTarget.Posts ->
+                addActionPosts(
+                    action = action,
+                    direction = direction,
+                )
+
+            ActionOnSwipeTarget.Comments ->
+                addActionComments(
+                    action = action,
+                    direction = direction,
+                )
+
+            ActionOnSwipeTarget.Inbox ->
+                addActionInbox(
+                    action = action,
+                    direction = direction,
+                )
         }
     }
 

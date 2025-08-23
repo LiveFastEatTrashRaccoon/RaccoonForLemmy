@@ -124,23 +124,14 @@ class PostListViewModel(
                     }
                 }.launchIn(this)
             notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeFeedType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "postList") {
-                        applyListingType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSortType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "postList") {
-                        applySortType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
                 .subscribe(NotificationCenterEvent.Logout::class)
                 .onEach {
                     handleLogout()
+                }.launchIn(this)
+            notificationCenter
+                .subscribe(NotificationCenterEvent.ChangeFeedType::class)
+                .onEach { evt ->
+                    applyListingType(evt.value)
                 }.launchIn(this)
             notificationCenter
                 .subscribe(NotificationCenterEvent.InstanceSelected::class)
@@ -148,23 +139,6 @@ class PostListViewModel(
                     refresh(initial = true)
                     delay(100)
                     emitEffect(PostListMviModel.Effect.BackToTop)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.BlockActionSelected::class)
-                .onEach { evt ->
-                    val userId = evt.userId
-                    val communityId = evt.communityId
-                    val instanceId = evt.instanceId
-                    when {
-                        userId != null -> blockUser(userId)
-                        communityId != null -> blockCommunity(communityId)
-                        instanceId != null -> blockInstance(instanceId)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.Share::class)
-                .onEach { evt ->
-                    shareHelper.share(evt.url)
                 }.launchIn(this)
             notificationCenter
                 .subscribe(NotificationCenterEvent.ResetHome::class)
@@ -310,6 +284,19 @@ class PostListViewModel(
                         setRead(post = post, read = !post.read)
                     }
                 }
+
+            is PostListMviModel.Intent.BlockActionSelected -> {
+                val userId = intent.userId
+                val communityId = intent.communityId
+                val instanceId = intent.instanceId
+                when {
+                    userId != null -> blockUser(userId)
+                    communityId != null -> blockCommunity(communityId)
+                    instanceId != null -> blockInstance(instanceId)
+                }
+            }
+            is PostListMviModel.Intent.ChangeFeedType -> applyListingType(intent.value)
+            is PostListMviModel.Intent.ChangeSortType -> applySortType(intent.value)
         }
     }
 
