@@ -52,9 +52,9 @@ class CreateCommentViewModel(
     init {
         viewModelScope.launch {
             val auth = identityRepository.authToken.value.orEmpty()
-            val originalPostFromCache = postId?.let { itemCache.getPost(it) }
-            val originalCommentFromCache = parentId?.let { itemCache.getComment(it) }
-            val editedComment = editedCommentId?.let { itemCache.getComment(it) }
+            val originalPostFromCache = postId.let { itemCache.getPost(it) }
+            val originalCommentFromCache = parentId.let { itemCache.getComment(it) }
+            val editedComment = editedCommentId.let { itemCache.getComment(it) }
             val originalPost =
                 if (originalPostFromCache != null && originalPostFromCache.title.isEmpty()) {
                     postRepository.get(originalPostFromCache.id) ?: originalPostFromCache
