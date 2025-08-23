@@ -73,7 +73,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
@@ -614,9 +613,7 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
             onSelect = { index ->
                 shareBottomSheetUrls = null
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.Share(url = values[index]),
-                    )
+                    model.reduce(MultiCommunityMviModel.Intent.Share(url = values[index]))
                 }
             },
         )
@@ -629,12 +626,7 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
             onSelect = { value ->
                 sortBottomSheetOpened = false
                 if (value != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeSortType(
-                            value = value,
-                            screenKey = "multiCommunity",
-                        ),
-                    )
+                    model.reduce(MultiCommunityMviModel.Intent.ChangeSortType(value = value))
                 }
             },
         )

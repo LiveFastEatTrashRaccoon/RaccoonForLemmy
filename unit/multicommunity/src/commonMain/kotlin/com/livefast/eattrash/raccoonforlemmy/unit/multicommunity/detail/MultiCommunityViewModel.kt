@@ -101,18 +101,6 @@ class MultiCommunityViewModel(
                 .onEach { evt ->
                     handlePostUpdate(evt.model)
                 }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSortType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == "multiCommunity") {
-                        applySortType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.Share::class)
-                .onEach { evt ->
-                    shareHelper.share(evt.url)
-                }.launchIn(this)
             identityRepository.isLogged
                 .onEach { logged ->
                     updateState { it.copy(isLogged = logged ?: false) }
@@ -191,15 +179,11 @@ class MultiCommunityViewModel(
             MultiCommunityMviModel.Intent.ClearRead -> clearRead()
             is MultiCommunityMviModel.Intent.MarkAsRead ->
                 viewModelScope.launch {
-                    markAsRead(
-                        post = uiState.value.posts.first { it.id == intent.id },
-                    )
+                    markAsRead(post = uiState.value.posts.first { it.id == intent.id })
                 }
 
             is MultiCommunityMviModel.Intent.Hide ->
-                hide(
-                    post = uiState.value.posts.first { it.id == intent.id },
-                )
+                hide(post = uiState.value.posts.first { it.id == intent.id })
 
             is MultiCommunityMviModel.Intent.WillOpenDetail ->
                 viewModelScope.launch {
@@ -217,6 +201,8 @@ class MultiCommunityViewModel(
                         setRead(post = post, read = !post.read)
                     }
                 }
+
+            is MultiCommunityMviModel.Intent.ChangeSortType -> applySortType(intent.value)
         }
     }
 
