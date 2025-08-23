@@ -171,12 +171,7 @@ internal fun MainScreen() {
                 when (evt) {
                     is DrawerEvent.ChangeListingType -> {
                         if (navigationCoordinator.currentSection.value == TabNavigationSection.Home) {
-                            notificationCenter.send(
-                                NotificationCenterEvent.ChangeFeedType(
-                                    evt.value,
-                                    "postList",
-                                ),
-                            )
+                            notificationCenter.send(NotificationCenterEvent.ChangeFeedType(evt.value))
                         } else {
                             with(navigationCoordinator) {
                                 setBottomNavigationSection(TabNavigationSection.Home)
@@ -184,20 +179,12 @@ internal fun MainScreen() {
                             launch {
                                 // wait for transition to finish
                                 delay(750)
-                                notificationCenter.send(
-                                    NotificationCenterEvent.ChangeFeedType(
-                                        evt.value,
-                                        "postList",
-                                    ),
-                                )
+                                notificationCenter.send(NotificationCenterEvent.ChangeFeedType(evt.value))
                             }
                         }
                     }
 
-                    DrawerEvent.OpenSettings -> {
-                        mainRouter.openSettings()
-                    }
-
+                    DrawerEvent.OpenSettings -> mainRouter.openSettings()
                     else -> Unit
                 }
             }.launchIn(this)
