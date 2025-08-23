@@ -70,7 +70,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditFormattedI
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInfoDialog
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
@@ -463,12 +462,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
             onSelect = { index ->
                 visibilityBottomSheetOpened = false
                 if (index != null) {
-                    val value = values[index]
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeCommunityVisibility(
-                            value = value,
-                        ),
-                    )
+                    model.reduce(EditCommunityMviModel.Intent.ChangeVisibility(value = values[index]))
                 }
             },
         )

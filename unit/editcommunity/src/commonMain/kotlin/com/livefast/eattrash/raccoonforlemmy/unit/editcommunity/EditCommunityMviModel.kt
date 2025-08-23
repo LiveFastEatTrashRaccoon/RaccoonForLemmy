@@ -45,6 +45,8 @@ interface EditCommunityMviModel :
         data class ChangePostingRestrictedToMods(val value: Boolean) : Intent
 
         data object Submit : Intent
+
+        data class ChangeVisibility(val value: CommunityVisibilityType) : Intent
     }
 
     data class UiState(

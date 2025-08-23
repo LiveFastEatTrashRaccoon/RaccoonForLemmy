@@ -16,7 +16,6 @@ val editCommunityModule =
                 identityRepository = instance(),
                 communityRepository = instance(),
                 mediaRepository = instance(),
-                notificationCenter = instance(),
             )
         }
     }
