@@ -40,7 +40,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsScreen
@@ -250,9 +249,7 @@ fun InboxScreen(modifier: Modifier = Modifier, model: InboxMviModel = getViewMod
             onSelect = { index ->
                 inboxTypeBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.ChangeInboxType(unreadOnly = index == 0),
-                    )
+                    model.reduce(InboxMviModel.Intent.ChangeInboxType(unreadOnly = index == 0))
                 }
             },
         )

@@ -6,6 +6,8 @@ interface InboxMviModel : MviModel<InboxMviModel.Intent, InboxMviModel.UiState, 
     sealed interface Intent {
         data class ChangeSection(val value: InboxSection) : Intent
 
+        data class ChangeInboxType(val unreadOnly: Boolean) : Intent
+
         data object ReadAll : Intent
     }
 

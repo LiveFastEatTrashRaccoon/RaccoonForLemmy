@@ -167,9 +167,9 @@ class InboxViewModelTest {
     }
 
     @Test
-    fun whenChangeInboxReadOnlyEventReceived_thenInteractionsAndStateAreAsExpected() = runTest {
+    fun whenChangeInboxReadOnlyIntentReceived_thenInteractionsAndStateAreAsExpected() = runTest {
         with(loggedDefaultUnreadOnlyRule) {
-            notificationChannel.send(NotificationCenterEvent.ChangeInboxType(unreadOnly = false))
+            send(InboxMviModel.Intent.ChangeInboxType(unreadOnly = false))
 
             onState { state ->
                 assertFalse(state.unreadOnly)
