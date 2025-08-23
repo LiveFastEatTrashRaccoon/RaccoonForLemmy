@@ -7,15 +7,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.BottomNavItemsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInts
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.toTabNavigationSection
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 internal class ConfigureNavBarViewModel(
@@ -24,21 +19,12 @@ internal class ConfigureNavBarViewModel(
     private val bottomNavItemsRepository: BottomNavItemsRepository,
     private val settingsRepository: SettingsRepository,
     private val hapticFeedback: HapticFeedback,
-    private val notificationCenter: NotificationCenter,
 ) : ViewModel(),
     MviModelDelegate<ConfigureNavBarMviModel.Intent, ConfigureNavBarMviModel.UiState, ConfigureNavBarMviModel.Effect>
     by DefaultMviModelDelegate(initialState = ConfigureNavBarMviModel.UiState()),
     ConfigureNavBarMviModel {
     init {
         viewModelScope.launch {
-            notificationCenter
-                .subscribe(NotificationCenterEvent.TabNavigationSectionSelected::class)
-                .onEach { evt ->
-                    evt.sectionId.toTabNavigationSection()?.also { section ->
-                        handleAdd(section)
-                    }
-                }.launchIn(this)
-
             refresh()
         }
     }
@@ -50,6 +36,7 @@ internal class ConfigureNavBarViewModel(
             is ConfigureNavBarMviModel.Intent.Delete -> handleDelete(intent.section)
             is ConfigureNavBarMviModel.Intent.SwapItems -> handleSwap(intent.from, intent.to)
             ConfigureNavBarMviModel.Intent.Save -> save()
+            is ConfigureNavBarMviModel.Intent.Add -> handleAdd(intent.value)
         }
     }
 

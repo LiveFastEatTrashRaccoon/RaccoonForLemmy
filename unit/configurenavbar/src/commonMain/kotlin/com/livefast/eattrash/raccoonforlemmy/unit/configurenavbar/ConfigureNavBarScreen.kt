@@ -50,7 +50,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toReadableName
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.composable.ConfigureAddAction
@@ -270,11 +269,7 @@ fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
             onSelect = { index ->
                 selectTabNavigationSectionBottomSheetOpened = false
                 if (index != null) {
-                    notificationCenter.send(
-                        NotificationCenterEvent.TabNavigationSectionSelected(
-                            sectionId = values[index].toInt(),
-                        ),
-                    )
+                    model.reduce(ConfigureNavBarMviModel.Intent.Add(value = values[index]))
                 }
             },
         )
