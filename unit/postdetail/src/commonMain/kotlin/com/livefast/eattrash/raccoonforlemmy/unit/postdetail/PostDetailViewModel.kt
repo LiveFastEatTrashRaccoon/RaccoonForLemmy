@@ -147,11 +147,6 @@ class PostDetailViewModel(
                     emitEffect(PostDetailMviModel.Effect.Close)
                 }.launchIn(this)
             notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeCommentSortType::class)
-                .onEach { evt ->
-                    applySortType(evt.value)
-                }.launchIn(this)
-            notificationCenter
                 .subscribe(NotificationCenterEvent.CommentCreated::class)
                 .onEach {
                     refresh()
@@ -163,11 +158,6 @@ class PostDetailViewModel(
                     if (evt.model.id == uiState.value.post.id) {
                         refreshPost()
                     }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.Share::class)
-                .onEach { evt ->
-                    shareHelper.share(evt.url)
                 }.launchIn(this)
             notificationCenter
                 .subscribe(NotificationCenterEvent.UserBannedComment::class)
@@ -393,10 +383,7 @@ class PostDetailViewModel(
                 toggleSavePost(intent.post)
             }
 
-            is PostDetailMviModel.Intent.Share -> {
-                shareHelper.share(intent.url)
-            }
-
+            is PostDetailMviModel.Intent.Share -> shareHelper.share(intent.url)
             is PostDetailMviModel.Intent.UpVoteComment -> {
                 if (intent.feedback) {
                     hapticFeedback.vibrate()
@@ -415,10 +402,7 @@ class PostDetailViewModel(
                 toggleUpVotePost(uiState.value.post)
             }
 
-            is PostDetailMviModel.Intent.FetchMoreComments -> {
-                loadMoreComments(intent.parentId)
-            }
-
+            is PostDetailMviModel.Intent.FetchMoreComments -> loadMoreComments(intent.parentId)
             is PostDetailMviModel.Intent.DeleteComment -> deleteComment(intent.commentId)
             PostDetailMviModel.Intent.DeletePost -> deletePost()
 
@@ -442,7 +426,6 @@ class PostDetailViewModel(
                     }
 
             is PostDetailMviModel.Intent.ModToggleModUser -> toggleModeratorStatus(intent.id)
-
             is PostDetailMviModel.Intent.ChangeSearching -> {
                 viewModelScope.launch {
                     updateState { it.copy(searching = intent.value) }
@@ -455,14 +438,11 @@ class PostDetailViewModel(
             is PostDetailMviModel.Intent.SetSearch -> updateSearchText(intent.value)
             PostDetailMviModel.Intent.NavigatePrevious -> navigateToPreviousPost()
             PostDetailMviModel.Intent.NavigateNext -> navigateToNextPost()
-            is PostDetailMviModel.Intent.NavigatePreviousComment ->
-                navigateToPreviousComment(intent.currentIndex)
-
-            is PostDetailMviModel.Intent.NavigateNextComment ->
-                navigateToNextComment(intent.currentIndex)
-
+            is PostDetailMviModel.Intent.NavigatePreviousComment -> navigateToPreviousComment(intent.currentIndex)
+            is PostDetailMviModel.Intent.NavigateNextComment -> navigateToNextComment(intent.currentIndex)
             PostDetailMviModel.Intent.RestorePost -> restorePost()
             is PostDetailMviModel.Intent.RestoreComment -> restoreComment(intent.commentId)
+            is PostDetailMviModel.Intent.ChangeSortType -> applySortType(intent.value)
         }
     }
 
