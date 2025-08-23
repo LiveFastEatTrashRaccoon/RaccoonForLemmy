@@ -33,27 +33,22 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.unit.about.components.AboutItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutDialog(modifier: Modifier = Modifier) {
+fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     val viewModel: AboutDialogMviModel = getViewModel<AboutDialogViewModel>()
     val uriHandler = LocalUriHandler.current
     val uiState by viewModel.uiState.collectAsState()
-    val notificationCenter = remember { getNotificationCenter() }
     val mainRouter = remember { getMainRouter() }
     val coreResources = remember { getCoreResources() }
 
     BasicAlertDialog(
         modifier = modifier,
-        onDismissRequest = {
-            notificationCenter.send(NotificationCenterEvent.CloseDialog)
-        },
+        onDismissRequest = onDismiss,
     ) {
         Surface {
             Column(
@@ -173,9 +168,7 @@ fun AboutDialog(modifier: Modifier = Modifier) {
                     }
                 }
                 Button(
-                    onClick = {
-                        notificationCenter.send(NotificationCenterEvent.CloseDialog)
-                    },
+                    onClick = onDismiss,
                 ) {
                     Text(text = LocalStrings.current.buttonClose)
                 }
