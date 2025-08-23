@@ -27,9 +27,3 @@ fun AppIconVariant.toInt(): Int =
         AppIconVariant.Classical -> 1
         AppIconVariant.Default -> 0
     }
-
-fun Int.toAppIconVariant(): AppIconVariant =
-    when (this) {
-        1 -> AppIconVariant.Classical
-        else -> AppIconVariant.Default
-    }
