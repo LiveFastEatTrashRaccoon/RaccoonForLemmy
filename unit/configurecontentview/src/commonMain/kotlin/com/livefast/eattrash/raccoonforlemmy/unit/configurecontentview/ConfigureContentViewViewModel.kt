@@ -10,10 +10,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentF
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheetType
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.toSelectNumberBottomSheetType
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -29,7 +25,6 @@ class ConfigureContentViewViewModel(
     private val themeRepository: ThemeRepository,
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
-    private val notificationCenter: NotificationCenter,
     private val lemmyValueCache: LemmyValueCache,
 ) : ViewModel(),
     MviModelDelegate<
@@ -54,33 +49,6 @@ class ConfigureContentViewViewModel(
                     updateState { it.copy(contentFontFamily = value) }
                 }.launchIn(this)
 
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangePostLayout::class)
-                .onEach { evt ->
-                    changePostLayout(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeVoteFormat::class)
-                .onEach { evt ->
-                    changeVoteFormat(evt.value)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.SelectNumberBottomSheetClosed::class)
-                .onEach { evt ->
-                    if (evt.type.toSelectNumberBottomSheetType() == SelectNumberBottomSheetType.PostBodyMaxLines) {
-                        changePostBodyMaxLines(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeContentFontSize::class)
-                .onEach { evt ->
-                    changeContentFontScale(evt.value, evt.contentClass)
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeContentFontFamily::class)
-                .onEach { evt ->
-                    changeContentFontFamily(evt.value)
-                }.launchIn(this)
             lemmyValueCache.isDownVoteEnabled
                 .onEach { value ->
                     updateState {
@@ -142,6 +110,16 @@ class ConfigureContentViewViewModel(
                 val value = (uiState.value.commentIndentAmount - 1).coerceIn(COMMENT_INDENT_AMOUNT_RANGE)
                 changeCommentIndentAmount(value)
             }
+
+            is ConfigureContentViewMviModel.Intent.ChangeContentFontFamily -> changeContentFontFamily(intent.value)
+            is ConfigureContentViewMviModel.Intent.ChangeContentFontSize -> changeContentFontScale(
+                value = intent.value,
+                contentClass = intent.contentClass,
+            )
+
+            is ConfigureContentViewMviModel.Intent.ChangePostLayout -> changePostLayout(intent.value)
+            is ConfigureContentViewMviModel.Intent.ChangeVoteFormat -> changeVoteFormat(intent.value)
+            is ConfigureContentViewMviModel.Intent.SelectPostBodyMaxLines -> changePostBodyMaxLines(intent.value)
         }
     }
 
