@@ -13,23 +13,26 @@ import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 
 @Composable
 internal fun ProfileMenuContent(
+    onManageAccounts: () -> Unit,
+    onManageSubscriptions: () -> Unit,
+    onOpenBookmarks: () -> Unit,
+    onOpenDrafts: () -> Unit,
+    onOpenVotes: () -> Unit,
+    onModeratorZone: () -> Unit,
+    onCreateCommunity: () -> Unit,
+    onLogout: () -> Unit,
     modifier: Modifier = Modifier,
     isModerator: Boolean = false,
     canCreateCommunity: Boolean = false,
     isBookmarksVisible: Boolean = true,
 ) {
-    val notificationCenter = remember { getNotificationCenter() }
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(Spacing.s),
@@ -37,59 +40,45 @@ internal fun ProfileMenuContent(
         SettingsRow(
             title = LocalStrings.current.navigationDrawerTitleSubscriptions,
             icon = Icons.Default.Book,
-            onTap = {
-                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageSubscriptions)
-            },
+            onTap = onManageSubscriptions,
         )
         if (isBookmarksVisible) {
             SettingsRow(
                 title = LocalStrings.current.navigationDrawerTitleBookmarks,
                 icon = Icons.Default.Bookmark,
-                onTap = {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Bookmarks)
-                },
+                onTap = onOpenBookmarks,
             )
         }
         SettingsRow(
             title = LocalStrings.current.navigationDrawerTitleDrafts,
             icon = Icons.Default.Drafts,
-            onTap = {
-                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Drafts)
-            },
+            onTap = onOpenDrafts,
         )
         SettingsRow(
             title = LocalStrings.current.profileUpvotesDownvotes,
             icon = Icons.Default.ThumbsUpDown,
-            onTap = {
-                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Votes)
-            },
+            onTap = onOpenVotes,
         )
 
         if (isModerator) {
             SettingsRow(
                 title = LocalStrings.current.moderatorZoneTitle,
                 icon = Icons.Default.Shield,
-                onTap = {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ModeratorZone)
-                },
+                onTap = onModeratorZone,
             )
         }
         if (canCreateCommunity) {
             SettingsRow(
                 title = LocalStrings.current.actionCreateCommunity,
                 icon = Icons.Default.GroupAdd,
-                onTap = {
-                    notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.CreateCommunity)
-                },
+                onTap = onCreateCommunity,
             )
         }
 
         SettingsRow(
             title = LocalStrings.current.manageAccountsTitle,
             icon = Icons.Default.ManageAccounts,
-            onTap = {
-                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.ManageAccounts)
-            },
+            onTap = onManageAccounts,
         )
 
         HorizontalDivider()
@@ -97,9 +86,7 @@ internal fun ProfileMenuContent(
         SettingsRow(
             title = LocalStrings.current.actionLogout,
             icon = Icons.AutoMirrored.Default.Logout,
-            onTap = {
-                notificationCenter.send(NotificationCenterEvent.ProfileSideMenuAction.Logout)
-            },
+            onTap = onLogout,
         )
     }
 }
