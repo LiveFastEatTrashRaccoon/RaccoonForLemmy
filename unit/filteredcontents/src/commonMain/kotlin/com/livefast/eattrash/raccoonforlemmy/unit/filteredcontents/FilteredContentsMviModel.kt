@@ -69,6 +69,8 @@ interface FilteredContentsMviModel :
         data class ModDistinguishComment(val commentId: Long) : Intent
 
         data class WillOpenDetail(val postId: Long, val commentId: Long? = null) : Intent
+
+        data class ChangedLikedType(val value: Boolean) : Intent
     }
 
     data class State(
