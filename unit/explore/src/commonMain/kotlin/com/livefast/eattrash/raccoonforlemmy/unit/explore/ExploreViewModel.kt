@@ -67,15 +67,6 @@ class ExploreViewModel(
     by DefaultMviModelDelegate(initialState = ExploreMviModel.UiState()),
     ExploreMviModel {
     private val isOnOtherInstance: Boolean get() = otherInstance.isNotEmpty()
-    private val notificationEventKey: String
-        get() =
-            buildString {
-                append("explore")
-                if (isOnOtherInstance) {
-                    append("-")
-                    append(otherInstance)
-                }
-            }
 
     init {
         viewModelScope.launch {
@@ -125,6 +116,7 @@ class ExploreViewModel(
                         )
                     }
                 }.launchIn(this)
+
             notificationCenter
                 .subscribe(NotificationCenterEvent.Logout::class)
                 .onEach {
@@ -141,30 +133,9 @@ class ExploreViewModel(
                     handleCommentUpdate(evt.model)
                 }.launchIn(this)
             notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeFeedType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == notificationEventKey) {
-                        changeListingType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSortType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == notificationEventKey) {
-                        changeSortType(evt.value)
-                    }
-                }.launchIn(this)
-            notificationCenter
                 .subscribe(NotificationCenterEvent.ResetExplore::class)
                 .onEach {
                     onFirstLoad()
-                }.launchIn(this)
-            notificationCenter
-                .subscribe(NotificationCenterEvent.ChangeSearchResultType::class)
-                .onEach { evt ->
-                    if (evt.screenKey == notificationEventKey) {
-                        changeResultType(evt.value)
-                    }
                 }.launchIn(this)
             notificationCenter
                 .subscribe(NotificationCenterEvent.CommunitySubscriptionChanged::class)
@@ -335,6 +306,9 @@ class ExploreViewModel(
             }
 
             is ExploreMviModel.Intent.ToggleSubscription -> toggleSubscription(intent.communityId)
+            is ExploreMviModel.Intent.ChangeFeedType -> changeListingType(intent.value)
+            is ExploreMviModel.Intent.ChangeSearchResultType -> changeResultType(intent.value)
+            is ExploreMviModel.Intent.ChangeSortType -> changeSortType(intent.value)
         }
     }
 
