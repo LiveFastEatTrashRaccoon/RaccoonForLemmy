@@ -15,6 +15,7 @@ val utilsModule =
     DI.Module("UtilsModule") {
         importAll(
             nativeAppIconModule,
+            nativeClipboardModule,
             nativeCrashReportModule,
             nativeCustomTabsModule,
             nativeFileSystemModule,

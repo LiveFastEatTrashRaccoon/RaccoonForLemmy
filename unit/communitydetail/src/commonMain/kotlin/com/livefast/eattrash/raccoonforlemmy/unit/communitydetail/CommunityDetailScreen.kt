@@ -68,9 +68,8 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -103,6 +102,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoo
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
@@ -160,7 +160,8 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
     val settings by settingsRepository.currentSettings.collectAsState()
     val keepScreenOn = rememberKeepScreenOn()
     val mainRouter = remember { getMainRouter() }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
     val focusManager = LocalFocusManager.current
     val keyboardScrollConnection =
         remember {
@@ -1235,7 +1236,9 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                                                             post.text.takeIf { it.isNotBlank() },
                                                         ).distinct()
                                                     if (texts.size == 1) {
-                                                        clipboardManager.setText(AnnotatedString(texts.first()))
+                                                        scope.launch {
+                                                            clipboardHelper.setText(texts.first())
+                                                        }
                                                     } else {
                                                         copyPostBottomSheet = post
                                                     }
@@ -1575,8 +1578,9 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
             onSelect = { index ->
                 copyPostBottomSheet = null
                 if (index != null) {
-                    val text = texts[index]
-                    clipboardManager.setText(AnnotatedString(text))
+                    scope.launch {
+                        clipboardHelper.setText(texts[index])
+                    }
                 }
             },
         )

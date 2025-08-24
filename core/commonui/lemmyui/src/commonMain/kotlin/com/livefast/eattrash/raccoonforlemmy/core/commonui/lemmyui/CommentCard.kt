@@ -19,10 +19,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
@@ -42,12 +43,14 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
+import kotlinx.coroutines.launch
 
 private val BAR_BASE_WIDTH_UNIT = 1.25.dp
 private const val COMMENT_TEXT_SCALE_FACTOR = 0.97f
@@ -108,10 +111,14 @@ fun CommentCard(
             0.dp
         }
     val shareHelper = remember { getShareHelper() }
-    val clipboardManager = LocalClipboardManager.current
-    val onShareLambda = {
-        val query = clipboardManager.getText()?.text.orEmpty()
-        shareHelper.share(query)
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
+    val scope = rememberCoroutineScope()
+    val onShareLambda: () -> Unit = {
+        scope.launch {
+            val query = clipboardHelper.getText().orEmpty()
+            shareHelper.share(query)
+        }
     }
     val shareActionLabel = LocalStrings.current.postActionShare
     val cancelActionLabel = LocalStrings.current.buttonCancel

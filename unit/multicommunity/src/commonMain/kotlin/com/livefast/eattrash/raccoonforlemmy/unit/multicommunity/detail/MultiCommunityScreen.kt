@@ -48,8 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -73,10 +72,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -116,8 +115,8 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val mainRouter = remember { getMainRouter() }
-    val notificationCenter = remember { getNotificationCenter() }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
     var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
     var sortBottomSheetOpened by remember { mutableStateOf(false) }
     var copyPostBottomSheet by remember { mutableStateOf<PostModel?>(null) }
@@ -531,7 +530,9 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
                                                     post.text.takeIf { it.isNotBlank() },
                                                 ).distinct()
                                             if (texts.size == 1) {
-                                                clipboardManager.setText(AnnotatedString(texts.first()))
+                                                scope.launch {
+                                                    clipboardHelper.setText(texts.first())
+                                                }
                                             } else {
                                                 copyPostBottomSheet = post
                                             }
@@ -660,8 +661,9 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
             onSelect = { index ->
                 copyPostBottomSheet = null
                 if (index != null) {
-                    val text = texts[index]
-                    clipboardManager.setText(AnnotatedString(text))
+                    scope.launch {
+                        clipboardHelper.setText(texts[index])
+                    }
                 }
             },
         )

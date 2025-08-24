@@ -74,10 +74,9 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -117,6 +116,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.toTimestamp
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
@@ -179,7 +179,8 @@ fun PostDetailScreen(
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val mainRouter = remember { getMainRouter() }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
     val focusManager = LocalFocusManager.current
     val keyboardScrollConnection =
         remember {
@@ -537,7 +538,9 @@ fun PostDetailScreen(
                                                         uiState.post.text.takeIf { it.isNotBlank() },
                                                     ).distinct()
                                                 if (texts.size == 1) {
-                                                    clipboardManager.setText(AnnotatedString(texts.first()))
+                                                    scope.launch {
+                                                        clipboardHelper.setText(texts.first())
+                                                    }
                                                 } else {
                                                     copyPostBottomSheet = uiState.post
                                                 }
@@ -2001,8 +2004,9 @@ fun PostDetailScreen(
             onSelect = { index ->
                 copyPostBottomSheet = null
                 if (index != null) {
-                    val text = texts[index]
-                    clipboardManager.setText(AnnotatedString(text))
+                    scope.launch {
+                        clipboardHelper.setText(texts[index])
+                    }
                 }
             },
         )

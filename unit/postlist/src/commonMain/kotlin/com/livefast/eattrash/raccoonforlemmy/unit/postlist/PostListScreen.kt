@@ -55,9 +55,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
@@ -89,6 +88,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificati
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
@@ -142,7 +142,8 @@ fun PostListScreen(
         with(LocalDensity.current) {
             WindowInsets.navigationBars.getBottom(this).toDp()
         }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
     var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
     var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
     var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
@@ -740,7 +741,9 @@ fun PostListScreen(
                                                         post.text.takeIf { it.isNotBlank() },
                                                     ).distinct()
                                                 if (texts.size == 1) {
-                                                    clipboardManager.setText(AnnotatedString(texts.first()))
+                                                    scope.launch {
+                                                        clipboardHelper.setText(texts.first())
+                                                    }
                                                 } else {
                                                     copyPostBottomSheet = post
                                                 }
@@ -1043,8 +1046,9 @@ fun PostListScreen(
             onSelect = { index ->
                 copyPostBottomSheet = null
                 if (index != null) {
-                    val text = texts[index]
-                    clipboardManager.setText(AnnotatedString(text))
+                    scope.launch {
+                        clipboardHelper.setText(texts[index])
+                    }
                 }
             },
         )

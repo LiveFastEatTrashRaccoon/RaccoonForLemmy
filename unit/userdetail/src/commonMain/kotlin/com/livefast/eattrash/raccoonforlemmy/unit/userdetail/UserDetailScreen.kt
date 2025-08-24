@@ -57,8 +57,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
@@ -96,6 +95,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
@@ -145,7 +145,8 @@ fun UserDetailScreen(userId: Long, modifier: Modifier = Modifier, otherInstance:
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val mainRouter = remember { getMainRouter() }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
     var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }
     var sortBottomSheetOpened by remember { mutableStateOf(false) }
     var defaultSortBottomSheetOpened by remember { mutableStateOf(false) }
@@ -782,7 +783,9 @@ fun UserDetailScreen(userId: Long, modifier: Modifier = Modifier, otherInstance:
                                                         post.text.takeIf { it.isNotBlank() },
                                                     ).distinct()
                                                 if (texts.size == 1) {
-                                                    clipboardManager.setText(AnnotatedString(texts.first()))
+                                                    scope.launch {
+                                                        clipboardHelper.setText(texts.first())
+                                                    }
                                                 } else {
                                                     copyPostBottomSheet = post
                                                 }
@@ -1264,8 +1267,9 @@ fun UserDetailScreen(userId: Long, modifier: Modifier = Modifier, otherInstance:
             onSelect = { index ->
                 copyPostBottomSheet = null
                 if (index != null) {
-                    val text = texts[index]
-                    clipboardManager.setText(AnnotatedString(text))
+                    scope.launch {
+                        clipboardHelper.setText(texts[index])
+                    }
                 }
             },
         )

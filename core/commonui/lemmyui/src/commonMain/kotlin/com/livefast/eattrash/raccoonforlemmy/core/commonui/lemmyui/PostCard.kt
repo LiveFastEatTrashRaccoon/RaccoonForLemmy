@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +31,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.LocalUriHandler
@@ -50,6 +51,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.Customized
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAnImage
@@ -60,6 +62,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.imageUrl
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.videoUrl
+import kotlinx.coroutines.launch
 
 @Composable
 fun PostCard(
@@ -351,10 +354,14 @@ private fun CompactPost(
             .takeIf { !it.looksLikeAnImage && !it.looksLikeAVideo }
             .orEmpty()
     val shareHelper = remember { getShareHelper() }
-    val clipboardManager = LocalClipboardManager.current
-    val onShareLambda = {
-        val query = clipboardManager.getText()?.text.orEmpty()
-        shareHelper.share(query)
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
+    val scope = rememberCoroutineScope()
+    val onShareLambda: () -> Unit = {
+        scope.launch {
+            val query = clipboardHelper.getText().orEmpty()
+            shareHelper.share(query)
+        }
     }
     val shareActionLabel = LocalStrings.current.postActionShare
     val cancelActionLabel = LocalStrings.current.buttonCancel
@@ -596,10 +603,14 @@ private fun ExtendedPost(
                     !it.looksLikeAVideo
             }.orEmpty()
     val shareHelper = remember { getShareHelper() }
-    val clipboardManager = LocalClipboardManager.current
-    val onShareLambda = {
-        val query = clipboardManager.getText()?.text.orEmpty()
-        shareHelper.share(query)
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
+    val scope = rememberCoroutineScope()
+    val onShareLambda: () -> Unit = {
+        scope.launch {
+            val query = clipboardHelper.getText().orEmpty()
+            shareHelper.share(query)
+        }
     }
     val shareActionLabel = LocalStrings.current.postActionShare
     val cancelActionLabel = LocalStrings.current.buttonCancel
