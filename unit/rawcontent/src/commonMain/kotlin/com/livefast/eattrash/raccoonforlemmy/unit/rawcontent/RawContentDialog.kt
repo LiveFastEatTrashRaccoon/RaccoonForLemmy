@@ -25,9 +25,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.text.font.FontFamily
@@ -36,10 +37,12 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,15 +59,21 @@ fun RawContentDialog(
     upVotes: Int? = null,
     downVotes: Int? = null,
 ) {
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
+    val clipboardHelper = remember { getClipboardHelper(clipboard) }
     val shareHelper = remember { getShareHelper() }
+    val scope = rememberCoroutineScope()
     val onShareLambda: () -> Unit = {
-        val query = clipboardManager.getText()?.text.orEmpty()
-        shareHelper.share(query)
+        scope.launch {
+            val query = clipboardHelper.getText().orEmpty()
+            shareHelper.share(query)
+        }
     }
     val onQuoteLambda: () -> Unit = {
-        val query = clipboardManager.getText()?.text.orEmpty()
-        onQuote?.invoke(query)
+        scope.launch {
+            val query = clipboardHelper.getText().orEmpty()
+            onQuote?.invoke(query)
+        }
     }
     val quoteActionLabel =
         if (isLogged) {
