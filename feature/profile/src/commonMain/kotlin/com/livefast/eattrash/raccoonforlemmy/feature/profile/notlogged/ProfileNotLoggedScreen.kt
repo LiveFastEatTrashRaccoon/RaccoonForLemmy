@@ -20,7 +20,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 
 @Composable
-fun ProfileNotLoggedScreen(modifier: Modifier = Modifier) {
+fun ProfileNotLoggedScreen(onManageAccounts: () -> Unit, modifier: Modifier = Modifier) {
     val model: ProfileNotLoggedMviModel = getViewModel<ProfileNotLoggedViewModel>()
     val mainRouter = remember { getMainRouter() }
     val uiState by model.uiState.collectAsState()
@@ -47,6 +47,13 @@ fun ProfileNotLoggedScreen(modifier: Modifier = Modifier) {
                 },
             ) {
                 Text(LocalStrings.current.buttonRetry)
+            }
+
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = onManageAccounts,
+            ) {
+                Text(LocalStrings.current.actionSwitchAccount)
             }
         } else {
             Button(

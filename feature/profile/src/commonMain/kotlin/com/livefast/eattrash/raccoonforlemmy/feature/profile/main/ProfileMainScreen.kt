@@ -183,7 +183,11 @@ fun ProfileMainScreen(
                     },
                 )
 
-                false -> ProfileNotLoggedScreen()
+                false -> ProfileNotLoggedScreen(
+                    onManageAccounts = {
+                        manageAccountsBottomSheetOpened = true
+                    },
+                )
                 else -> Unit
             }
         }
