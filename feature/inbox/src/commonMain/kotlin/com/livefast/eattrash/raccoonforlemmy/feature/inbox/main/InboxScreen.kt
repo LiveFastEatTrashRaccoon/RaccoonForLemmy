@@ -40,7 +40,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.InboxMessagesScreen
@@ -61,7 +60,6 @@ fun InboxScreen(modifier: Modifier = Modifier, model: InboxMviModel = getViewMod
     val settings by settingsRepository.currentSettings.collectAsState()
     val scope = rememberCoroutineScope()
     val connection = navigationCoordinator.getBottomBarScrollConnection()
-    val notificationCenter = remember { getNotificationCenter() }
     var inboxTypeBottomSheetOpened by remember { mutableStateOf(false) }
     val inboxReadAllSuccessMessage = LocalStrings.current.messageReadAllInboxSuccess
 

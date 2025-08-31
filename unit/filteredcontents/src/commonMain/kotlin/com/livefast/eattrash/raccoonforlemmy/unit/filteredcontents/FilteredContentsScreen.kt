@@ -74,7 +74,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
@@ -113,7 +112,6 @@ fun FilteredContentsScreen(
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
     val mainRouter = remember { getMainRouter() }
-    val notificationCenter = remember { getNotificationCenter() }
     var rawContent by remember { mutableStateOf<Any?>(null) }
     val themeRepository = remember { getThemeRepository() }
     val upVoteColor by themeRepository.upVoteColor.collectAsState()

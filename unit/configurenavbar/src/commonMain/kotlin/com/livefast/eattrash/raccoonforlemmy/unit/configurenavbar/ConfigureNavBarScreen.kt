@@ -50,7 +50,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toReadableName
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.composable.ConfigureAddAction
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.composable.ConfigureNavBarItem
@@ -63,7 +62,6 @@ fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
     val model: ConfigureNavBarMviModel = getViewModel<ConfigureNavBarViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = remember { getNavigationCoordinator() }
-    val notificationCenter = remember { getNotificationCenter() }
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val settingsRepository = remember { getSettingsRepository() }

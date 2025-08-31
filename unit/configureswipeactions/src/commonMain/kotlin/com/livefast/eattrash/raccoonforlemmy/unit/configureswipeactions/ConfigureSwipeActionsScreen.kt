@@ -52,7 +52,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeTarget
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toIcon
@@ -74,7 +73,6 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val settingsRepository = remember { getSettingsRepository() }
     val settings by settingsRepository.currentSettings.collectAsState()
-    val notificationCenter = remember { getNotificationCenter() }
     var selectActionBottomSheet by remember { mutableStateOf<ActionConfig?>(null) }
 
     Scaffold(

@@ -91,7 +91,6 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val scrollState = rememberScrollState()
     val themeRepository = remember { getThemeRepository() }
-    val notificationCenter = remember { getNotificationCenter() }
     val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
     val contentTypography = contentFontFamily.toTypography()
     val settingsRepository = remember { getSettingsRepository() }
