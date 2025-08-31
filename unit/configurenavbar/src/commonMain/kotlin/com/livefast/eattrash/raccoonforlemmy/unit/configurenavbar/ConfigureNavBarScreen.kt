@@ -2,9 +2,9 @@ package com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,7 +34,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.PredictiveBackHandler
@@ -134,6 +134,20 @@ fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
                 },
             )
         },
+        bottomBar = {
+            BottomAppBar {
+                Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    enabled = uiState.hasUnsavedChanges,
+                    onClick = {
+                        model.reduce(ConfigureNavBarMviModel.Intent.Save)
+                    },
+                ) {
+                    Text(text = LocalStrings.current.actionSave)
+                }
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        },
     ) { padding ->
         Column(
             modifier =
@@ -207,20 +221,6 @@ fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
                             },
                         )
                     }
-                }
-            }
-
-            Box(
-                modifier = Modifier.fillMaxWidth().padding(vertical = Spacing.m),
-                contentAlignment = Alignment.Center,
-            ) {
-                Button(
-                    enabled = uiState.hasUnsavedChanges,
-                    onClick = {
-                        model.reduce(ConfigureNavBarMviModel.Intent.Save)
-                    },
-                ) {
-                    Text(text = LocalStrings.current.actionSave)
                 }
             }
         }
