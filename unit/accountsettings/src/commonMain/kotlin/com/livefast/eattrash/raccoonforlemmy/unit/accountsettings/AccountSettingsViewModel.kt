@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.usecase.LogoutUseCase
@@ -25,8 +24,7 @@ class AccountSettingsViewModel(
     private val mediaRepository: MediaRepository,
     private val userRepository: UserRepository,
     private val getSortTypesUseCase: GetSortTypesUseCase,
-    private val logoutUseCase: LogoutUseCase,
-    private val notificationCenter: NotificationCenter,
+    private val logout: LogoutUseCase,
 ) : ViewModel(),
     MviModelDelegate<AccountSettingsMviModel.Intent, AccountSettingsMviModel.UiState, AccountSettingsMviModel.Effect>
     by DefaultMviModelDelegate(initialState = AccountSettingsMviModel.UiState()),
@@ -291,7 +289,7 @@ class AccountSettingsViewModel(
 
             if (success) {
                 emitEffect(AccountSettingsMviModel.Effect.CloseDeleteAccountDialog)
-                logoutUseCase()
+                logout()
                 updateState { it.copy(operationInProgress = false) }
                 emitEffect(AccountSettingsMviModel.Effect.Close)
             } else {
@@ -345,7 +343,7 @@ class AccountSettingsViewModel(
                 emitEffect(
                     AccountSettingsMviModel.Effect.Success,
                 )
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 updateState { it.copy(loading = false) }
                 emitEffect(
                     AccountSettingsMviModel.Effect.Failure,

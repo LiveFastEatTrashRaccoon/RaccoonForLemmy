@@ -14,8 +14,7 @@ val accountSettingsModule =
                 mediaRepository = instance(),
                 userRepository = instance(),
                 getSortTypesUseCase = instance(),
-                logoutUseCase = instance(),
-                notificationCenter = instance(),
+                logout = instance(),
             )
         }
     }
