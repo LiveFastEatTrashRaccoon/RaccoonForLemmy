@@ -34,7 +34,6 @@ val settingsTabModule =
                 identityRepository = instance(),
                 settingsRepository = instance(),
                 accountRepository = instance(),
-                notificationCenter = instance(),
             )
         }
         bindViewModel {

@@ -60,7 +60,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SliderBottomSh
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconVariant
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toReadableName
@@ -92,7 +91,6 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val scrollState = rememberScrollState()
-    val notificationCenter = remember { getNotificationCenter() }
     var screenWidth by remember { mutableFloatStateOf(0f) }
     val snackbarHostState = remember { SnackbarHostState() }
     val successMessage = LocalStrings.current.messageOperationSuccessful

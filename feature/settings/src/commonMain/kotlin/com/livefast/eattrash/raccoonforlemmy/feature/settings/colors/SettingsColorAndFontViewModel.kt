@@ -12,7 +12,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRep
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ColorSchemeProvider
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.SettingsModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.AccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
@@ -30,7 +29,6 @@ class SettingsColorAndFontViewModel(
     private val identityRepository: IdentityRepository,
     private val settingsRepository: SettingsRepository,
     private val accountRepository: AccountRepository,
-    private val notificationCenter: NotificationCenter,
 ) : ViewModel(),
     MviModelDelegate<Intent, UiState, Effect> by DefaultMviModelDelegate(initialState = UiState()),
     SettingsColorAndFontMviModel {

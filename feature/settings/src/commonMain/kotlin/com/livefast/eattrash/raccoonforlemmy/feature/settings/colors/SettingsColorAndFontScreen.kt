@@ -68,7 +68,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
@@ -89,7 +88,6 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
     val model: SettingsColorAndFontMviModel = getViewModel<SettingsColorAndFontViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = remember { getNavigationCoordinator() }
-    val notificationCenter = remember { getNotificationCenter() }
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val settingsRepository = remember { getSettingsRepository() }

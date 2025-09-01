@@ -41,7 +41,6 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.getAdditionalLabel
@@ -62,7 +61,6 @@ fun InstanceInfoScreen(url: String, modifier: Modifier = Modifier) {
     val settings by settingsRepository.currentSettings.collectAsState()
     val listState = rememberLazyListState()
     val mainRouter = remember { getMainRouter() }
-    val notificationCenter = remember { getNotificationCenter() }
     var sortBottomSheetOpened by remember { mutableStateOf(false) }
     val instanceName = url.replace("https://", "")
 
