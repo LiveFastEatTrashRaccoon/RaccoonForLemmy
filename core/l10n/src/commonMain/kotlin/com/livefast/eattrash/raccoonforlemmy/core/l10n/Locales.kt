@@ -13,7 +13,7 @@ object Locales {
     const val PT = "pt"
     const val PT_BR = "pt_BR"
     const val TA = "ta"
-    const val UA = "ua"
+    const val UK = "uk"
     const val ZH_CN = "zh_CN"
     const val ZH_HK = "zh_HK"
     const val ZH_TW = "zh_TW"
@@ -32,7 +32,7 @@ object Locales {
             PT,
             PT_BR,
             TA,
-            UA,
+            UK,
             ZH_CN,
             ZH_HK,
             ZH_TW,
