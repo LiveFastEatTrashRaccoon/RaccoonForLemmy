@@ -219,7 +219,7 @@ interface Strings {
     val languagePt: String @Composable get
     val languagePtBr: String @Composable get
     val languageTa: String @Composable get
-    val languageUa: String @Composable get
+    val languageUk: String @Composable get
     val languageZhCn: String @Composable get
     val languageZhHk: String @Composable get
     val languageZhTw: String @Composable get
