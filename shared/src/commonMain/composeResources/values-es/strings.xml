@@ -223,7 +223,7 @@
     <string name="navigation_drawer_title_drafts">Borradores</string>
     <string name="navigation_drawer_title_subscriptions">Gestionar suscripciones</string>
     <string name="navigation_home">Publicaciones</string>
-    <string name="navigation_inbox">Mensajes</string>
+    <string name="navigation_inbox">Bandeja de entrada</string>
     <string name="navigation_profile">Perfil</string>
     <string name="navigation_search">Descubre</string>
     <string name="navigation_settings">Ajustes</string>
@@ -499,7 +499,7 @@
     <string name="default_tag_bot">bot</string>
     <string name="default_tag_admin">admin</string>
     <string name="default_tag_current_user">mí</string>
-    <string name="default_tag_moderator">mod</string>
+    <string name="default_tag_moderator">moderador</string>
     <string name="action_remove_from_bookmarks">Remover de guardados</string>
     <string name="default_tag_original_poster">op</string>
     <string name="user_tags_special_section_title">Especiales</string>
