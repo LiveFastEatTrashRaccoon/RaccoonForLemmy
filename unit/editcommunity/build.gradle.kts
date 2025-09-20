@@ -10,7 +10,6 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kodein)
-                implementation(libs.compose.ui.backhandler)
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.architecture)

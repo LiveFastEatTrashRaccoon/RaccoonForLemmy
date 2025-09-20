@@ -16,8 +16,9 @@ internal fun Project.configureComposeMultiplatform(extension: KotlinMultiplatfor
                     implementation(composeDeps.foundation)
                     implementation(composeDeps.material3)
                     implementation(composeDeps.materialIconsExtended)
-
                     implementation(libs.findLibrary("androidx-lifecycle-viewmodel-compose").dependency)
+                    implementation(libs.findLibrary("compose-ui-backhandler").dependency)
+
                 }
             }
         }
