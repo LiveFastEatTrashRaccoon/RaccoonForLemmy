@@ -12,8 +12,8 @@ kotlin {
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
-                implementation(libs.compose.multiplatform.media.player)
                 implementation(libs.compose.ui.backhandler)
+                implementation(libs.compose.multiplatform.media.player)
                 implementation(libs.kodein.compose)
                 implementation(libs.androidx.navigation.compose)
 
