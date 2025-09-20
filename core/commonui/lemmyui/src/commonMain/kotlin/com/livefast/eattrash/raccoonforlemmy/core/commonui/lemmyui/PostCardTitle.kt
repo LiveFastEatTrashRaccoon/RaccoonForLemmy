@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -82,18 +83,21 @@ fun PostCardTitle(
                 list = typography.bodyMedium,
                 ordered = typography.bodyMedium,
                 code = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
-                link =
-                typography.bodyMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = TextDecoration.Underline,
+                inlineCode = typography.bodyMedium.copy(fontFamily = FontFamily.Monospace),
+                textLink = TextLinkStyles(
+                    style = typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = TextDecoration.Underline,
+                    ).toSpanStyle(),
                 ),
+                table = typography.bodyMedium,
             ),
             colors =
             markdownColor(
                 text = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
-                codeText = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
                 codeBackground = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
                 dividerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                inlineCodeBackground = MaterialTheme.colorScheme.onBackground.copy(alpha = additionalAlphaFactor),
             ),
             highlightText = highlightText,
             enableAlternateRendering = enableAlternateMarkdownRendering,
