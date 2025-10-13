@@ -31,7 +31,7 @@ multiplatform-settings = "1.3.0"
 reorderable = "3.0.0"
 spotless = "8.0.0"
 stately = "2.1.0"
-sqlcipher = "4.10.0"
+sqlcipher = "4.11.0"
 sqldelight = "2.1.0"
 turbine = "1.2.1"
 
