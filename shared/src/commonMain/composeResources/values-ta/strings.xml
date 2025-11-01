@@ -405,7 +405,7 @@
     <string name="settings_content_font_smallest">இரட்டை கூடுதல் சிறியது</string>
     <string name="settings_custom_seed_color">தனிப்பயன் கருப்பொருள் நிறம்</string>
     <string name="settings_edge_to_edge">விளிம்பிலிருந்து விளிம்பு உள்ளடக்கங்கள்</string>
-    <string name="settings_default_comment_sort_type">இயல்புநிலை கருத்து வரிசை வகை</string>
+    <string name="settings_default_comment_sort_type">இயல்புநிலை கருத்து வரிசை வகை (posts)</string>
     <string name="settings_default_explore_result_type">உலாவ இயல்புநிலை தேடல் முடிவு வகை</string>
     <string name="settings_default_explore_type">உலாவ இயல்புநிலை ஊட்ட வகை</string>
     <string name="settings_default_inbox_type">இயல்புநிலை அகப்பெட்டி வகை</string>
@@ -508,4 +508,5 @@
         <item quantity="one">படிக்காத உருப்படி %1$d உள்ளது</item>
         <item quantity="other">%1$d படிக்காத உருப்படிகள் உள்ளன</item>
     </plurals>
+    <string name="settings_default_comment_sort_type_profile">இயல்புநிலை கருத்து வரிசை வகை (பயனர் சுயவிவரம்)</string>
 </resources>
