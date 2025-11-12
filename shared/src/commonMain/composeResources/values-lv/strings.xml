@@ -156,4 +156,11 @@
     <string name="settings_about">Par lietotni</string>
     <string name="settings_content_font_larger">Īpaši liels</string>
     <string name="settings_content_font_large">Liels</string>
+    <string name="action_toggle_read">Atzīmēt kā lasītu/nelasītu</string>
+    <string name="button_confirm">Apstiprināt</string>
+    <string name="button_reset">Atiestatīt</string>
+    <string name="button_retry">Mēģināt vēlreiz</string>
+    <string name="community_action_unsubscribe">Pārtraukt abonementu</string>
+    <string name="community_info_moderators">Moderatori</string>
+    <string name="community_info_posts">raksti</string>
 </resources>
