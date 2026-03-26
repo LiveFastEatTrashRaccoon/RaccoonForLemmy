@@ -31,6 +31,7 @@ data class PostModel(
     val deleted: Boolean = false,
     val locked: Boolean = false,
     val languageId: Long = 0,
+    val category: String? = null,
 )
 
 val PostModel.imageUrl: String

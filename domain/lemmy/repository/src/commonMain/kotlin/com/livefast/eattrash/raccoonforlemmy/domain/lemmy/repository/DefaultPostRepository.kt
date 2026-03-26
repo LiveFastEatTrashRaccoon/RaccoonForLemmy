@@ -26,6 +26,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toMod
 internal class DefaultPostRepository(
     private val services: ServiceProvider,
     private val customServices: ServiceProvider,
+    private val postCategorizer: PostCategorizer,
 ) : PostRepository {
     override suspend fun getAll(
         auth: String?,
@@ -61,7 +62,14 @@ internal class DefaultPostRepository(
                     sort = sort.toDto(),
                 )
             }
-        val posts = response.posts.map { it.toModel() }
+        val posts =
+            response.posts
+                .subList(0, response.posts.size.coerceAtMost(2))
+                .map {
+                it.toModel().let { model ->
+                    model.copy(category = postCategorizer.categorize(model.title))
+                }
+            }
         posts to response.nextPage
     }.getOrNull()
 
@@ -77,9 +85,12 @@ internal class DefaultPostRepository(
                 customServices.changeInstance(instance)
                 customServices.v3.post.get(id = id)
             }
-        response.postView.toModel().copy(
-            crossPosts = response.crossPosts.map { it.toModel() },
-        )
+        response.postView.toModel().let { model ->
+            model.copy(
+                category = postCategorizer.categorize(model.title),
+                crossPosts = response.crossPosts.map { it.toModel() },
+            )
+        }
     }.getOrNull()
 
     override fun asUpVoted(post: PostModel, voted: Boolean) = post.copy(

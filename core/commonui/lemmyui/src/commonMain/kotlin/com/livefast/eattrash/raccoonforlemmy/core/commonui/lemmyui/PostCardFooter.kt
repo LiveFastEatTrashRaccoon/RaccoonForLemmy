@@ -67,6 +67,7 @@ fun PostCardFooter(
     markRead: Boolean = false,
     downVoteEnabled: Boolean = true,
     optionsMenuOpen: Boolean = false,
+    category: String? = null,
     options: List<Option> = emptyList(),
     onClick: (() -> Unit)? = null,
     onUpVote: (() -> Unit)? = null,
@@ -292,6 +293,13 @@ fun PostCardFooter(
                         onClick = {
                             onDownVote?.invoke()
                         },
+                    )
+                }
+                if (category != null) {
+                    Text(
+                        text = category,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.error,
                     )
                 }
             }

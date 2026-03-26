@@ -216,9 +216,6 @@ fun PostCard(
                                 }
                         }
                     }
-                if (helperActions.isNotEmpty()) {
-                    customActions = helperActions
-                }
             },
     ) {
         if (postLayout != PostLayout.Compact) {
@@ -534,6 +531,7 @@ private fun CompactPost(
                 onReply = onReply,
                 publishDate = post.publishDate,
                 updateDate = post.updateDate,
+                category = post.category,
                 options = options,
                 onSelectOption = onSelectOption,
                 actionButtonsActive = actionButtonsActive,
@@ -840,6 +838,7 @@ private fun ExtendedPost(
                 onReply = onReply,
                 publishDate = post.publishDate,
                 updateDate = post.updateDate,
+                category = post.category,
                 options = options,
                 onSelectOption = onSelectOption,
                 actionButtonsActive = actionButtonsActive,

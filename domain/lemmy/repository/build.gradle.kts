@@ -20,5 +20,11 @@ kotlin {
                 implementation(projects.domain.lemmy.data)
             }
         }
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.llamaAndroid)
+                implementation(libs.ktor.cio)
+            }
+        }
     }
 }

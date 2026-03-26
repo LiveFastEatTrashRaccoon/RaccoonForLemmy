@@ -26,6 +26,7 @@ ksp = "2.3.6"
 ktlint = "1.6.0"
 ktlint-compose-rules = "0.5.6"
 ktor = "3.4.2"
+llamaAndroid = "0.0.2"
 materialKolor = "4.1.1"
 mockk = "1.14.9"
 multiplatform-markdown-renderer = "0.39.2"
@@ -104,6 +105,8 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-contentnegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+llamaAndroid = { module = "com.github.1opp0-org:llama.android", version.ref = "llamaAndroid" }
 
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 

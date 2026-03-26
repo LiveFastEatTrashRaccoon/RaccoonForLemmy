@@ -13,7 +13,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLemm
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultLocalItemCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultMediaRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultModlogRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPrivateMessageRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultSiteRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultUserRepository
@@ -23,7 +22,6 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LemmyValueC
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LocalItemCache
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.MediaRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.ModlogRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PrivateMessageRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.SiteRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.UserRepository
@@ -54,6 +52,7 @@ private val cacheModule =
 val lemmyRepositoryModule =
     DI.Module("LemmyRepositoryModule") {
         import(cacheModule)
+        import(lemmyRepositoryPlatformModule)
 
         bind<CommentRepository> {
             singleton {
@@ -99,14 +98,6 @@ val lemmyRepositoryModule =
             singleton {
                 DefaultModlogRepository(
                     services = instance(tag = "default"),
-                )
-            }
-        }
-        bind<PostRepository> {
-            singleton {
-                DefaultPostRepository(
-                    services = instance(tag = "default"),
-                    customServices = instance(tag = "custom"),
                 )
             }
         }
