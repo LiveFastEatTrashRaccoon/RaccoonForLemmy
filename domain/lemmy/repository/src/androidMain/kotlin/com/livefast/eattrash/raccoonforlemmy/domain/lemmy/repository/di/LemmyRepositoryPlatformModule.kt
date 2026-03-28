@@ -1,8 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.di
 
 import com.arm.aichat.AiChat
-import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPostCategorizer
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.LlamaCppCategorizer
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.DefaultPostRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.MediaPipePostCategorizer
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.ModelDownloader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostCategorizer
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.PostRepository
@@ -30,10 +31,11 @@ actual val lemmyRepositoryPlatformModule: DI.Module = DI.Module("LemmyRepository
 
     bind<PostCategorizer> {
         singleton {
-            DefaultPostCategorizer(
-                modelDownloader = instance(),
-                engine = AiChat.getInferenceEngine(instance())
-            )
+//            LlamaCppCategorizer(
+//                modelDownloader = instance(),
+//                engine = AiChat.getInferenceEngine(instance())
+//            )
+            MediaPipePostCategorizer(instance())
         }
     }
 

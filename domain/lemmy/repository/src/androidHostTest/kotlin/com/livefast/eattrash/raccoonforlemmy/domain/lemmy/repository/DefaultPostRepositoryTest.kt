@@ -50,10 +50,15 @@ class DefaultPostRepositoryTest {
                 }
         }
 
+    private val postCategorizer = mockk<PostCategorizer> {
+        coEvery { categorize(any()) } returns "Other"
+    }
+
     private val sut =
         DefaultPostRepository(
             services = serviceProvider,
             customServices = customServiceProvider,
+            postCategorizer = postCategorizer,
         )
 
     @Test

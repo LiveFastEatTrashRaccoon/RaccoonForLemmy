@@ -36,11 +36,12 @@ spotless = "8.4.0"
 stately = "2.1.0"
 sqlcipher = "4.14.1"
 sqldelight = "2.3.2"
+mediapipe = "0.10.14"
 turbine = "1.2.1"
 
 android-targetSdk = "36"
 android-compileSdk = "36"
-android-minSdk = "26"
+android-minSdk = "30"
 
 [libraries]
 
@@ -109,6 +110,7 @@ ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = 
 llamaAndroid = { module = "com.github.1opp0-org:llama.android", version.ref = "llamaAndroid" }
 
 materialKolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
+mediapipe-tasks-text = { module = "com.google.mediapipe:tasks-text", version.ref = "mediapipe" }
 
 multiplatform-markdown-renderer = { module = "com.mikepenz:multiplatform-markdown-renderer", version.ref = "multiplatform-markdown-renderer" }
 multiplatform-markdown-renderer-m3 = { module = "com.mikepenz:multiplatform-markdown-renderer-m3", version.ref = "multiplatform-markdown-renderer" }

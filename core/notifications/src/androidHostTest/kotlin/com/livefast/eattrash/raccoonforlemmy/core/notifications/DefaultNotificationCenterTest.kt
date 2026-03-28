@@ -17,6 +17,7 @@ class DefaultNotificationCenterTest {
             dispatcher = dispatcherRule.dispatcher,
         )
 
+
     @Test
     fun givenSubscription_whenSendEvent_thenEventIsReceivedJustOnce() = runTest {
         launch {
