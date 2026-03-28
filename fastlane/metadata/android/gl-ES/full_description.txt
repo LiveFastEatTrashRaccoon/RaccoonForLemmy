@@ -1,0 +1,34 @@
+<p>
+    <i>Raccoon Para Lemmy</i> é plenamente de código aberto e pretende ofrecer un experiencia libre de anuncios e tan funcional como sexa posible como en Lemmy.
+</p>
+<p>
+    Nesta app todo o mundo tería que sentir como na súa casa, pois dáselle unha importancia grande á súa localización e adaptación da interface.
+</p>
+<p>
+    <b>Características principais:</b>
+</p>
+<ul>
+    <li>lista de publicacións e comentarios con diferentes clases e formas de listaxe;</li>
+    <li>posibilidade de votar en positivo ou negativo (con accións de intercambio múltiple);</li>
+    <li>con detalle de usuario e de comunidade (con información sobre moderadores/comunidades moderadas);</li>
+    <li>perfil de usuario coas súas publicacións propias, e comentarios e elementos gardados;</li>
+    <li>caixa de entrada con respostas, mencións e mensaxes directas;</li>
+    <li>procura global con tipos de resultado diferente (todo, correos, comentarios, usuario, comunidades);</li>
+    <li>creación e edición de correos novos (con imaxes opcionais);</li>
+    <li>contido intre-cruzado con outras comunidades;</li>
+    <li>resposta a correo e comentarios (e edición de respostas);</li>
+    <li>marcar as publicacións como lidas (mentres se avanza coa lectura) e agoche de contidos lidos;</li>
+    <li>aparencia personalizada (esquema de cores, fontes, tamaños de texto, formato das publicacións, etc.);</li>
+    <li>localización personalizadas (independente da propia do sistema);</li>
+    <li>bloqueo de usuarios, comunidades e instancias;</li>
+    <li>correo con informes e comentarios para os moderadores/as;</li>
+    <li>apoio para contas múltiples con características específicas cada unha delas;</li>
+    <li>avance en modo preguiceiro (o tamén chamado en modo zombi);</li>
+    <li>exploración de todas as comunidades en modo de convidado;</li>
+    <li>multi-comunidades (agregación comunitaria);</li>
+    <li>vista do rexistro de moderación;</li>
+    <li>ferramenta de moderación comunitaria (examina e resolve peticións, bloqueo de usuarios, publicacións destacadas na comunidade, marcado dos comentarios como destacados, eliminación de publicacións ou comentarios, revisión de todas as publicacións e comentarios, edición e creación de comunidades)</li>
+    <li>gardado de borradores para publicacións e comentarios</li>
+    <li>modo anónimo con cambio rápido de modo</li>
+    <li>ferramentas dos administradores (purga de usuarios/publicacións/comentarios, publicacións destacadas  a nivel local, agochado/mostra de comunidades)</li>
+</ul>
