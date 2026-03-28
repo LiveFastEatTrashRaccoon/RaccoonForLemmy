@@ -40,7 +40,7 @@ jobs:
         run: ./gradlew assembleRelease --stacktrace
 
       - name: Upload release build to artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: release-artifacts
           path: |
