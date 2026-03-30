@@ -10,18 +10,18 @@ plugins {
 
 kotlin {
     sourceSets {
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(libs.sqlcipher)
                 implementation(libs.sqldelight.android)
             }
         }
-        val iosMain by getting {
+        iosMain {
             dependencies {
                 implementation(libs.sqldelight.native)
             }
         }
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.kotlinx.coroutines)
                 implementation(libs.kotlinx.serialization.json)

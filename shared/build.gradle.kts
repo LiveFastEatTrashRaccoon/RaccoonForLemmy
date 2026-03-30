@@ -1,19 +1,20 @@
+
 plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
     id("com.livefast.eattrash.composeMultiplatform")
+    id("com.livefast.eattrash.androidTest")
     id("com.livefast.eattrash.spotless")
     alias(libs.plugins.kotlinx.kover)
 }
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
-
-                implementation(libs.compose.ui.backhandler)
                 implementation(libs.compose.multiplatform.media.player)
+                implementation(libs.compose.material)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
                 implementation(libs.kodein.compose)
                 implementation(libs.androidx.navigation.compose)
 
@@ -88,26 +89,11 @@ kotlin {
                 api(projects.feature.settings)
             }
         }
-        val commonTest by getting {
+        commonTest {
             dependencies {
                 implementation(kotlin("test"))
             }
         }
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(libs.mockk)
-                implementation(libs.kotlinx.coroutines.test)
-                implementation(projects.core.testutils)
-            }
-        }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by getting
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by getting
     }
 }
 

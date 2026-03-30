@@ -5,7 +5,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation(libs.kotlinx.coroutines.test)

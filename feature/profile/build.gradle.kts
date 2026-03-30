@@ -8,7 +8,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.kodein)
                 implementation(libs.ktor.cio)
@@ -44,9 +44,12 @@ kotlin {
                 implementation(projects.unit.zoomableimage)
             }
         }
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(projects.core.architecture.testutils)
+
+        configureEach {
+            if (name == "androidHostTest") {
+                dependencies {
+                    implementation(projects.core.architecture.testutils)
+                }
             }
         }
     }

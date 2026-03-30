@@ -4,8 +4,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(libs.kotlinx.coroutines)
                 implementation(projects.core.architecture)

@@ -8,7 +8,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.kodein)
                 implementation(libs.ktor.cio)
@@ -21,7 +21,7 @@ kotlin {
                 implementation(projects.core.l10n)
             }
         }
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.androidx.activity)
@@ -30,7 +30,7 @@ kotlin {
                 implementation(libs.coil.gif)
             }
         }
-        val iosMain by getting {
+        iosMain {
             dependencies {
                 implementation(libs.ktor.darwin)
             }
