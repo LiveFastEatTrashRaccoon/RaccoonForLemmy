@@ -7,12 +7,12 @@ plugins {
 kotlin {
 
     sourceSets {
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(libs.multiplatform.markdown.renderer.coil3)
             }
         }
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 api(libs.multiplatform.markdown.renderer)
                 api(libs.multiplatform.markdown.renderer.m3)

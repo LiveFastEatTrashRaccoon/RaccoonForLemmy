@@ -7,12 +7,12 @@ plugins {
 
 kotlin {
     sourceSets {
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(libs.coil.compose)
             }
         }
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.calf)
                 implementation(libs.kodein)

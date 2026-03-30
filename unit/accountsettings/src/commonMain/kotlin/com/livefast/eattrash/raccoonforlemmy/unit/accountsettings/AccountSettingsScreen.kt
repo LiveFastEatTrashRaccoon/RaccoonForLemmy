@@ -48,12 +48,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.PredictiveBackHandler
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -113,6 +115,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
     var sortBottomSheetOpened by remember { mutableStateOf(false) }
     var deleteAccountDialogOpen by remember { mutableStateOf(false) }
     var deleteAccountValidationError by remember { mutableStateOf<ValidationError?>(null) }
+    val navState = rememberNavigationEventState(NavigationEventInfo.None)
 
     LaunchedEffect(model) {
         model.effects
@@ -135,9 +138,13 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
             }.launchIn(this)
     }
 
-    PredictiveBackHandler(uiState.hasUnsavedChanges) {
-        confirmBackWithUnsavedChangesDialog = true
-    }
+    NavigationBackHandler(
+        state = navState,
+        isBackEnabled = uiState.hasUnsavedChanges,
+        onBackCompleted = {
+            confirmBackWithUnsavedChangesDialog = true
+        },
+    )
 
     Scaffold(
         modifier = modifier,

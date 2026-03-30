@@ -11,7 +11,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.kodein)
                 implementation(projects.core.di)
@@ -23,9 +23,8 @@ kotlin {
                 implementation(projects.domain.lemmy.repository)
             }
         }
-        val androidMain by getting {
+        androidMain {
             dependencies {
-                implementation(libs.androidx.core)
                 implementation(libs.androidx.work.runtime)
             }
         }

@@ -46,11 +46,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.PredictiveBackHandler
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -104,6 +106,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
     var openBannerPicker by remember { mutableStateOf(false) }
     var confirmBackWithUnsavedChangesDialogOpened by remember { mutableStateOf(false) }
     var visibilityBottomSheetOpened by remember { mutableStateOf(false) }
+    val navState = rememberNavigationEventState(NavigationEventInfo.None)
 
     LaunchedEffect(model) {
         model.reduce(EditCommunityMviModel.Intent.Refresh)
@@ -122,9 +125,13 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
             }.launchIn(this)
     }
 
-    PredictiveBackHandler(uiState.hasUnsavedChanges) {
-        confirmBackWithUnsavedChangesDialogOpened = true
-    }
+    NavigationBackHandler(
+        state = navState,
+        isBackEnabled = uiState.hasUnsavedChanges,
+        onBackCompleted = {
+            confirmBackWithUnsavedChangesDialogOpened = true
+        },
+    )
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),

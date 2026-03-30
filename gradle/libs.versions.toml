@@ -1,38 +1,41 @@
 [versions]
 
-androidx-activity = "1.11.0"
-androidx-browser = "1.9.0"
-androidx-core = "1.17.0"
+agp = "9.0.0"
+androidx-activity = "1.13.0"
+androidx-browser = "1.10.0"
 androidx-crypto = "1.1.0"
-androidx-lifecycle-viewmodel-compose = "2.9.6"
-androidx-navigation-compose = "2.9.0"
+androidx-lifecycle-viewmodel-compose = "2.10.0"
+androidx-navigation-compose = "2.9.2"
 androidx-splashscreen = "1.2.0"
-androidx-work = "2.10.5"
-android-gradle = "8.10.0"
-calf = "0.9.0"
-coil = "3.3.0"
-colorpicker = "1.1.2"
-compose = "1.9.0"
-compose-multiplatform-media-player = "1.0.47"
-kodein = "7.29.0"
-kotlin = "2.2.21"
+androidx-work = "2.11.2"
+calf = "0.10.0"
+coil = "3.4.0"
+compose-colorpicker = "1.1.3"
+compose-m3 = "1.9.0"
+compose-navigationevent = "1.0.1"
+compose-plugin = "1.10.3"
+compose-material-icons = "1.7.3"
+compose-multiplatform-media-player = "1.0.53"
+compose-ui-test = "1.10.6"
+kodein = "7.31.0"
+kotlin = "2.3.20"
 kotlincrypto = "0.8.0"
 kotlinx-coroutines = "1.10.2"
-kotlinx-serialization-json = "1.9.0"
-kover = "0.9.2"
-ksp = "2.3.2"
+kotlinx-serialization-json = "1.10.0"
+kover = "0.9.8"
+ksp = "2.3.6"
 ktlint = "1.6.0"
-ktlint-compose-rules = "0.4.27"
-ktor = "3.3.2"
-materialKolor = "3.0.1"
-mockk = "1.14.6"
-multiplatform-markdown-renderer = "0.37.0"
+ktlint-compose-rules = "0.5.6"
+ktor = "3.4.2"
+materialKolor = "4.1.1"
+mockk = "1.14.9"
+multiplatform-markdown-renderer = "0.39.2"
 multiplatform-settings = "1.3.0"
 reorderable = "3.0.0"
-spotless = "8.1.0"
+spotless = "8.4.0"
 stately = "2.1.0"
-sqlcipher = "4.11.0"
-sqldelight = "2.2.1"
+sqlcipher = "4.14.0"
+sqldelight = "2.3.2"
 turbine = "1.2.1"
 
 android-targetSdk = "36"
@@ -44,8 +47,7 @@ android-minSdk = "26"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
-androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
-androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref="androidx-lifecycle-viewmodel-compose" }
+androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle-viewmodel-compose" }
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation-compose" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidx-crypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-splashscreen" }
@@ -58,12 +60,24 @@ coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.re
 coil-compose = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 
-compose-multiplatform-media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "compose-multiplatform-media-player" }
-compose-gradlePlugin = { module = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin", version.ref = "compose" }
-compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
-compose-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-plugin" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-plugin" }
+compose-gradlePlugin = { module = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin", version.ref = "compose-plugin" }
+compose-material = { module = "org.jetbrains.compose.material:material", version.ref = "compose-plugin" }
+compose-material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "compose-material-icons" }
+compose-m3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "compose-m3" }
+compose-navigationevent = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "compose-navigationevent" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-plugin" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-plugin" }
+compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "compose-ui-test" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-ui-test" }
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-plugin" }
 
-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
+compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "compose-colorpicker" }
+
+compose-multiplatform-media-player = { module = "network.chaintech:compose-multiplatform-media-player", version.ref = "compose-multiplatform-media-player" }
+
+gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
 kodein = { module = "org.kodein.di:kodein-di", version.ref = "kodein" }
 kodein-compose = { module = "org.kodein.di:kodein-di-framework-compose", version.ref = "kodein" }
@@ -114,18 +128,19 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 
-android-application = { id = "com.android.application", version.ref = "android-gradle" }
-android-library = { id = "com.android.library", version.ref = "android-gradle" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-kmp-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 
-jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }

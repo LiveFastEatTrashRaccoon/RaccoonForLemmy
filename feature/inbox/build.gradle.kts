@@ -8,7 +8,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.kodein)
 
@@ -35,9 +35,11 @@ kotlin {
                 implementation(projects.domain.inbox)
             }
         }
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(projects.core.architecture.testutils)
+        configureEach {
+            if (name == "androidHostTest") {
+                dependencies {
+                    implementation(projects.core.architecture.testutils)
+                }
             }
         }
     }

@@ -9,13 +9,13 @@ plugins {
 
 kotlin {
     sourceSets {
-        val androidMain by getting {
+        androidMain {
             dependencies {
                 implementation(libs.multiplatform.settings)
                 implementation(libs.androidx.security.crypto)
             }
         }
-        val commonMain by getting {
+        commonMain {
             dependencies {
                 implementation(libs.kodein)
                 implementation(libs.kotlinx.coroutines)
@@ -26,9 +26,11 @@ kotlin {
                 implementation(projects.core.utils)
             }
         }
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(libs.ktor.client.mock)
+        configureEach {
+            if (name == "androidHostTest") {
+                dependencies {
+                    implementation(libs.ktor.client.mock)
+                }
             }
         }
     }
