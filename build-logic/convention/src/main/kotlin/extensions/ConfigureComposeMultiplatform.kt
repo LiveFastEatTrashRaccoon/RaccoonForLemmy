@@ -8,17 +8,15 @@ import utils.libs
 
 internal fun Project.configureComposeMultiplatform(extension: KotlinMultiplatformExtension) =
     extension.apply {
-        val composeDeps = extensions.getByType(ComposePlugin.Dependencies::class.java)
         sourceSets.apply {
             commonMain {
                 dependencies {
-                    implementation(composeDeps.runtime)
-                    implementation(composeDeps.foundation)
-                    implementation(composeDeps.material3)
-                    implementation(composeDeps.materialIconsExtended)
+                    implementation(libs.findLibrary("compose-runtime").dependency)
+                    implementation(libs.findLibrary("compose-foundation").dependency)
+                    implementation(libs.findLibrary("compose-m3").dependency)
+                    implementation(libs.findLibrary("compose-material-icons-extended").dependency)
                     implementation(libs.findLibrary("androidx-lifecycle-viewmodel-compose").dependency)
-                    implementation(libs.findLibrary("compose-ui-backhandler").dependency)
-
+                    implementation(libs.findLibrary("compose-navigationevent").dependency)
                 }
             }
         }

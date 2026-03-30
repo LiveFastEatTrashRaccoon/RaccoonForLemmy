@@ -1,7 +1,5 @@
 package plugins
 
-import com.android.build.gradle.LibraryExtension
-import extensions.configureKotlinAndroid
 import extensions.configureKotlinMultiplatform
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -14,16 +12,12 @@ class KotlinMultiplatformPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply(libs.findPlugin("kotlin-multiplatform").pluginId)
-                apply(libs.findPlugin("android-library").pluginId)
+                apply(libs.findPlugin("android-kmp-library").pluginId)
             }
 
             extensions.configure(
                 KotlinMultiplatformExtension::class.java,
                 ::configureKotlinMultiplatform,
-            )
-            extensions.configure(
-                LibraryExtension::class.java,
-                ::configureKotlinAndroid,
             )
         }
 }

@@ -8,15 +8,18 @@ import utils.libs
 internal fun Project.configureAndroidTest(extension: KotlinMultiplatformExtension) {
     extension.apply {
         sourceSets.apply {
-            androidUnitTest {
-                dependencies {
-                    implementation(libs.findLibrary("kotlinx-coroutines-test").dependency)
-                    implementation(kotlin("test-junit"))
-                    implementation(libs.findLibrary("mockk").dependency)
-                    implementation(libs.findLibrary("turbine").dependency)
-                    implementation(project(":core:testutils"))
+            configureEach {
+                if (name == "androidHostTest") {
+                    dependencies {
+                        implementation(libs.findLibrary("kotlinx-coroutines-test").dependency)
+                        implementation(kotlin("test-junit"))
+                        implementation(libs.findLibrary("mockk").dependency)
+                        implementation(libs.findLibrary("turbine").dependency)
+                        implementation(project(":core:testutils"))
+                    }
                 }
             }
+
             commonTest {
                 dependencies {
                     implementation(kotlin("test"))

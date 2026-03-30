@@ -1,23 +1,23 @@
 package extensions
 
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
 import org.gradle.api.Project
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.kotlin.dsl.create
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import utils.PACKAGE_PREFIX
+import utils.libs
+import utils.version
 
 interface CustomKotlinMultiplatformExtension {
     val baseName: Property<String>
+    val iOSCustomLinkerOptions: ListProperty<String>
 }
 
 internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatformExtension) =
     extension.apply {
         applyDefaultHierarchyTemplate()
-        androidTarget {
-            compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_11)
-            }
-        }
 
         val moduleName = path.split(":").drop(1).joinToString(".")
         val customExtension =
@@ -31,6 +31,26 @@ internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatform
             it.binaries.framework {
                 baseName = customExtension.baseName.orNull ?: moduleName
                 isStatic = true
+                val customOptions = customExtension.iOSCustomLinkerOptions.orNull ?: emptyList()
+                for (option in customOptions) {
+                    linkerOpts.add(option)
+                }
             }
+        }
+
+        targets.withType(KotlinMultiplatformAndroidLibraryTarget::class.java).configureEach {
+            val moduleName = path.split(":").drop(1).joinToString(".")
+            namespace = if (moduleName.isNotEmpty()) "$PACKAGE_PREFIX.$moduleName" else PACKAGE_PREFIX
+
+            compileSdk = libs.findVersion("android-compileSdk").version
+            minSdk = libs.findVersion("android-minSdk").version
+
+            packaging {
+                resources {
+                    excludes += "/META-INF/{AL2.0,LGPL2.1}"
+                }
+            }
+
+            experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
         }
     }
