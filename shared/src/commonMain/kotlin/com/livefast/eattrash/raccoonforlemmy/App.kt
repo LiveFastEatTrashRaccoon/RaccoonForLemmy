@@ -21,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.PredictiveBackHandler
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -31,6 +30,9 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.toSize
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toCommentBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toPostLayout
@@ -103,6 +105,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
     val fallbackUriHandler = LocalUriHandler.current
     val customUriHandler = remember { getCustomUriHandler(fallbackUriHandler) }
     val navController = rememberNavController()
+    val navState = rememberNavigationEventState(NavigationEventInfo.None)
 
     LaunchedEffect(settingsRepository) {
         val lastActiveAccount = accountRepository.getActive()
@@ -280,12 +283,15 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
                         },
                     ) {
                         val canPop by drawerCoordinator.drawerOpened.collectAsState()
-                        PredictiveBackHandler(enabled = canPop) {
-                            // if the drawer is open, closes it
-                            scope.launch {
-                                drawerCoordinator.toggleDrawer()
-                            }
-                        }
+                        NavigationBackHandler(
+                            state = navState,
+                            isBackEnabled = canPop,
+                            onBackCompleted = {
+                                scope.launch {
+                                    drawerCoordinator.toggleDrawer()
+                                }
+                            },
+                        )
                         NavHost(
                             navController = navController,
                             startDestination = Destination.Main,

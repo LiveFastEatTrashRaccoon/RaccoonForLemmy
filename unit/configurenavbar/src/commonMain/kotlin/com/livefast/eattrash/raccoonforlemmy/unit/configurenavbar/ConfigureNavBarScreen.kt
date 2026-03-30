@@ -36,11 +36,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.PredictiveBackHandler
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigationevent.NavigationEventInfo
+import androidx.navigationevent.compose.NavigationBackHandler
+import androidx.navigationevent.compose.rememberNavigationEventState
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
@@ -78,10 +80,15 @@ fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
         }
     var confirmBackWithUnsavedChangesDialogOpened by remember { mutableStateOf(false) }
     var selectTabNavigationSectionBottomSheetOpened by remember { mutableStateOf(false) }
+    val navState = rememberNavigationEventState(NavigationEventInfo.None)
 
-    PredictiveBackHandler(uiState.hasUnsavedChanges) {
-        confirmBackWithUnsavedChangesDialogOpened = true
-    }
+    NavigationBackHandler(
+        state = navState,
+        isBackEnabled = uiState.hasUnsavedChanges,
+        onBackCompleted = {
+            confirmBackWithUnsavedChangesDialogOpened = true
+        },
+    )
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
