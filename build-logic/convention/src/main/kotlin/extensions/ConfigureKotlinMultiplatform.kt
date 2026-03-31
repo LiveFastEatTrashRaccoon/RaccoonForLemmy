@@ -19,6 +19,7 @@ internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatform
     extension.apply {
         applyDefaultHierarchyTemplate()
 
+        targets.findByName("android")
         val moduleName = path.split(":").drop(1).joinToString(".")
         val customExtension =
             project.extensions
