@@ -10,7 +10,7 @@ internal fun Project.configureAndroidTest(extension: KotlinMultiplatformExtensio
     extension.apply {
         sourceSets.configureEach {
             when (name) {
-                "androidUnitTest", "androidHostTest" -> {
+                "androidHostTest" -> {
                     dependencies {
                         implementation(libs.findLibrary("kotlinx-coroutines-test").dependency)
                         implementation(kotlin("test-junit"))
