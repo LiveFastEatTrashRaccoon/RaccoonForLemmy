@@ -14,7 +14,6 @@ internal fun Project.configureComposeMultiplatform(extension: KotlinMultiplatfor
                     implementation(libs.findLibrary("compose-runtime").dependency)
                     implementation(libs.findLibrary("compose-foundation").dependency)
                     implementation(libs.findLibrary("compose-m3").dependency)
-                    implementation(libs.findLibrary("compose-material-icons-extended").dependency)
                     implementation(libs.findLibrary("androidx-lifecycle-viewmodel-compose").dependency)
                     implementation(libs.findLibrary("compose-navigationevent").dependency)
                 }

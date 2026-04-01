@@ -16,26 +16,24 @@ class AndroidTestPlugin : Plugin<Project> {
                 ::configureAndroidTest,
             )
 
-            // Configure Kover 0.9.x for Android KMP
             pluginManager.withPlugin(libs.findPlugin("kotlinx-kover").pluginId) {
                 afterEvaluate {
                     extensions.configure<KoverProjectExtension>("kover") {
                         currentProject {
                             providedVariant("android") {
                                 sources {
-                                    // Ensure commonMain is part of the android variant
+                                    // ensure commonMain is part of the android variant
                                     includedSourceSets.add("commonMain")
                                     includedSourceSets.add("androidMain")
                                 }
                             }
                         }
 
-                        // Configure reports to include your package
+                        // workaround to include all the classes in the namespace
                         reports {
                             variant("android") {
                                 filters {
                                     includes {
-                                        // Use your package name found in constants
                                         packages("com.livefast.eattrash.raccoonforlemmy")
                                     }
                                 }
