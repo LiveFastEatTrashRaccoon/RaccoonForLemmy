@@ -8,16 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Article
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.AlternateEmail
-import androidx.compose.material.icons.filled.Cake
-import androidx.compose.material.icons.filled.CalendarViewDay
-import androidx.compose.material.icons.filled.CalendarViewMonth
-import androidx.compose.material.icons.filled.CalendarViewWeek
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Group
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +33,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -95,7 +86,7 @@ fun CommunityInfoScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = LocalResources.current.close,
                             contentDescription = LocalStrings.current.buttonClose,
                         )
                     }
@@ -122,13 +113,13 @@ fun CommunityInfoScreen(
                     SelectionContainer {
                         DetailInfoItem(
                             modifier = Modifier.fillMaxWidth(),
-                            icon = Icons.Default.AlternateEmail,
+                            icon = LocalResources.current.alternateEmail,
                             title = uiState.community.readableHandle,
                         )
                     }
                     DetailInfoItem(
                         modifier = Modifier.fillMaxWidth(),
-                        icon = Icons.Default.Cake,
+                        icon = LocalResources.current.cake,
                         title =
                         uiState.community.creationDate
                             ?.prettifyDate()
@@ -136,7 +127,7 @@ fun CommunityInfoScreen(
                     )
                     DetailInfoItem(
                         modifier = Modifier.fillMaxWidth(),
-                        icon = Icons.AutoMirrored.Default.Article,
+                        icon = LocalResources.current.article,
                         title = LocalStrings.current.communityInfoPosts,
                         value =
                         uiState.community.posts.getPrettyNumber(
@@ -146,7 +137,7 @@ fun CommunityInfoScreen(
                     )
                     DetailInfoItem(
                         modifier = Modifier.fillMaxWidth(),
-                        icon = Icons.AutoMirrored.Default.Reply,
+                        icon = LocalResources.current.reply,
                         title = LocalStrings.current.communityInfoComments,
                         value =
                         uiState.community.comments.getPrettyNumber(
@@ -156,7 +147,7 @@ fun CommunityInfoScreen(
                     )
                     DetailInfoItem(
                         modifier = Modifier.fillMaxWidth(),
-                        icon = Icons.Default.Group,
+                        icon = LocalResources.current.group,
                         title = LocalStrings.current.communityInfoSubscribers,
                         value =
                         uiState.community.subscribers.getPrettyNumber(
@@ -166,7 +157,7 @@ fun CommunityInfoScreen(
                     )
                     DetailInfoItem(
                         modifier = Modifier.fillMaxWidth(),
-                        icon = Icons.Default.CalendarViewMonth,
+                        icon = LocalResources.current.calendarMonthFill,
                         title = LocalStrings.current.communityInfoMonthlyActiveUsers,
                         value =
                         uiState.community.monthlyActiveUsers.getPrettyNumber(
@@ -176,7 +167,7 @@ fun CommunityInfoScreen(
                     )
                     DetailInfoItem(
                         modifier = Modifier.fillMaxWidth(),
-                        icon = Icons.Default.CalendarViewWeek,
+                        icon = LocalResources.current.viewWeekFill,
                         title = LocalStrings.current.communityInfoWeeklyActiveUsers,
                         value =
                         uiState.community.weeklyActiveUsers.getPrettyNumber(
@@ -186,7 +177,7 @@ fun CommunityInfoScreen(
                     )
                     DetailInfoItem(
                         modifier = Modifier.fillMaxWidth(),
-                        icon = Icons.Default.CalendarViewDay,
+                        icon = LocalResources.current.calendarViewDayFill,
                         title = LocalStrings.current.communityInfoDailyActiveUsers,
                         value =
                         uiState.community.dailyActiveUsers.getPrettyNumber(

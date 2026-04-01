@@ -1,18 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.TrendingUp
-import androidx.compose.material.icons.filled.ElderlyWoman
-import androidx.compose.material.icons.filled.Forum
-import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.filled.MarkUnreadChatAlt
-import androidx.compose.material.icons.filled.MilitaryTech
-import androidx.compose.material.icons.filled.MonitorWeight
-import androidx.compose.material.icons.filled.RocketLaunch
-import androidx.compose.material.icons.filled.Thunderstorm
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 sealed interface SortType {
     data object Active : SortType
@@ -90,16 +81,17 @@ fun Int.toSortType() = when (this) {
     else -> SortType.Active
 }
 
+@Composable
 fun SortType.toIcon(): ImageVector = when (this) {
-    SortType.Active -> Icons.Default.RocketLaunch
-    SortType.Hot -> Icons.Default.LocalFireDepartment
-    SortType.MostComments -> Icons.Default.Forum
-    SortType.New -> Icons.AutoMirrored.Default.TrendingUp
-    SortType.NewComments -> Icons.Default.MarkUnreadChatAlt
-    SortType.Old -> Icons.Default.ElderlyWoman
-    SortType.Controversial -> Icons.Default.Thunderstorm
-    SortType.Scaled -> Icons.Default.MonitorWeight
-    else -> Icons.Default.MilitaryTech
+    SortType.Active -> LocalResources.current.rocketLaunch
+    SortType.Hot -> LocalResources.current.localFireDepartment
+    SortType.MostComments -> LocalResources.current.comment
+    SortType.New -> LocalResources.current.trendingUp
+    SortType.NewComments -> LocalResources.current.markChatUnread
+    SortType.Old -> LocalResources.current.elderlyWoman
+    SortType.Controversial -> LocalResources.current.thunderstorm
+    SortType.Scaled -> LocalResources.current.scale
+    else -> LocalResources.current.workspacePremium
 }
 
 @Composable

@@ -13,15 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Article
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.filled.Message
-import androidx.compose.material.icons.filled.KeyboardDoubleArrowLeft
-import androidx.compose.material.icons.filled.KeyboardDoubleArrowRight
-import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,6 +49,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toModifier
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureActionItem
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureAddAction
 
@@ -97,7 +89,7 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -127,7 +119,7 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                 item {
                     SettingsHeader(
                         title = LocalStrings.current.exploreResultTypePosts,
-                        icon = Icons.AutoMirrored.Default.Article,
+                        icon = LocalResources.current.article,
                         rightButton = @Composable {
                             TextButton(
                                 contentPadding =
@@ -167,8 +159,8 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                     ConfigureActionItem(
                         icon =
                         when (idx) {
-                            1 -> Icons.Default.KeyboardDoubleArrowLeft
-                            else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                            1 -> LocalResources.current.keyboardDoubleArrowLeft
+                            else -> LocalResources.current.keyboardArrowLeft
                         },
                         iconContentDescription =
                         when (idx) {
@@ -231,8 +223,8 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                     ConfigureActionItem(
                         icon =
                         when (idx) {
-                            1 -> Icons.Default.KeyboardDoubleArrowRight
-                            else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                            1 -> LocalResources.current.keyboardDoubleArrowRight
+                            else -> LocalResources.current.keyboardArrowRight
                         },
                         iconContentDescription =
                         when (idx) {
@@ -283,7 +275,7 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                 item {
                     SettingsHeader(
                         title = LocalStrings.current.exploreResultTypeComments,
-                        icon = Icons.AutoMirrored.Default.Message,
+                        icon = LocalResources.current.comment,
                         rightButton = @Composable {
                             TextButton(
                                 contentPadding =
@@ -323,8 +315,8 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                     ConfigureActionItem(
                         icon =
                         when (idx) {
-                            1 -> Icons.Default.KeyboardDoubleArrowLeft
-                            else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                            1 -> LocalResources.current.keyboardDoubleArrowLeft
+                            else -> LocalResources.current.keyboardArrowLeft
                         },
                         iconContentDescription =
                         when (idx) {
@@ -389,8 +381,8 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                     ConfigureActionItem(
                         icon =
                         when (idx) {
-                            1 -> Icons.Default.KeyboardDoubleArrowRight
-                            else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                            1 -> LocalResources.current.keyboardDoubleArrowRight
+                            else -> LocalResources.current.keyboardArrowRight
                         },
                         iconContentDescription =
                         when (idx) {
@@ -441,7 +433,7 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                 item {
                     SettingsHeader(
                         title = LocalStrings.current.navigationInbox,
-                        icon = Icons.Default.Mail,
+                        icon = LocalResources.current.inboxFill,
                         rightButton = @Composable {
                             TextButton(
                                 contentPadding =
@@ -481,8 +473,8 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                     ConfigureActionItem(
                         icon =
                         when (idx) {
-                            1 -> Icons.Default.KeyboardDoubleArrowLeft
-                            else -> Icons.AutoMirrored.Default.KeyboardArrowLeft
+                            1 -> LocalResources.current.keyboardDoubleArrowLeft
+                            else -> LocalResources.current.keyboardArrowLeft
                         },
                         iconContentDescription =
                         when (idx) {
@@ -545,8 +537,8 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                     ConfigureActionItem(
                         icon =
                         when (idx) {
-                            1 -> Icons.Default.KeyboardDoubleArrowRight
-                            else -> Icons.AutoMirrored.Default.KeyboardArrowRight
+                            1 -> LocalResources.current.keyboardDoubleArrowRight
+                            else -> LocalResources.current.keyboardArrowRight
                         },
                         iconContentDescription =
                         when (idx) {

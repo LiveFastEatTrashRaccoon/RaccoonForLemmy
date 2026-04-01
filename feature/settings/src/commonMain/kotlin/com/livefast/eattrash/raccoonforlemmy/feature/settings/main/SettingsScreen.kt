@@ -11,14 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AdminPanelSettings
-import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.Explicit
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.SettingsApplications
-import androidx.compose.material.icons.filled.Style
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -58,6 +50,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordin
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.UrlOpeningMode
 import com.livefast.eattrash.raccoonforlemmy.core.utils.url.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -105,7 +98,7 @@ fun SettingsScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -118,7 +111,7 @@ fun SettingsScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Menu,
+                                imageVector = LocalResources.current.menu,
                                 contentDescription = LocalStrings.current.actionOpenSideMenu,
                             )
                         }
@@ -145,7 +138,7 @@ fun SettingsScreen(
                 modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
             ) {
                 SettingsHeader(
-                    icon = Icons.Default.Style,
+                    icon = LocalResources.current.styleFill,
                     title = LocalStrings.current.settingsSectionAppearance,
                 )
 
@@ -184,7 +177,7 @@ fun SettingsScreen(
                 )
 
                 SettingsHeader(
-                    icon = Icons.Default.SettingsApplications,
+                    icon = LocalResources.current.settingsApplications,
                     title = LocalStrings.current.settingsSectionGeneral,
                 )
 
@@ -262,7 +255,7 @@ fun SettingsScreen(
 
                 if (uiState.isLogged) {
                     SettingsHeader(
-                        icon = Icons.Default.AdminPanelSettings,
+                        icon = LocalResources.current.adminPanelSettings,
                         title = LocalStrings.current.settingsSectionAccount,
                     )
 
@@ -316,7 +309,7 @@ fun SettingsScreen(
                 }
 
                 SettingsHeader(
-                    icon = Icons.Default.Explicit,
+                    icon = LocalResources.current.explicitFill,
                     title = LocalStrings.current.settingsSectionNsfw,
                 )
 
@@ -337,7 +330,7 @@ fun SettingsScreen(
                 )
 
                 SettingsHeader(
-                    icon = Icons.Default.BugReport,
+                    icon = LocalResources.current.bugReport,
                     title = LocalStrings.current.settingsSectionDebug,
                 )
 

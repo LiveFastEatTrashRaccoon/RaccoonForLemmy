@@ -10,14 +10,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.LocalPolice
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Stars
-import androidx.compose.material.icons.filled.Verified
-import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +37,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImag
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
@@ -275,26 +268,26 @@ fun CommunityAndCreatorInfo(
             if (isFromModerator) {
                 Icon(
                     modifier = buttonModifier,
-                    imageVector = Icons.Default.LocalPolice,
+                    imageVector = LocalResources.current.localPolice,
                     contentDescription = LocalStrings.current.itemFromModerator,
                 )
             }
             if (distinguished) {
                 Icon(
                     modifier = buttonModifier,
-                    imageVector = Icons.Default.WorkspacePremium,
+                    imageVector = LocalResources.current.workspacePremium,
                     contentDescription = LocalStrings.current.itemDistinguished,
                 )
             } else if (featuredLocal) {
                 Icon(
                     modifier = buttonModifier,
-                    imageVector = Icons.Default.Verified,
+                    imageVector = LocalResources.current.verified,
                     contentDescription = LocalStrings.current.itemFeaturedInstance,
                 )
             } else if (featuredCommunity) {
                 Icon(
                     modifier = buttonModifier,
-                    imageVector = Icons.Default.Stars,
+                    imageVector = LocalResources.current.awardStar,
                     contentDescription = LocalStrings.current.itemFeaturedCommunity,
                 )
             }
@@ -302,7 +295,7 @@ fun CommunityAndCreatorInfo(
             if (locked) {
                 Icon(
                     modifier = buttonModifier,
-                    imageVector = Icons.Default.Lock,
+                    imageVector = LocalResources.current.lock,
                     contentDescription = LocalStrings.current.itemFeaturedInstance,
                 )
             }
@@ -315,12 +308,12 @@ fun CommunityAndCreatorInfo(
                 ) {
                     if (indicatorExpanded) {
                         Icon(
-                            imageVector = Icons.Default.ExpandLess,
+                            imageVector = LocalResources.current.unfoldLess,
                             contentDescription = LocalStrings.current.actionCollapse,
                         )
                     } else {
                         Icon(
-                            imageVector = Icons.Default.ExpandMore,
+                            imageVector = LocalResources.current.unfoldMore,
                             contentDescription = LocalStrings.current.actionExpand,
                         )
                     }

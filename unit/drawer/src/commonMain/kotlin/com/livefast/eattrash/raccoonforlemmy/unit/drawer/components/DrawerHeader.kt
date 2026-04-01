@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +24,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 
 @Composable
@@ -109,7 +108,7 @@ internal fun DrawerHeader(
                     },
                 ) {
                     Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
+                        imageVector = LocalResources.current.arrowDropDown,
                         contentDescription = LocalStrings.current.actionSwitchAccount,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )
@@ -142,7 +141,7 @@ internal fun DrawerHeader(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ArrowDropDown,
+                            imageVector = LocalResources.current.arrowDropDown,
                             contentDescription = LocalStrings.current.actionSwitchInstance,
                             tint = MaterialTheme.colorScheme.onBackground,
                         )

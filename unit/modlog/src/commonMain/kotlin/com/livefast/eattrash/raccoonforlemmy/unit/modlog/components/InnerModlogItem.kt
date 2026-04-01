@@ -10,10 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,6 +51,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
@@ -266,7 +263,7 @@ private fun ModlogFooter(
             ) {
                 Icon(
                     modifier = Modifier.size(IconSize.m).padding(1.5.dp),
-                    imageVector = Icons.Default.Schedule,
+                    imageVector = LocalResources.current.schedule,
                     contentDescription = LocalStrings.current.creationDate,
                     tint = ancillaryColor,
                 )
@@ -292,7 +289,7 @@ private fun ModlogFooter(
                     },
                 ) {
                     Icon(
-                        imageVector = Icons.Default.MoreHoriz,
+                        imageVector = LocalResources.current.moreHoriz,
                         contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )
@@ -307,7 +304,7 @@ private fun ModlogFooter(
                     },
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Default.OpenInNew,
+                        imageVector = LocalResources.current.openInBrowser,
                         contentDescription = LocalStrings.current.actionOpen,
                     )
                 }

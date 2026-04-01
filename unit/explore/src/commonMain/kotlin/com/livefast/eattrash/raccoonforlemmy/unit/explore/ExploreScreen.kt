@@ -15,9 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -74,6 +71,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
@@ -360,7 +358,7 @@ fun ExploreScreen(
                                             SwipeAction(
                                                 swipeContent = {
                                                     Icon(
-                                                        imageVector = Icons.AutoMirrored.Default.Reply,
+                                                        imageVector = LocalResources.current.reply,
                                                         contentDescription = LocalStrings.current.actionReply,
                                                         tint = Color.White,
                                                     )
@@ -379,7 +377,7 @@ fun ExploreScreen(
                                             SwipeAction(
                                                 swipeContent = {
                                                     Icon(
-                                                        imageVector = Icons.Default.Bookmark,
+                                                        imageVector = LocalResources.current.bookmark,
                                                         contentDescription =
                                                         LocalStrings.current.actionAddToBookmarks,
                                                         tint = Color.White,
@@ -572,7 +570,7 @@ fun ExploreScreen(
                                             SwipeAction(
                                                 swipeContent = {
                                                     Icon(
-                                                        imageVector = Icons.AutoMirrored.Default.Reply,
+                                                        imageVector = LocalResources.current.reply,
                                                         contentDescription = LocalStrings.current.actionReply,
                                                         tint = Color.White,
                                                     )
@@ -593,7 +591,7 @@ fun ExploreScreen(
                                             SwipeAction(
                                                 swipeContent = {
                                                     Icon(
-                                                        imageVector = Icons.Default.Bookmark,
+                                                        imageVector = LocalResources.current.bookmark,
                                                         contentDescription =
                                                         LocalStrings.current.actionAddToBookmarks,
                                                         tint = Color.White,

@@ -17,13 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Article
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
@@ -77,6 +70,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomShee
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
@@ -172,7 +166,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -199,7 +193,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
                                     Modifier.rotate(iconRotate)
                                 },
                             ),
-                        imageVector = Icons.Default.Sync,
+                        imageVector = LocalResources.current.sync,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )
@@ -247,7 +241,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.weight(1f).verticalScroll(scrollState),
             ) {
                 SettingsHeader(
-                    icon = Icons.Default.AccountCircle,
+                    icon = LocalResources.current.accountCircleFill,
                     title = LocalStrings.current.settingsWebHeaderPersonal,
                 )
 
@@ -328,7 +322,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
                 )
 
                 SettingsHeader(
-                    icon = Icons.AutoMirrored.Default.Article,
+                    icon = LocalResources.current.article,
                     title = LocalStrings.current.settingsWebHeaderContents,
                 )
 
@@ -378,7 +372,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
                 )
 
                 SettingsHeader(
-                    icon = Icons.Default.ThumbsUpDown,
+                    icon = LocalResources.current.thumbsUpDownFill,
                     title = LocalStrings.current.settingsVoteFormat,
                 )
 
@@ -423,7 +417,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
                 )
 
                 SettingsHeader(
-                    icon = Icons.Default.Notifications,
+                    icon = LocalResources.current.notifications,
                     title = LocalStrings.current.settingsWebHeaderNotifications,
                 )
 

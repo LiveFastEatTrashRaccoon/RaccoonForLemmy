@@ -12,10 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,6 +57,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInf
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.unit.manageban.components.ManageBanItem
 import com.livefast.eattrash.raccoonforlemmy.unit.manageban.components.ManageBanItemPlaceholder
 import kotlinx.coroutines.flow.launchIn
@@ -142,7 +139,7 @@ fun ManageBanScreen(modifier: Modifier = Modifier) {
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -176,7 +173,7 @@ fun ManageBanScreen(modifier: Modifier = Modifier) {
                     buildList {
                         this +=
                             FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ExpandLess,
+                                icon = LocalResources.current.unfoldLess,
                                 text = LocalStrings.current.actionBackToTop,
                                 onSelected = {
                                     scope.launch {
@@ -192,7 +189,7 @@ fun ManageBanScreen(modifier: Modifier = Modifier) {
                             ManageBanSection.Domains ->
                                 this +=
                                     FloatingActionButtonMenuItem(
-                                        icon = Icons.Default.AddCircle,
+                                        icon = LocalResources.current.addCircle,
                                         text = LocalStrings.current.buttonAdd,
                                         onSelected = {
                                             addDomainDialogOpen = true
@@ -202,7 +199,7 @@ fun ManageBanScreen(modifier: Modifier = Modifier) {
                             ManageBanSection.StopWords ->
                                 this +=
                                     FloatingActionButtonMenuItem(
-                                        icon = Icons.Default.AddCircle,
+                                        icon = LocalResources.current.addCircle,
                                         text = LocalStrings.current.buttonAdd,
                                         onSelected = {
                                             addStopWordDialogOpen = true

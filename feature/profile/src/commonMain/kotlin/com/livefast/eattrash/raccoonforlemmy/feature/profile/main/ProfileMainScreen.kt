@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.MenuOpen
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,6 +44,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordin
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.menu.ProfileSideMenu
 import com.livefast.eattrash.raccoonforlemmy.feature.profile.notlogged.ProfileNotLoggedScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.manageaccounts.ManageAccountsBottomSheet
@@ -95,7 +92,7 @@ fun ProfileMainScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Menu,
+                            imageVector = LocalResources.current.menu,
                             contentDescription = LocalStrings.current.actionOpenSideMenu,
                         )
                     }
@@ -142,7 +139,7 @@ fun ProfileMainScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.MenuOpen,
+                                imageVector = LocalResources.current.menuOpen,
                                 contentDescription = LocalStrings.current.actionOpenSideMenu,
                             )
                         }
@@ -254,7 +251,7 @@ fun ProfileMainScreen(
                                 tint = MaterialTheme.colorScheme.onBackground,
                             )
                             Icon(
-                                imageVector = Icons.Default.ChevronRight,
+                                imageVector = LocalResources.current.chevronForward,
                                 tint = MaterialTheme.colorScheme.onBackground,
                                 contentDescription = null,
                             )

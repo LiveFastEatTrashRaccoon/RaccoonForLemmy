@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +33,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 
@@ -137,9 +135,9 @@ internal fun DeleteAccountDialog(
                         Icon(
                             imageVector =
                             if (transformation == VisualTransformation.None) {
-                                Icons.Default.VisibilityOff
+                                LocalResources.current.visibilityOff
                             } else {
-                                Icons.Default.Visibility
+                                LocalResources.current.visibility
                             },
                             contentDescription = LocalStrings.current.actionToggleVisibility,
                         )

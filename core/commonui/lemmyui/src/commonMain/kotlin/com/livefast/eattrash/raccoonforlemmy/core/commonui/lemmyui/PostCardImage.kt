@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
@@ -140,9 +138,9 @@ fun PostCardImage(
                         modifier = iconModifier,
                         imageVector =
                         if (revealing) {
-                            Icons.Default.VisibilityOff
+                            LocalResources.current.visibilityOff
                         } else {
-                            Icons.Default.Visibility
+                            LocalResources.current.visibility
                         },
                         contentDescription = LocalStrings.current.actionToggleVisibility,
                         tint = MaterialTheme.colorScheme.onBackground,

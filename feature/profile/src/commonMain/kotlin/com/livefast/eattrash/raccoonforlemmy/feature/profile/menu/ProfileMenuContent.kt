@@ -2,21 +2,13 @@ package com.livefast.eattrash.raccoonforlemmy.feature.profile.menu
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Drafts
-import androidx.compose.material.icons.filled.GroupAdd
-import androidx.compose.material.icons.filled.ManageAccounts
-import androidx.compose.material.icons.filled.Shield
-import androidx.compose.material.icons.filled.ThumbsUpDown
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsRow
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 @Composable
 internal fun ProfileMenuContent(
@@ -39,45 +31,45 @@ internal fun ProfileMenuContent(
     ) {
         SettingsRow(
             title = LocalStrings.current.navigationDrawerTitleSubscriptions,
-            icon = Icons.Default.Book,
+            icon = LocalResources.current.book,
             onTap = onManageSubscriptions,
         )
         if (isBookmarksVisible) {
             SettingsRow(
                 title = LocalStrings.current.navigationDrawerTitleBookmarks,
-                icon = Icons.Default.Bookmark,
+                icon = LocalResources.current.bookmarkFill,
                 onTap = onOpenBookmarks,
             )
         }
         SettingsRow(
             title = LocalStrings.current.navigationDrawerTitleDrafts,
-            icon = Icons.Default.Drafts,
+            icon = LocalResources.current.stylusFountainPenFill,
             onTap = onOpenDrafts,
         )
         SettingsRow(
             title = LocalStrings.current.profileUpvotesDownvotes,
-            icon = Icons.Default.ThumbsUpDown,
+            icon = LocalResources.current.thumbsUpDownFill,
             onTap = onOpenVotes,
         )
 
         if (isModerator) {
             SettingsRow(
                 title = LocalStrings.current.moderatorZoneTitle,
-                icon = Icons.Default.Shield,
+                icon = LocalResources.current.shield,
                 onTap = onModeratorZone,
             )
         }
         if (canCreateCommunity) {
             SettingsRow(
                 title = LocalStrings.current.actionCreateCommunity,
-                icon = Icons.Default.GroupAdd,
+                icon = LocalResources.current.addCircle,
                 onTap = onCreateCommunity,
             )
         }
 
         SettingsRow(
             title = LocalStrings.current.manageAccountsTitle,
-            icon = Icons.Default.ManageAccounts,
+            icon = LocalResources.current.changeCircle,
             onTap = onManageAccounts,
         )
 
@@ -85,7 +77,7 @@ internal fun ProfileMenuContent(
 
         SettingsRow(
             title = LocalStrings.current.actionLogout,
-            icon = Icons.AutoMirrored.Default.Logout,
+            icon = LocalResources.current.logout,
             onTap = onLogout,
         )
     }

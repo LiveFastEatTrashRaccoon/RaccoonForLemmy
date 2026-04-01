@@ -12,10 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarViewMonth
-import androidx.compose.material.icons.filled.Group
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +31,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -147,7 +144,7 @@ fun CommunityHeader(
                     if (community.subscribers >= 0) {
                         Icon(
                             modifier = Modifier.size(iconSize),
-                            imageVector = Icons.Default.Group,
+                            imageVector = LocalResources.current.group,
                             contentDescription = LocalStrings.current.communityInfoSubscribers,
                         )
                         Text(
@@ -163,7 +160,7 @@ fun CommunityHeader(
                     if (community.monthlyActiveUsers >= 0) {
                         Icon(
                             modifier = Modifier.size(iconSize),
-                            imageVector = Icons.Default.CalendarViewMonth,
+                            imageVector = LocalResources.current.calendarMonthFill,
                             contentDescription = LocalStrings.current.communityInfoMonthlyActiveUsers,
                         )
                         Text(
@@ -187,7 +184,7 @@ fun CommunityHeader(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Info,
+                                imageVector = LocalResources.current.info,
                                 contentDescription = LocalStrings.current.moreInfo,
                             )
                         }

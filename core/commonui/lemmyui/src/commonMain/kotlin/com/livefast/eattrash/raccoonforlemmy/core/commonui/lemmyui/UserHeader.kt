@@ -13,11 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Article
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.Cake
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +32,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.getPrettyNumber
@@ -149,7 +145,7 @@ fun UserHeader(
                     if (postScore != null) {
                         Icon(
                             modifier = Modifier.size(iconSize),
-                            imageVector = Icons.AutoMirrored.Default.Article,
+                            imageVector = LocalResources.current.article,
                             contentDescription = LocalStrings.current.userPostScore,
                         )
                         Text(
@@ -168,7 +164,7 @@ fun UserHeader(
                         }
                         Icon(
                             modifier = Modifier.size(iconSize),
-                            imageVector = Icons.AutoMirrored.Default.Reply,
+                            imageVector = LocalResources.current.reply,
                             contentDescription = LocalStrings.current.userCommentScore,
                         )
                         Text(
@@ -188,7 +184,7 @@ fun UserHeader(
                         }
                         Icon(
                             modifier = Modifier.size(iconSize),
-                            imageVector = Icons.Default.Cake,
+                            imageVector = LocalResources.current.cake,
                             contentDescription = LocalStrings.current.userAccountAge,
                         )
                         Text(
@@ -215,7 +211,7 @@ fun UserHeader(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Info,
+                                imageVector = LocalResources.current.info,
                                 contentDescription = LocalStrings.current.moreInfo,
                             )
                         }

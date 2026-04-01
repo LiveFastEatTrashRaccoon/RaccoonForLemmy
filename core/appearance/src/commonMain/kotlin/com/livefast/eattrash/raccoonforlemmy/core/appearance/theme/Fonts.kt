@@ -2,13 +2,12 @@ package com.livefast.eattrash.raccoonforlemmy.core.appearance.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiFontFamily
-import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 /*
  * Reference:
@@ -16,12 +15,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
  */
 @Composable
 fun UiFontFamily.toTypography(): Typography {
-    val coreResources = remember { getCoreResources() }
     val fontFamily =
         when (this) {
-            UiFontFamily.NotoSans -> coreResources.notoSans
-            UiFontFamily.AtkinsonHyperlegible -> coreResources.atkinsonHyperlegible
-            UiFontFamily.Poppins -> coreResources.poppins
+            UiFontFamily.NotoSans -> LocalResources.current.notoSans
+            UiFontFamily.AtkinsonHyperlegible -> LocalResources.current.atkinsonHyperlegible
+            UiFontFamily.Poppins -> LocalResources.current.poppins
             else -> FontFamily.Default
         }
     return Typography(

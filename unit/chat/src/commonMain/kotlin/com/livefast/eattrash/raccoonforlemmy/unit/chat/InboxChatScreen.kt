@@ -20,9 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -69,6 +66,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.TextFormattin
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
@@ -164,7 +162,7 @@ fun InboxChatScreen(otherUserId: Long, modifier: Modifier = Modifier) {
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            imageVector = LocalResources.current.arrowBack,
                             contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
@@ -240,7 +238,7 @@ fun InboxChatScreen(otherUserId: Long, modifier: Modifier = Modifier) {
                     onSelectImage = {
                         openImagePicker = true
                     },
-                    lastActionIcon = Icons.AutoMirrored.Default.Send,
+                    lastActionIcon = LocalResources.current.send,
                     lastActionDescription = LocalStrings.current.actionSend,
                     onLastAction = {
                         model.reduce(

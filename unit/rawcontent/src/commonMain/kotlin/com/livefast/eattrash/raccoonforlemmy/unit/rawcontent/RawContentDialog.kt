@@ -12,10 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Percent
-import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
@@ -204,7 +201,7 @@ fun RawContentDialog(
                                 ) {
                                     Icon(
                                         modifier = Modifier.size(IconSize.m).padding(1.5.dp),
-                                        imageVector = Icons.Default.Schedule,
+                                        imageVector = LocalResources.current.schedule,
                                         contentDescription = LocalStrings.current.creationDate,
                                         tint = fullColor,
                                     )
@@ -229,7 +226,7 @@ fun RawContentDialog(
                             ) {
                                 Icon(
                                     modifier = Modifier.size(IconSize.m).padding(0.25.dp),
-                                    imageVector = Icons.Default.Update,
+                                    imageVector = LocalResources.current.update,
                                     contentDescription = LocalStrings.current.updateDate,
                                     tint = fullColor,
                                 )
@@ -293,7 +290,7 @@ fun RawContentDialog(
                                 val percentage = "${(percVote * 100).toInt()}"
                                 Icon(
                                     modifier = Modifier.size(IconSize.m).padding(end = 3.5.dp),
-                                    imageVector = Icons.Default.Percent,
+                                    imageVector = LocalResources.current.percent,
                                     contentDescription = LocalStrings.current.settingsVoteFormatPercentage,
                                     tint = fullColor,
                                 )

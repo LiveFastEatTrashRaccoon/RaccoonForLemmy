@@ -15,13 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Badge
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.SettingsApplications
-import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.filled.TextFormat
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
@@ -72,6 +65,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInf
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityVisibilityType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
@@ -168,7 +162,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -195,7 +189,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
                                     Modifier.rotate(iconRotate)
                                 },
                             ),
-                        imageVector = Icons.Default.Sync,
+                        imageVector = LocalResources.current.sync,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )
@@ -248,7 +242,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
             ) {
                 if (communityId == null) {
                     SettingsHeader(
-                        icon = Icons.Default.Badge,
+                        icon = LocalResources.current.info,
                         title = LocalStrings.current.communityDetailInfo,
                     )
 
@@ -264,7 +258,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
                 }
 
                 SettingsHeader(
-                    icon = Icons.Default.Image,
+                    icon = LocalResources.current.image,
                     title = LocalStrings.current.settingsTitlePictures,
                 )
 
@@ -294,7 +288,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
                 )
 
                 SettingsHeader(
-                    icon = Icons.Default.TextFormat,
+                    icon = LocalResources.current.abc,
                     title = LocalStrings.current.editCommunityHeaderTextual,
                 )
 
@@ -317,7 +311,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
                 )
 
                 SettingsHeader(
-                    icon = Icons.Default.SettingsApplications,
+                    icon = LocalResources.current.settingsApplications,
                     title = LocalStrings.current.navigationSettings,
                 )
 

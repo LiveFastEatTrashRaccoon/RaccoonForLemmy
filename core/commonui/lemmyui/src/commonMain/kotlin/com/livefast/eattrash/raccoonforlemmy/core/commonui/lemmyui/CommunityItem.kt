@@ -7,13 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Group
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.AddCircleOutline
-import androidx.compose.material.icons.outlined.Pending
-import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,6 +34,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.buildAnnotatedStringWithHighlights
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -145,7 +139,7 @@ fun CommunityItem(
                         color = ancillaryColor,
                     )
                     Icon(
-                        imageVector = Icons.Default.Group,
+                        imageVector = LocalResources.current.group,
                         contentDescription = "",
                         tint = ancillaryColor,
                     )
@@ -155,7 +149,7 @@ fun CommunityItem(
                 if (community.favorite) {
                     Icon(
                         modifier = Modifier.size(IconSize.s),
-                        imageVector = Icons.Default.Star,
+                        imageVector = LocalResources.current.starFill,
                         contentDescription = "",
                         tint = ancillaryColor,
                     )
@@ -173,15 +167,15 @@ fun CommunityItem(
                         imageVector =
                         when (community.subscribed) {
                             true -> {
-                                Icons.Outlined.RemoveCircleOutline
+                                LocalResources.current.doNotDisturbOn
                             }
 
                             false -> {
-                                Icons.Outlined.AddCircleOutline
+                                LocalResources.current.addCircle
                             }
 
                             else -> {
-                                Icons.Outlined.Pending
+                                LocalResources.current.pending
                             }
                         },
                         contentDescription = "",
@@ -206,7 +200,7 @@ fun CommunityItem(
                     },
                 ) {
                     Icon(
-                        imageVector = Icons.Default.MoreVert,
+                        imageVector = LocalResources.current.moreVert,
                         contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )

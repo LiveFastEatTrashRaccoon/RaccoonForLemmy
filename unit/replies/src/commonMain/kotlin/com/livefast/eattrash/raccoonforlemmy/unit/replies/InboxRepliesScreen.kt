@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MarkChatRead
-import androidx.compose.material.icons.filled.MarkChatUnread
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -44,6 +41,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSectio
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
@@ -187,8 +185,8 @@ fun InboxRepliesScreen(modifier: Modifier = Modifier) {
                                 swipeContent = {
                                     val icon =
                                         when {
-                                            reply.read -> Icons.Default.MarkChatUnread
-                                            else -> Icons.Default.MarkChatRead
+                                            reply.read -> LocalResources.current.markChatUnread
+                                            else -> LocalResources.current.markChatRead
                                         }
                                     Icon(
                                         imageVector = icon,

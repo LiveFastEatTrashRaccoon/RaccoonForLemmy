@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,6 +45,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsIntVa
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsSwitchRow
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import com.livefast.eattrash.raccoonforlemmy.unit.ban.di.BanUserMviModelParams
@@ -113,7 +111,7 @@ fun BanUserScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = LocalResources.current.close,
                             contentDescription = LocalStrings.current.buttonClose,
                         )
                     }
@@ -139,7 +137,7 @@ fun BanUserScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.Send,
+                            imageVector = LocalResources.current.send,
                             contentDescription = LocalStrings.current.actionSend,
                         )
                     }

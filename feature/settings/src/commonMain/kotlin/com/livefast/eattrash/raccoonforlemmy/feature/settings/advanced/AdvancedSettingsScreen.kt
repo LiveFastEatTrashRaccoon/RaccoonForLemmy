@@ -11,12 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Article
-import androidx.compose.material.icons.filled.DisplaySettings
-import androidx.compose.material.icons.filled.Photo
-import androidx.compose.material.icons.filled.Science
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -60,7 +54,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SliderBottomSh
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconVariant
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.getPrettyDuration
@@ -97,7 +91,6 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
     val errorMessage = LocalStrings.current.messageGenericError
     val scope = rememberCoroutineScope()
     val fileSystemManager = remember { getFileSystemManager() }
-    val coreResources = remember { getCoreResources() }
     var languageDialogOpened by remember { mutableStateOf(false) }
     var fileInputOpened by remember { mutableStateOf(false) }
     var settingsContent by remember { mutableStateOf<String?>(null) }
@@ -148,7 +141,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -179,7 +172,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
             ) {
                 SettingsHeader(
                     title = LocalStrings.current.settingsTitleDisplay,
-                    icon = Icons.Default.DisplaySettings,
+                    icon = LocalResources.current.displaySettings,
                 )
                 // navigation bar titles
                 SettingsSwitchRow(
@@ -218,7 +211,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
 
                 SettingsHeader(
                     title = LocalStrings.current.settingsTitleReading,
-                    icon = Icons.AutoMirrored.Default.Article,
+                    icon = LocalResources.current.article,
                 )
                 if (uiState.isLogged) {
                     // visually differentiate read posts
@@ -419,7 +412,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
 
                 SettingsHeader(
                     title = LocalStrings.current.settingsTitlePictures,
-                    icon = Icons.Default.Photo,
+                    icon = LocalResources.current.image,
                 )
                 // image loading
                 SettingsSwitchRow(
@@ -448,7 +441,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
 
                 SettingsHeader(
                     title = LocalStrings.current.settingsTitleExperimental,
-                    icon = Icons.Default.Science,
+                    icon = LocalResources.current.science,
                 )
                 SettingsRow(
                     title = LocalStrings.current.settingsItemConfigureBottomNavigationBar,
@@ -633,8 +626,8 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
                     leadingContent = {
                         val painter =
                             when (value) {
-                                AppIconVariant.Classical -> coreResources.appIconClassical
-                                else -> coreResources.appIconDefault
+                                AppIconVariant.Classical -> LocalResources.current.appIconClassical
+                                else -> LocalResources.current.appIconDefault
                             }
                         Image(
                             modifier = Modifier.size(IconSize.m),

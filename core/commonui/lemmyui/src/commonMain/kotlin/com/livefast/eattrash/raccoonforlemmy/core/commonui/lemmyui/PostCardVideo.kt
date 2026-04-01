@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
@@ -27,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.VideoPlayerPreview
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 @Composable
 fun PostCardVideo(
@@ -74,7 +73,7 @@ fun PostCardVideo(
                 },
             ) {
                 Icon(
-                    imageVector = Icons.Default.PlayArrow,
+                    imageVector = LocalResources.current.playCircle,
                     contentDescription = LocalStrings.current.actionOpenFullScreen,
                 )
             }
