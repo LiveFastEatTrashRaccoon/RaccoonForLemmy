@@ -90,4 +90,7 @@ dependencies {
     implementation(projects.core.navigation)
     implementation(projects.core.persistence)
     implementation(projects.core.resources)
+
+    debugImplementation(libs.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

@@ -13,6 +13,7 @@ kotlin {
 
                 implementation(projects.core.appearance)
                 implementation(projects.core.l10n)
+                implementation(projects.core.resources)
                 implementation(projects.core.utils)
             }
         }

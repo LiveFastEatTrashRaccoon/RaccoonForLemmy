@@ -18,6 +18,7 @@ kotlin {
             implementation(projects.core.l10n)
             implementation(projects.core.persistence)
             implementation(projects.core.preferences)
+            implementation(projects.core.resources)
             implementation(projects.domain.lemmy.data)
         }
     }

@@ -11,6 +11,7 @@ kotlin {
                 implementation(projects.core.l10n)
                 implementation(projects.core.utils)
                 implementation(projects.core.persistence)
+                implementation(projects.core.resources)
             }
         }
     }
