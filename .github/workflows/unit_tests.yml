@@ -40,13 +40,13 @@ jobs:
         run: ./gradlew test
 
       - name: Generate code coverage
-        run: ./gradlew koverXmlReport
+        run: ./gradlew koverXmlReportAndroid
 
       - name: Upload coverage
         uses: codecov/codecov-action@v6
         with:
           fail_ci_if_error: false
-          files: ./shared/build/reports/kover/report.xml
+          files: ./shared/build/reports/kover/reportAndroid.xml
           flags: unittests
           name: raccoon4lemmy
           token: ${{ secrets.CODECOV_TOKEN }}
