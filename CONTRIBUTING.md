@@ -360,7 +360,7 @@ make sure any new code is compliant with the rules.
 
 Unit test are targeted as a single unit of code: the test class will have the same name of the
 component under test, followed by the `Test` suffix and will be placed in the same package, within
-the `androidUnitTest` source set. The tests will be platform specific for now, since multi-platform
+the `androidHostTest` source set. The tests will be platform specific for now, since multi-platform
 tests under the `commonTest` set require some additional setup and a considerable amount of extra
 effort.
 
