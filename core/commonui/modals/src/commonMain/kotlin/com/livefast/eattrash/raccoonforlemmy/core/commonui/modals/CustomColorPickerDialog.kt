@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +37,7 @@ import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,7 +119,7 @@ fun CustomColorPickerDialog(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Edit,
+                            imageVector = LocalResources.current.edit,
                             contentDescription = LocalStrings.current.postActionEdit,
                         )
                     }

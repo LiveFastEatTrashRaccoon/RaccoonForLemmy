@@ -59,6 +59,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInts
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getAccountRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.getAppConfigStore
+import com.livefast.eattrash.raccoonforlemmy.core.resources.ProvideResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
@@ -258,78 +259,80 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
         ProvideStrings(
             lang = langState,
         ) {
-            ProvideCustomUriHandler {
-                CompositionLocalProvider(
-                    LocalDensity provides
-                        Density(
-                            density = LocalDensity.current.density,
-                            fontScale = uiFontScale,
-                        ),
-                ) {
-
-                    ModalNavigationDrawer(
-                        modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .onGloballyPositioned {
-                                    screenWidth = it.size.toSize().width
-                                },
-                        drawerState = drawerState,
-                        gesturesEnabled = drawerGesturesEnabled,
-                        drawerContent = {
-                            ModalDrawerSheet {
-                                ModalDrawerContent()
-                            }
-                        },
+            ProvideResources {
+                ProvideCustomUriHandler {
+                    CompositionLocalProvider(
+                        LocalDensity provides
+                            Density(
+                                density = LocalDensity.current.density,
+                                fontScale = uiFontScale,
+                            ),
                     ) {
-                        val canPop by drawerCoordinator.drawerOpened.collectAsState()
-                        NavigationBackHandler(
-                            state = navState,
-                            isBackEnabled = canPop,
-                            onBackCompleted = {
-                                scope.launch {
-                                    drawerCoordinator.toggleDrawer()
-                                }
-                            },
-                        )
-                        NavHost(
-                            navController = navController,
-                            startDestination = Destination.Main,
-                        ) {
-                            buildNavigationGraph()
-                        }
-                    }
 
-                    // scrim for draggable side menu
-                    AnimatedVisibility(
-                        modifier = Modifier.fillMaxSize(),
-                        visible = sideMenuOpened,
-                    ) {
-                        Surface(
+                        ModalNavigationDrawer(
                             modifier =
                                 Modifier
-                                    .onClick(
-                                        onClick = {
-                                            navigationCoordinator.closeSideMenu()
-                                        },
-                                    ),
-                            color = DrawerDefaults.scrimColor,
+                                    .fillMaxSize()
+                                    .onGloballyPositioned {
+                                        screenWidth = it.size.toSize().width
+                                    },
+                            drawerState = drawerState,
+                            gesturesEnabled = drawerGesturesEnabled,
+                            drawerContent = {
+                                ModalDrawerSheet {
+                                    ModalDrawerContent()
+                                }
+                            },
                         ) {
-                            Box(modifier = Modifier.fillMaxSize())
+                            val canPop by drawerCoordinator.drawerOpened.collectAsState()
+                            NavigationBackHandler(
+                                state = navState,
+                                isBackEnabled = canPop,
+                                onBackCompleted = {
+                                    scope.launch {
+                                        drawerCoordinator.toggleDrawer()
+                                    }
+                                },
+                            )
+                            NavHost(
+                                navController = navController,
+                                startDestination = Destination.Main,
+                            ) {
+                                buildNavigationGraph()
+                            }
                         }
-                    }
 
-                    // draggable side menu
-                    DraggableSideMenu(
-                        availableWidth = screenWidth.toLocalDp(),
-                        opened = sideMenuOpened,
-                        onDismiss = {
-                            navigationCoordinator.closeSideMenu()
-                        },
-                        content = {
-                            sideMenuContent?.invoke()
-                        },
-                    )
+                        // scrim for draggable side menu
+                        AnimatedVisibility(
+                            modifier = Modifier.fillMaxSize(),
+                            visible = sideMenuOpened,
+                        ) {
+                            Surface(
+                                modifier =
+                                    Modifier
+                                        .onClick(
+                                            onClick = {
+                                                navigationCoordinator.closeSideMenu()
+                                            },
+                                        ),
+                                color = DrawerDefaults.scrimColor,
+                            ) {
+                                Box(modifier = Modifier.fillMaxSize())
+                            }
+                        }
+
+                        // draggable side menu
+                        DraggableSideMenu(
+                            availableWidth = screenWidth.toLocalDp(),
+                            opened = sideMenuOpened,
+                            onDismiss = {
+                                navigationCoordinator.closeSideMenu()
+                            },
+                            content = {
+                                sideMenuContent?.invoke()
+                            },
+                        )
+                    }
                 }
             }
         }

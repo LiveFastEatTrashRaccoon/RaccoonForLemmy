@@ -1,12 +1,10 @@
 package com.livefast.eattrash.raccoonforlemmy.core.utils
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 sealed interface VoteAction {
     data object UpVote : VoteAction
@@ -17,8 +15,8 @@ sealed interface VoteAction {
 @Composable
 fun VoteAction.toIcon() =
     when (this) {
-        VoteAction.DownVote -> Icons.Default.ArrowDownward
-        VoteAction.UpVote -> Icons.Default.ArrowUpward
+        VoteAction.DownVote -> LocalResources.current.arrowCircleDown
+        VoteAction.UpVote -> LocalResources.current.arrowCircleUp
     }
 
 @Composable

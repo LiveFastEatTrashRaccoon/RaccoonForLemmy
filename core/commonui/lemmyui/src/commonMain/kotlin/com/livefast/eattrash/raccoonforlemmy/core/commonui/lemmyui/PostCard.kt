@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,6 +48,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
@@ -489,7 +488,7 @@ private fun CompactPost(
                             minHeight = Dp.Unspecified,
                             loadButtonContent = @Composable {
                                 Icon(
-                                    imageVector = Icons.Default.Download,
+                                    imageVector = LocalResources.current.download,
                                     contentDescription = LocalStrings.current.actionDownload,
                                 )
                             },

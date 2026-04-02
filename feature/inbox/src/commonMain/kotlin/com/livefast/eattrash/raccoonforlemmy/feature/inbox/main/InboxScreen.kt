@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DoneAll
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,6 +38,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.InboxMessagesScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.replies.InboxRepliesScreen
@@ -92,7 +90,7 @@ fun InboxScreen(modifier: Modifier = Modifier, model: InboxMviModel = getViewMod
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Menu,
+                            imageVector = LocalResources.current.menu,
                             contentDescription = LocalStrings.current.actionOpenSideMenu,
                         )
                     }
@@ -130,7 +128,7 @@ fun InboxScreen(modifier: Modifier = Modifier, model: InboxMviModel = getViewMod
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.DoneAll,
+                                imageVector = LocalResources.current.doneAll,
                                 contentDescription = LocalStrings.current.actionMarkAllAsRead,
                             )
                         }

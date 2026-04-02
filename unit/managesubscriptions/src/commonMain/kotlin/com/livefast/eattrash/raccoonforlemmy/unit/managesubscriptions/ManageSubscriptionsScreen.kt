@@ -16,10 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -69,6 +65,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.Destination
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -140,7 +137,7 @@ fun ManageSubscriptionsScreen(modifier: Modifier = Modifier) {
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            imageVector = LocalResources.current.arrowBack,
                             contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
@@ -164,7 +161,7 @@ fun ManageSubscriptionsScreen(modifier: Modifier = Modifier) {
                     buildList {
                         this +=
                             FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ExpandLess,
+                                icon = LocalResources.current.unfoldLess,
                                 text = LocalStrings.current.actionBackToTop,
                                 onSelected = {
                                     scope.launch {
@@ -248,7 +245,7 @@ fun ManageSubscriptionsScreen(modifier: Modifier = Modifier) {
                                 },
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.AddCircle,
+                                    imageVector = LocalResources.current.addCircle,
                                     contentDescription = LocalStrings.current.buttonAdd,
                                 )
                             }

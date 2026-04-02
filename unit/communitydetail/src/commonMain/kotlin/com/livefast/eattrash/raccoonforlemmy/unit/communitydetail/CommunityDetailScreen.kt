@@ -19,20 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.ClearAll
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.filled.SyncDisabled
-import androidx.compose.material.icons.outlined.AddCircleOutline
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Pending
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -101,6 +87,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
@@ -270,9 +257,9 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                             Icon(
                                 imageVector =
                                 when (uiState.community.subscribed) {
-                                    true -> Icons.Outlined.CheckCircle
-                                    false -> Icons.Outlined.AddCircleOutline
-                                    else -> Icons.Outlined.Pending
+                                    true -> LocalResources.current.checkCircle
+                                    false -> LocalResources.current.addCircle
+                                    else -> LocalResources.current.pending
                                 },
                                 contentDescription =
                                 when (uiState.community.subscribed) {
@@ -428,7 +415,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.MoreVert,
+                                imageVector = LocalResources.current.moreVert,
                                 contentDescription = LocalStrings.current.actionOpenOptionMenu,
                             )
                         }
@@ -565,7 +552,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -591,7 +578,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                         if (uiState.zombieModeActive) {
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.SyncDisabled,
+                                    icon = LocalResources.current.syncDisabled,
                                     text = LocalStrings.current.actionDeactivateZombieMode,
                                     onSelected = {
                                         model.reduce(CommunityDetailMviModel.Intent.PauseZombieMode)
@@ -600,7 +587,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                         } else {
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.Sync,
+                                    icon = LocalResources.current.sync,
                                     text = LocalStrings.current.actionActivateZombieMode,
                                     onSelected = {
                                         model.reduce(
@@ -611,7 +598,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                         }
                         this +=
                             FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ExpandLess,
+                                icon = LocalResources.current.unfoldLess,
                                 text = LocalStrings.current.actionBackToTop,
                                 onSelected = {
                                     scope.launch {
@@ -626,7 +613,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                         if (uiState.isLogged && !isOnOtherInstance) {
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.ClearAll,
+                                    icon = LocalResources.current.clearAll,
                                     text = LocalStrings.current.actionClearRead,
                                     onSelected = {
                                         model.reduce(CommunityDetailMviModel.Intent.ClearRead)
@@ -641,7 +628,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                                 )
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.Create,
+                                    icon = LocalResources.current.add,
                                     text = LocalStrings.current.actionCreatePost,
                                     onSelected = {
                                         mainRouter.openCreatePost(
@@ -839,7 +826,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                                         SwipeAction(
                                             swipeContent = {
                                                 Icon(
-                                                    imageVector = Icons.AutoMirrored.Default.Reply,
+                                                    imageVector = LocalResources.current.reply,
                                                     contentDescription = LocalStrings.current.actionReply,
                                                     tint = Color.White,
                                                 )
@@ -856,7 +843,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                                         SwipeAction(
                                             swipeContent = {
                                                 Icon(
-                                                    imageVector = Icons.Default.Bookmark,
+                                                    imageVector = LocalResources.current.bookmark,
                                                     contentDescription =
                                                     LocalStrings.current.actionAddToBookmarks,
                                                     tint = Color.White,
@@ -876,7 +863,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                                         SwipeAction(
                                             swipeContent = {
                                                 Icon(
-                                                    imageVector = Icons.Default.Edit,
+                                                    imageVector = LocalResources.current.edit,
                                                     contentDescription = LocalStrings.current.postActionEdit,
                                                     tint = Color.White,
                                                 )

@@ -9,11 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Preview
-import androidx.compose.material.icons.filled.Style
-import androidx.compose.material.icons.filled.TextFormat
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,6 +49,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,7 +88,7 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -112,7 +108,7 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxSize().verticalScroll(scrollState),
             ) {
                 SettingsHeader(
-                    icon = Icons.Default.TextFormat,
+                    icon = LocalResources.current.abc,
                     title = LocalStrings.current.settingsConfigureText,
                 )
 
@@ -168,7 +164,7 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
                 )
 
                 SettingsHeader(
-                    icon = Icons.Default.Style,
+                    icon = LocalResources.current.styleFill,
                     title = LocalStrings.current.settingsConfigureCustomizations,
                 )
 
@@ -264,7 +260,7 @@ fun ConfigureContentViewScreen(modifier: Modifier = Modifier) {
                 )
 
                 SettingsHeader(
-                    icon = Icons.Default.Preview,
+                    icon = LocalResources.current.preview,
                     title = LocalStrings.current.createPostTabPreview,
                 )
                 // preview

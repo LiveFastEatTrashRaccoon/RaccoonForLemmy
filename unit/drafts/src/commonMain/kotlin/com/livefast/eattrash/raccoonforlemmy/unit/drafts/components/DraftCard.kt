@@ -9,11 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Article
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,6 +44,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardTitle
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftType
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.toIso8601Timestamp
@@ -93,8 +89,8 @@ fun DraftCard(
                     ) {
                         val imageVector =
                             when (draft.type) {
-                                DraftType.Comment -> Icons.AutoMirrored.Default.Reply
-                                DraftType.Post -> Icons.AutoMirrored.Default.Article
+                                DraftType.Comment -> LocalResources.current.reply
+                                DraftType.Post -> LocalResources.current.article
                             }
                         Icon(
                             imageVector = imageVector,
@@ -165,7 +161,7 @@ private fun DraftFooter(
             ) {
                 Icon(
                     modifier = Modifier.size(IconSize.m).padding(1.5.dp),
-                    imageVector = Icons.Default.Schedule,
+                    imageVector = LocalResources.current.schedule,
                     contentDescription = LocalStrings.current.creationDate,
                     tint = ancillaryColor,
                 )
@@ -194,7 +190,7 @@ private fun DraftFooter(
                     },
                 ) {
                     Icon(
-                        imageVector = Icons.Default.MoreHoriz,
+                        imageVector = LocalResources.current.moreHoriz,
                         contentDescription = LocalStrings.current.actionOpenOptionMenu,
                         tint = ancillaryColor,
                     )

@@ -13,6 +13,8 @@ internal fun Project.configureAndroidTest(extension: KotlinMultiplatformExtensio
                 "androidHostTest" -> {
                     dependencies {
                         implementation(libs.findLibrary("kotlinx-coroutines-test").dependency)
+                        implementation(libs.findLibrary("compose-ui-test").dependency)
+                        implementation(libs.findLibrary("compose-ui-test-manifest").dependency)
                         implementation(kotlin("test-junit"))
                         implementation(libs.findLibrary("mockk").dependency)
                         implementation(libs.findLibrary("turbine").dependency)

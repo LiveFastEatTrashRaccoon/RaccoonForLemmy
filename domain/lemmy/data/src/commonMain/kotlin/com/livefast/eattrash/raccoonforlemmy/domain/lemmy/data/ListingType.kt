@@ -1,11 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Cottage
-import androidx.compose.material.icons.filled.Public
 import androidx.compose.runtime.Composable
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 sealed interface ListingType {
     data object All : ListingType
@@ -29,10 +26,11 @@ fun Int.toListingType() = when (this) {
     else -> ListingType.Local
 }
 
+@Composable
 fun ListingType.toIcon() = when (this) {
-    ListingType.Local -> Icons.Default.Cottage
-    ListingType.Subscribed -> Icons.Default.Book
-    else -> Icons.Default.Public
+    ListingType.Local -> LocalResources.current.cottage
+    ListingType.Subscribed -> LocalResources.current.book
+    else -> LocalResources.current.public
 }
 
 @Composable

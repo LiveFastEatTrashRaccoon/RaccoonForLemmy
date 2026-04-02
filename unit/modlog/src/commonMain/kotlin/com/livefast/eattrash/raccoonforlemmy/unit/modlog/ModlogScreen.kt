@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -40,6 +38,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ModlogItem
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.components.AdminPurgeCommentItem
 import com.livefast.eattrash.raccoonforlemmy.unit.modlog.components.AdminPurgeCommunityItem
@@ -103,7 +102,7 @@ fun ModlogScreen(modifier: Modifier = Modifier, communityId: Long? = null) {
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            imageVector = LocalResources.current.arrowBack,
                             contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }

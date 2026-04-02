@@ -16,3 +16,13 @@ kotlin {
         }
     }
 }
+
+spotless {
+    kotlin {
+        target("**/ProvideResources.kt")
+        suppressLintsFor {
+            step = "ktlint"
+            shortCode = "compose:compositionlocal-allowlist"
+        }
+    }
+}

@@ -14,10 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -67,6 +63,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
@@ -173,7 +170,7 @@ fun CreateCommentScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = LocalResources.current.close,
                             contentDescription = LocalStrings.current.buttonClose,
                         )
                     }
@@ -202,7 +199,7 @@ fun CreateCommentScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Save,
+                                imageVector = LocalResources.current.save,
                                 contentDescription = LocalStrings.current.actionSave,
                             )
                         }
@@ -214,7 +211,7 @@ fun CreateCommentScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.Send,
+                            imageVector = LocalResources.current.send,
                             contentDescription = LocalStrings.current.actionSend,
                         )
                     }

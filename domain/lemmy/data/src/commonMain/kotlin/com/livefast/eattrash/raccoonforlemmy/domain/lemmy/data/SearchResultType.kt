@@ -1,15 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Article
-import androidx.compose.material.icons.automirrored.filled.Message
-import androidx.compose.material.icons.filled.AllInclusive
-import androidx.compose.material.icons.filled.AlternateEmail
-import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 sealed interface SearchResultType {
     data object All : SearchResultType
@@ -25,13 +19,14 @@ sealed interface SearchResultType {
     data object Urls : SearchResultType
 }
 
+@Composable
 fun SearchResultType.toIcon(): ImageVector = when (this) {
-    SearchResultType.All -> Icons.Default.AllInclusive
-    SearchResultType.Comments -> Icons.AutoMirrored.Default.Message
-    SearchResultType.Communities -> Icons.Default.Groups
-    SearchResultType.Posts -> Icons.AutoMirrored.Default.Article
-    SearchResultType.Users -> Icons.Default.Person
-    SearchResultType.Urls -> Icons.Default.AlternateEmail
+    SearchResultType.All -> LocalResources.current.allInclusive
+    SearchResultType.Comments -> LocalResources.current.comment
+    SearchResultType.Communities -> LocalResources.current.groups
+    SearchResultType.Posts -> LocalResources.current.article
+    SearchResultType.Users -> LocalResources.current.person
+    SearchResultType.Urls -> LocalResources.current.alternateEmail
 }
 
 @Composable

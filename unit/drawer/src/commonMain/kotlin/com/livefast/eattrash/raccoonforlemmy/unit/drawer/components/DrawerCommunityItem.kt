@@ -4,9 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
@@ -20,6 +17,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.PlaceholderImage
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 @Composable
@@ -85,7 +83,7 @@ internal fun DrawerCommunityItem(
                         .size(IconSize.s)
                         .padding(start = 1.dp)
                         .onClick(onClick = { onToggleFavorite?.invoke() }),
-                    imageVector = if (favorite) Icons.Default.Star else Icons.Default.StarBorder,
+                    imageVector = if (favorite) LocalResources.current.starFill else LocalResources.current.star,
                     contentDescription = "",
                     tint =
                     MaterialTheme.colorScheme.onBackground.let {

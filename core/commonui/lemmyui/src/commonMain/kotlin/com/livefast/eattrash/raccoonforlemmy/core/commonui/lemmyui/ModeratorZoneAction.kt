@@ -1,12 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ListAlt
-import androidx.compose.material.icons.filled.Report
-import androidx.compose.material.icons.filled.Shield
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 sealed interface ModeratorZoneAction {
     data object GlobalModLog : ModeratorZoneAction
@@ -25,7 +22,7 @@ fun ModeratorZoneAction.toReadableName(): String = when (this) {
 
 @Composable
 fun ModeratorZoneAction.toIcon(): ImageVector = when (this) {
-    ModeratorZoneAction.GlobalModLog -> Icons.AutoMirrored.Default.ListAlt
-    ModeratorZoneAction.GlobalReports -> Icons.Default.Report
-    ModeratorZoneAction.ModeratedContents -> Icons.Default.Shield
+    ModeratorZoneAction.GlobalModLog -> LocalResources.current.listAlt
+    ModeratorZoneAction.GlobalReports -> LocalResources.current.report
+    ModeratorZoneAction.ModeratedContents -> LocalResources.current.shield
 }

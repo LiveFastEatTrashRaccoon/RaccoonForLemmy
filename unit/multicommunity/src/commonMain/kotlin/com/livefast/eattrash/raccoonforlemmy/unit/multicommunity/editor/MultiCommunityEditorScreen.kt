@@ -18,9 +18,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -59,6 +56,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchFiel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import com.livefast.eattrash.raccoonforlemmy.unit.multicommunity.di.MultiCommunityEditorMviModelParams
@@ -104,7 +102,7 @@ fun MultiCommunityEditorScreen(modifier: Modifier = Modifier, communityId: Long?
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            imageVector = LocalResources.current.arrowBack,
                             contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
@@ -117,7 +115,7 @@ fun MultiCommunityEditorScreen(modifier: Modifier = Modifier, communityId: Long?
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.CheckCircle,
+                            imageVector = LocalResources.current.checkCircle,
                             contentDescription = LocalStrings.current.buttonConfirm,
                         )
                     }

@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +39,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableName
@@ -189,7 +188,7 @@ fun ModalDrawerContent(modifier: Modifier = Modifier) {
                             item {
                                 DrawerShortcut(
                                     title = LocalStrings.current.navigationSettings,
-                                    icon = Icons.Default.Settings,
+                                    icon = LocalResources.current.settingsFill,
                                     onSelect = {
                                         scope.launch {
                                             focusManager.clearFocus()
@@ -322,7 +321,7 @@ fun ModalDrawerContent(modifier: Modifier = Modifier) {
                 item {
                     DrawerShortcut(
                         title = LocalStrings.current.navigationSettings,
-                        icon = Icons.Default.Settings,
+                        icon = LocalResources.current.settingsFill,
                         onSelect = {
                             scope.launch {
                                 focusManager.clearFocus()

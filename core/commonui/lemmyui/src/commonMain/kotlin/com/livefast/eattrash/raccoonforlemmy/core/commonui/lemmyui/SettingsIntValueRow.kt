@@ -4,9 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircleOutline
-import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +15,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FeedbackButton
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 @Composable
 fun SettingsIntValueRow(
@@ -57,7 +55,7 @@ fun SettingsIntValueRow(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             FeedbackButton(
-                imageVector = Icons.Default.RemoveCircleOutline,
+                imageVector = LocalResources.current.doNotDisturbOn,
                 tintColor = MaterialTheme.colorScheme.secondary,
                 contentDescription = LocalStrings.current.actionDecrement,
                 onClick = onDecrement,
@@ -73,7 +71,7 @@ fun SettingsIntValueRow(
                 color = fullColor,
             )
             FeedbackButton(
-                imageVector = Icons.Default.AddCircleOutline,
+                imageVector = LocalResources.current.addCircle,
                 tintColor = MaterialTheme.colorScheme.secondary,
                 contentDescription = LocalStrings.current.actionIncrement,
                 onClick = onIncrement,

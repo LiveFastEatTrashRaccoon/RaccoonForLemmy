@@ -17,12 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -76,6 +70,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
@@ -183,7 +178,7 @@ fun FilteredContentsScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -196,7 +191,7 @@ fun FilteredContentsScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Menu,
+                                imageVector = LocalResources.current.menu,
                                 contentDescription = LocalStrings.current.actionOpenSideMenu,
                             )
                         }
@@ -266,7 +261,7 @@ fun FilteredContentsScreen(
                     buildList {
                         this +=
                             FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ExpandLess,
+                                icon = LocalResources.current.unfoldLess,
                                 text = LocalStrings.current.actionBackToTop,
                                 onSelected = {
                                     scope.launch {
@@ -429,7 +424,7 @@ fun FilteredContentsScreen(
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.AutoMirrored.Default.Reply,
+                                                imageVector = LocalResources.current.reply,
                                                 contentDescription = LocalStrings.current.actionReply,
                                                 tint = Color.White,
                                             )
@@ -444,7 +439,7 @@ fun FilteredContentsScreen(
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.Default.Bookmark,
+                                                imageVector = LocalResources.current.bookmark,
                                                 contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                 tint = Color.White,
                                             )
@@ -766,7 +761,7 @@ fun FilteredContentsScreen(
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.AutoMirrored.Default.Reply,
+                                                imageVector = LocalResources.current.reply,
                                                 contentDescription = LocalStrings.current.actionReply,
                                                 tint = Color.White,
                                             )
@@ -784,7 +779,7 @@ fun FilteredContentsScreen(
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.Default.Bookmark,
+                                                imageVector = LocalResources.current.bookmark,
                                                 contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                 tint = Color.White,
                                             )

@@ -15,10 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Report
-import androidx.compose.material.icons.filled.ReportOff
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -62,6 +58,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentReportModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostReportModel
@@ -118,7 +115,7 @@ fun ReportListScreen(modifier: Modifier = Modifier, communityId: Long? = null) {
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            imageVector = LocalResources.current.arrowBack,
                             contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
@@ -248,8 +245,8 @@ fun ReportListScreen(modifier: Modifier = Modifier, communityId: Long? = null) {
                                             swipeContent = {
                                                 val icon =
                                                     when {
-                                                        report.resolved -> Icons.Default.Report
-                                                        else -> Icons.Default.ReportOff
+                                                        report.resolved -> LocalResources.current.report
+                                                        else -> LocalResources.current.reportOff
                                                     }
                                                 Icon(
                                                     imageVector = icon,
@@ -363,8 +360,8 @@ fun ReportListScreen(modifier: Modifier = Modifier, communityId: Long? = null) {
                                             swipeContent = {
                                                 val icon =
                                                     when {
-                                                        report.resolved -> Icons.Default.Report
-                                                        else -> Icons.Default.ReportOff
+                                                        report.resolved -> LocalResources.current.report
+                                                        else -> LocalResources.current.reportOff
                                                     }
                                                 Icon(
                                                     imageVector = icon,

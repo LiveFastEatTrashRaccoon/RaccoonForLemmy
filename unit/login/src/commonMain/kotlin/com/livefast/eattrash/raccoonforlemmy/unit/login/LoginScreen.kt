@@ -14,12 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.HelpOutline
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -58,6 +52,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInset
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.autofill
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
@@ -117,7 +112,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            imageVector = LocalResources.current.arrowBack,
                             contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
@@ -129,7 +124,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.HelpOutline,
+                            imageVector = LocalResources.current.support,
                             contentDescription = LocalStrings.current.moreInfo,
                         )
                     }
@@ -209,7 +204,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                                         )
                                     },
                                 ),
-                                imageVector = Icons.Default.Clear,
+                                imageVector = LocalResources.current.cancel,
                                 contentDescription = LocalStrings.current.actionClear,
                             )
                         }
@@ -311,9 +306,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                             Icon(
                                 imageVector =
                                 if (transformation == VisualTransformation.None) {
-                                    Icons.Default.VisibilityOff
+                                    LocalResources.current.visibilityOff
                                 } else {
-                                    Icons.Default.Visibility
+                                    LocalResources.current.visibility
                                 },
                                 contentDescription = LocalStrings.current.actionToggleVisibility,
                             )

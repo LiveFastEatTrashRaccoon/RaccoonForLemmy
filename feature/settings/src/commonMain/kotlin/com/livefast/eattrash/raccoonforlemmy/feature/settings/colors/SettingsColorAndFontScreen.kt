@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -69,6 +66,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -147,7 +145,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -345,7 +343,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
                         label = LocalStrings.current.settingsColorCustom,
                         trailingContent = {
                             Icon(
-                                imageVector = Icons.Default.ChevronRight,
+                                imageVector = LocalResources.current.chevronForward,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onBackground,
                             )
@@ -461,7 +459,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
                         label = LocalStrings.current.settingsColorCustom,
                         trailingContent = {
                             Icon(
-                                imageVector = Icons.Default.ChevronRight,
+                                imageVector = LocalResources.current.chevronForward,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.onBackground,
                             )

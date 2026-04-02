@@ -15,12 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -75,6 +69,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
@@ -244,7 +239,7 @@ fun CreatePostScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = LocalResources.current.close,
                             contentDescription = LocalStrings.current.buttonClose,
                         )
                     }
@@ -268,7 +263,7 @@ fun CreatePostScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Save,
+                                imageVector = LocalResources.current.save,
                                 contentDescription = LocalStrings.current.actionSave,
                             )
                         }
@@ -279,7 +274,7 @@ fun CreatePostScreen(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.Send,
+                            imageVector = LocalResources.current.send,
                             contentDescription = LocalStrings.current.actionSend,
                         )
                     }
@@ -386,7 +381,7 @@ fun CreatePostScreen(
                     },
                     trailingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Groups,
+                            imageVector = LocalResources.current.groups,
                             contentDescription = null,
                         )
                     },
@@ -500,7 +495,7 @@ fun CreatePostScreen(
                                 openImagePicker = true
                             },
                         ),
-                        imageVector = Icons.Default.Image,
+                        imageVector = LocalResources.current.image,
                         contentDescription = null,
                     )
                 },

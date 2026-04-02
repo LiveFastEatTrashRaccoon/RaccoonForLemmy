@@ -17,12 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.ClearAll
-import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,6 +68,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
@@ -162,7 +157,7 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            imageVector = LocalResources.current.arrowBack,
                             contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
@@ -212,7 +207,7 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
                     buildList {
                         this +=
                             FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ExpandLess,
+                                icon = LocalResources.current.unfoldLess,
                                 text = LocalStrings.current.actionBackToTop,
                                 onSelected = {
                                     scope.launch {
@@ -226,7 +221,7 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
                             )
                         this +=
                             FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ClearAll,
+                                icon = LocalResources.current.clearAll,
                                 text = LocalStrings.current.actionClearRead,
                                 onSelected = {
                                     model.reduce(MultiCommunityMviModel.Intent.ClearRead)
@@ -334,7 +329,7 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
                                 SwipeAction(
                                     swipeContent = {
                                         Icon(
-                                            imageVector = Icons.AutoMirrored.Default.Reply,
+                                            imageVector = LocalResources.current.reply,
                                             contentDescription = LocalStrings.current.actionReply,
                                             tint = Color.White,
                                         )
@@ -349,7 +344,7 @@ fun MultiCommunityScreen(communityId: Long, modifier: Modifier = Modifier) {
                                 SwipeAction(
                                     swipeContent = {
                                         Icon(
-                                            imageVector = Icons.Default.Bookmark,
+                                            imageVector = LocalResources.current.bookmark,
                                             contentDescription = LocalStrings.current.actionAddToBookmarks,
                                             tint = Color.White,
                                         )

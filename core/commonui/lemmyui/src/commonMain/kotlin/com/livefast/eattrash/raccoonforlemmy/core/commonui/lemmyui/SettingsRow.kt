@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -24,6 +22,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 @Composable
 fun SettingsRow(
@@ -111,7 +110,7 @@ fun SettingsRow(
         }
         if (disclosureIndicator) {
             Icon(
-                imageVector = Icons.Default.ChevronRight,
+                imageVector = LocalResources.current.chevronForward,
                 tint = fullColor,
                 contentDescription = null,
             )

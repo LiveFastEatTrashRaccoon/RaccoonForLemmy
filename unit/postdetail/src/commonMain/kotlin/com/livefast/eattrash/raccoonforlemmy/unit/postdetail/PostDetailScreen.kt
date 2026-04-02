@@ -26,17 +26,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.NavigateBefore
-import androidx.compose.material.icons.automirrored.filled.NavigateNext
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -113,6 +102,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.toTimestamp
@@ -435,7 +425,7 @@ fun PostDetailScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.MoreVert,
+                                imageVector = LocalResources.current.moreVert,
                                 contentDescription = LocalStrings.current.actionOpenOptionMenu,
                             )
                         }
@@ -590,7 +580,7 @@ fun PostDetailScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                                imageVector = LocalResources.current.arrowBack,
                                 contentDescription = LocalStrings.current.actionGoBack,
                             )
                         }
@@ -625,7 +615,7 @@ fun PostDetailScreen(
                     buildList {
                         this +=
                             FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ExpandLess,
+                                icon = LocalResources.current.unfoldLess,
                                 text = LocalStrings.current.actionBackToTop,
                                 onSelected = {
                                     scope.launch {
@@ -640,7 +630,7 @@ fun PostDetailScreen(
                         if (uiState.isLogged && !isOnOtherInstance) {
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.AutoMirrored.Default.Reply,
+                                    icon = LocalResources.current.reply,
                                     text = LocalStrings.current.actionReply,
                                     onSelected = {
                                         mainRouter.openReply(
@@ -943,7 +933,7 @@ fun PostDetailScreen(
                                                     SwipeAction(
                                                         swipeContent = {
                                                             Icon(
-                                                                imageVector = Icons.AutoMirrored.Default.Reply,
+                                                                imageVector = LocalResources.current.reply,
                                                                 contentDescription =
                                                                 LocalStrings.current.actionReply,
                                                                 tint = Color.White,
@@ -964,7 +954,7 @@ fun PostDetailScreen(
                                                     SwipeAction(
                                                         swipeContent = {
                                                             Icon(
-                                                                imageVector = Icons.Default.Bookmark,
+                                                                imageVector = LocalResources.current.bookmark,
                                                                 contentDescription =
                                                                 LocalStrings.current.actionAddToBookmarks,
                                                                 tint = Color.White,
@@ -986,7 +976,7 @@ fun PostDetailScreen(
                                                     SwipeAction(
                                                         swipeContent = {
                                                             Icon(
-                                                                imageVector = Icons.Default.Edit,
+                                                                imageVector = LocalResources.current.edit,
                                                                 contentDescription =
                                                                 LocalStrings.current.postActionEdit,
                                                                 tint = Color.White,
@@ -1765,7 +1755,7 @@ fun PostDetailScreen(
                                         model.reduce(PostDetailMviModel.Intent.NavigatePrevious)
                                     },
                                 ),
-                            imageVector = Icons.AutoMirrored.Default.NavigateBefore,
+                            imageVector = LocalResources.current.keyboardArrowLeft,
                             contentDescription = LocalStrings.current.actionNavigateToPreviousPost,
                             tint = MaterialTheme.colorScheme.onBackground,
                         )
@@ -1783,7 +1773,7 @@ fun PostDetailScreen(
                                     )
                                 },
                             ),
-                        imageVector = Icons.Default.KeyboardArrowUp,
+                        imageVector = LocalResources.current.keyboardArrowUp,
                         contentDescription = LocalStrings.current.actionNavigateToPreviousComment,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )
@@ -1800,7 +1790,7 @@ fun PostDetailScreen(
                                     )
                                 },
                             ),
-                        imageVector = Icons.Default.KeyboardArrowDown,
+                        imageVector = LocalResources.current.keyboardArrowDown,
                         contentDescription = LocalStrings.current.actionNavigateToNextComment,
                         tint = MaterialTheme.colorScheme.onBackground,
                     )
@@ -1815,7 +1805,7 @@ fun PostDetailScreen(
                                         model.reduce(PostDetailMviModel.Intent.NavigateNext)
                                     },
                                 ),
-                            imageVector = Icons.AutoMirrored.Default.NavigateNext,
+                            imageVector = LocalResources.current.keyboardArrowRight,
                             contentDescription = LocalStrings.current.actionNavigateToNextPost,
                             tint = MaterialTheme.colorScheme.onBackground,
                         )

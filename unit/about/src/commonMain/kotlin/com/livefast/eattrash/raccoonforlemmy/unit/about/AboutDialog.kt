@@ -9,11 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Chat
-import androidx.compose.material.icons.filled.Gavel
-import androidx.compose.material.icons.filled.OpenInBrowser
-import androidx.compose.material.icons.filled.VolunteerActivism
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,7 +28,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.resources.di.getCoreResources
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.unit.about.components.AboutItem
 
@@ -44,7 +39,6 @@ fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
     val uiState by viewModel.uiState.collectAsState()
     val mainRouter = remember { getMainRouter() }
-    val coreResources = remember { getCoreResources() }
 
     BasicAlertDialog(
         modifier = modifier,
@@ -80,7 +74,7 @@ fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
                     item {
                         AboutItem(
                             text = LocalStrings.current.settingsAboutChangelog,
-                            vector = Icons.Default.OpenInBrowser,
+                            vector = LocalResources.current.openInBrowser,
                             textDecoration = TextDecoration.Underline,
                             onClick = {
                                 uriHandler.openUri(AboutConstants.CHANGELOG_URL)
@@ -115,7 +109,7 @@ fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
                     }
                     item {
                         AboutItem(
-                            painter = coreResources.github,
+                            painter = LocalResources.current.github,
                             text = LocalStrings.current.settingsAboutViewGithub,
                             textDecoration = TextDecoration.Underline,
                             onClick = {
@@ -125,7 +119,7 @@ fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
                     }
                     item {
                         AboutItem(
-                            painter = coreResources.lemmy,
+                            painter = LocalResources.current.lemmy,
                             text = LocalStrings.current.settingsAboutViewLemmy,
                             textDecoration = TextDecoration.Underline,
                             onClick = {
@@ -138,7 +132,7 @@ fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
                     }
                     item {
                         AboutItem(
-                            vector = Icons.AutoMirrored.Default.Chat,
+                            vector = LocalResources.current.chatFill,
                             text = LocalStrings.current.settingsAboutMatrix,
                             textDecoration = TextDecoration.Underline,
                             onClick = {
@@ -149,7 +143,7 @@ fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
                     item {
                         AboutItem(
                             text = LocalStrings.current.settingsAboutLicences,
-                            vector = Icons.Default.Gavel,
+                            vector = LocalResources.current.gavel,
                             textDecoration = TextDecoration.Underline,
                             onClick = {
                                 mainRouter.openLicences()
@@ -159,7 +153,7 @@ fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
                     item {
                         AboutItem(
                             text = LocalStrings.current.settingsAboutAcknowledgements,
-                            vector = Icons.Default.VolunteerActivism,
+                            vector = LocalResources.current.volunteerActivism,
                             textDecoration = TextDecoration.Underline,
                             onClick = {
                                 mainRouter.openAcknowledgements()

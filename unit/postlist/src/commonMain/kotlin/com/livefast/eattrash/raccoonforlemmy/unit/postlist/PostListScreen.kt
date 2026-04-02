@@ -21,15 +21,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.ClearAll
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.filled.SyncDisabled
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -87,6 +78,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCent
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
@@ -251,7 +243,7 @@ fun PostListScreen(
                         if (uiState.zombieModeActive) {
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.SyncDisabled,
+                                    icon = LocalResources.current.syncDisabled,
                                     text = LocalStrings.current.actionDeactivateZombieMode,
                                     onSelected = {
                                         model.reduce(PostListMviModel.Intent.PauseZombieMode)
@@ -260,7 +252,7 @@ fun PostListScreen(
                         } else {
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.Sync,
+                                    icon = LocalResources.current.sync,
                                     text = LocalStrings.current.actionActivateZombieMode,
                                     onSelected = {
                                         model.reduce(
@@ -273,7 +265,7 @@ fun PostListScreen(
                         }
                         this +=
                             FloatingActionButtonMenuItem(
-                                icon = Icons.Default.ExpandLess,
+                                icon = LocalResources.current.unfoldLess,
                                 text = LocalStrings.current.actionBackToTop,
                                 onSelected = {
                                     scope.launch {
@@ -288,7 +280,7 @@ fun PostListScreen(
                         if (uiState.isLogged) {
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.ClearAll,
+                                    icon = LocalResources.current.clearAll,
                                     text = LocalStrings.current.actionClearRead,
                                     onSelected = {
                                         model.reduce(PostListMviModel.Intent.ClearRead)
@@ -304,7 +296,7 @@ fun PostListScreen(
 
                             this +=
                                 FloatingActionButtonMenuItem(
-                                    icon = Icons.Default.Create,
+                                    icon = LocalResources.current.add,
                                     text = LocalStrings.current.actionCreatePost,
                                     onSelected = {
                                         mainRouter.openCreatePost(
@@ -423,7 +415,7 @@ fun PostListScreen(
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.AutoMirrored.Default.Reply,
+                                                imageVector = LocalResources.current.reply,
                                                 contentDescription = LocalStrings.current.actionReply,
                                                 tint = Color.White,
                                             )
@@ -438,7 +430,7 @@ fun PostListScreen(
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.Default.Bookmark,
+                                                imageVector = LocalResources.current.bookmark,
                                                 contentDescription = LocalStrings.current.actionAddToBookmarks,
                                                 tint = Color.White,
                                             )
@@ -457,7 +449,7 @@ fun PostListScreen(
                                     SwipeAction(
                                         swipeContent = {
                                             Icon(
-                                                imageVector = Icons.Default.Edit,
+                                                imageVector = LocalResources.current.edit,
                                                 contentDescription = LocalStrings.current.postActionEdit,
                                                 tint = Color.White,
                                             )

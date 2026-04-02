@@ -1,11 +1,9 @@
 package com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cottage
-import androidx.compose.material.icons.filled.Public
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 
 sealed interface CommunityVisibilityType {
     data object Public : CommunityVisibilityType
@@ -15,8 +13,8 @@ sealed interface CommunityVisibilityType {
 
 @Composable
 fun CommunityVisibilityType.toIcon(): ImageVector = when (this) {
-    CommunityVisibilityType.LocalOnly -> Icons.Default.Cottage
-    else -> Icons.Default.Public
+    CommunityVisibilityType.LocalOnly -> LocalResources.current.cottage
+    else -> LocalResources.current.public
 }
 
 @Composable

@@ -8,13 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Chat
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,6 +40,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomDrop
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FeedbackButton
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
@@ -130,7 +124,7 @@ fun PostCardFooter(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.Chat,
+                                imageVector = LocalResources.current.chatFill,
                                 contentDescription = LocalStrings.current.actionReply,
                                 tint = ancillaryColor,
                             )
@@ -179,9 +173,9 @@ fun PostCardFooter(
                             ),
                             imageVector =
                             if (isShowingUpdateDate) {
-                                Icons.Default.Update
+                                LocalResources.current.update
                             } else {
-                                Icons.Default.Schedule
+                                LocalResources.current.schedule
                             },
                             contentDescription = LocalStrings.current.creationDate,
                             tint = ancillaryColor,
@@ -208,7 +202,7 @@ fun PostCardFooter(
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.MoreHoriz,
+                            imageVector = LocalResources.current.moreVert,
                             contentDescription = LocalStrings.current.actionOpenOptionMenu,
                             tint = ancillaryColor,
                         )
@@ -225,9 +219,9 @@ fun PostCardFooter(
                         ),
                         imageVector =
                         if (!saved) {
-                            Icons.Default.BookmarkBorder
+                            LocalResources.current.bookmark
                         } else {
-                            Icons.Default.Bookmark
+                            LocalResources.current.bookmarkFill
                         },
                         tintColor =
                         if (saved) {

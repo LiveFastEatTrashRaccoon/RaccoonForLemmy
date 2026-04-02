@@ -3,8 +3,6 @@ package com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FiberManualRecord
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,6 +17,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
 
 @Composable
@@ -74,7 +73,7 @@ fun InboxCardHeader(mention: PersonMentionModel, type: InboxCardType, modifier: 
                 Modifier
                     .padding(end = Spacing.s)
                     .size(IconSize.xs),
-                imageVector = Icons.Filled.FiberManualRecord,
+                imageVector = LocalResources.current.circle,
                 contentDescription = LocalStrings.current.itemUnread,
                 tint = ancillaryColor,
             )

@@ -4,11 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.AspectRatio
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -46,6 +41,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.di.ZoomableImageMviModelParams
@@ -94,7 +90,7 @@ fun ZoomableImageScreen(url: String, modifier: Modifier = Modifier, source: Stri
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            imageVector = LocalResources.current.arrowBack,
                             contentDescription = LocalStrings.current.actionGoBack,
                         )
                     }
@@ -106,7 +102,7 @@ fun ZoomableImageScreen(url: String, modifier: Modifier = Modifier, source: Stri
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Download,
+                            imageVector = LocalResources.current.download,
                             contentDescription = LocalStrings.current.actionDownload,
                         )
                     }
@@ -124,7 +120,7 @@ fun ZoomableImageScreen(url: String, modifier: Modifier = Modifier, source: Stri
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Share,
+                            imageVector = LocalResources.current.share,
                             contentDescription = LocalStrings.current.postActionShare,
                         )
                     }
@@ -151,7 +147,7 @@ fun ZoomableImageScreen(url: String, modifier: Modifier = Modifier, source: Stri
                                 },
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.AspectRatio,
+                                    imageVector = LocalResources.current.aspectRatio,
                                     contentDescription = LocalStrings.current.actionChangeImageScaleMode,
                                 )
                             }

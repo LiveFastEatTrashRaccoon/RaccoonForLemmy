@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +40,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeReposito
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 
 data class FloatingActionButtonMenuItem(val icon: ImageVector, val text: String, val onSelected: (() -> Unit)? = null)
@@ -172,7 +171,7 @@ fun FloatingActionButtonMenu(modifier: Modifier = Modifier, items: List<Floating
             content = {
                 Icon(
                     modifier = Modifier.rotate(fabRotation),
-                    imageVector = Icons.Default.Add,
+                    imageVector = LocalResources.current.add,
                     contentDescription = LocalStrings.current.actionOpenActionMenu,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 )

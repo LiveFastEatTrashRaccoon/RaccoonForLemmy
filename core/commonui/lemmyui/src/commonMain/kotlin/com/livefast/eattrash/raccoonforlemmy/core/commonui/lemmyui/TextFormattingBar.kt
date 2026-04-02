@@ -8,16 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
-import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.FormatBold
-import androidx.compose.material.icons.filled.FormatItalic
-import androidx.compose.material.icons.filled.FormatListNumbered
-import androidx.compose.material.icons.filled.FormatQuote
-import androidx.compose.material.icons.filled.FormatStrikethrough
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.InsertLink
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,6 +24,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.LanguageModel
 
@@ -101,7 +92,7 @@ fun TextFormattingBar(
                         onChangeTextFieldValue(newValue)
                     },
                 ),
-                imageVector = Icons.Default.FormatBold,
+                imageVector = LocalResources.current.formatBold,
                 contentDescription = LocalStrings.current.formatBold,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
@@ -152,7 +143,7 @@ fun TextFormattingBar(
                         onChangeTextFieldValue(newValue)
                     },
                 ),
-                imageVector = Icons.Default.FormatItalic,
+                imageVector = LocalResources.current.formatItalic,
                 contentDescription = LocalStrings.current.formatItalic,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
@@ -203,7 +194,7 @@ fun TextFormattingBar(
                         onChangeTextFieldValue(newValue)
                     },
                 ),
-                imageVector = Icons.Default.FormatStrikethrough,
+                imageVector = LocalResources.current.strikethroughS,
                 tint = MaterialTheme.colorScheme.onBackground,
                 contentDescription = LocalStrings.current.formatStrikethrough,
             )
@@ -219,7 +210,7 @@ fun TextFormattingBar(
                             onSelectImage.invoke()
                         },
                     ),
-                    imageVector = Icons.Default.Image,
+                    imageVector = LocalResources.current.image,
                     contentDescription = LocalStrings.current.actionAddImage,
                     tint = MaterialTheme.colorScheme.onBackground,
                 )
@@ -273,7 +264,7 @@ fun TextFormattingBar(
                         onChangeTextFieldValue(newValue)
                     },
                 ),
-                imageVector = Icons.Default.InsertLink,
+                imageVector = LocalResources.current.link,
                 contentDescription = LocalStrings.current.actionAddLink,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
@@ -324,7 +315,7 @@ fun TextFormattingBar(
                         onChangeTextFieldValue(newValue)
                     },
                 ),
-                imageVector = Icons.Default.Code,
+                imageVector = LocalResources.current.code,
                 contentDescription = LocalStrings.current.formatMonospace,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
@@ -356,7 +347,7 @@ fun TextFormattingBar(
                         onChangeTextFieldValue(newValue)
                     },
                 ),
-                imageVector = Icons.Default.FormatQuote,
+                imageVector = LocalResources.current.formatQuote,
                 contentDescription = LocalStrings.current.formatQuote,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
@@ -388,7 +379,7 @@ fun TextFormattingBar(
                         onChangeTextFieldValue(newValue)
                     },
                 ),
-                imageVector = Icons.AutoMirrored.Default.FormatListBulleted,
+                imageVector = LocalResources.current.formatListBulleted,
                 contentDescription = LocalStrings.current.insertBulletedList,
                 tint = MaterialTheme.colorScheme.onBackground,
             )
@@ -420,7 +411,7 @@ fun TextFormattingBar(
                         onChangeTextFieldValue(newValue)
                     },
                 ),
-                imageVector = Icons.Default.FormatListNumbered,
+                imageVector = LocalResources.current.formatListNumbered,
                 contentDescription = LocalStrings.current.insertNumberedList,
                 tint = MaterialTheme.colorScheme.onBackground,
             )

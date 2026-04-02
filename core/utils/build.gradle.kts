@@ -19,6 +19,7 @@ kotlin {
 
                 implementation(projects.core.di)
                 implementation(projects.core.l10n)
+                implementation(projects.core.resources)
             }
         }
         androidMain {

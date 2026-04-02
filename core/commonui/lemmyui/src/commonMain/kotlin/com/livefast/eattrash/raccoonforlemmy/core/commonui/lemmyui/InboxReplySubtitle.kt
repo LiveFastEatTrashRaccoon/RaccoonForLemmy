@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Chat
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,6 +44,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImag
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.FeedbackButton
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
+import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
@@ -208,7 +205,7 @@ fun InboxReplySubtitle(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Default.Chat,
+                                imageVector = LocalResources.current.chatFill,
                                 contentDescription = LocalStrings.current.actionReply,
                                 tint = ancillaryColor,
                             )
@@ -218,7 +215,7 @@ fun InboxReplySubtitle(
                         ) {
                             Icon(
                                 modifier = Modifier.size(IconSize.m).padding(1.5.dp),
-                                imageVector = Icons.Default.Schedule,
+                                imageVector = LocalResources.current.schedule,
                                 contentDescription = LocalStrings.current.creationDate,
                                 tint = ancillaryColor,
                             )
@@ -243,7 +240,7 @@ fun InboxReplySubtitle(
                                 },
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.MoreHoriz,
+                                    imageVector = LocalResources.current.moreVert,
                                     contentDescription = LocalStrings.current.actionOpenOptionMenu,
                                     tint = ancillaryColor,
                                 )
