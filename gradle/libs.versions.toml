@@ -13,6 +13,7 @@ calf = "0.9.0"
 coil = "3.3.0"
 colorpicker = "1.1.2"
 compose = "1.9.0"
+compose-ui-backhandler = "1.10.3"
 compose-multiplatform-media-player = "1.0.47"
 kodein = "7.29.0"
 kotlin = "2.2.21"
@@ -62,6 +63,7 @@ compose-multiplatform-media-player = { module = "network.chaintech:compose-multi
 compose-gradlePlugin = { module = "org.jetbrains.compose:org.jetbrains.compose.gradle.plugin", version.ref = "compose" }
 compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", version.ref = "colorpicker" }
 compose-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler" }
+#compose-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-ui-backhandler" }
 
 gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle" }
 

@@ -86,6 +86,7 @@ kotlin {
                 api(projects.feature.search)
                 api(projects.feature.profile)
                 api(projects.feature.settings)
+//                implementation(libs.compose.ui.backhandler)
             }
         }
         val commonTest by getting {
