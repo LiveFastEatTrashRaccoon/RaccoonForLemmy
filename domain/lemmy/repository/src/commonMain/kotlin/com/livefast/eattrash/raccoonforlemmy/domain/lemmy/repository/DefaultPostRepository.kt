@@ -64,7 +64,7 @@ internal class DefaultPostRepository(
             }
         val posts =
             response.posts
-                .subList(0, response.posts.size.coerceAtMost(2))
+//                .subList(0, response.posts.size.coerceAtMost(2))
                 .map {
                 it.toModel().let { model ->
                     model.copy(category = postCategorizer.categorize(model.title))
