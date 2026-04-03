@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getImageLoaderProvider
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberImageLoaderProvider
 
 @Composable
 fun CustomImage(
@@ -42,7 +42,7 @@ fun CustomImage(
     onFailure: @Composable (BoxScope.(Throwable) -> Unit)? = null,
     onSuccess: @Composable (BoxScope.() -> Unit)? = null,
 ) {
-    val imageLoaderProvider = remember { getImageLoaderProvider() }
+    val imageLoaderProvider = rememberImageLoaderProvider()
     var painterState: AsyncImagePainter.State by remember {
         mutableStateOf(AsyncImagePainter.State.Empty)
     }

@@ -23,7 +23,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
@@ -64,7 +64,7 @@ fun CollapsedCommentCard(
     onSelectOption: ((OptionId) -> Unit)? = null,
     onToggleExpand: (() -> Unit)? = null,
 ) {
-    val themeRepository = remember { getThemeRepository() }
+    val themeRepository = rememberThemeRepository()
     val commentBarTheme by themeRepository.commentBarTheme.collectAsState()
     var commentHeight by remember { mutableFloatStateOf(0f) }
     val barColor =

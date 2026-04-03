@@ -5,11 +5,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiBarTheme
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getBarColorProvider
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberBarColorProvider
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberColorSchemeProvider
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 
 @Composable
 fun AppTheme(
@@ -17,15 +16,12 @@ fun AppTheme(
     barTheme: UiBarTheme = UiBarTheme.Solid,
     content: @Composable () -> Unit,
 ) {
-    val repository =
-        remember {
-            getThemeRepository()
-        }
+    val repository = rememberThemeRepository()
 
     val themeState by repository.uiTheme.collectAsState()
     val customSeedColor by repository.customSeedColor.collectAsState()
 
-    val colorSchemeProvider = remember { getColorSchemeProvider() }
+    val colorSchemeProvider = rememberColorSchemeProvider()
     val colorScheme =
         colorSchemeProvider.getColorScheme(
             theme = themeState,
@@ -37,7 +33,7 @@ fun AppTheme(
     val fontFamily by repository.uiFontFamily.collectAsState()
     val typography = fontFamily.toTypography()
 
-    val barColorProvider = remember { getBarColorProvider() }
+    val barColorProvider = rememberBarColorProvider()
     barColorProvider.setBarColorAccordingToTheme(
         theme = themeState,
         barTheme = barTheme,

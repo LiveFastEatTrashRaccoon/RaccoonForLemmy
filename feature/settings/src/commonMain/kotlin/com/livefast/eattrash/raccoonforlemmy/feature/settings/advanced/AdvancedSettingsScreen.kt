@@ -52,13 +52,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguage
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectNumberBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SliderBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.AppIconVariant
 import com.livefast.eattrash.raccoonforlemmy.core.utils.appicon.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.getPrettyDuration
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getFileSystemManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberFileSystemManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SearchResultType
@@ -80,8 +80,8 @@ private const val SETTINGS_FILE_NAME = "raccoon4lemmy_settings.json"
 fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
     val model: AdvancedSettingsMviModel = getViewModel<AdvancedSettingsViewModel>()
     val uiState by model.uiState.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val mainRouter = remember { getMainRouter() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val mainRouter = rememberMainRouter()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val scrollState = rememberScrollState()
@@ -90,7 +90,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
     val successMessage = LocalStrings.current.messageOperationSuccessful
     val errorMessage = LocalStrings.current.messageGenericError
     val scope = rememberCoroutineScope()
-    val fileSystemManager = remember { getFileSystemManager() }
+    val fileSystemManager = rememberFileSystemManager()
     var languageDialogOpened by remember { mutableStateOf(false) }
     var fileInputOpened by remember { mutableStateOf(false) }
     var settingsContent by remember { mutableStateOf<String?>(null) }

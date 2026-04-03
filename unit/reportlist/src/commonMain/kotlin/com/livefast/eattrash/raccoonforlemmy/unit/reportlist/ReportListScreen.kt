@@ -55,9 +55,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentReportModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -78,12 +78,12 @@ fun ReportListScreen(modifier: Modifier = Modifier, communityId: Long? = null) {
     val uiState by model.uiState.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     var rawContent by remember { mutableStateOf<Any?>(null) }
-    val settingsRepository = remember { getSettingsRepository() }
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     val lazyListState = rememberLazyListState()
-    val mainRouter = remember { getMainRouter() }
+    val mainRouter = rememberMainRouter()
     val defaultResolveColor = MaterialTheme.colorScheme.secondary
     var reportTypeBottomSheetOpened by remember { mutableStateOf(false) }
 

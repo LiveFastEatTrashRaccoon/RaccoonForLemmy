@@ -45,8 +45,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.MediaModel
 import com.livefast.eattrash.raccoonforlemmy.unit.medialist.components.MediaItem
@@ -61,8 +61,8 @@ fun MediaListScreen(modifier: Modifier = Modifier) {
     val uiState by model.uiState.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val mainRouter = remember { getMainRouter() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val mainRouter = rememberMainRouter()
     val snackbarHostState = remember { SnackbarHostState() }
     val successMessage = LocalStrings.current.messageOperationSuccessful
     val failureMessage = LocalStrings.current.messageGenericError

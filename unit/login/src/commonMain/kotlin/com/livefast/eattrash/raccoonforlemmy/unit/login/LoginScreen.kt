@@ -51,7 +51,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.autofill
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
@@ -68,7 +68,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     val topAppBarState = rememberTopAppBarState()
     val snackbarHostState = remember { SnackbarHostState() }
     val genericError = LocalStrings.current.messageGenericError
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val uriHandler = LocalUriHandler.current
     val instanceFocusRequester = remember { FocusRequester() }
     val usernameFocusRequester = remember { FocusRequester() }

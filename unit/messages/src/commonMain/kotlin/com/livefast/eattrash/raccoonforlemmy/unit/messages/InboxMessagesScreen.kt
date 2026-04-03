@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -28,8 +27,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.otherUser
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.components.ChatCard
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.components.ChatCardPlaceholder
@@ -41,8 +40,8 @@ import kotlinx.coroutines.flow.onEach
 fun InboxMessagesScreen(modifier: Modifier = Modifier) {
     val model: InboxMessagesMviModel = getViewModel<InboxMessagesViewModel>()
     val uiState by model.uiState.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val mainRouter = remember { getMainRouter() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val mainRouter = rememberMainRouter()
     val lazyListState = rememberLazyListState()
 
     LaunchedEffect(navigationCoordinator) {

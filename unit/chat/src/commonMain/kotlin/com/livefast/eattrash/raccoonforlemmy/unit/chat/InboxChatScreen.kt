@@ -53,7 +53,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
@@ -64,10 +64,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.TextFormattingBar
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -84,16 +84,16 @@ fun InboxChatScreen(otherUserId: Long, modifier: Modifier = Modifier) {
     val model: InboxChatMviModel = getViewModel<InboxChatViewModel>(InboxChatMviModelParams(otherUserId))
     val uiState by model.uiState.collectAsState()
     val topAppBarState = rememberTopAppBarState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val mainRouter = remember { getMainRouter() }
-    val galleryHelper = remember { getGalleryHelper() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val mainRouter = rememberMainRouter()
+    val galleryHelper = rememberGalleryHelper()
     var openImagePicker by remember { mutableStateOf(false) }
     var textFieldValue by remember {
         mutableStateOf(
             TextFieldValue(text = ""),
         )
     }
-    val themeRepository = remember { getThemeRepository() }
+    val themeRepository = rememberThemeRepository()
     val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
     val typography = contentFontFamily.toTypography()
     var rawContent by remember { mutableStateOf<Any?>(null) }

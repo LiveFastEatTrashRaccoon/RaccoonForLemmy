@@ -39,10 +39,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.ZoomableIm
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.unit.zoomableimage.di.ZoomableImageMviModelParams
 import kotlinx.coroutines.flow.launchIn
@@ -56,9 +56,9 @@ fun ZoomableImageScreen(url: String, modifier: Modifier = Modifier, source: Stri
     val snackbarHostState = remember { SnackbarHostState() }
     val successMessage = LocalStrings.current.messageOperationSuccessful
     val errorMessage = LocalStrings.current.messageGenericError
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val drawerCoordinator = remember { getDrawerCoordinator() }
-    val shareHelper = remember { getShareHelper() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val drawerCoordinator = rememberDrawerCoordinator()
+    val shareHelper = rememberShareHelper()
     var imageShareBottomSheetOpened by remember { mutableStateOf(false) }
 
     LaunchedEffect(model) {

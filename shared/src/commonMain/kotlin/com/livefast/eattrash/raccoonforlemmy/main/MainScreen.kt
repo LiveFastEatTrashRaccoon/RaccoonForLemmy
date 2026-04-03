@@ -37,17 +37,17 @@ import androidx.compose.ui.unit.toSize
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DefaultBottomNavigationAdapter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DrawerEvent
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.rememberNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.feature.home.ui.HomeTab
 import com.livefast.eattrash.raccoonforlemmy.feature.inbox.main.InboxViewModel
 import com.livefast.eattrash.raccoonforlemmy.feature.inbox.ui.InboxTab
@@ -77,16 +77,16 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainScreen() {
-    val themeRepository = remember { getThemeRepository() }
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val mainRouter = remember { getMainRouter() }
+    val themeRepository = rememberThemeRepository()
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val mainRouter = rememberMainRouter()
     val model: MainMviModel = getViewModel<MainViewModel>()
     val uiState by model.uiState.collectAsState()
     val uiFontScale by themeRepository.uiFontScale.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val exitMessage = LocalStrings.current.messageConfirmExit
-    val drawerCoordinator = remember { getDrawerCoordinator() }
-    val notificationCenter = remember { getNotificationCenter() }
+    val drawerCoordinator = rememberDrawerCoordinator()
+    val notificationCenter = rememberNotificationCenter()
     var bottomBarHeightPx by remember { mutableFloatStateOf(0f) }
     val bottomNavigationInsetPx = WindowInsets.navigationBars.getBottom(LocalDensity.current)
     val scope = rememberCoroutineScope()

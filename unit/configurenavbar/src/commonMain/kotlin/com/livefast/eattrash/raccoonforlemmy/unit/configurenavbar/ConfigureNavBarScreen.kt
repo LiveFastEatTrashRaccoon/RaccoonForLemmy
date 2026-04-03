@@ -47,10 +47,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInt
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toReadableName
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.composable.ConfigureAddAction
 import com.livefast.eattrash.raccoonforlemmy.unit.configurenavbar.composable.ConfigureNavBarItem
@@ -62,10 +62,10 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
 fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
     val model: ConfigureNavBarMviModel = getViewModel<ConfigureNavBarViewModel>()
     val uiState by model.uiState.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-    val settingsRepository = remember { getSettingsRepository() }
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     val lazyListState = rememberLazyListState()
     val reorderableLazyColumnState =

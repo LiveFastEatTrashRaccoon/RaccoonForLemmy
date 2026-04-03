@@ -51,7 +51,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
@@ -64,23 +64,23 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCard
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardPlaceholder
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.rememberFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.toReadableName
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.rememberNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipe
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberClipboardHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.keepscreenon.rememberKeepScreenOn
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
@@ -109,10 +109,10 @@ fun PostListScreen(
     val uiState by model.uiState.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-    val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
+    val fabNestedScrollConnection = rememberFabNestedScrollConnection()
     val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val themeRepository = remember { getThemeRepository() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val themeRepository = rememberThemeRepository()
     val upVoteColor by themeRepository.upVoteColor.collectAsState()
     val downVoteColor by themeRepository.downVoteColor.collectAsState()
     val replyColor by themeRepository.replyColor.collectAsState()
@@ -121,21 +121,21 @@ fun PostListScreen(
     val defaultReplyColor = MaterialTheme.colorScheme.secondary
     val defaultSaveColor = MaterialTheme.colorScheme.secondaryContainer
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
-    val drawerCoordinator = remember { getDrawerCoordinator() }
+    val drawerCoordinator = rememberDrawerCoordinator()
     val scope = rememberCoroutineScope()
-    val notificationCenter = remember { getNotificationCenter() }
+    val notificationCenter = rememberNotificationCenter()
     var rawContent by remember { mutableStateOf<Any?>(null) }
-    val settingsRepository = remember { getSettingsRepository() }
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     val keepScreenOn = rememberKeepScreenOn()
-    val mainRouter = remember { getMainRouter() }
+    val mainRouter = rememberMainRouter()
     val connection = navigationCoordinator.getBottomBarScrollConnection()
     val bottomNavigationInset =
         with(LocalDensity.current) {
             WindowInsets.navigationBars.getBottom(this).toDp()
         }
     val clipboard = LocalClipboard.current
-    val clipboardHelper = remember { getClipboardHelper(clipboard) }
+    val clipboardHelper = rememberClipboardHelper(clipboard)
     var itemIdToDelete by remember { mutableStateOf<Long?>(null) }
     var listingTypeBottomSheetOpened by remember { mutableStateOf(false) }
     var shareBottomSheetUrls by remember { mutableStateOf<List<String>?>(null) }

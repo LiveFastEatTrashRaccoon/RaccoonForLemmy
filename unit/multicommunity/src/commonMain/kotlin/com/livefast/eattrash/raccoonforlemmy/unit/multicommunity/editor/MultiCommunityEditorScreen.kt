@@ -55,7 +55,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImag
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
@@ -70,7 +70,7 @@ fun MultiCommunityEditorScreen(modifier: Modifier = Modifier, communityId: Long?
         getViewModel<MultiCommunityEditorViewModel>(MultiCommunityEditorMviModelParams(communityId ?: 0))
     val uiState by model.uiState.collectAsState()
     val topAppBarState = rememberTopAppBarState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
 
     LaunchedEffect(model) {
         model.effects

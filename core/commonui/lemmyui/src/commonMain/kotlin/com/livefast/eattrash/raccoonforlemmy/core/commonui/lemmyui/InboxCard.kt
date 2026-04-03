@@ -36,8 +36,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberClipboardHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PersonMentionModel
@@ -78,9 +78,9 @@ fun InboxCard(
     val onClickPost = {
         onClick.invoke(mention.post)
     }
-    val shareHelper = remember { getShareHelper() }
+    val shareHelper = rememberShareHelper()
     val clipboard = LocalClipboard.current
-    val clipboardHelper = remember { getClipboardHelper(clipboard) }
+    val clipboardHelper = rememberClipboardHelper(clipboard)
     val scope = rememberCoroutineScope()
     val onShareLambda: () -> Unit = {
         scope.launch {

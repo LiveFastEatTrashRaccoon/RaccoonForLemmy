@@ -28,17 +28,17 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SearchField
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DrawerEvent
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.rememberNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -62,12 +62,12 @@ import kotlin.time.Duration.Companion.milliseconds
 fun ModalDrawerContent(modifier: Modifier = Modifier) {
     val model: ModalDrawerMviModel = getViewModel<ModalDrawerViewModel>()
     val uiState by model.uiState.collectAsState()
-    val coordinator = remember { getDrawerCoordinator() }
-    val themeRepository = remember { getThemeRepository() }
+    val coordinator = rememberDrawerCoordinator()
+    val themeRepository = rememberThemeRepository()
     val scope = rememberCoroutineScope()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val mainRouter = remember { getMainRouter() }
-    val notificationCenter = remember { getNotificationCenter() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val mainRouter = rememberMainRouter()
+    val notificationCenter = rememberNotificationCenter()
     val focusManager = LocalFocusManager.current
     val keyboardScrollConnection =
         remember {

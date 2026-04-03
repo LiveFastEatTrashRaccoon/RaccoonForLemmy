@@ -21,7 +21,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
@@ -33,7 +32,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.UserTagMemberItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.unit.usertags.di.UserTagDetailMviModelParams
 
@@ -42,7 +41,7 @@ import com.livefast.eattrash.raccoonforlemmy.unit.usertags.di.UserTagDetailMviMo
 fun UserTagDetailScreen(id: Long, modifier: Modifier = Modifier) {
     val model: UserTagDetailMviModel = getViewModel<UserTagDetailViewModel>(UserTagDetailMviModelParams(id))
     val uiState by model.uiState.collectAsState()
-    val navigatorCoordinator = remember { getNavigationCoordinator() }
+    val navigatorCoordinator = rememberNavigationCoordinator()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
 

@@ -59,11 +59,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.rememberNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.readableHandle
@@ -85,11 +85,11 @@ fun ProfileLoggedScreen(
     onLogout: (() -> Unit)? = null,
 ) {
     val uiState by model.uiState.collectAsState()
-    val notificationCenter = remember { getNotificationCenter() }
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val notificationCenter = rememberNotificationCenter()
+    val navigationCoordinator = rememberNavigationCoordinator()
     var rawContent by remember { mutableStateOf<Any?>(null) }
-    val mainRouter = remember { getMainRouter() }
-    val settingsRepository = remember { getSettingsRepository() }
+    val mainRouter = rememberMainRouter()
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     var postIdToDelete by remember { mutableStateOf<Long?>(null) }
     var commentIdToDelete by remember { mutableStateOf<Long?>(null) }

@@ -46,10 +46,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.DraftModel
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -63,11 +63,11 @@ fun DraftsScreen(modifier: Modifier = Modifier) {
     val uiState by model.uiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val topAppBarState = rememberTopAppBarState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val settingsRepository = remember { getSettingsRepository() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     val lazyListState = rememberLazyListState()
-    val mainRouter = remember { getMainRouter() }
+    val mainRouter = rememberMainRouter()
     var itemToDelete by remember { mutableStateOf<DraftModel?>(null) }
 
     Scaffold(

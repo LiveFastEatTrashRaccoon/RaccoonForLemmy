@@ -49,7 +49,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
@@ -68,11 +68,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditFormattedI
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInfoDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SortBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.ValidationError
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ListingType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
@@ -85,14 +85,14 @@ import kotlinx.coroutines.flow.onEach
 fun AccountSettingsScreen(modifier: Modifier = Modifier) {
     val model: AccountSettingsMviModel = getViewModel<AccountSettingsViewModel>()
     val uiState by model.uiState.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val scrollState = rememberScrollState()
-    val themeRepository = remember { getThemeRepository() }
+    val themeRepository = rememberThemeRepository()
     val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
     val contentTypography = contentFontFamily.toTypography()
-    val settingsRepository = remember { getSettingsRepository() }
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     var openDisplayNameEditDialog by remember { mutableStateOf(false) }
     var openEmailEditDialog by remember { mutableStateOf(false) }
@@ -101,7 +101,7 @@ fun AccountSettingsScreen(modifier: Modifier = Modifier) {
     val successMessage = LocalStrings.current.messageOperationSuccessful
     val errorMessage = LocalStrings.current.messageGenericError
     val snackbarHostState = remember { SnackbarHostState() }
-    val galleryHelper = remember { getGalleryHelper() }
+    val galleryHelper = rememberGalleryHelper()
     var openAvatarPicker by remember { mutableStateOf(false) }
     var openBannerPicker by remember { mutableStateOf(false) }
     var confirmBackWithUnsavedChangesDialog by remember { mutableStateOf(false) }

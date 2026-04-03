@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.VoteFormat
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
@@ -43,8 +43,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryText
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberClipboardHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
@@ -94,7 +94,7 @@ fun CommentCard(
     onSelectOption: ((OptionId) -> Unit)? = null,
     onToggleExpand: (() -> Unit)? = null,
 ) {
-    val themeRepository = remember { getThemeRepository() }
+    val themeRepository = rememberThemeRepository()
     var commentHeight by remember { mutableFloatStateOf(0f) }
     val commentBarTheme by themeRepository.commentBarTheme.collectAsState()
     var textSelection by remember { mutableStateOf(false) }
@@ -110,9 +110,9 @@ fun CommentCard(
         } else {
             0.dp
         }
-    val shareHelper = remember { getShareHelper() }
+    val shareHelper = rememberShareHelper()
     val clipboard = LocalClipboard.current
-    val clipboardHelper = remember { getClipboardHelper(clipboard) }
+    val clipboardHelper = rememberClipboardHelper(clipboard)
     val scope = rememberCoroutineScope()
     val onShareLambda: () -> Unit = {
         scope.launch {

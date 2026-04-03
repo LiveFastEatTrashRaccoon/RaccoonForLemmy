@@ -42,13 +42,13 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsHeade
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeDirection
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.ActionOnSwipeTarget
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toModifier
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.data.toReadableName
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureActionItem
 import com.livefast.eattrash.raccoonforlemmy.unit.configureswipeactions.ui.components.ConfigureAddAction
@@ -60,10 +60,10 @@ private data class ActionConfig(val target: ActionOnSwipeTarget, val direction: 
 fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
     val model: ConfigureSwipeActionsMviModel = getViewModel<ConfigureSwipeActionsViewModel>()
     val uiState by model.uiState.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-    val settingsRepository = remember { getSettingsRepository() }
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     var selectActionBottomSheet by remember { mutableStateOf<ActionConfig?>(null) }
 

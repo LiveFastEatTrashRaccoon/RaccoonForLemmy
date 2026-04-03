@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,8 +33,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.VoteAction
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberClipboardHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.texttoolbar.getCustomTextToolbar
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toModifier
@@ -57,8 +56,8 @@ fun RawContentDialog(
     downVotes: Int? = null,
 ) {
     val clipboard = LocalClipboard.current
-    val clipboardHelper = remember { getClipboardHelper(clipboard) }
-    val shareHelper = remember { getShareHelper() }
+    val clipboardHelper = rememberClipboardHelper(clipboard)
+    val shareHelper = rememberShareHelper()
     val scope = rememberCoroutineScope()
     val onShareLambda: () -> Unit = {
         scope.launch {
