@@ -47,9 +47,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toReplyColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toSaveColor
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUpVoteColor
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getAppColorRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberAppColorRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberColorSchemeProvider
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
@@ -64,8 +64,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomColorPic
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
@@ -85,14 +85,14 @@ enum class CustomColorType {
 fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
     val model: SettingsColorAndFontMviModel = getViewModel<SettingsColorAndFontViewModel>()
     val uiState by model.uiState.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-    val settingsRepository = remember { getSettingsRepository() }
-    val themeRepository = remember { getThemeRepository() }
-    val appColorRepository = remember { getAppColorRepository() }
+    val settingsRepository = rememberSettingsRepository()
+    val themeRepository = rememberThemeRepository()
+    val appColorRepository = rememberAppColorRepository()
     val scrollState = rememberScrollState()
-    val colorSchemeProvider = remember { getColorSchemeProvider() }
+    val colorSchemeProvider = rememberColorSchemeProvider()
     val defaultTheme =
         if (isSystemInDarkTheme()) {
             UiTheme.Dark

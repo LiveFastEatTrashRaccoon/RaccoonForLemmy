@@ -19,13 +19,12 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ContentFontClass
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
@@ -35,8 +34,8 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.Customized
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.DetailInfoItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.prettifyDate
@@ -59,10 +58,10 @@ fun UserInfoScreen(userId: Long, username: String, otherInstance: String, modifi
             ),
         )
     val uiState by model.uiState.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val scope = rememberCoroutineScope()
-    val mainRouter = remember { getMainRouter() }
-    val themeRepository = remember { getThemeRepository() }
+    val mainRouter = rememberMainRouter()
+    val themeRepository = rememberThemeRepository()
     val family by themeRepository.contentFontFamily.collectAsState()
     val typography = family.toTypography()
 

@@ -35,8 +35,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.UiTheme
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getColorSchemeProvider
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberColorSchemeProvider
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.CornerSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
@@ -49,8 +49,8 @@ private const val ANIMATION_DURATION = 50
 
 @Composable
 fun FloatingActionButtonMenu(modifier: Modifier = Modifier, items: List<FloatingActionButtonMenuItem> = emptyList()) {
-    val themeRepository = remember { getThemeRepository() }
-    val schemeProvider = remember { getColorSchemeProvider() }
+    val themeRepository = rememberThemeRepository()
+    val schemeProvider = rememberColorSchemeProvider()
     val seedColor by themeRepository.customSeedColor.collectAsState()
     val theme by themeRepository.uiTheme.collectAsState()
     val dynamicColors by themeRepository.dynamicColors.collectAsState()

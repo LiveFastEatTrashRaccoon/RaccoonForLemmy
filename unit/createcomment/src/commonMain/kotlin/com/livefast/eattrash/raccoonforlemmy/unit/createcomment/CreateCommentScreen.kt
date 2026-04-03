@@ -44,7 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.PostLayout
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toWindowInsets
@@ -60,11 +60,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.PostCardBody
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.TextFormattingBar
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.SelectLanguageDialog
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
-import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.getNotificationCenter
+import com.livefast.eattrash.raccoonforlemmy.core.notifications.di.rememberNotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.safeImePadding
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toReadableMessage
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
@@ -96,14 +96,14 @@ fun CreateCommentScreen(
     val uiState by model.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val genericError = LocalStrings.current.messageGenericError
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val notificationCenter = remember { getNotificationCenter() }
-    val galleryHelper = remember { getGalleryHelper() }
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val notificationCenter = rememberNotificationCenter()
+    val galleryHelper = rememberGalleryHelper()
     var openImagePicker by remember { mutableStateOf(false) }
     var rawContent by remember { mutableStateOf<Any?>(null) }
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
-    val themeRepository = remember { getThemeRepository() }
+    val themeRepository = rememberThemeRepository()
     val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
     val typography = contentFontFamily.toTypography()
     var selectLanguageDialogOpen by remember { mutableStateOf(false) }

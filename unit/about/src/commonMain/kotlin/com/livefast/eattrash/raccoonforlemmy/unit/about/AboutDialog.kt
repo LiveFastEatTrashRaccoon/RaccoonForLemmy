@@ -18,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
 import com.livefast.eattrash.raccoonforlemmy.unit.about.components.AboutItem
@@ -38,7 +37,7 @@ fun AboutDialog(onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     val viewModel: AboutDialogMviModel = getViewModel<AboutDialogViewModel>()
     val uriHandler = LocalUriHandler.current
     val uiState by viewModel.uiState.collectAsState()
-    val mainRouter = remember { getMainRouter() }
+    val mainRouter = rememberMainRouter()
 
     BasicAlertDialog(
         modifier = modifier,

@@ -46,7 +46,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.IconSize
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
@@ -63,10 +63,10 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBot
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditFormattedInfoDialog
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.EditTextualInfoDialog
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getGalleryHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberGalleryHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityVisibilityType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toIcon
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.toReadableName
@@ -80,14 +80,14 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
     val model: EditCommunityMviModel =
         getViewModel<EditCommunityViewModel>(EditCommunityMviModelParams(communityId ?: 0))
     val uiState by model.uiState.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val scrollState = rememberScrollState()
-    val themeRepository = remember { getThemeRepository() }
+    val themeRepository = rememberThemeRepository()
     val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
     val contentTypography = contentFontFamily.toTypography()
-    val settingsRepository = remember { getSettingsRepository() }
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     var openNameEditDialog by remember { mutableStateOf(false) }
     var openTitleEditDialog by remember { mutableStateOf(false) }
@@ -95,7 +95,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
     val successMessage = LocalStrings.current.messageOperationSuccessful
     val errorMessage = LocalStrings.current.messageGenericError
     val snackbarHostState = remember { SnackbarHostState() }
-    val galleryHelper = remember { getGalleryHelper() }
+    val galleryHelper = rememberGalleryHelper()
     var openIconPicker by remember { mutableStateOf(false) }
     var openBannerPicker by remember { mutableStateOf(false) }
     var confirmBackWithUnsavedChangesDialogOpened by remember { mutableStateOf(false) }

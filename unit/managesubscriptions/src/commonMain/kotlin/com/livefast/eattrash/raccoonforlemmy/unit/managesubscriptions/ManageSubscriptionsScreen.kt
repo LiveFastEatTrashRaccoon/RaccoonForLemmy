@@ -60,11 +60,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.CommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.MultiCommunityItem
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.Option
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.OptionId
-import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.getFabNestedScrollConnection
+import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.di.rememberFabNestedScrollConnection
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.Destination
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import kotlinx.coroutines.flow.launchIn
@@ -76,14 +76,14 @@ import kotlinx.coroutines.launch
 fun ManageSubscriptionsScreen(modifier: Modifier = Modifier) {
     val model: ManageSubscriptionsMviModel = getViewModel<ManageSubscriptionsViewModel>()
     val uiState by model.uiState.collectAsState()
-    val navigatorCoordinator = remember { getNavigationCoordinator() }
+    val navigatorCoordinator = rememberNavigationCoordinator()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
-    val fabNestedScrollConnection = remember { getFabNestedScrollConnection() }
+    val fabNestedScrollConnection = rememberFabNestedScrollConnection()
     val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
-    val mainRouter = remember { getMainRouter() }
+    val mainRouter = rememberMainRouter()
     val focusManager = LocalFocusManager.current
     val keyboardScrollConnection =
         remember {

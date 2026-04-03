@@ -39,35 +39,35 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toPostLayout
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiBarTheme
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiFontFamily
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.data.toUiTheme
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getAppColorRepository
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberAppColorRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.AppTheme
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.DraggableSideMenu
 import com.livefast.eattrash.raccoonforlemmy.core.di.RootDI
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.ProvideStrings
-import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.getL10nManager
+import com.livefast.eattrash.raccoonforlemmy.core.l10n.di.rememberL10nManager
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.ComposeEvent
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DefaultNavigationAdapter
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.Destination
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.DrawerEvent
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.SideMenuEvents
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getBottomNavItemsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberBottomNavItemsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toInts
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getAccountRepository
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
-import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.getAppConfigStore
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberAccountRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.preferences.di.rememberAppConfigStore
 import com.livefast.eattrash.raccoonforlemmy.core.resources.ProvideResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import com.livefast.eattrash.raccoonforlemmy.core.utils.toLocalDp
-import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getApiConfigurationRepository
-import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.getCustomUriHandler
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.rememberApiConfigurationRepository
+import com.livefast.eattrash.raccoonforlemmy.domain.identity.di.rememberCustomUriHandler
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.urlhandler.ProvideCustomUriHandler
 import com.livefast.eattrash.raccoonforlemmy.navigation.buildNavigationGraph
 import com.livefast.eattrash.raccoonforlemmy.unit.drawer.content.ModalDrawerContent
-import com.livefast.eattrash.raccoonforlemmy.unit.drawer.di.getSubscriptionsCache
+import com.livefast.eattrash.raccoonforlemmy.unit.drawer.di.rememberSubscriptionsCache
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.debounce
@@ -80,31 +80,31 @@ import org.kodein.di.compose.withDI
 @OptIn(FlowPreview::class, ExperimentalComposeUiApi::class)
 @Composable
 fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
-    val accountRepository = remember { getAccountRepository() }
-    val settingsRepository = remember { getSettingsRepository() }
-    val appColorRepository = remember { getAppColorRepository() }
+    val accountRepository = rememberAccountRepository()
+    val settingsRepository = rememberSettingsRepository()
+    val appColorRepository = rememberAppColorRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     var hasBeenInitialized by remember { mutableStateOf(false) }
-    val apiConfigurationRepository = remember { getApiConfigurationRepository() }
-    val themeRepository = remember { getThemeRepository() }
+    val apiConfigurationRepository = rememberApiConfigurationRepository()
+    val themeRepository = rememberThemeRepository()
     val useDynamicColors by themeRepository.dynamicColors.collectAsState()
     val uiFontScale by themeRepository.uiFontScale.collectAsState()
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val drawerCoordinator = remember { getDrawerCoordinator() }
+    val drawerCoordinator = rememberDrawerCoordinator()
     val drawerGesturesEnabled by drawerCoordinator.gesturesEnabled.collectAsState()
-    val mainRouter = remember { getMainRouter() }
-    val l10nManager = remember { getL10nManager() }
+    val mainRouter = rememberMainRouter()
+    val l10nManager = rememberL10nManager()
     val langState by l10nManager.lang.collectAsState()
     var screenWidth by remember { mutableStateOf(0f) }
     var sideMenuContent by remember { mutableStateOf<@Composable (() -> Unit)?>(null) }
     val sideMenuOpened by navigationCoordinator.sideMenuOpened.collectAsState()
     val scope = rememberCoroutineScope()
-    val subscriptionsCache = remember { getSubscriptionsCache() }
-    val appConfigStore = remember { getAppConfigStore() }
-    val bottomNavItemsRepository = remember { getBottomNavItemsRepository() }
+    val subscriptionsCache = rememberSubscriptionsCache()
+    val appConfigStore = rememberAppConfigStore()
+    val bottomNavItemsRepository = rememberBottomNavItemsRepository()
     val fallbackUriHandler = LocalUriHandler.current
-    val customUriHandler = remember { getCustomUriHandler(fallbackUriHandler) }
+    val customUriHandler = rememberCustomUriHandler(fallbackUriHandler)
     val navController = rememberNavController()
     val navState = rememberNavigationEventState(NavigationEventInfo.None)
 

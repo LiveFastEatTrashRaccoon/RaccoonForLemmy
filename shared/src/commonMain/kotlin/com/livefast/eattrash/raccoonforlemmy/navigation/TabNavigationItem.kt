@@ -26,7 +26,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomImage
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.TabNavigationSection
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toIcon
 import com.livefast.eattrash.raccoonforlemmy.core.navigation.toReadableName
 
@@ -38,7 +38,7 @@ internal fun RowScope.TabNavigationItem(
     onClick: (() -> Unit)? = null,
     onLongPress: (() -> Unit)? = null,
 ) {
-    val navigationCoordinator = remember { getNavigationCoordinator() }
+    val navigationCoordinator = rememberNavigationCoordinator()
     val unread by navigationCoordinator.inboxUnread.collectAsState()
     val currentSection by navigationCoordinator.currentSection.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }

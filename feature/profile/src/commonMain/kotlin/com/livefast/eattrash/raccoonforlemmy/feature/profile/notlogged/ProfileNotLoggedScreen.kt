@@ -11,18 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.di.getViewModel
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getMainRouter
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberMainRouter
 
 @Composable
 fun ProfileNotLoggedScreen(onManageAccounts: () -> Unit, modifier: Modifier = Modifier) {
     val model: ProfileNotLoggedMviModel = getViewModel<ProfileNotLoggedViewModel>()
-    val mainRouter = remember { getMainRouter() }
+    val mainRouter = rememberMainRouter()
     val uiState by model.uiState.collectAsState()
 
     Column(

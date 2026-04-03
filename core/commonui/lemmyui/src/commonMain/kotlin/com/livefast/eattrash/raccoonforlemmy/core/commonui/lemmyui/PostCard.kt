@@ -47,11 +47,11 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.ancillaryTextAlpha
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.CustomizedContent
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getClipboardHelper
-import com.livefast.eattrash.raccoonforlemmy.core.utils.di.getShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberClipboardHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.di.rememberShareHelper
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAVideo
 import com.livefast.eattrash.raccoonforlemmy.core.utils.looksLikeAnImage
 import com.livefast.eattrash.raccoonforlemmy.core.utils.normalizeImgurUrl
@@ -342,7 +342,7 @@ private fun CompactPost(
     botTagColor: Int? = null,
     meTagColor: Int? = null,
 ) {
-    val settingsRepository = remember { getSettingsRepository() }
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     val uriHandler = LocalUriHandler.current
     var textSelection by remember { mutableStateOf(false) }
@@ -352,9 +352,9 @@ private fun CompactPost(
             .orEmpty()
             .takeIf { !it.looksLikeAnImage && !it.looksLikeAVideo }
             .orEmpty()
-    val shareHelper = remember { getShareHelper() }
+    val shareHelper = rememberShareHelper()
     val clipboard = LocalClipboard.current
-    val clipboardHelper = remember { getClipboardHelper(clipboard) }
+    val clipboardHelper = rememberClipboardHelper(clipboard)
     val scope = rememberCoroutineScope()
     val onShareLambda: () -> Unit = {
         scope.launch {
@@ -585,7 +585,7 @@ private fun ExtendedPost(
     botTagColor: Int? = null,
     meTagColor: Int? = null,
 ) {
-    val settingsRepository = remember { getSettingsRepository() }
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     val maxLines = settings.postBodyMaxLines.takeIf { limitBodyHeight }
     val uriHandler = LocalUriHandler.current
@@ -601,9 +601,9 @@ private fun ExtendedPost(
                     !it.looksLikeAnImage &&
                     !it.looksLikeAVideo
             }.orEmpty()
-    val shareHelper = remember { getShareHelper() }
+    val shareHelper = rememberShareHelper()
     val clipboard = LocalClipboard.current
-    val clipboardHelper = remember { getClipboardHelper(clipboard) }
+    val clipboardHelper = rememberClipboardHelper(clipboard)
     val scope = rememberCoroutineScope()
     val onShareLambda: () -> Unit = {
         scope.launch {

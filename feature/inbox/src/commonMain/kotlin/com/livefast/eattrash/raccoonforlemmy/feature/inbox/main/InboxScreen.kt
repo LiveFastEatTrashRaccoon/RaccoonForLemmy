@@ -35,9 +35,9 @@ import com.livefast.eattrash.raccoonforlemmy.core.commonui.components.SectionSel
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheet
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.modals.CustomModalBottomSheetItem
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getDrawerCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.getNavigationCoordinator
-import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.getSettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberDrawerCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.navigation.di.rememberNavigationCoordinator
+import com.livefast.eattrash.raccoonforlemmy.core.persistence.di.rememberSettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.resources.LocalResources
 import com.livefast.eattrash.raccoonforlemmy.unit.mentions.InboxMentionsScreen
 import com.livefast.eattrash.raccoonforlemmy.unit.messages.InboxMessagesScreen
@@ -52,9 +52,9 @@ fun InboxScreen(modifier: Modifier = Modifier, model: InboxMviModel = getViewMod
     val uiState by model.uiState.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
-    val drawerCoordinator = remember { getDrawerCoordinator() }
-    val navigationCoordinator = remember { getNavigationCoordinator() }
-    val settingsRepository = remember { getSettingsRepository() }
+    val drawerCoordinator = rememberDrawerCoordinator()
+    val navigationCoordinator = rememberNavigationCoordinator()
+    val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
     val scope = rememberCoroutineScope()
     val connection = navigationCoordinator.getBottomBarScrollConnection()

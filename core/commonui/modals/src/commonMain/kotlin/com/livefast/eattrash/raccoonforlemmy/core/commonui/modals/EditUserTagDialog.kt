@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.getThemeRepository
+import com.livefast.eattrash.raccoonforlemmy.core.appearance.di.rememberThemeRepository
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.Spacing
 import com.livefast.eattrash.raccoonforlemmy.core.appearance.theme.toTypography
 import com.livefast.eattrash.raccoonforlemmy.core.commonui.lemmyui.SettingsColorRow
@@ -46,7 +46,7 @@ fun EditUserTagDialog(
     onClose: ((String?, Color?) -> Unit)? = null,
 ) {
     var textFieldValue by remember { mutableStateOf(TextFieldValue(text = value)) }
-    val themeRepository = remember { getThemeRepository() }
+    val themeRepository = rememberThemeRepository()
     val contentFontFamily by themeRepository.contentFontFamily.collectAsState()
     val typography = contentFontFamily.toTypography()
     var selectCustomColorDialogOpen by remember { mutableStateOf(false) }
