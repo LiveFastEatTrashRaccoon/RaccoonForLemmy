@@ -22,7 +22,7 @@
     <string name="admin_action_mark_as_featured">Mettre en avant (instance)</string>
     <string name="admin_action_purge">Purger</string>
     <string name="admin_action_unmark_as_featured">Ne plus mettre en avant (instance)</string>
-    <string name="advanced_settings_default_language">Langue par défaut dans l'éditeur</string>
+    <string name="advanced_settings_default_language">Langue par défaut dans l\'éditeur</string>
     <string name="app_icon_alt_1">Monochromatique</string>
     <string name="app_icon_classical">Classique</string>
     <string name="app_icon_default">Défaut</string>
@@ -34,7 +34,7 @@
     <string name="bar_theme_transparent">Transparent</string>
     <string name="beta">Bêta</string>
     <string name="block_action_community">Bloquer la communauté</string>
-    <string name="block_action_user">Bloquer l'utilisateur</string>
+    <string name="block_action_user">Bloquer l\'utilisateur</string>
     <string name="button_add">Ajouter nouveau</string>
     <string name="button_cancel">Annuler</string>
     <string name="button_close">Fermer</string>
@@ -51,9 +51,9 @@
     <string name="community_action_unsubscribe">Se désabonner</string>
     <string name="community_action_view_modlog">Afficher le journal de modération</string>
     <string name="community_detail_block">Bloquer</string>
-    <string name="community_detail_block_instance">Bloquer l'instance</string>
+    <string name="community_detail_block_instance">Bloquer l\'instance</string>
     <string name="community_detail_info">Informations sur la communauté</string>
-    <string name="community_detail_instance_info">Détails sur l'instance</string>
+    <string name="community_detail_instance_info">Détails sur l\'instance</string>
     <string name="community_info_comments">commentaires</string>
     <string name="community_info_daily_active_users">utilisateurs actifs (jour)</string>
     <string name="community_info_moderators">Modérateurs</string>
@@ -91,7 +91,7 @@
     <string name="dialog_raw_content_title">Titre</string>
     <string name="dialog_raw_content_url">URL</string>
     <string name="dialog_title_add_instance">Ajouter instance</string>
-    <string name="dialog_title_change_instance">Changer d'instance</string>
+    <string name="dialog_title_change_instance">Changer d\'instance</string>
     <string name="dialog_title_raw_content">Contenu brut</string>
     <string name="dialog_title_select_community">Sélectionner une communauté</string>
     <string name="edit_comment_title">Modifier commentaire</string>
@@ -129,13 +129,13 @@
     <string name="home_sort_type_top_6_hours_short">6h</string>
     <string name="home_sort_type_top_day">Top du jour</string>
     <string name="home_sort_type_top_day_short">jour</string>
-    <string name="home_sort_type_top_hour">Top de l'heure</string>
+    <string name="home_sort_type_top_hour">Top de l\'heure</string>
     <string name="home_sort_type_top_hour_short">1h</string>
     <string name="home_sort_type_top_month">Top du mois</string>
     <string name="home_sort_type_top_month_short">mois</string>
     <string name="home_sort_type_top_week">Top de la semaine</string>
     <string name="home_sort_type_top_week_short">semaine</string>
-    <string name="home_sort_type_top_year">Top de l'an</string>
+    <string name="home_sort_type_top_year">Top de l\'an</string>
     <string name="home_sort_type_top_year_short">an</string>
     <string name="inbox_chat_message">Message</string>
     <string name="inbox_item_mention">vous a mentionné</string>
@@ -144,14 +144,14 @@
     <string name="inbox_listing_type_all">Tous</string>
     <string name="inbox_listing_type_title">Type de boîte de réception</string>
     <string name="inbox_listing_type_unread">Non lus</string>
-    <string name="inbox_not_logged_message">Vous n'êtes pas connecté.\nVeuillez ajouter un compte à partir de l'écran de profil pour voir votre boîte de réception.</string>
+    <string name="inbox_not_logged_message">Vous n\'êtes pas connecté.\nVeuillez ajouter un compte à partir de l\'écran de profil pour voir votre boîte de réception.</string>
     <string name="inbox_notification_title">Éléments non lus</string>
     <string name="inbox_section_mentions">Mentions</string>
     <string name="inbox_section_messages">Messages</string>
     <string name="inbox_section_replies">Réponses</string>
     <string name="instance_detail_communities">Communautés</string>
-    <string name="instance_detail_title">Instance :</string>
-    <string name="login_field_instance_name">Nom de l'instance</string>
+    <string name="instance_detail_title">Instance :</string>
+    <string name="login_field_instance_name">Nom de l\'instance</string>
     <string name="login_field_label_optional">(optionnel)</string>
     <string name="login_field_password">Mot de passe</string>
     <string name="login_field_token">Jeton 2FA TOTP</string>
@@ -161,19 +161,19 @@
     <string name="manage_subscriptions_header_multicommunities">Multi-communautés</string>
     <string name="manage_subscriptions_header_subscriptions">Abonnements</string>
     <string name="message_are_you_sure">Êtes-vous sûr de vouloir continuer ?</string>
-    <string name="message_auth_issue">Une erreur s'est produite lors de la récupération des données, peut-être que votre jeton a expiré.</string>
-    <string name="message_auth_issue_segue_0">Vous pourriez essayer l'une des actions suivantes :</string>
-    <string name="message_auth_issue_segue_1">actualiser l'ecran</string>
-    <string name="message_auth_issue_segue_2">s'enregistrer à nouveau</string>
-    <string name="message_auth_issue_segue_3">effacer les données de l'application</string>
+    <string name="message_auth_issue">Une erreur s\'est produite lors de la récupération des données, peut-être que votre jeton a expiré.</string>
+    <string name="message_auth_issue_segue_0">Vous pourriez essayer l\'une des actions suivantes :</string>
+    <string name="message_auth_issue_segue_1">actualiser l\'ecran</string>
+    <string name="message_auth_issue_segue_2">s\'enregistrer à nouveau</string>
+    <string name="message_auth_issue_segue_3">effacer les données de l\'application</string>
     <string name="message_confirm_exit">Appuyez à nouveau sur 🔙 pour quitter</string>
     <string name="message_content_deleted">Vous avez supprimé ce contenu</string>
     <string name="message_content_removed">(ce contenu a été supprimé)</string>
     <string name="message_empty_comments">C\'est trop silencieux.\nAllez-vous être le premier à commenter ?</string>
-    <string name="message_empty_list">Pas d'éléments à afficher</string>
-    <string name="message_error_loading_comments">Une erreur s'est produite lors du chargement des commentaires.</string>
+    <string name="message_empty_list">Pas d\'éléments à afficher</string>
+    <string name="message_error_loading_comments">Une erreur s\'est produite lors du chargement des commentaires.</string>
     <string name="message_generic_error">Erreur générique</string>
-    <string name="message_image_loading_error">Erreur de chargement de l'image</string>
+    <string name="message_image_loading_error">Erreur de chargement de l\'image</string>
     <string name="message_invalid_field">Champ invalide</string>
     <string name="message_missing_field">Champs manquant</string>
     <string name="message_operation_successful">Opération terminée avec succès</string>
@@ -181,8 +181,8 @@
     <string name="message_unsaved_changes">Des modifications sont non enregistrées, êtes-vous sûr de vouloir quitter ?</string>
     <string name="message_video_nsfw">Cette vidéo a été marquée comme NSFW</string>
     <string name="mod_action_add_mod">Ajouter modérateur</string>
-    <string name="mod_action_allow">Réautoriser l'utilisateur</string>
-    <string name="mod_action_ban">Bannir l'utilisateur</string>
+    <string name="mod_action_allow">Réautoriser l\'utilisateur</string>
+    <string name="mod_action_ban">Bannir l\'utilisateur</string>
     <string name="mod_action_lock">Verrouiller</string>
     <string name="mod_action_mark_as_distinguished">Marquer comme distingué</string>
     <string name="mod_action_mark_as_featured">Marquer comme mis en avant</string>
@@ -228,8 +228,8 @@
     <string name="navigation_search">Explorer</string>
     <string name="navigation_settings">Paramètres</string>
     <string name="never">Jamais</string>
-    <string name="notice_banned_user">L'utilisateur actuel a été banni de cette communauté</string>
-    <string name="notice_community_local_only">Cette communauté n'est visible que dans l'instance actuelle</string>
+    <string name="notice_banned_user">L\'utilisateur actuel a été banni de cette communauté</string>
+    <string name="notice_community_local_only">Cette communauté n\'est visible que dans l\'instance actuelle</string>
     <string name="post_action_cross_post">Publication croisée</string>
     <string name="post_action_edit">Éditer</string>
     <string name="post_action_hide">Cacher</string>
@@ -242,9 +242,9 @@
     <string name="post_hour_short">h</string>
     <string name="post_list_load_more_posts">Charger plus de publications</string>
     <string name="post_minute_short">min</string>
-    <string name="post_reply_source_account">par :</string>
+    <string name="post_reply_source_account">par :</string>
     <string name="post_second_short">s</string>
-    <string name="profile_button_login">S'inscrire</string>
+    <string name="profile_button_login">S\'inscrire</string>
     <string name="profile_day_short">j</string>
     <string name="profile_million_short">M</string>
     <string name="profile_month_short">mois</string>
@@ -265,7 +265,7 @@
     <string name="select_tab_navigation_title">Sélectionnez une section</string>
     <string name="settings_about">À propos de cette application</string>
     <string name="settings_about_acknowledgements">Remerciements</string>
-    <string name="settings_about_app_version">Version de l'application</string>
+    <string name="settings_about_app_version">Version de l\'application</string>
     <string name="settings_about_changelog">Voir le journal des modifications</string>
     <string name="settings_about_licences">Licences</string>
     <string name="settings_about_matrix">Rejoindre le salon Matrix</string>
@@ -275,7 +275,7 @@
     <string name="settings_about_view_lemmy">Communauté Lemmy</string>
     <string name="settings_advanced">Paramètres avancés</string>
     <string name="settings_ancillary_font_scale">Taille des textes annexes</string>
-    <string name="settings_app_icon">Icône de l'application</string>
+    <string name="settings_app_icon">Icône de l\'application</string>
     <string name="settings_auto_expand_comments">Élargir les commentaires automatiquement</string>
     <string name="settings_auto_load_images">Charger les images automatiquement</string>
     <string name="settings_bar_theme">Thème de la barre d\'état et de navigation</string>
@@ -296,7 +296,7 @@
     <string name="settings_color_purple">🐙 Pieuvre pantouflarde</string>
     <string name="settings_color_red">🦀 Crabe calme</string>
     <string name="settings_color_white">🐼 Ours obèse</string>
-    <string name="settings_colors_and_fonts">Apparence de l'application</string>
+    <string name="settings_colors_and_fonts">Apparence de l\'application</string>
     <string name="settings_comment_bar_theme">Thème de la barre de commentaires</string>
     <string name="settings_comment_bar_theme_blue">🌊 Océan</string>
     <string name="settings_comment_bar_theme_green">🥑 Avocat</string>
@@ -328,9 +328,9 @@
     <string name="settings_downvote_color">Couleur votes négatifs</string>
     <string name="settings_dynamic_colors">Utiliser couleur dynamique</string>
     <string name="settings_edge_to_edge">Contenu bord à bord</string>
-    <string name="settings_enable_buttons_to_scroll_between_comments">Boutons de navigation dans l'écran de publication</string>
-    <string name="settings_enable_crash_report">Activer les rapports d'accidents</string>
-    <string name="settings_enable_double_tap">Activer l'action double tap</string>
+    <string name="settings_enable_buttons_to_scroll_between_comments">Boutons de navigation dans l\'écran de publication</string>
+    <string name="settings_enable_crash_report">Activer les rapports d\'accidents</string>
+    <string name="settings_enable_double_tap">Activer l\'action double tap</string>
     <string name="settings_enable_swipe_actions">Activer les actions de glissement</string>
     <string name="settings_enable_toggle_favorite_in_nav_drawer">Ajouter/supprimer des favoris dans le tiroir de navigation</string>
     <string name="settings_export">Exporter les paramètres vers un fichier</string>
@@ -348,12 +348,12 @@
     <string name="settings_item_alternate_markdown_rendering">Activer le rendu de Markdown alternatif</string>
     <string name="settings_item_configure_bottom_navigation_bar">Configurer la barre de navigation inférieure</string>
     <string name="settings_item_image_source_path">Enregistrez les images dans des sous-répertoires spécifiques</string>
-    <string name="settings_item_open_post_web_page_on_image_click">Ouvrir la page web en cliquant sur l'image de la publication</string>
+    <string name="settings_item_open_post_web_page_on_image_click">Ouvrir la page web en cliquant sur l\'image de la publication</string>
     <string name="settings_item_random_theme_color">Utiliser une couleur aléatoire</string>
     <string name="settings_language">Langue</string>
     <string name="settings_manage_ban">Bans et filtres</string>
     <string name="settings_manage_ban_action_unban">Débannir</string>
-    <string name="settings_manage_ban_domain_placeholder">Sous-chaîne de l'URL à exclure</string>
+    <string name="settings_manage_ban_domain_placeholder">Sous-chaîne de l\'URL à exclure</string>
     <string name="settings_manage_ban_section_domains">Domaines</string>
     <string name="settings_manage_ban_section_instances">Instances</string>
     <string name="settings_manage_ban_section_stop_words">Mots</string>
@@ -370,8 +370,8 @@
     <string name="settings_post_layout_compact">Compacte</string>
     <string name="settings_post_layout_full">Pleine</string>
     <string name="settings_prefer_user_nicknames">Utiliser les noms d\'affichage pour les utilisateurs et les communautés</string>
-    <string name="settings_reply_color">Couleur de l'action de réponse</string>
-    <string name="settings_save_color">Couleur de l'action de sauvegarde</string>
+    <string name="settings_reply_color">Couleur de l\'action de réponse</string>
+    <string name="settings_save_color">Couleur de l\'action de sauvegarde</string>
     <string name="settings_search_posts_title_only">Rechercher les publications uniquement dans le titre</string>
     <string name="settings_section_account">Paramètres du compte</string>
     <string name="settings_section_appearance">Apparence</string>
@@ -380,9 +380,9 @@
     <string name="settings_section_nsfw">NSFW</string>
     <string name="settings_show_scores">Afficher les votes</string>
     <string name="settings_show_unread_comments">Afficher le nombre de commentaires non lus</string>
-    <string name="settings_subtitle_image_source_path">utiliser la communauté ou le handle d'utilisateur dans les chemins</string>
-    <string name="settings_subtitle_open_post_web_page_on_image_click">Si une publication est associée à une URL, ouvrir la page web en cliquant sur l'image</string>
-    <string name="settings_subtitle_random_theme_color">Changer la couleur du thème à chaque démarrage de l'application</string>
+    <string name="settings_subtitle_image_source_path">utiliser la communauté ou le handle d\'utilisateur dans les chemins</string>
+    <string name="settings_subtitle_open_post_web_page_on_image_click">Si une publication est associée à une URL, ouvrir la page web en cliquant sur l\'image</string>
+    <string name="settings_subtitle_random_theme_color">Changer la couleur du thème à chaque démarrage de l\'application</string>
     <string name="settings_theme_black">Noir (AMOLED)</string>
     <string name="settings_theme_dark">Sombre</string>
     <string name="settings_theme_light">Lumineux</string>
@@ -391,14 +391,14 @@
     <string name="settings_title_font_scale">Taille du texte des titres</string>
     <string name="settings_title_pictures">Images</string>
     <string name="settings_title_reading">Lecture et contenu</string>
-    <string name="settings_ui_font_family">Police de l'interface</string>
-    <string name="settings_ui_font_scale">Taille de texte de l'interface</string>
-    <string name="settings_ui_theme">Thème de l'interface</string>
+    <string name="settings_ui_font_family">Police de l\'interface</string>
+    <string name="settings_ui_font_scale">Taille de texte de l\'interface</string>
+    <string name="settings_ui_theme">Thème de l\'interface</string>
     <string name="settings_upvote_color">Couleur votes positifs</string>
     <string name="settings_url_opening_mode_custom_tabs">Onglets personnalisés</string>
     <string name="settings_url_opening_mode_external">Navigateur externe</string>
-    <string name="settings_url_opening_mode_internal">Dans l'application</string>
-    <string name="settings_use_avatar_as_profile_navigation_icon">Utiliser l'avatar comme icône de profil dans la barre de navigation inférieure</string>
+    <string name="settings_url_opening_mode_internal">Dans l\'application</string>
+    <string name="settings_use_avatar_as_profile_navigation_icon">Utiliser l\'avatar comme icône de profil dans la barre de navigation inférieure</string>
     <string name="settings_user_manual">Manuel utilisateur</string>
     <string name="settings_vote_format">Format du vote</string>
     <string name="settings_vote_format_aggregated">Agrégat</string>
@@ -420,13 +420,13 @@
     <string name="settings_web_show_bot">Afficher les comptes de bots</string>
     <string name="settings_web_show_nsfw">Afficher NSFW</string>
     <string name="settings_web_show_read">Afficher les messages lus</string>
-    <string name="settings_zombie_mode_interval">Durée de l'intervalle du mode zombie</string>
+    <string name="settings_zombie_mode_interval">Durée de l\'intervalle du mode zombie</string>
     <string name="settings_zombie_mode_scroll_amount">Quantité de défilement en mode zombie</string>
     <string name="share_mode_file">Partager sous forme de fichier</string>
     <string name="share_mode_url">Partager l\'URL</string>
-    <string name="sidebar_not_logged_message">Bienvenus sur Raccoon pour Lemmy !\n\nEn mode anonyme, utilisez le bouton déroulant (▼) ci-dessus pour changer d'instance.\n\nVous pouvez vous connecter à votre instance à tout moment depuis l'écran Profil.\n\nProfitez de Lemmy !</string>
+    <string name="sidebar_not_logged_message">Bienvenus sur Raccoon pour Lemmy !\n\nEn mode anonyme, utilisez le bouton déroulant (▼) ci-dessus pour changer d\'instance.\n\nVous pouvez vous connecter à votre instance à tout moment depuis l\'écran Profil.\n\nProfitez de Lemmy !</string>
     <string name="undetermined">Indéfini</string>
-    <string name="user_detail_info">Informations de l'utilisateur</string>
+    <string name="user_detail_info">Informations de l\'utilisateur</string>
     <string name="user_info_admin">administrateur</string>
     <string name="user_info_moderates">Modérateur de</string>
     <plurals name="inbox_notification_content">
@@ -509,4 +509,21 @@
     <string name="swipe_action_start_one">Côté gauche (1ère action)</string>
     <string name="settings_mark_as_read_on_interaction_subtitle">Après avoir voté ou sauvegardé une publication, la marquer comme lue</string>
     <string name="settings_mark_as_read_on_interaction">Marquer lu les publications lors d\'une interaction avec elles</string>
+    <string name="language_zh_tw" translatable="false"></string>
+    <string name="language_it" translatable="false"></string>
+    <string name="language_pl" translatable="false"></string>
+    <string name="language_ga" translatable="false"></string>
+    <string name="language_pt_br" translatable="false"></string>
+    <string name="language_pt" translatable="false"></string>
+    <string name="language_uk" translatable="false"></string>
+    <string name="language_lv" translatable="false"></string>
+    <string name="language_es" translatable="false"></string>
+    <string name="language_ta" translatable="false"></string>
+    <string name="language_de" translatable="false"></string>
+    <string name="language_en" translatable="false"></string>
+    <string name="language_zh_cn" translatable="false"></string>
+    <string name="settings_default_comment_sort_type_profile"></string>
+    <string name="language_zh_hk" translatable="false"></string>
+    <string name="language_fi" translatable="false"></string>
+    <string name="language_fr" translatable="false"></string>
 </resources>
