@@ -9,6 +9,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation(libs.kotlinx.coroutines.test)
+                implementation(libs.kodein)
+                implementation(projects.core.di)
             }
         }
     }

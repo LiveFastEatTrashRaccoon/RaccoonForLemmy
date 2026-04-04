@@ -16,10 +16,12 @@ kotlin {
                 implementation(projects.core.commonui.components)
                 implementation(projects.core.commonui.lemmyui)
                 implementation(projects.core.commonui.modals)
+                implementation(projects.core.di)
                 implementation(projects.core.l10n)
                 implementation(projects.core.navigation)
                 implementation(projects.core.notifications)
                 implementation(projects.core.persistence)
+                implementation(projects.core.preferences)
                 implementation(projects.core.resources)
                 implementation(projects.core.utils)
 
