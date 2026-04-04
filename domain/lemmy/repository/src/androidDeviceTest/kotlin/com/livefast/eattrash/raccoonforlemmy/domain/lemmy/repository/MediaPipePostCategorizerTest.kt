@@ -32,11 +32,6 @@ class MediaPipePostCategorizerTest {
         assertNotNull(context, "Context should be available in instrumented test")
     }
 
-    @Test
-    fun smokeb(){
-        assertTrue(false, "Running on phone")
-    }
-
     /**
      * cannot run on emulator :( https://github.com/google-ai-edge/mediapipe/issues/5362
      */
@@ -73,4 +68,3 @@ class MediaPipePostCategorizerTest {
     }
 }
 
-ddd

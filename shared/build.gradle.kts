@@ -94,18 +94,26 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting {
-            dependencies {
-//                implementation(libs.compose.ui.backhandler)
-            }
-        }
-        val androidUnitTest by getting {
+
+        androidInstrumentedTest {
             dependencies {
                 implementation(libs.mockk)
                 implementation(libs.kotlinx.coroutines.test)
                 implementation(projects.core.testutils)
             }
         }
+//        val androidMain by getting {
+//            dependencies {
+//                implementation(libs.compose.ui.backhandler)
+//            }
+//        }
+//        val androidInstrumentedTest by getting {
+//            dependencies {
+//                implementation(libs.mockk)
+//                implementation(libs.kotlinx.coroutines.test)
+//                implementation(projects.core.testutils)
+//            }
+//        }
 //        val iosX64Main by getting
 //        val iosArm64Main by getting
 //        val iosSimulatorArm64Main by getting

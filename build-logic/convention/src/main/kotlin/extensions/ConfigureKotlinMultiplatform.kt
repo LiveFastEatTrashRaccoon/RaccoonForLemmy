@@ -52,6 +52,10 @@ internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatform
                 }
             }
 
+//            withDeviceTest {
+//                this.instrumentationRunner = "invalid"
+//            }
+
             experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
         }
     }

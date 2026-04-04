@@ -2,12 +2,19 @@ plugins {
     id("com.livefast.eattrash.kotlinMultiplatform")
     id("com.livefast.eattrash.androidTest")
     id("com.livefast.eattrash.spotless")
+//    id("com.android.kotlin.multiplatform.library")
     alias(libs.plugins.kotlinx.kover)
-    // Apply KSP plugin for annotation processing
-    alias(libs.plugins.ksp)
 }
 
 kotlin {
+
+    android {
+        withDeviceTest {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            execution = "HOST"
+        }
+    }
+
     sourceSets {
         commonMain {
             dependencies {
@@ -21,47 +28,28 @@ kotlin {
 
                 implementation(projects.domain.lemmy.data)
             }
-        }
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.llamaAndroid)
-                implementation(libs.ktor.cio)
-                implementation(libs.mediapipe.tasks.text)
 
-                // AutoValue dependencies for annotation processing
-//                implementation(libs.autovalue)
-//                ksp(libs.autovalue.ksp)
+            androidMain {
+                dependencies {
+                    implementation(libs.llamaAndroid)
+                    implementation(libs.ktor.cio)
+                    implementation(libs.mediapipe.tasks.text)
+                }
             }
         }
-        val androidInstrumentedTest by getting {
+
+        getByName("androidDeviceTest") {
+
             dependencies {
                 val androidXTestVersion = "1.5.0"
-                implementation ("androidx.test:runner:$androidXTestVersion")
-                implementation ("androidx.test:rules:$androidXTestVersion")
+                implementation("androidx.test:runner:$androidXTestVersion")
+                implementation("androidx.test:rules:$androidXTestVersion")
 
                 implementation(libs.kotlinx.coroutines.test)
                 implementation(kotlin("test-junit"))
                 implementation(project(":core:testutils"))
                 implementation("androidx.test.ext:junit:1.2.1")
             }
-        }
-    }
-}
-
-android {
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
