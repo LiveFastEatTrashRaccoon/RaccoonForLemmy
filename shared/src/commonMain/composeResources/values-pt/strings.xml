@@ -431,6 +431,7 @@
     <string name="user_info_moderates">Moderador de</string>
     <plurals name="inbox_notification_content">
         <item quantity="one">Existe %1$d item não lido</item>
+        <item quantity="many"/>
         <item quantity="other">Existem %1$d itens não lidos</item>
     </plurals>
 </resources>

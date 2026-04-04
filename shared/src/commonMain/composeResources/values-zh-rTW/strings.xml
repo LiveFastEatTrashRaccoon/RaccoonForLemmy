@@ -144,7 +144,7 @@
     <string name="inbox_listing_type_all">全部</string>
     <string name="inbox_listing_type_title">收件箱類型</string>
     <string name="inbox_listing_type_unread">未讀</string>
-    <string name="inbox_not_logged_message">   "您目前未登錄。\n請從個人資料頁面添加賬戶以查看您的收件箱。</string>
+    <string name="inbox_not_logged_message">\"您目前未登錄。\n請從個人資料頁面添加賬戶以查看您的收件箱。</string>
     <string name="inbox_notification_title">未讀項目</string>
     <string name="inbox_section_mentions">提及</string>
     <string name="inbox_section_messages">訊息</string>
@@ -404,13 +404,12 @@
     <string name="settings_zombie_mode_scroll_amount">殭屍模式滾動量</string>
     <string name="share_mode_file">作為文件分享</string>
     <string name="share_mode_url">作為網址分享</string>
-    <string name="sidebar_not_logged_message">   "歡迎來到Raccoon！\n\n在匿名模式下，使用上方的下拉按鈕(▼) 更改網站。\n\n您可以隨時從個人資料屏幕登錄到您的網站。\n\n享受Lemmy！</string>
+    <string name="sidebar_not_logged_message">\"歡迎來到Raccoon！\n\n在匿名模式下，使用上方的下拉按鈕(▼) 更改網站。\n\n您可以隨時從個人資料屏幕登錄到您的網站。\n\n享受Lemmy！</string>
     <string name="undetermined">未定義</string>
     <string name="user_detail_info">用戶資訊</string>
     <string name="user_info_admin">管理員</string>
     <string name="user_info_moderates">…的版主</string>
     <plurals name="inbox_notification_content">
-        <item quantity="one">有%1$d未讀項目</item>
         <item quantity="other">有%1$d未讀項目</item>
     </plurals>
 </resources>

@@ -16,13 +16,13 @@
     <string name="action_restore">Ripristina</string>
     <string name="action_save">Salva</string>
     <string name="action_search_in_comments">Cerca nei commenti</string>
-    <string name="action_search_in_community">Cerca all'interno della comunità</string>
+    <string name="action_search_in_community">Cerca all\'interno della comunità</string>
     <string name="action_toggle_read">Letto/non letto</string>
     <string name="action_upvote">Voto positivo</string>
     <string name="admin_action_mark_as_featured">Contrassegna come fissato (istanza)</string>
     <string name="admin_action_purge">Epura</string>
     <string name="admin_action_unmark_as_featured">Contrassegna come non fisasto (istanza)</string>
-    <string name="advanced_settings_default_language">Lingua di default nell'editor</string>
+    <string name="advanced_settings_default_language">Lingua di default nell\'editor</string>
     <string name="app_icon_alt_1">Monocromatica</string>
     <string name="app_icon_classical">Classica</string>
     <string name="app_icon_default">Predefinita</string>
@@ -163,9 +163,9 @@
     <string name="message_are_you_sure">Sei sicuro di voler continuare?</string>
     <string name="message_auth_issue">Si è verificato un errore nel recupero dei dati, è possibile che il token attuale sia scaduto.</string>
     <string name="message_auth_issue_segue_0">Si consiglia di intraprendere una delle seguenti azioni:</string>
-    <string name="message_auth_issue_segue_1">forzare l'aggiornamento</string>
-    <string name="message_auth_issue_segue_2">effettuare nuovamente l'accesso</string>
-    <string name="message_auth_issue_segue_3">cancellare i dati dell'applicazione</string>
+    <string name="message_auth_issue_segue_1">forzare l\'aggiornamento</string>
+    <string name="message_auth_issue_segue_2">effettuare nuovamente l\'accesso</string>
+    <string name="message_auth_issue_segue_3">cancellare i dati dell\'applicazione</string>
     <string name="message_confirm_exit">Premi due volte 🔙 per uscire</string>
     <string name="message_content_deleted">Hai eliminato questo contenuto</string>
     <string name="message_content_removed">(questo contenuto è stato rimosso)</string>
@@ -229,8 +229,8 @@
     <string name="navigation_search">Esplora</string>
     <string name="navigation_settings">Impostazioni</string>
     <string name="never">Mai</string>
-    <string name="notice_banned_user">L'utente corrente è stato bannato da questa comunità</string>
-    <string name="notice_community_local_only">Questa comunità è visibile esclusivamente all'interno dell'istanza corrente</string>
+    <string name="notice_banned_user">L\'utente corrente è stato bannato da questa comunità</string>
+    <string name="notice_community_local_only">Questa comunità è visibile esclusivamente all\'interno dell\'istanza corrente</string>
     <string name="post_action_cross_post">Cross-post</string>
     <string name="post_action_edit">Modifica</string>
     <string name="post_action_hide">Nascondi</string>
@@ -262,7 +262,7 @@
     <string name="report_list_type_title">Tipo elenco segnalazioni</string>
     <string name="report_list_type_unresolved">Non risolte</string>
     <string name="requires_restart">(riavvio richiesto)</string>
-    <string name="select_action_title">Seleziona un'azione</string>
+    <string name="select_action_title">Seleziona un\'azione</string>
     <string name="select_tab_navigation_title">Seleziona una sezione</string>
     <string name="settings_about">Informazioni app</string>
     <string name="settings_about_acknowledgements">Riconoscimenti</string>
@@ -276,7 +276,7 @@
     <string name="settings_about_view_lemmy">Comunità Lemmy</string>
     <string name="settings_advanced">Impostazioni avanzate</string>
     <string name="settings_ancillary_font_scale">Dimensione testi ancillari</string>
-    <string name="settings_app_icon">Icona dell'applicazione</string>
+    <string name="settings_app_icon">Icona dell\'applicazione</string>
     <string name="settings_auto_expand_comments">Espandi commenti automaticamente</string>
     <string name="settings_auto_load_images">Carica immagini automaticamente</string>
     <string name="settings_bar_theme">Tema barra notifiche di sistema e navigazione</string>
@@ -297,7 +297,7 @@
     <string name="settings_color_purple">🐙 Polpo portentoso</string>
     <string name="settings_color_red">🦀 Granchio galante</string>
     <string name="settings_color_white">🐼 Panda peloso</string>
-    <string name="settings_colors_and_fonts">Aspetto dell'applicazione</string>
+    <string name="settings_colors_and_fonts">Aspetto dell\'applicazione</string>
     <string name="settings_comment_bar_theme">Tema barra dei commenti</string>
     <string name="settings_comment_bar_theme_blue">🌊 Oceano</string>
     <string name="settings_comment_bar_theme_green">🥑 Avocado</string>
@@ -383,8 +383,8 @@
     <string name="settings_show_scores">Mostra voti</string>
     <string name="settings_show_unread_comments">Mostra il numero di commenti non letti</string>
     <string name="settings_subtitle_image_source_path">utilizza handle comunità o utente nei percorsi</string>
-    <string name="settings_subtitle_open_post_web_page_on_image_click">Se un post ha un URL, apri pagina web al click sull'immagine</string>
-    <string name="settings_subtitle_random_theme_color">Cambia il colore del tema ad ogni avvio dell'app</string>
+    <string name="settings_subtitle_open_post_web_page_on_image_click">Se un post ha un URL, apri pagina web al click sull\'immagine</string>
+    <string name="settings_subtitle_random_theme_color">Cambia il colore del tema ad ogni avvio dell\'app</string>
     <string name="settings_theme_black">Scuro (AMOLED)</string>
     <string name="settings_theme_dark">Scuro</string>
     <string name="settings_theme_light">Chiaro</string>

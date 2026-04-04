@@ -144,7 +144,7 @@
     <string name="inbox_listing_type_all">全部</string>
     <string name="inbox_listing_type_title">收件箱類型</string>
     <string name="inbox_listing_type_unread">未睇</string>
-    <string name="inbox_not_logged_message">   "您依家未登錄。\n請從個人資料頁面加個賬戶去睇您嘅收件箱。</string>
+    <string name="inbox_not_logged_message">\"您依家未登錄。\n請從個人資料頁面加個賬戶去睇您嘅收件箱。</string>
     <string name="inbox_section_mentions">講起</string>
     <string name="inbox_section_messages">訊息</string>
     <string name="inbox_section_replies">回覆</string>
@@ -403,7 +403,7 @@
     <string name="settings_zombie_mode_scroll_amount">殭屍模式滾動量</string>
     <string name="share_mode_file">分享文件</string>
     <string name="share_mode_url">分享網址</string>
-    <string name="sidebar_not_logged_message">   "歡迎您用Raccoon！\n\n喺匿名模式，用上面嘅下拉按鈕(▼) 更改網站。\n\n您可以隨時喺個人資料屏幕登錄到您嘅網站。\n\n享受Lemmy！</string>
+    <string name="sidebar_not_logged_message">\"歡迎您用Raccoon！\n\n喺匿名模式，用上面嘅下拉按鈕(▼) 更改網站。\n\n您可以隨時喺個人資料屏幕登錄到您嘅網站。\n\n享受Lemmy！</string>
     <string name="undetermined">未定義</string>
     <string name="user_detail_info">用戶資訊</string>
     <string name="user_info_admin">管理員</string>

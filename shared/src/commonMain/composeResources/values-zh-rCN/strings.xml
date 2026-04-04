@@ -261,7 +261,7 @@
     <string name="settings_vote_format_separated">分开计数</string>
     <string name="settings_zombie_mode_interval">僵尸模式间隔时长</string>
     <string name="settings_zombie_mode_scroll_amount">僵尸模式滚动量</string>
-    <string name="sidebar_not_logged_message">   "欢迎使用 Raccoon！\n\n在匿名模式下，您可以使用顶部的下拉按钮 (▼) 更改当前浏览的实例。\n\n您也可以随时在个人资料页面登录您的实例。\n\n还请尽享 Lemmy！</string>
+    <string name="sidebar_not_logged_message">\"欢迎使用 Raccoon！\n\n在匿名模式下，您可以使用顶部的下拉按钮 (▼) 更改当前浏览的实例。\n\n您也可以随时在个人资料页面登录您的实例。\n\n还请尽享 Lemmy！</string>
     <string name="action_create_community">创建社群</string>
     <string name="action_downvote">踩</string>
     <string name="action_toggle_read">已读/未读</string>
