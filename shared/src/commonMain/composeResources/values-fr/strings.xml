@@ -77,7 +77,7 @@
     <string name="create_comment_title">Nouveau commentaire</string>
     <string name="create_post_body">Texte de la publication</string>
     <string name="create_post_community">Communauté</string>
-    <string name="create_post_cross_post_text">Publication croisée :</string>
+    <string name="create_post_cross_post_text">Publication croisée :</string>
     <string name="create_post_name">Titre de la publication</string>
     <string name="create_post_nsfw">NSFW</string>
     <string name="create_post_tab_editor">Éditeur</string>
@@ -160,7 +160,7 @@
     <string name="manage_accounts_title">Gérer les comptes</string>
     <string name="manage_subscriptions_header_multicommunities">Multi-communautés</string>
     <string name="manage_subscriptions_header_subscriptions">Abonnements</string>
-    <string name="message_are_you_sure">Êtes-vous sûr de vouloir continuer ?</string>
+    <string name="message_are_you_sure">Êtes-vous sûr de vouloir continuer ?</string>
     <string name="message_auth_issue">Une erreur s\'est produite lors de la récupération des données, peut-être que votre jeton a expiré.</string>
     <string name="message_auth_issue_segue_0">Vous pourriez essayer l\'une des actions suivantes :</string>
     <string name="message_auth_issue_segue_1">actualiser l\'ecran</string>
@@ -169,7 +169,7 @@
     <string name="message_confirm_exit">Appuyez à nouveau sur 🔙 pour quitter</string>
     <string name="message_content_deleted">Vous avez supprimé ce contenu</string>
     <string name="message_content_removed">(ce contenu a été supprimé)</string>
-    <string name="message_empty_comments">C\'est trop silencieux.\nAllez-vous être le premier à commenter ?</string>
+    <string name="message_empty_comments">C\'est trop silencieux.\nAllez-vous être le premier à commenter ?</string>
     <string name="message_empty_list">Pas d\'éléments à afficher</string>
     <string name="message_error_loading_comments">Une erreur s\'est produite lors du chargement des commentaires.</string>
     <string name="message_generic_error">Erreur générique</string>
@@ -178,7 +178,7 @@
     <string name="message_missing_field">Champs manquant</string>
     <string name="message_operation_successful">Opération terminée avec succès</string>
     <string name="message_read_all_inbox_success">Tous les articles ont été marqués comme lus</string>
-    <string name="message_unsaved_changes">Des modifications sont non enregistrées, êtes-vous sûr de vouloir quitter ?</string>
+    <string name="message_unsaved_changes">Des modifications sont non enregistrées, êtes-vous sûr de vouloir quitter ?</string>
     <string name="message_video_nsfw">Cette vidéo a été marquée comme NSFW</string>
     <string name="mod_action_add_mod">Ajouter modérateur</string>
     <string name="mod_action_allow">Réautoriser l\'utilisateur</string>
@@ -237,7 +237,7 @@
     <string name="post_action_see_raw">Texte brut</string>
     <string name="post_action_share">Partager</string>
     <string name="post_action_unhide">Annuler le masquage</string>
-    <string name="post_detail_cross_posts">publié aussi sur :</string>
+    <string name="post_detail_cross_posts">publié aussi sur :</string>
     <string name="post_detail_load_more_comments">Charger plus de commentaires</string>
     <string name="post_hour_short">h</string>
     <string name="post_list_load_more_posts">Charger plus de publications</string>
@@ -436,7 +436,7 @@
     </plurals>
     <string name="default_tag_admin">admin</string>
     <string name="bar_theme_solid">Solide</string>
-    <string name="message_no_result">Oups... Aucun résultat n\'a été trouvé !</string>
+    <string name="message_no_result">Oups... Aucun résultat n\'a été trouvé !</string>
     <string name="action_delete_account">Supprimer le compte</string>
     <string name="action_remove_from_bookmarks">Retirer des sauvegardés</string>
     <string name="delete_account_remove_content">Effacer le contenu</string>
