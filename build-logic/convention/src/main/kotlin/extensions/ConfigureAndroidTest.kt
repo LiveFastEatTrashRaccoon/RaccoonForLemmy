@@ -21,21 +21,9 @@ internal fun Project.configureAndroidTest(extension: KotlinMultiplatformExtensio
                         implementation(project(":core:testutils"))
                     }
                 }
-
                 "commonTest" -> {
                     dependencies {
                         implementation(kotlin("test"))
-                    }
-                }
-
-                else -> {
-                    if ( name.contains("android",ignoreCase = true)) {
-
-                        println(
-                            "Helllooo $name" + this.resources.map {
-                                it.absoluteFile
-                            }.joinToString(),
-                        )
                     }
                 }
             }
