@@ -510,20 +510,4 @@
     <string name="delete_account_body">Inserisci la password per confermare l\'eliminazione dell\'account.</string>
     <string name="settings_mark_as_read_on_interaction">Segna post come letti all\'interazione</string>
     <string name="settings_mark_as_read_on_interaction_subtitle">Dopo aver votato o salvato un post, segnalo come letto</string>
-    <string name="language_zh_tw" translatable="false"></string>
-    <string name="language_it" translatable="false"></string>
-    <string name="language_pl" translatable="false"></string>
-    <string name="language_ga" translatable="false"></string>
-    <string name="language_pt_br" translatable="false"></string>
-    <string name="language_pt" translatable="false"></string>
-    <string name="language_uk" translatable="false"></string>
-    <string name="language_lv" translatable="false"></string>
-    <string name="language_es" translatable="false"></string>
-    <string name="language_ta" translatable="false"></string>
-    <string name="language_de" translatable="false"></string>
-    <string name="language_en" translatable="false"></string>
-    <string name="language_zh_cn" translatable="false"></string>
-    <string name="language_zh_hk" translatable="false"></string>
-    <string name="language_fi" translatable="false"></string>
-    <string name="language_fr" translatable="false"></string>
 </resources>
