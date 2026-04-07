@@ -331,6 +331,7 @@ internal fun MarkdownParagraphWithHighlights(
 
     MarkdownText(
         content = styledText,
+        node = node,
         modifier = modifier,
         style = typography.paragraph,
     )
