@@ -25,7 +25,6 @@ internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatform
             project.extensions
                 .create<CustomKotlinMultiplatformExtension>("customKotlinMultiplatformExtension")
         listOf(
-            iosX64(),
             iosArm64(),
             iosSimulatorArm64(),
         ).forEach {
