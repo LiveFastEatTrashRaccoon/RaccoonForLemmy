@@ -135,6 +135,7 @@ fun UserDetailScreen(userId: Long, modifier: Modifier = Modifier, otherInstance:
     val defaultSaveColor = MaterialTheme.colorScheme.secondaryContainer
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     var rawContent by remember { mutableStateOf<Any?>(null) }
     val settingsRepository = rememberSettingsRepository()
     val settings by settingsRepository.currentSettings.collectAsState()
@@ -368,7 +369,7 @@ fun UserDetailScreen(userId: Long, modifier: Modifier = Modifier, otherInstance:
                     }
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()

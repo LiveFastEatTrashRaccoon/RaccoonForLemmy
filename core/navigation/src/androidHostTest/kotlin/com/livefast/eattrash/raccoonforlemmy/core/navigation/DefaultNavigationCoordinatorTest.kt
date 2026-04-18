@@ -8,6 +8,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -58,7 +59,7 @@ class DefaultNavigationCoordinatorTest {
         assertFalse(initial)
         val navigator =
             mockk<NavigationAdapter> {
-                every { canPop } returns true
+                every { canPop } returns MutableStateFlow(true)
             }
 
         sut.setRootNavigator(navigator)
@@ -113,7 +114,7 @@ class DefaultNavigationCoordinatorTest {
         val destination = Destination.WebInternal(url = "www.example.com")
         val navigator =
             mockk<NavigationAdapter>(relaxUnitFun = true) {
-                every { canPop } returns true
+                every { canPop } returns MutableStateFlow(true)
             }
         sut.setRootNavigator(navigator)
 
@@ -133,7 +134,7 @@ class DefaultNavigationCoordinatorTest {
     fun whenPopScreen_thenInteractionsAreAsExpected() = runTest {
         val navigator =
             mockk<NavigationAdapter>(relaxUnitFun = true) {
-                every { canPop } returns false
+                every { canPop } returns MutableStateFlow(false)
             }
         sut.setRootNavigator(navigator)
 
@@ -225,7 +226,7 @@ class DefaultNavigationCoordinatorTest {
     fun whenPopUntilRoot_thenInteractionsAreAsExpected() = runTest {
         val navigator =
             mockk<NavigationAdapter>(relaxUnitFun = true) {
-                every { canPop } returns false
+                every { canPop } returns MutableStateFlow(false)
             }
         sut.setRootNavigator(navigator)
 

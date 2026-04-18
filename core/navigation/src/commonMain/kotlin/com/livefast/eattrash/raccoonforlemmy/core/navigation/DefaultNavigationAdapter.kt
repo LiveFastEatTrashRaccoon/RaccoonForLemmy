@@ -7,6 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
@@ -15,16 +19,22 @@ class DefaultNavigationAdapter(
     private val navController: NavController,
     dispatcher: CoroutineDispatcher = Dispatchers.Main,
 ) : NavigationAdapter {
-    override val canPop: Boolean get() = navController.currentBackStack.value.size > 1
+    override val canPop = MutableStateFlow(false)
     private val scope = CoroutineScope(SupervisorJob() + dispatcher)
     private var job: Job? = null
+
+    init {
+        navController.currentBackStack
+            .onEach { backStack -> canPop.update { backStack.size > 2 } }
+            .launchIn(scope)
+    }
 
     override fun navigate(destination: Destination, replaceTop: Boolean) {
         if (job?.isActive == true) {
             return
         }
         perform {
-            if (replaceTop && canPop) {
+            if (replaceTop && canPop.value) {
                 navController.popBackStack()
             }
             navController.navigate(destination)
@@ -36,7 +46,7 @@ class DefaultNavigationAdapter(
             return
         }
         perform {
-            if (canPop) {
+            if (canPop.value) {
                 navController.popBackStack()
             }
         }
