@@ -70,6 +70,7 @@ fun SettingsScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val drawerCoordinator = rememberDrawerCoordinator()
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val mainRouter = rememberMainRouter()
     var infoDialogOpened by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -89,7 +90,7 @@ fun SettingsScreen(
                 windowInsets = topAppBarState.toWindowInsets(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()

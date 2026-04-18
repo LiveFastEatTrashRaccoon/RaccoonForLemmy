@@ -81,6 +81,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
         getViewModel<EditCommunityViewModel>(EditCommunityMviModelParams(communityId ?: 0))
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val scrollState = rememberScrollState()
@@ -151,7 +152,7 @@ fun EditCommunityScreen(modifier: Modifier = Modifier, communityId: Long? = null
                     )
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 if (uiState.hasUnsavedChanges) {

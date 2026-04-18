@@ -63,6 +63,7 @@ fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
     val model: ConfigureNavBarMviModel = getViewModel<ConfigureNavBarViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val settingsRepository = rememberSettingsRepository()
@@ -104,7 +105,7 @@ fun ConfigureNavBarScreen(modifier: Modifier = Modifier) {
                     )
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 if (uiState.hasUnsavedChanges) {

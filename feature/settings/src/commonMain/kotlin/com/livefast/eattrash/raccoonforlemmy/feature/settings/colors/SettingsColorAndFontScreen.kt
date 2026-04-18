@@ -86,6 +86,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
     val model: SettingsColorAndFontMviModel = getViewModel<SettingsColorAndFontViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val settingsRepository = rememberSettingsRepository()
@@ -138,7 +139,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
                     )
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()

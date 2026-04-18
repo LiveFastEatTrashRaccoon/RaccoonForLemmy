@@ -119,8 +119,8 @@ fun FilteredContentsScreen(
     val defaultDownVoteColor = MaterialTheme.colorScheme.tertiary
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val navigationCanPop by navigationCoordinator.canPop.collectAsState()
-    val isTopLevel = !navigationCanPop
+    val canPopState by navigationCoordinator.canPop.collectAsState()
+    val isTopLevel = !canPopState
     val connection =
         if (isTopLevel) {
             navigationCoordinator.getBottomBarScrollConnection()
@@ -171,7 +171,7 @@ fun FilteredContentsScreen(
                 windowInsets = topAppBarState.toWindowInsets(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()

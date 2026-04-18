@@ -70,6 +70,7 @@ fun ManageBanScreen(modifier: Modifier = Modifier) {
     val model: ManageBanMviModel = getViewModel<ManageBanViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val fabNestedScrollConnection = rememberFabNestedScrollConnection()
@@ -132,7 +133,7 @@ fun ManageBanScreen(modifier: Modifier = Modifier) {
                     )
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()

@@ -81,6 +81,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
     val model: AdvancedSettingsMviModel = getViewModel<AdvancedSettingsViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val mainRouter = rememberMainRouter()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
@@ -134,7 +135,7 @@ fun AdvancedSettingsScreen(modifier: Modifier = Modifier) {
                     )
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()

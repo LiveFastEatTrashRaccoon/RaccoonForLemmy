@@ -133,6 +133,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
     val fabNestedScrollConnection = rememberFabNestedScrollConnection()
     val isFabVisible by fabNestedScrollConnection.isFabVisible.collectAsState()
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val themeRepository = rememberThemeRepository()
     val upVoteColor by themeRepository.upVoteColor.collectAsState()
     val downVoteColor by themeRepository.downVoteColor.collectAsState()
@@ -545,7 +546,7 @@ fun CommunityDetailScreen(communityId: Long, modifier: Modifier = Modifier, othe
                     }
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()

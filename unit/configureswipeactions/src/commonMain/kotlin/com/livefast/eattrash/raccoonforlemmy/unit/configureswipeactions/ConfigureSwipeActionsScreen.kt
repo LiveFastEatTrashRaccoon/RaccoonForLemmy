@@ -61,6 +61,7 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
     val model: ConfigureSwipeActionsMviModel = getViewModel<ConfigureSwipeActionsViewModel>()
     val uiState by model.uiState.collectAsState()
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val settingsRepository = rememberSettingsRepository()
@@ -82,7 +83,7 @@ fun ConfigureSwipeActionsScreen(modifier: Modifier = Modifier) {
                     )
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()

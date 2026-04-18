@@ -149,6 +149,7 @@ fun PostDetailScreen(
     val otherInstanceName = remember { otherInstance }
     val commentIdToHighlight = remember { highlightCommentId }
     val navigationCoordinator = rememberNavigationCoordinator()
+    val canPopState by navigationCoordinator.canPop.collectAsState()
     val topAppBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
     val fabNestedScrollConnection = rememberFabNestedScrollConnection()
@@ -573,7 +574,7 @@ fun PostDetailScreen(
                     }
                 },
                 navigationIcon = {
-                    if (navigationCoordinator.canPop.value) {
+                    if (canPopState) {
                         IconButton(
                             onClick = {
                                 navigationCoordinator.pop()
