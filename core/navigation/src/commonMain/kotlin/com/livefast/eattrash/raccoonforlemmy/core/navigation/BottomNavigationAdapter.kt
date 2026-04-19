@@ -1,13 +1,8 @@
 package com.livefast.eattrash.raccoonforlemmy.core.navigation
 
-import androidx.navigation.NavController
+import kotlinx.coroutines.flow.StateFlow
 
 interface BottomNavigationAdapter {
+    val currentSection: StateFlow<TabNavigationSection?>
     fun navigate(section: TabNavigationSection)
-}
-
-class DefaultBottomNavigationAdapter(private val navController: NavController) : BottomNavigationAdapter {
-    override fun navigate(section: TabNavigationSection) {
-        navController.navigate(section)
-    }
 }
