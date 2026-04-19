@@ -16,7 +16,6 @@ import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -31,22 +30,30 @@ class DefaultNavigationCoordinatorTest {
 
     @Test
     fun whenSetBottomNavigationSection_thenValueIsUpdated() = runTest {
-        val initial = sut.currentSection.value
-        assertNull(initial)
+        val navigator =
+            mockk<BottomNavigationAdapter>(relaxUnitFun = true) {
+                every { currentSection } returns MutableStateFlow(TabNavigationSection.Home)
+            }
+        sut.setBottomNavigator(navigator)
 
         sut.setBottomNavigationSection(TabNavigationSection.Profile)
 
-        val value = sut.currentSection.value
-        assertEquals(TabNavigationSection.Profile, value)
+        verify { navigator.navigate(TabNavigationSection.Profile) }
     }
 
     @Test
     fun whenSetBottomNavigationSectionTwice_thenOnDoubleTabSelectionTriggered() = runTest {
-        sut.setBottomNavigationSection(TabNavigationSection.Profile)
+        val navigator =
+            mockk<BottomNavigationAdapter>(relaxUnitFun = true) {
+                every { currentSection } returns MutableStateFlow(TabNavigationSection.Profile)
+            }
+        sut.setBottomNavigator(navigator)
+
         launch {
             delay(DELAY)
             sut.setBottomNavigationSection(TabNavigationSection.Profile)
         }
+
         sut.onDoubleTabSelection.test {
             val section = awaitItem()
             assertEquals(TabNavigationSection.Profile, section)
@@ -95,18 +102,6 @@ class DefaultNavigationCoordinatorTest {
         sut.setExitMessageVisible(true)
         val value = sut.exitMessageVisible.value
         assertTrue(value)
-    }
-
-    @Test
-    fun whenSetBottomNavigationSection_thenAdapterNavigatesToSection() = runTest {
-        val adapter = mockk<BottomNavigationAdapter>(relaxUnitFun = true)
-        sut.setBottomNavigator(adapter)
-
-        sut.setBottomNavigationSection(TabNavigationSection.Home)
-
-        verify {
-            adapter.navigate(TabNavigationSection.Home)
-        }
     }
 
     @Test
