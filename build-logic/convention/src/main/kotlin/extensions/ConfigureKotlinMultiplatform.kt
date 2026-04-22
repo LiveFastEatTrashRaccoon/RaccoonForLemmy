@@ -1,6 +1,6 @@
 package extensions
 
-import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryExtension
 import org.gradle.api.Project
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
@@ -15,7 +15,7 @@ interface CustomKotlinMultiplatformExtension {
     val iOSCustomLinkerOptions: ListProperty<String>
 }
 
-internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatformExtension) =
+internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatformExtension) {
     extension.apply {
         applyDefaultHierarchyTemplate()
 
@@ -37,20 +37,23 @@ internal fun Project.configureKotlinMultiplatform(extension: KotlinMultiplatform
                 }
             }
         }
-
-        targets.withType(KotlinMultiplatformAndroidLibraryTarget::class.java).configureEach {
-            val moduleName = path.split(":").drop(1).joinToString(".")
-            namespace = if (moduleName.isNotEmpty()) "$PACKAGE_PREFIX.$moduleName" else PACKAGE_PREFIX
-
-            compileSdk = libs.findVersion("android-compileSdk").version
-            minSdk = libs.findVersion("android-minSdk").version
-
-            packaging {
-                resources {
-                    excludes += "/META-INF/{AL2.0,LGPL2.1}"
-                }
-            }
-
-            experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
-        }
     }
+}
+
+internal fun Project.configureKotlinMultiplatformAndroidLibrary(extension: KotlinMultiplatformAndroidLibraryExtension) {
+    extension.apply {
+        val moduleName = path.split(":").drop(1).joinToString(".")
+        namespace = if (moduleName.isNotEmpty()) "$PACKAGE_PREFIX.$moduleName" else PACKAGE_PREFIX
+
+        compileSdk = libs.findVersion("android-compileSdk").version
+        minSdk = libs.findVersion("android-minSdk").version
+
+        packaging {
+            resources {
+                excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            }
+        }
+
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+    }
+}
