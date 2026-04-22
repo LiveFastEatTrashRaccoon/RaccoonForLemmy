@@ -14,9 +14,7 @@ class SerializationPlugin : Plugin<Project> {
                 apply(libs.findPlugin("ksp").pluginId)
                 apply(libs.findPlugin("kotlinx-serialization").pluginId)
             }
-            extensions.configure(
-                KotlinMultiplatformExtension::class.java,
-            ) {
+            extensions.configure(KotlinMultiplatformExtension::class.java) {
                 sourceSets.apply {
                     commonMain {
                         dependencies {

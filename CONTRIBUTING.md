@@ -473,7 +473,7 @@ Symbols used in version numbers:
 #### 7.1 Beta releases
 
 - [ ] checkout the `master` branch
-- [ ] increment `versionCode` (ε) and `versionName` (α.β.γ-betaδ) in `androidApp/build.gradle.kts`
+- [ ] increment `buildNumber` (ε) and `versionName` (α.β.γ-betaδ) in `gradle.properties`
 - [ ] create a file called `ε.txt` under `fastlane/metadata/android/en-US/changelogs/` with the
     changes you want to display on the stores (remember: 500 character limit)
 - [ ] add everything to stage and create a commit with the message "version α.β.γ-betaδ"
@@ -486,7 +486,7 @@ Symbols used in version numbers:
 #### 7.2 Stable releases
 
 - [ ] checkout the `master` branch
-- [ ] increment `versionCode` (ε) and `versionName` (α.β.γ) in `androidApp/build.gradle.kts`
+- [ ] increment `buildNumber` (ε) and `versionName` (α.β.γ) in `gradle.properties`
 - [ ] update `res/changelog.txt` with a detailed change list, remembering:
   - to include PR (with author) and issue references (if possible)
   - to update the version comparison for GitHub diff view
