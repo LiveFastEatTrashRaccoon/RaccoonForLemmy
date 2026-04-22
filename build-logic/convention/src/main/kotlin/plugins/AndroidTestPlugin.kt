@@ -1,6 +1,8 @@
 package plugins
 
-import extensions.configureAndroidTest
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
+import extensions.configureTestAndroid
+import extensions.configureTestAndroidLibrary
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -11,10 +13,13 @@ import utils.pluginId
 class AndroidTestPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit =
         with(target) {
-            extensions.configure(
-                KotlinMultiplatformExtension::class.java,
-                ::configureAndroidTest,
-            )
+            extensions.configure(KotlinMultiplatformExtension::class.java) {
+                configureTestAndroid(this)
+
+                targets.withType(KotlinMultiplatformAndroidLibraryTarget::class.java).configureEach {
+                    configureTestAndroidLibrary(this)
+                }
+            }
 
             pluginManager.withPlugin(libs.findPlugin("kotlinx-kover").pluginId) {
                 afterEvaluate {

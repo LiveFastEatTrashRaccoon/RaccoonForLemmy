@@ -13,9 +13,7 @@ class SpotlessPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply(libs.findPlugin("spotless").pluginId)
             }
-            extensions.configure(
-                SpotlessExtension::class.java,
-            ) {
+            extensions.configure(SpotlessExtension::class.java) {
                 kotlin {
                     target("**/*.kt")
                     targetExclude("**/build/**/*.kt")
