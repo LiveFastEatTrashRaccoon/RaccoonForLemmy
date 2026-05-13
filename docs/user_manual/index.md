@@ -1,31 +1,6 @@
----
-layout: default
----
-
 # User manual
 
 This page contains a short description of the main features of the app.
-
-## Table of contents
-
-- [Home screen](#home-screen)
-- [Side menu](#side-menu)
-- [Post detail](#post-detail)
-- [Community detail](#community-detail)
-- [Instance detail](#instance-detail)
-- [User detail](#user-detail)
-- [Explore](#explore)
-- [Profile](#profile)
-- [Inbox](#inbox)
-- [Settings](#settings)
-    - [Application appearance](#application-appearance)
-    - [Content appearance](#content-appearance)
-    - [Advanced settings](#advanced-settings)
-    - [Configure swipe actions](#configure-swipe-actions)
-    - [Web account settings](#web-account-settings)
-    - [Ban and filters](#ban-and-filters)
-- [Moderation log](#moderation-log)
-- [Moderation tools](#moderation-tools)
 
 ## Home screen
 
@@ -55,8 +30,6 @@ enabled the "Mark read while scrolling" option in the Settings screen) just seen
 <img width="310" alt="floating action button menu" src="images/home_fab.png" />
 </div>
 
-[Back to top](#table-of-contents)
-
 ## Side menu
 
 In anonymous mode, the side menu gives you the opportunity to change instance (the same menu can be
@@ -75,8 +48,6 @@ By clicking on each item, you will open the corresponding community or multi-com
 <img width="310" alt="side menu select instance" src="images/drawer.png" />
 <img width="310" alt="add instance" src="images/drawer_change_instance.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ## Post detail
 
@@ -97,8 +68,6 @@ If you are logged, you can vote or save both the main post and all its comments.
 <img width="310" alt="post detail" src="images/post_detail.png" />
 </div>
 
-[Back to top](#table-of-contents)
-
 ## Community detail
 
 By tapping on the community info above each post title, you can open the community detail screen,
@@ -117,8 +86,6 @@ actions which you can find in the home screen timeline.
 <img width="310" alt="user info" src="images/community_info.png" />
 </div>
 
-[Back to top](#table-of-contents)
-
 ## Instance detail
 
 From the "⋮" button of a community detail you can open the "Instance detail" page which shows a list
@@ -128,8 +95,6 @@ available). This is useful because you can sort communities and explore the inst
 <div align="center">
 <img width="310" alt="user info" src="images/instance_info.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ## User detail
 
@@ -144,8 +109,6 @@ information.
 <img width="310" alt="user detail" src="images/user_detail.png" />
 <img width="310" alt="user info" src="images/user_info.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ## Explore
 
@@ -168,8 +131,6 @@ right in the top bar and, if you are logged, you can vote posts or save them.
 <img width="310" alt="explore" src="images/explore_communities.png" />
 <img width="310" alt="explore" src="images/explore_users.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ## Profile
 
@@ -203,8 +164,6 @@ retry the login if your token has expired.
 <img width="310" alt="anonymous profile" src="images/profile_menu.png" />
 </div>
 
-[Back to top](#table-of-contents)
-
 ## Inbox
 
 The Inbox screen is divided into three sections:
@@ -223,8 +182,6 @@ In anonymous mode the profile is just a placeholder that invite you to access wi
 <img width="310" alt="anonymous profile" src="images/inbox_replies.png" />
 <img width="310" alt="anonymous profile" src="images/inbox_mentions.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ## Settings
 
@@ -282,8 +239,6 @@ via adb or the "Device Explorer" if you are using Android Studio.
 <img width="310" alt="settings second part" src="images/settings_2.png" />
 </div>
 
-[Back to top](#table-of-contents)
-
 ### Application appearance
 
 This screen allows to configure colors and fonts of the UI:
@@ -306,8 +261,6 @@ This screen allows to configure colors and fonts of the UI:
 <div align="center">
 <img width="310" alt="colors and fonts" src="images/appearance.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ### Content appearance
 
@@ -339,8 +292,6 @@ You can see a preview of the result below the list of options.
 <div align="center">
 <img width="310" alt="settings first part" src="images/content_appearance.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ### Advanced settings
 
@@ -395,8 +346,6 @@ This screen contains a series of less frequently used customization options:
 <img width="310" alt="settings first part" src="images/advanced_settings_2.png" />
 </div>
 
-[Back to top](#table-of-contents)
-
 ### Configure swipe actions
 
 In this screen it is possible to assign an action to the 4 slots (two on the left side and two on
@@ -405,8 +354,6 @@ the right side) of the cards used to render post, comments and inbox items.
 <div align="center">
 <img width="310" alt="configure swipe actions" src="images/swipe_actions.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ### Web account settings
 
@@ -417,8 +364,6 @@ you can do on the webapp).
 <img width="310" alt="web settings" src="images/account_settings.png" />
 </div>
 
-[Back to top](#table-of-contents)
-
 ### Ban and filters
 
 This screen allows you to see what users, communities and instances you have blocked and
@@ -427,8 +372,6 @@ remove the block (these settings are tied to your Lemmy account too).
 <div align="center">
 <img width="310" alt="bans and filters" src="images/ban_filters.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ## Moderation log
 
@@ -445,8 +388,6 @@ list of all the actions that happened for that given community, e.g.:
 <div align="center">
 <img width="310" alt="moderation log" src="images/modlog.png" />
 </div>
-
-[Back to top](#table-of-contents)
 
 ## Moderation tools
 
@@ -466,5 +407,3 @@ content (e.g. to remove it) and you can mark the report as "resolved" once you a
 <div align="center">
 <img width="310" alt="report list" src="images/modtools.png" />
 </div>
-
-[Back to top](#table-of-contents)

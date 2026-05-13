@@ -2,7 +2,8 @@
 .gradle
 .idea
 .DS_Store
-build
+build/
+site/
 captures
 .externalNativeBuild
 .cxx

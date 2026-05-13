@@ -1,21 +1,10 @@
----
-layout: default
----
-
+# Raccoon for Lemmy
 Welcome to the homepage of Raccoon for Lemmy!
 
 If you need some guidance about how to use the app, please have a look at
-the [User manual](user_manual/main).
+the [User manual](user_manual).
 
-# Table of contents
-
-- [project overview](#overview)
-- [rationale](#rationale)
-- [key app features](#key-app-features)
-- [credits and acknowledgements](#credits-and-acknowledgements)
-- [further reading](#further-reading)
-
-# Overview
+## Overview
 
 Raccoon is a mobile client for Lemmy, a federated aggregation and discussion platform. The
 app is implemented as a Kotlin Multiplatform (KMP) project, mainly focusing on the Android platform.
@@ -23,7 +12,7 @@ app is implemented as a Kotlin Multiplatform (KMP) project, mainly focusing on t
 The project was started as an exercise to play around with Kotlin Multiplatform and Compose
 multiplatform and gradually grew as a fully functional client with several features.
 
-# Rationale
+## Rationale
 
 There are several reasons why this project was started:
 
@@ -63,7 +52,7 @@ anyone, they are lazy, chubby and cute.
 As long as you are on this page, don't forget every raccoon's motto: «Live Fast, Eat Trash»
 (abbreviated L.F.E.T.).
 
-# Key app features
+## Key app features
 
 Here is a list of the most important features of the app:
 
@@ -112,9 +101,9 @@ using the web interface, and in the beginning moderation tools were rare among m
 This app tried to bridge this gap and offer moderation tools (feature post, lock post, distinguish
 comment, remove post/comment, ban users and the ability to revert any of these actions).
 
-# Credits and acknowledgements
+## Credits and acknowledgements
 
-## Credits
+### Credits
 
 A saying from the original developer:
 <blockquote>
@@ -136,7 +125,7 @@ which is again both source of inspiration and admiration.
 
 Towards all the authors and contributors of these projects, a great "thank you" 🙏️🙏️🙏️
 
-## Acknowledgements
+### Acknowledgements
 
 A special thanks goes to all those who contributed so far (in nearly chronological order):
 
@@ -184,16 +173,17 @@ other users and made the community a better place, etc.
 
 You are **awesome**… THANKS ❤️🦝️❤️
 
-# Further reading
+## Further reading
 
 If what you have read so far sounds interesting and you want to know more, here are some useful
 links:
 
-- check out the [User manual](user_manual/main);
-- have a look at the more detailed documentation in the [Technical manual](tech_manual/main);
+- check out the [User manual](user_manual/);
+- have a look at the more detailed documentation in the [Technical manual](tech_manual/);
+- visit our [Blog](https://livefasteattrashraccoon.github.io/blog/archive){ target = _blank };
 - consult
-  the [CONTRIBUTING](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/CONTRIBUTING.md)
-  guide.
+  the [CONTRIBUTING](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/CONTRIBUTING.md){ target = _blank };
+  guide or the [README](https://github.com/LiveFastEatTrashRaccoon/RaccoonForLemmy/blob/master/README.md){ target = _blank }.
 
 If, on the other hand, you just want to interact with the community, provide suggestions, report
 bugs, contribute with translations or tell your opinion, you can:
@@ -207,5 +197,4 @@ bugs, contribute with translations or tell your opinion, you can:
   to report
   bugs or request features;
 - finally, if none of the above methods fits your needs you
-  can write an [email](mailto://livefast.eattrash.raccoon@gmail.com) or reach out to me
-  on [Matrix](https://matrix.to/#/@dieguitux8623:matrix.org).
+  can write an [email](mailto://livefast.eattrash.raccoon@gmail.com).
