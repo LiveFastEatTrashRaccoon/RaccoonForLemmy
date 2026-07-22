@@ -456,4 +456,13 @@
     <string name="settings_web_header_contents">Contidos</string>
     <string name="settings_web_matrix">ID do usuario en Matrix</string>
     <string name="action_close_side_menu">Pechar o menú lateral</string>
+    <string name="settings_navigation_bar_titles_visible">Amosar os títulos das as barras de navegación</string>
+    <string name="settings_open_url_external">Abrir URLs</string>
+    <string name="settings_points_short">pt</string>
+    <string name="settings_post_body_max_lines">Máximo de liñas da publicación</string>
+    <string name="settings_post_body_max_lines_unlimited">Sen límite</string>
+    <string name="settings_post_layout">Deseño da publicación</string>
+    <string name="settings_reply_color">Cor da acción de resposta</string>
+    <string name="settings_save_color">Cor da acción de gardar</string>
+    <string name="settings_search_posts_title_only">Procurar publicacións só no título</string>
 </resources>
