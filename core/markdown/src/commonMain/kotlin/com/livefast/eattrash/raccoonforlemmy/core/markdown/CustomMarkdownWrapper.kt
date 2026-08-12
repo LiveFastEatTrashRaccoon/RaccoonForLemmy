@@ -47,13 +47,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.intellij.markdown.ast.ASTNode
 import kotlin.math.floor
+import kotlin.time.Duration.Companion.milliseconds
 
 private val String.isImage: Boolean
     get() = ImageRegex.image.matches(this)
 
 private const val MAX_LINES_SCALE_FACTOR = 0.97f
 private const val GLOBAL_SCALE_FACTOR = 0.99f
-private const val LINK_DELAY = 250L
+private val LINK_DELAY = 250.milliseconds
 
 @Composable
 fun CustomMarkdownWrapperController(

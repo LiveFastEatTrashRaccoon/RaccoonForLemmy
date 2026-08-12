@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class UserDetailViewModel(
     private val userId: Long,
@@ -334,7 +335,7 @@ class UserDetailViewModel(
                 }
             }
             emitEffect(UserDetailMviModel.Effect.BackToTop)
-            delay(50)
+            delay(50.milliseconds)
             refresh()
         }
     }

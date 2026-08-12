@@ -19,6 +19,7 @@ import org.junit.Rule
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.time.Duration.Companion.milliseconds
 
 class DefaultSubscriptionsCacheTest {
     @get:Rule
@@ -74,6 +75,6 @@ class DefaultSubscriptionsCacheTest {
     }
 
     companion object {
-        private const val DELAY = 250L
+        private val DELAY = 250.milliseconds
     }
 }

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Dispatchers.Main) :
     NavigationCoordinator {
@@ -39,7 +40,7 @@ internal class DefaultNavigationCoordinator(dispatcher: CoroutineDispatcher = Di
     private var updateCanPopJob: Job? = null
 
     companion object {
-        private const val DEEP_LINK_DELAY = 500L
+        private val DEEP_LINK_DELAY = 500.milliseconds
     }
 
     override fun setRootNavigator(adapter: NavigationAdapter) {

@@ -71,6 +71,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlin.time.Duration.Companion.milliseconds
 
 enum class CustomColorType {
     UpvoteColor,
@@ -115,7 +116,7 @@ fun SettingsColorAndFontScreen(modifier: Modifier = Modifier) {
             .drop(1)
             .onEach {
                 uiFontSizeWorkaround = false
-                delay(50)
+                delay(50.milliseconds)
                 uiFontSizeWorkaround = true
             }.launchIn(this)
     }
