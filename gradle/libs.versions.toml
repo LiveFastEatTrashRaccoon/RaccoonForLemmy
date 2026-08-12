@@ -39,9 +39,9 @@ sqlcipher = "4.15.0"
 sqldelight = "2.3.2"
 turbine = "1.2.1"
 
-android-targetSdk = "36"
-android-compileSdk = "36"
+android-compileSdk = "37"
 android-minSdk = "26"
+android-targetSdk = "37"
 
 [libraries]
 
