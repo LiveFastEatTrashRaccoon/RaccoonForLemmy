@@ -76,6 +76,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.kodein.di.compose.withDI
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -135,7 +136,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
         hasBeenInitialized = true
 
         launch {
-            delay(50)
+            delay(50.milliseconds)
             onLoadingFinished()
         }
     }
@@ -197,7 +198,7 @@ fun App(onLoadingFinished: () -> Unit = {}) = withDI(RootDI.di) {
                     }
 
                     SideMenuEvents.Close -> {
-                        delay(250)
+                        delay(250.milliseconds)
                         sideMenuContent = null
                     }
                 }

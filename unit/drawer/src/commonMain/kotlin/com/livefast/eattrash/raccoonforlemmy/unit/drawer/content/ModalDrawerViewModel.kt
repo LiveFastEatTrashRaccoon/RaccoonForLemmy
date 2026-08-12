@@ -39,6 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 class ModalDrawerViewModel(
@@ -81,7 +82,7 @@ class ModalDrawerViewModel(
             notificationCenter
                 .subscribe(NotificationCenterEvent.Logout::class)
                 .onEach {
-                    delay(250)
+                    delay(250.milliseconds)
                     refreshUser()
                     refresh()
                 }.launchIn(this)
@@ -120,7 +121,7 @@ class ModalDrawerViewModel(
                     refresh()
                 }.launchIn(this)
 
-            delay(250)
+            delay(250.milliseconds)
             refreshUser()
             refresh(initial = true)
         }
@@ -153,7 +154,7 @@ class ModalDrawerViewModel(
                     withTimeout(2000) {
                         while (user == null) {
                             // retry getting user if non-empty auth
-                            delay(500)
+                            delay(500.milliseconds)
                             user = siteRepository.getCurrentUser(auth)
                             yield()
                         }

@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.livefast.eattrash.raccoonforlemmy.core.l10n.LocalStrings
 import com.livefast.eattrash.raccoonforlemmy.core.utils.compose.onClick
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val LOADING_ANIMATION_DURATION = 1000
 
@@ -54,7 +55,7 @@ fun ZoomableImage(
 
     LaunchedEffect(contentScale) {
         visible = false
-        delay(50)
+        delay(50.milliseconds)
         visible = true
     }
 

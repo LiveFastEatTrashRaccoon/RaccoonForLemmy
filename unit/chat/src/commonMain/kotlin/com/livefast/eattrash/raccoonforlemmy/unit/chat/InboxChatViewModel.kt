@@ -236,7 +236,7 @@ class InboxChatViewModel(
                 val newMessage =
                     if (isEditing) {
                         messageRepository.edit(
-                            messageId = editedMessageId ?: 0,
+                            messageId = editedMessageId,
                             message = text,
                             auth = auth,
                         )

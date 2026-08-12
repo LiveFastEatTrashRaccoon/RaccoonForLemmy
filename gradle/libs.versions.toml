@@ -1,6 +1,6 @@
 [versions]
 
-agp = "9.0.0"
+agp = "9.1.1"
 androidx-activity = "1.13.0"
 androidx-browser = "1.10.0"
 androidx-crypto = "1.1.0"
@@ -39,9 +39,9 @@ sqlcipher = "4.16.0"
 sqldelight = "2.3.2"
 turbine = "1.2.1"
 
-android-targetSdk = "36"
-android-compileSdk = "36"
+android-compileSdk = "37"
 android-minSdk = "26"
+android-targetSdk = "37"
 
 [libraries]
 

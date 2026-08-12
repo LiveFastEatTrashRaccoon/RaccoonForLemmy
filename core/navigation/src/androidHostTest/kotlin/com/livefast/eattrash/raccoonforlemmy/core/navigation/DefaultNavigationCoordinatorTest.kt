@@ -17,6 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultNavigationCoordinatorTest {
@@ -233,6 +234,6 @@ class DefaultNavigationCoordinatorTest {
     }
 
     companion object {
-        private const val DELAY = 250L
+        private val DELAY = 250.milliseconds
     }
 }

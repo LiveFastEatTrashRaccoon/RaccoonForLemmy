@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 class ManageBanViewModel(
@@ -68,7 +69,7 @@ class ManageBanViewModel(
                 .onEach { query ->
                     if (!uiState.value.initial) {
                         emitEffect(ManageBanMviModel.Effect.BackToTop)
-                        delay(50)
+                        delay(50.milliseconds)
                         filterResults(query)
                     }
                 }.launchIn(this)
