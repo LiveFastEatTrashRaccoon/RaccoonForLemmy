@@ -73,6 +73,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,7 +179,7 @@ internal fun MainScreen() {
                             }
                             launch {
                                 // wait for transition to finish
-                                delay(750)
+                                delay(750.milliseconds)
                                 notificationCenter.send(NotificationCenterEvent.ChangeFeedType(evt.value))
                             }
                         }
@@ -223,7 +224,7 @@ internal fun MainScreen() {
                         .drop(1)
                         .onEach {
                             uiFontSizeWorkaround = false
-                            delay(50)
+                            delay(50.milliseconds)
                             uiFontSizeWorkaround = true
                         }.launchIn(this)
                 }

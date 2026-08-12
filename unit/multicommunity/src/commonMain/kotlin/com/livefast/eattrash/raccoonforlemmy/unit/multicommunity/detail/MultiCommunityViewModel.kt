@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class MultiCommunityViewModel(
     private val communityId: Long,
@@ -284,7 +285,7 @@ class MultiCommunityViewModel(
         viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(MultiCommunityMviModel.Effect.BackToTop)
-            delay(50)
+            delay(50.milliseconds)
             refresh()
         }
     }

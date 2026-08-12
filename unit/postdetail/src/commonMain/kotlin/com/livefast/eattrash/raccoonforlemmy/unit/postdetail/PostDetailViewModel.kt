@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(FlowPreview::class)
 class PostDetailViewModel(
@@ -590,7 +591,7 @@ class PostDetailViewModel(
         viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(PostDetailMviModel.Effect.BackToTop)
-            delay(50)
+            delay(50.milliseconds)
             refresh()
         }
     }

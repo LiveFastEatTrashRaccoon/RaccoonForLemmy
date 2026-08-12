@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
+import kotlin.time.Duration.Companion.milliseconds
 
 class ProfileLoggedViewModel(
     private val identityRepository: IdentityRepository,
@@ -107,7 +108,7 @@ class ProfileLoggedViewModel(
             notificationCenter
                 .subscribe(NotificationCenterEvent.Logout::class)
                 .onEach {
-                    delay(250)
+                    delay(250.milliseconds)
                     refreshUser()
                 }.launchIn(this)
 
@@ -247,7 +248,7 @@ class ProfileLoggedViewModel(
                     withTimeout(2000) {
                         while (user == null) {
                             // retry getting user if non-empty auth
-                            delay(500)
+                            delay(500.milliseconds)
                             identityRepository.refreshLoggedState()
                             user = identityRepository.cachedUser
                             yield()

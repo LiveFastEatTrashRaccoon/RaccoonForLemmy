@@ -87,7 +87,7 @@ fun ModalDrawerContent(modifier: Modifier = Modifier) {
             .drop(1)
             .onEach {
                 uiFontSizeWorkaround = false
-                delay(50)
+                delay(50.milliseconds)
                 uiFontSizeWorkaround = true
             }.launchIn(this)
     }

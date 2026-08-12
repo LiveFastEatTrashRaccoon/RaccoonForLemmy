@@ -18,6 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class ReportListViewModel(
     private val communityId: Long,
@@ -105,7 +106,7 @@ class ReportListViewModel(
                 it.copy(unresolvedOnly = value)
             }
             emitEffect(ReportListMviModel.Effect.BackToTop)
-            delay(50)
+            delay(50.milliseconds)
             refresh(initial = true)
         }
     }

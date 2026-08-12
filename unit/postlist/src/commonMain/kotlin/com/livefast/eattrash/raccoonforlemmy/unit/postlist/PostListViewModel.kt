@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 class PostListViewModel(
     private val postPaginationManager: PostPaginationManager,
@@ -137,7 +138,7 @@ class PostListViewModel(
                 .subscribe(NotificationCenterEvent.InstanceSelected::class)
                 .onEach {
                     refresh(initial = true)
-                    delay(100)
+                    delay(100.milliseconds)
                     emitEffect(PostListMviModel.Effect.BackToTop)
                 }.launchIn(this)
             notificationCenter
@@ -378,7 +379,7 @@ class PostListViewModel(
         viewModelScope.launch {
             updateState { it.copy(sortType = value) }
             emitEffect(PostListMviModel.Effect.BackToTop)
-            delay(50)
+            delay(50.milliseconds)
             refresh()
         }
     }
@@ -390,7 +391,7 @@ class PostListViewModel(
         viewModelScope.launch {
             updateState { it.copy(listingType = value) }
             emitEffect(PostListMviModel.Effect.BackToTop)
-            delay(50)
+            delay(50.milliseconds)
             refresh()
         }
     }
