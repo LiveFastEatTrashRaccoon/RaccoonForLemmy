@@ -51,7 +51,7 @@ android {
         }
         getByName("release") {
             resValue("string", "app_name", "Raccoon")
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             setProguardFiles(
                 listOf(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -62,8 +62,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     splits {
         abi {
