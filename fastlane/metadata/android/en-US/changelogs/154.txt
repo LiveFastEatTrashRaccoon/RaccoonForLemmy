@@ -1,0 +1,4 @@
+- enh: improve compatibility with recent Lemmy versions
+- refactor: adopt Material symbols
+- chore: update l10n
+- chore: update dependencies
