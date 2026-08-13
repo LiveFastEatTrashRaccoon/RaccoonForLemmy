@@ -11,7 +11,7 @@ androidx-test-ext-junit = "1.3.0"
 androidx-test-runner = "1.7.0"
 androidx-work = "2.11.2"
 calf = "0.13.0"
-coil = "3.4.0"
+coil = "3.5.0"
 compose-colorpicker = "1.1.4"
 compose-m3 = "1.9.0"
 compose-navigationevent = "1.1.0"
@@ -102,7 +102,7 @@ ktlint-compose-rules = { module = "io.nlopez.compose.rules:ktlint", version.ref 
 ktor-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
 ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-contentnegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
