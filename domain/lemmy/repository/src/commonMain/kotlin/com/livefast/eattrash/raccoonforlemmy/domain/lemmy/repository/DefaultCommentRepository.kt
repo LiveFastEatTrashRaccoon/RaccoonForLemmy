@@ -20,6 +20,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAut
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toCommentDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
+import kotlinx.coroutines.CancellationException
 
 internal class DefaultCommentRepository(
     private val services: ServiceProvider,
@@ -34,7 +35,7 @@ internal class DefaultCommentRepository(
         type: ListingType,
         sort: SortType,
         maxDepth: Int,
-    ): List<CommentModel>? = runCatching {
+    ): List<CommentModel>? = try {
         val response =
             if (instance.isNullOrEmpty()) {
                 services.v3.comment.getAll(
@@ -59,9 +60,12 @@ internal class DefaultCommentRepository(
                 )
             }
         response.comments.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun getBy(id: Long, auth: String?, instance: String?): CommentModel? = runCatching {
+    override suspend fun getBy(id: Long, auth: String?, instance: String?): CommentModel? = try {
         if (instance.isNullOrEmpty()) {
             services.v3.comment.getBy(
                 authHeader = auth.toAuthHeader(),
@@ -72,7 +76,10 @@ internal class DefaultCommentRepository(
             customServices.changeInstance(instance)
             customServices.v3.comment.getBy(id = id)
         }.commentView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getChildren(
         parentId: Long,
@@ -82,7 +89,7 @@ internal class DefaultCommentRepository(
         type: ListingType,
         sort: SortType,
         maxDepth: Int,
-    ): List<CommentModel>? = runCatching {
+    ): List<CommentModel>? = try {
         val response =
             if (instance.isNullOrEmpty()) {
                 services.v3.comment.getAll(
@@ -105,7 +112,10 @@ internal class DefaultCommentRepository(
                 )
             }
         response.comments.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override fun asUpVoted(comment: CommentModel, voted: Boolean) = comment.copy(
         myVote = if (voted) 1 else 0,
@@ -149,7 +159,7 @@ internal class DefaultCommentRepository(
         },
     )
 
-    override suspend fun upVote(comment: CommentModel, auth: String, voted: Boolean) = runCatching {
+    override suspend fun upVote(comment: CommentModel, auth: String, voted: Boolean) = try {
         val data =
             CreateCommentLikeForm(
                 commentId = comment.id,
@@ -157,7 +167,10 @@ internal class DefaultCommentRepository(
                 auth = auth,
             )
         services.v3.comment.like(authHeader = auth.toAuthHeader(), form = data)
-        Unit
+        Result.success(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
     }
 
     override fun asDownVoted(comment: CommentModel, downVoted: Boolean) = comment.copy(
@@ -202,7 +215,7 @@ internal class DefaultCommentRepository(
         },
     )
 
-    override suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean) = runCatching {
+    override suspend fun downVote(comment: CommentModel, auth: String, downVoted: Boolean) = try {
         val data =
             CreateCommentLikeForm(
                 commentId = comment.id,
@@ -210,12 +223,15 @@ internal class DefaultCommentRepository(
                 auth = auth,
             )
         services.v3.comment.like(authHeader = auth.toAuthHeader(), form = data)
-        Unit
+        Result.success(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
     }
 
     override fun asSaved(comment: CommentModel, saved: Boolean) = comment.copy(saved = saved)
 
-    override suspend fun save(comment: CommentModel, auth: String, saved: Boolean) = runCatching {
+    override suspend fun save(comment: CommentModel, auth: String, saved: Boolean) = try {
         val data =
             SaveCommentForm(
                 commentId = comment.id,
@@ -223,24 +239,29 @@ internal class DefaultCommentRepository(
                 auth = auth,
             )
         services.v3.comment.save(authHeader = auth.toAuthHeader(), form = data)
+        Result.success(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
+    }
+
+    override suspend fun create(postId: Long, parentId: Long?, text: String, languageId: Long?, auth: String) = try {
+        val data =
+            CreateCommentForm(
+                content = text,
+                postId = postId,
+                parentId = parentId,
+                languageId = languageId,
+                auth = auth,
+            )
+        services.v3.comment.create(authHeader = auth.toAuthHeader(), form = data)
+        Unit
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
         Unit
     }
 
-    override suspend fun create(postId: Long, parentId: Long?, text: String, languageId: Long?, auth: String) =
-        runCatching {
-            val data =
-                CreateCommentForm(
-                    content = text,
-                    postId = postId,
-                    parentId = parentId,
-                    languageId = languageId,
-                    auth = auth,
-                )
-            services.v3.comment.create(authHeader = auth.toAuthHeader(), form = data)
-            Unit
-        }.getOrDefault(Unit)
-
-    override suspend fun edit(commentId: Long, text: String, languageId: Long?, auth: String) = runCatching {
+    override suspend fun edit(commentId: Long, text: String, languageId: Long?, auth: String) = try {
         val data =
             EditCommentForm(
                 content = text,
@@ -250,9 +271,12 @@ internal class DefaultCommentRepository(
             )
         services.v3.comment.edit(authHeader = auth.toAuthHeader(), form = data)
         Unit
-    }.getOrDefault(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Unit
+    }
 
-    override suspend fun delete(commentId: Long, auth: String) = runCatching {
+    override suspend fun delete(commentId: Long, auth: String) = try {
         val data =
             DeleteCommentForm(
                 commentId = commentId,
@@ -260,9 +284,12 @@ internal class DefaultCommentRepository(
             )
         val res = services.v3.comment.delete(authHeader = auth.toAuthHeader(), form = data)
         res.commentView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun restore(commentId: Long, auth: String) = runCatching {
+    override suspend fun restore(commentId: Long, auth: String) = try {
         val data =
             DeleteCommentForm(
                 commentId = commentId,
@@ -270,9 +297,12 @@ internal class DefaultCommentRepository(
             )
         val res = services.v3.comment.delete(authHeader = auth.toAuthHeader(), form = data)
         res.commentView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun report(commentId: Long, reason: String, auth: String) = runCatching {
+    override suspend fun report(commentId: Long, reason: String, auth: String) = try {
         val data =
             CreateCommentReportForm(
                 commentId = commentId,
@@ -284,40 +314,47 @@ internal class DefaultCommentRepository(
             authHeader = auth.toAuthHeader(),
         )
         Unit
-    }.getOrDefault(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Unit
+    }
 
-    override suspend fun remove(commentId: Long, auth: String, removed: Boolean, reason: String): CommentModel? =
-        runCatching {
-            val data =
-                RemoveCommentForm(
-                    commentId = commentId,
-                    removed = removed,
-                    reason = reason,
-                    auth = auth,
-                )
-            val response =
-                services.v3.comment.remove(
-                    form = data,
-                    authHeader = auth.toAuthHeader(),
-                )
-            response.commentView.toModel()
-        }.getOrNull()
+    override suspend fun remove(commentId: Long, auth: String, removed: Boolean, reason: String): CommentModel? = try {
+        val data =
+            RemoveCommentForm(
+                commentId = commentId,
+                removed = removed,
+                reason = reason,
+                auth = auth,
+            )
+        val response =
+            services.v3.comment.remove(
+                form = data,
+                authHeader = auth.toAuthHeader(),
+            )
+        response.commentView.toModel()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun distinguish(commentId: Long, auth: String, distinguished: Boolean): CommentModel? =
-        runCatching {
-            val data =
-                DistinguishCommentForm(
-                    commentId = commentId,
-                    distinguished = distinguished,
-                    auth = auth,
-                )
-            val response =
-                services.v3.comment.distinguish(
-                    form = data,
-                    authHeader = auth.toAuthHeader(),
-                )
-            response.commentView.toModel()
-        }.getOrNull()
+    override suspend fun distinguish(commentId: Long, auth: String, distinguished: Boolean): CommentModel? = try {
+        val data =
+            DistinguishCommentForm(
+                commentId = commentId,
+                distinguished = distinguished,
+                auth = auth,
+            )
+        val response =
+            services.v3.comment.distinguish(
+                form = data,
+                authHeader = auth.toAuthHeader(),
+            )
+        response.commentView.toModel()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getReports(
         auth: String,
@@ -325,7 +362,7 @@ internal class DefaultCommentRepository(
         page: Int,
         limit: Int,
         unresolvedOnly: Boolean,
-    ): List<CommentReportModel>? = runCatching {
+    ): List<CommentReportModel>? = try {
         val response =
             services.v3.comment.listReports(
                 authHeader = auth.toAuthHeader(),
@@ -338,23 +375,28 @@ internal class DefaultCommentRepository(
         response.commentReports.map {
             it.toModel()
         }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun resolveReport(reportId: Long, auth: String, resolved: Boolean): CommentReportModel? =
-        runCatching {
-            val data =
-                ResolveCommentReportForm(
-                    reportId = reportId,
-                    resolved = resolved,
-                    auth = auth,
-                )
-            val response =
-                services.v3.comment.resolveReport(
-                    form = data,
-                    authHeader = auth.toAuthHeader(),
-                )
-            response.commentReportView.toModel()
-        }.getOrNull()
+    override suspend fun resolveReport(reportId: Long, auth: String, resolved: Boolean): CommentReportModel? = try {
+        val data =
+            ResolveCommentReportForm(
+                reportId = reportId,
+                resolved = resolved,
+                auth = auth,
+            )
+        val response =
+            services.v3.comment.resolveReport(
+                form = data,
+                authHeader = auth.toAuthHeader(),
+            )
+        response.commentReportView.toModel()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun purge(auth: String?, commentId: Long, reason: String?) {
         val data =
@@ -370,12 +412,15 @@ internal class DefaultCommentRepository(
         require(res.success)
     }
 
-    override suspend fun getResolved(query: String, auth: String?): CommentModel? = runCatching {
+    override suspend fun getResolved(query: String, auth: String?): CommentModel? = try {
         val response =
             services.v3.search.resolveObject(
                 authHeader = auth.toAuthHeader(),
                 q = query,
             )
         response.comment?.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 }

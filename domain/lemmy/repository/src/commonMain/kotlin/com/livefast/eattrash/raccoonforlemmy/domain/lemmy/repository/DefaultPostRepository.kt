@@ -22,6 +22,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.SortType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
+import kotlinx.coroutines.CancellationException
 
 internal class DefaultPostRepository(
     private val services: ServiceProvider,
@@ -37,7 +38,7 @@ internal class DefaultPostRepository(
         communityId: Long?,
         communityName: String?,
         otherInstance: String?,
-    ): Pair<List<PostModel>, String?>? = runCatching {
+    ): Pair<List<PostModel>, String?>? = try {
         val response =
             if (otherInstance.isNullOrEmpty()) {
                 services.v3.post.getAll(
@@ -63,9 +64,12 @@ internal class DefaultPostRepository(
             }
         val posts = response.posts.map { it.toModel() }
         posts to response.nextPage
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun get(id: Long, auth: String?, instance: String?): PostModel? = runCatching {
+    override suspend fun get(id: Long, auth: String?, instance: String?): PostModel? = try {
         val response =
             if (instance.isNullOrEmpty()) {
                 services.v3.post.get(
@@ -80,7 +84,10 @@ internal class DefaultPostRepository(
         response.postView.toModel().copy(
             crossPosts = response.crossPosts.map { it.toModel() },
         )
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override fun asUpVoted(post: PostModel, voted: Boolean) = post.copy(
         myVote = if (voted) 1 else 0,
@@ -103,7 +110,7 @@ internal class DefaultPostRepository(
         },
     )
 
-    override suspend fun upVote(post: PostModel, auth: String, voted: Boolean) = runCatching {
+    override suspend fun upVote(post: PostModel, auth: String, voted: Boolean) = try {
         val data =
             CreatePostLikeForm(
                 postId = post.id,
@@ -114,7 +121,10 @@ internal class DefaultPostRepository(
             authHeader = auth.toAuthHeader(),
             form = data,
         )
-        Unit
+        Result.success(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
     }
 
     override fun asDownVoted(post: PostModel, downVoted: Boolean) = post.copy(
@@ -138,7 +148,7 @@ internal class DefaultPostRepository(
         },
     )
 
-    override suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean) = runCatching {
+    override suspend fun downVote(post: PostModel, auth: String, downVoted: Boolean) = try {
         val data =
             CreatePostLikeForm(
                 postId = post.id,
@@ -149,12 +159,15 @@ internal class DefaultPostRepository(
             authHeader = auth.toAuthHeader(),
             form = data,
         )
-        Unit
+        Result.success(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
     }
 
     override fun asSaved(post: PostModel, saved: Boolean): PostModel = post.copy(saved = saved)
 
-    override suspend fun save(post: PostModel, auth: String, saved: Boolean) = runCatching {
+    override suspend fun save(post: PostModel, auth: String, saved: Boolean) = try {
         val data =
             SavePostForm(
                 postId = post.id,
@@ -165,7 +178,10 @@ internal class DefaultPostRepository(
             authHeader = auth.toAuthHeader(),
             form = data,
         )
-        Unit
+        Result.success(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
     }
 
     override suspend fun create(
@@ -218,7 +234,7 @@ internal class DefaultPostRepository(
         )
     }
 
-    override suspend fun setRead(read: Boolean, postId: Long, auth: String?) = runCatching {
+    override suspend fun setRead(read: Boolean, postId: Long, auth: String?) = try {
         val data =
             MarkPostAsReadForm(
                 postId = postId,
@@ -229,10 +245,13 @@ internal class DefaultPostRepository(
             authHeader = auth.toAuthHeader(),
             form = data,
         )
-        Unit
+        Result.success(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
     }
 
-    override suspend fun hide(hidden: Boolean, postId: Long, auth: String?) = runCatching {
+    override suspend fun hide(hidden: Boolean, postId: Long, auth: String?) = try {
         val data =
             HidePostForm(
                 postIds = listOf(postId),
@@ -242,10 +261,13 @@ internal class DefaultPostRepository(
             authHeader = auth.toAuthHeader(),
             form = data,
         )
-        Unit
+        Result.success(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Result.failure(e)
     }
 
-    override suspend fun delete(id: Long, auth: String) = runCatching {
+    override suspend fun delete(id: Long, auth: String) = try {
         val data =
             DeletePostForm(
                 postId = id,
@@ -257,9 +279,12 @@ internal class DefaultPostRepository(
                 form = data,
             )
         res.postView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun restore(id: Long, auth: String): PostModel? = runCatching {
+    override suspend fun restore(id: Long, auth: String): PostModel? = try {
         val data =
             DeletePostForm(
                 postId = id,
@@ -271,9 +296,12 @@ internal class DefaultPostRepository(
                 form = data,
             )
         res.postView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun report(postId: Long, reason: String, auth: String) = runCatching {
+    override suspend fun report(postId: Long, reason: String, auth: String) = try {
         val data =
             CreatePostReportForm(
                 postId = postId,
@@ -285,9 +313,12 @@ internal class DefaultPostRepository(
             authHeader = auth.toAuthHeader(),
         )
         Unit
-    }.getOrDefault(Unit)
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        Unit
+    }
 
-    override suspend fun featureInCommunity(postId: Long, auth: String, featured: Boolean): PostModel? = runCatching {
+    override suspend fun featureInCommunity(postId: Long, auth: String, featured: Boolean): PostModel? = try {
         val data =
             FeaturePostForm(
                 postId = postId,
@@ -301,9 +332,12 @@ internal class DefaultPostRepository(
                 authHeader = auth.toAuthHeader(),
             )
         response.postView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun featureInInstance(postId: Long, auth: String, featured: Boolean): PostModel? = runCatching {
+    override suspend fun featureInInstance(postId: Long, auth: String, featured: Boolean): PostModel? = try {
         val data =
             FeaturePostForm(
                 postId = postId,
@@ -317,9 +351,12 @@ internal class DefaultPostRepository(
                 authHeader = auth.toAuthHeader(),
             )
         response.postView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun lock(postId: Long, auth: String, locked: Boolean): PostModel? = runCatching {
+    override suspend fun lock(postId: Long, auth: String, locked: Boolean): PostModel? = try {
         val data =
             LockPostForm(
                 postId = postId,
@@ -332,24 +369,29 @@ internal class DefaultPostRepository(
                 authHeader = auth.toAuthHeader(),
             )
         response.postView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun remove(postId: Long, auth: String, reason: String, removed: Boolean): PostModel? =
-        runCatching {
-            val data =
-                RemovePostForm(
-                    postId = postId,
-                    auth = auth,
-                    removed = removed,
-                    reason = reason,
-                )
-            val response =
-                services.v3.post.remove(
-                    form = data,
-                    authHeader = auth.toAuthHeader(),
-                )
-            response.postView.toModel()
-        }.getOrNull()
+    override suspend fun remove(postId: Long, auth: String, reason: String, removed: Boolean): PostModel? = try {
+        val data =
+            RemovePostForm(
+                postId = postId,
+                auth = auth,
+                removed = removed,
+                reason = reason,
+            )
+        val response =
+            services.v3.post.remove(
+                form = data,
+                authHeader = auth.toAuthHeader(),
+            )
+        response.postView.toModel()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getReports(
         auth: String,
@@ -357,7 +399,7 @@ internal class DefaultPostRepository(
         page: Int,
         limit: Int,
         unresolvedOnly: Boolean,
-    ): List<PostReportModel>? = runCatching {
+    ): List<PostReportModel>? = try {
         val response =
             services.v3.post.listReports(
                 authHeader = auth.toAuthHeader(),
@@ -370,23 +412,28 @@ internal class DefaultPostRepository(
         response.postReports.map {
             it.toModel()
         }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun resolveReport(reportId: Long, auth: String, resolved: Boolean): PostReportModel? =
-        runCatching {
-            val data =
-                ResolvePostReportForm(
-                    reportId = reportId,
-                    auth = auth,
-                    resolved = resolved,
-                )
-            val response =
-                services.v3.post.resolveReport(
-                    form = data,
-                    authHeader = auth.toAuthHeader(),
-                )
-            response.postReportView.toModel()
-        }.getOrNull()
+    override suspend fun resolveReport(reportId: Long, auth: String, resolved: Boolean): PostReportModel? = try {
+        val data =
+            ResolvePostReportForm(
+                reportId = reportId,
+                auth = auth,
+                resolved = resolved,
+            )
+        val response =
+            services.v3.post.resolveReport(
+                form = data,
+                authHeader = auth.toAuthHeader(),
+            )
+        response.postReportView.toModel()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun purge(auth: String?, postId: Long, reason: String?) {
         val data =
@@ -402,12 +449,15 @@ internal class DefaultPostRepository(
         require(response.success)
     }
 
-    override suspend fun getResolved(query: String, auth: String?): PostModel? = runCatching {
+    override suspend fun getResolved(query: String, auth: String?): PostModel? = try {
         val response =
             services.v3.search.resolveObject(
                 authHeader = auth.toAuthHeader(),
                 q = query,
             )
         response.post?.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 }

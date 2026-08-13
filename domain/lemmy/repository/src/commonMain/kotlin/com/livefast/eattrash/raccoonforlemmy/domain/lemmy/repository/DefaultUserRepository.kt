@@ -18,37 +18,43 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAut
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toCommentDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
+import kotlinx.coroutines.CancellationException
 
 internal class DefaultUserRepository(
     private val services: ServiceProvider,
     private val customServices: ServiceProvider,
 ) : UserRepository {
-    override suspend fun getResolved(query: String, auth: String?): UserModel? = runCatching {
+    override suspend fun getResolved(query: String, auth: String?): UserModel? = try {
         val response =
             services.v3.search.resolveObject(
                 authHeader = auth.toAuthHeader(),
                 q = query,
             )
         response.user?.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun get(id: Long, auth: String?, username: String?, otherInstance: String?): UserModel? =
-        runCatching {
-            val response =
-                if (otherInstance.isNullOrEmpty()) {
-                    services.v3.user.getDetails(
-                        authHeader = auth.toAuthHeader(),
-                        auth = auth,
-                        personId = id,
-                    )
-                } else {
-                    customServices.changeInstance(otherInstance)
-                    customServices.v3.user.getDetails(
-                        username = "$username@$otherInstance",
-                    )
-                }
-            response.personView.toModel()
-        }.getOrNull()
+    override suspend fun get(id: Long, auth: String?, username: String?, otherInstance: String?): UserModel? = try {
+        val response =
+            if (otherInstance.isNullOrEmpty()) {
+                services.v3.user.getDetails(
+                    authHeader = auth.toAuthHeader(),
+                    auth = auth,
+                    personId = id,
+                )
+            } else {
+                customServices.changeInstance(otherInstance)
+                customServices.v3.user.getDetails(
+                    username = "$username@$otherInstance",
+                )
+            }
+        response.personView.toModel()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getPosts(
         id: Long?,
@@ -58,7 +64,7 @@ internal class DefaultUserRepository(
         sort: SortType,
         username: String?,
         otherInstance: String?,
-    ): List<PostModel>? = runCatching {
+    ): List<PostModel>? = try {
         val response =
             if (otherInstance.isNullOrEmpty()) {
                 services.v3.user.getDetails(
@@ -79,7 +85,10 @@ internal class DefaultUserRepository(
                 )
             }
         response.posts.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getSavedPosts(
         id: Long,
@@ -87,7 +96,7 @@ internal class DefaultUserRepository(
         page: Int,
         limit: Int,
         sort: SortType,
-    ): List<PostModel>? = runCatching {
+    ): List<PostModel>? = try {
         val response =
             services.v3.user.getDetails(
                 authHeader = auth.toAuthHeader(),
@@ -99,7 +108,10 @@ internal class DefaultUserRepository(
                 savedOnly = true,
             )
         response.posts.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getComments(
         id: Long?,
@@ -109,7 +121,7 @@ internal class DefaultUserRepository(
         sort: SortType,
         username: String?,
         otherInstance: String?,
-    ): List<CommentModel>? = runCatching {
+    ): List<CommentModel>? = try {
         val response =
             if (otherInstance.isNullOrEmpty()) {
                 services.v3.user.getDetails(
@@ -130,7 +142,10 @@ internal class DefaultUserRepository(
                 )
             }
         response.comments.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getSavedComments(
         id: Long,
@@ -138,7 +153,7 @@ internal class DefaultUserRepository(
         page: Int,
         limit: Int,
         sort: SortType,
-    ): List<CommentModel>? = runCatching {
+    ): List<CommentModel>? = try {
         val response =
             services.v3.user.getDetails(
                 authHeader = auth.toAuthHeader(),
@@ -150,7 +165,10 @@ internal class DefaultUserRepository(
                 savedOnly = true,
             )
         response.comments.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getMentions(
         auth: String?,
@@ -158,7 +176,7 @@ internal class DefaultUserRepository(
         limit: Int,
         sort: SortType,
         unreadOnly: Boolean,
-    ): List<PersonMentionModel>? = runCatching {
+    ): List<PersonMentionModel>? = try {
         val response =
             services.v3.user.getMentions(
                 authHeader = auth.toAuthHeader(),
@@ -169,7 +187,10 @@ internal class DefaultUserRepository(
                 unreadOnly = unreadOnly,
             )
         response.mentions.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getReplies(
         auth: String?,
@@ -177,7 +198,7 @@ internal class DefaultUserRepository(
         limit: Int,
         sort: SortType,
         unreadOnly: Boolean,
-    ): List<PersonMentionModel>? = runCatching {
+    ): List<PersonMentionModel>? = try {
         val response =
             services.v3.user.getReplies(
                 authHeader = auth.toAuthHeader(),
@@ -188,20 +209,25 @@ internal class DefaultUserRepository(
                 unreadOnly = unreadOnly,
             )
         response.replies.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun readAll(auth: String?) {
-        runCatching {
+        try {
             val data = MarkAllAsReadForm(auth.orEmpty())
             services.v3.user.markAllAsRead(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
         }
     }
 
     override suspend fun setMentionRead(read: Boolean, mentionId: Long, auth: String?) {
-        runCatching {
+        try {
             val data =
                 MarkPersonMentionAsReadForm(
                     mentionId = mentionId,
@@ -212,11 +238,13 @@ internal class DefaultUserRepository(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
         }
     }
 
     override suspend fun setReplyRead(read: Boolean, replyId: Long, auth: String?) {
-        runCatching {
+        try {
             val data =
                 MarkCommentAsReadForm(
                     replyId = replyId,
@@ -227,6 +255,8 @@ internal class DefaultUserRepository(
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
         }
     }
 
@@ -243,7 +273,7 @@ internal class DefaultUserRepository(
         )
     }
 
-    override suspend fun getModeratedCommunities(auth: String?, id: Long?): List<CommunityModel> = runCatching {
+    override suspend fun getModeratedCommunities(auth: String?, id: Long?): List<CommunityModel> = try {
         val response =
             services.v3.user.getDetails(
                 authHeader = auth.toAuthHeader(),
@@ -253,7 +283,10 @@ internal class DefaultUserRepository(
         response.moderates.map {
             it.community.toModel()
         }
-    }.getOrElse { emptyList() }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        emptyList()
+    }
 
     override suspend fun getLikedPosts(
         auth: String?,
@@ -262,7 +295,7 @@ internal class DefaultUserRepository(
         limit: Int,
         sort: SortType,
         liked: Boolean,
-    ): Pair<List<PostModel>, String?>? = runCatching {
+    ): Pair<List<PostModel>, String?>? = try {
         val response =
             services.v3.post.getAll(
                 authHeader = auth.toAuthHeader(),
@@ -277,7 +310,10 @@ internal class DefaultUserRepository(
             )
         val posts = response.posts.map { it.toModel() }
         posts to response.nextPage
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getLikedComments(
         auth: String?,
@@ -285,7 +321,7 @@ internal class DefaultUserRepository(
         limit: Int,
         sort: SortType,
         liked: Boolean,
-    ): List<CommentModel>? = runCatching {
+    ): List<CommentModel>? = try {
         val response =
             services.v3.comment.getAll(
                 authHeader = auth.toAuthHeader(),
@@ -298,7 +334,10 @@ internal class DefaultUserRepository(
                 dislikedOnly = if (!liked) true else null,
             )
         response.comments.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun purge(auth: String?, id: Long, reason: String?) {
         val data =
@@ -320,7 +359,7 @@ internal class DefaultUserRepository(
         pageCursor: String?,
         limit: Int,
         sort: SortType,
-    ): Pair<List<PostModel>, String?>? = runCatching {
+    ): Pair<List<PostModel>, String?>? = try {
         val response =
             services.v3.post.getAll(
                 authHeader = auth.toAuthHeader(),
@@ -334,7 +373,10 @@ internal class DefaultUserRepository(
             )
         val posts = response.posts.map { it.toModel() }
         posts to response.nextPage
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun deleteAccount(auth: String?, password: String, deleteContent: Boolean): Boolean {
         val data =
