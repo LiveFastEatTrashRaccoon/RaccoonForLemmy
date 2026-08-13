@@ -8,9 +8,10 @@ import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import kotlinx.coroutines.CancellationException
 
 class DefaultMediaRepository(private val services: ServiceProvider) : MediaRepository {
-    override suspend fun uploadImage(auth: String, bytes: ByteArray): String? = runCatching {
+    override suspend fun uploadImage(auth: String, bytes: ByteArray): String? = try {
         val url = "https://${services.currentInstance}/pictrs/image"
         val multipart =
             MultiPartFormDataContent(
@@ -34,13 +35,12 @@ class DefaultMediaRepository(private val services: ServiceProvider) : MediaRepos
                 content = multipart,
             )
         "$url/${images.files?.firstOrNull()?.file}"
-    }.apply {
-        exceptionOrNull()?.also {
-            it.printStackTrace()
-        }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun getAll(auth: String?, page: Int, limit: Int): List<MediaModel> = runCatching {
+    override suspend fun getAll(auth: String?, page: Int, limit: Int): List<MediaModel> = try {
         val response =
             services.v3.user.listMedia(
                 authHeader = auth.toAuthHeader(),
@@ -48,7 +48,10 @@ class DefaultMediaRepository(private val services: ServiceProvider) : MediaRepos
                 limit = limit,
             )
         response.images.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        emptyList()
+    }
 
     override suspend fun delete(auth: String?, media: MediaModel) {
         val url =

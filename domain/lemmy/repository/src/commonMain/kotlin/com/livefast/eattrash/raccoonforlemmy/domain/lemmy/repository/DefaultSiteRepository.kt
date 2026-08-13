@@ -12,13 +12,14 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.shoul
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
+import kotlinx.coroutines.CancellationException
 
 internal class DefaultSiteRepository(
     private val services: ServiceProvider,
     private val customServices: ServiceProvider,
     private val siteVersionDataSource: SiteVersionDataSource,
 ) : SiteRepository {
-    override suspend fun getCurrentUser(auth: String): UserModel? = runCatching {
+    override suspend fun getCurrentUser(auth: String): UserModel? = try {
         val remoteUser =
             if (siteVersionDataSource.shouldUseV4()) {
                 services.v4.account.get(authHeader = auth.toAuthHeader())
@@ -33,9 +34,12 @@ internal class DefaultSiteRepository(
             val counts = it.localUserView?.counts
             user?.toModel()?.copy(score = counts?.toModel())
         }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun getSiteVersion(auth: String?, otherInstance: String?): String? = runCatching {
+    override suspend fun getSiteVersion(auth: String?, otherInstance: String?): String? = try {
         if (otherInstance.isNullOrEmpty()) {
             val response = services.v3.site.get(authHeader = auth.toAuthHeader())
             response.version.takeIf { !it.isNullOrEmpty() }
@@ -44,7 +48,10 @@ internal class DefaultSiteRepository(
             val response = customServices.v3.site.get(authHeader = "")
             response.version.takeIf { !it.isNullOrEmpty() }
         }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun block(id: Long, blocked: Boolean, auth: String?) {
         val data =
@@ -58,28 +65,37 @@ internal class DefaultSiteRepository(
         )
     }
 
-    override suspend fun getMetadata(url: String): MetadataModel? = runCatching {
+    override suspend fun getMetadata(url: String): MetadataModel? = try {
         val response = services.v3.post.getSiteMetadata(url = url)
         response.metadata.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun getLanguages(auth: String?): List<LanguageModel> = runCatching {
+    override suspend fun getLanguages(auth: String?): List<LanguageModel> = try {
         val response =
             services.v3.site.get(
                 auth = auth,
                 authHeader = auth.toAuthHeader(),
             )
         response.allLanguages.map { it.toModel() }
-    }.getOrElse { emptyList() }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        emptyList()
+    }
 
-    override suspend fun getAccountSettings(auth: String): AccountSettingsModel? = runCatching {
+    override suspend fun getAccountSettings(auth: String): AccountSettingsModel? = try {
         val response =
             services.v3.site.get(
                 auth = auth,
                 authHeader = auth.toAuthHeader(),
             )
         response.myUser?.localUserView?.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun updateAccountSettings(auth: String, value: AccountSettingsModel) {
         val formData = value.toDto().copy(auth = auth)
@@ -89,7 +105,7 @@ internal class DefaultSiteRepository(
         )
     }
 
-    override suspend fun getBans(auth: String): AccountBansModel? = runCatching {
+    override suspend fun getBans(auth: String): AccountBansModel? = try {
         val response =
             services.v3.site.get(
                 auth = auth,
@@ -102,9 +118,12 @@ internal class DefaultSiteRepository(
                 instances = instanceBlocks.map { it.instance.toModel() },
             )
         }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun getAdmins(otherInstance: String?): List<UserModel> = runCatching {
+    override suspend fun getAdmins(otherInstance: String?): List<UserModel> = try {
         if (otherInstance.isNullOrEmpty()) {
             val response = services.v3.site.get()
             response.admins.map { it.toModel() }
@@ -113,5 +132,8 @@ internal class DefaultSiteRepository(
             val response = customServices.v3.site.get()
             response.admins.map { it.toModel() }
         }
-    }.getOrElse { emptyList() }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        emptyList()
+    }
 }

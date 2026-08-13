@@ -19,6 +19,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.UserModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
+import kotlinx.coroutines.CancellationException
 
 internal class DefaultCommunityRepository(
     private val services: ServiceProvider,
@@ -34,7 +35,7 @@ internal class DefaultCommunityRepository(
         listingType: ListingType,
         sortType: SortType,
         resultType: SearchResultType,
-    ): List<SearchResult> = runCatching {
+    ): List<SearchResult> = try {
         val searchResponse =
             if (instance.isNullOrEmpty()) {
                 services.v3.search.search(
@@ -75,10 +76,13 @@ internal class DefaultCommunityRepository(
             val users = searchResponse.users.map { it.toModel() }
             this += users.map { SearchResult.User(it) }
         }
-    }.getOrElse { emptyList() }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        emptyList()
+    }
 
     override suspend fun getList(instance: String, page: Int, limit: Int, sortType: SortType): List<CommunityModel> =
-        runCatching {
+        try {
             customServices.changeInstance(instance)
             val response =
                 customServices.v3.community.getAll(
@@ -89,19 +93,25 @@ internal class DefaultCommunityRepository(
             response.communities.map {
                 it.toModel()
             }
-        }.getOrElse { emptyList() }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            emptyList()
+        }
 
-    override suspend fun getResolved(query: String, auth: String?): CommunityModel? = runCatching {
+    override suspend fun getResolved(query: String, auth: String?): CommunityModel? = try {
         val resolveResponse =
             services.v3.search.resolveObject(
                 authHeader = auth.toAuthHeader(),
                 q = query,
             )
         resolveResponse.community?.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun getSubscribed(auth: String?, page: Int, limit: Int, query: String): List<CommunityModel> =
-        runCatching {
+        try {
             val response =
                 services.v3.search.search(
                     authHeader = auth.toAuthHeader(),
@@ -113,26 +123,31 @@ internal class DefaultCommunityRepository(
                     listingType = ListingType.Subscribed.toDto(),
                 )
             response.communities.map { it.toModel() }
-        }.getOrElse { emptyList() }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            emptyList()
+        }
 
-    override suspend fun get(auth: String?, id: Long?, name: String?, instance: String?): CommunityModel? =
-        runCatching {
-            val response =
-                if (instance.isNullOrEmpty()) {
-                    services.v3.community.get(
-                        authHeader = auth.toAuthHeader(),
-                        auth = auth,
-                        id = id,
-                        name = name,
-                    )
-                } else {
-                    customServices.changeInstance(instance)
-                    customServices.v3.community.get(name = name)
-                }
-            response.communityView.toModel()
-        }.getOrNull()
+    override suspend fun get(auth: String?, id: Long?, name: String?, instance: String?): CommunityModel? = try {
+        val response =
+            if (instance.isNullOrEmpty()) {
+                services.v3.community.get(
+                    authHeader = auth.toAuthHeader(),
+                    auth = auth,
+                    id = id,
+                    name = name,
+                )
+            } else {
+                customServices.changeInstance(instance)
+                customServices.v3.community.get(name = name)
+            }
+        response.communityView.toModel()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun getModerators(auth: String?, id: Long?): List<UserModel> = runCatching {
+    override suspend fun getModerators(auth: String?, id: Long?): List<UserModel> = try {
         val response =
             services.v3.community.get(
                 authHeader = auth.toAuthHeader(),
@@ -142,9 +157,12 @@ internal class DefaultCommunityRepository(
         response.moderators.map {
             it.moderator.toModel()
         }
-    }.getOrElse { emptyList() }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        emptyList()
+    }
 
-    override suspend fun subscribe(auth: String?, id: Long): CommunityModel? = runCatching {
+    override suspend fun subscribe(auth: String?, id: Long): CommunityModel? = try {
         val data =
             FollowCommunityForm(
                 auth = auth.orEmpty(),
@@ -157,9 +175,12 @@ internal class DefaultCommunityRepository(
                 form = data,
             )
         response.communityView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun unsubscribe(auth: String?, id: Long): CommunityModel? = runCatching {
+    override suspend fun unsubscribe(auth: String?, id: Long): CommunityModel? = try {
         val data =
             FollowCommunityForm(
                 auth = auth.orEmpty(),
@@ -172,7 +193,10 @@ internal class DefaultCommunityRepository(
                 form = data,
             )
         response.communityView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun block(id: Long, blocked: Boolean, auth: String?) {
         val data =
@@ -195,7 +219,7 @@ internal class DefaultCommunityRepository(
         removeData: Boolean,
         reason: String?,
         expires: Long?,
-    ): UserModel? = runCatching {
+    ): UserModel? = try {
         val data =
             BanFromCommunityForm(
                 auth = auth.orEmpty(),
@@ -212,14 +236,17 @@ internal class DefaultCommunityRepository(
                 form = data,
             )
         response.personView.toModel().copy(banned = ban)
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun addModerator(
         auth: String?,
         communityId: Long,
         userId: Long,
         added: Boolean,
-    ): List<UserModel> = runCatching {
+    ): List<UserModel> = try {
         val data =
             AddModToCommunityForm(
                 auth = auth.orEmpty(),
@@ -236,7 +263,10 @@ internal class DefaultCommunityRepository(
             ?.map {
                 it.moderator.toModel()
             }.orEmpty()
-    }.getOrElse { emptyList() }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        emptyList()
+    }
 
     override suspend fun create(auth: String?, community: CommunityModel): CommunityModel {
         val data =

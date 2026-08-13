@@ -8,6 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.api.provider.ServiceProvider
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PrivateMessageModel
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toModel
+import kotlinx.coroutines.CancellationException
 
 internal class DefaultPrivateMessageRepository(private val services: ServiceProvider) : PrivateMessageRepository {
     override suspend fun getAll(
@@ -16,7 +17,7 @@ internal class DefaultPrivateMessageRepository(private val services: ServiceProv
         page: Int,
         limit: Int,
         unreadOnly: Boolean,
-    ): List<PrivateMessageModel>? = runCatching {
+    ): List<PrivateMessageModel>? = try {
         val response =
             services.v3.privateMessages.getAll(
                 authHeader = auth.toAuthHeader(),
@@ -27,9 +28,12 @@ internal class DefaultPrivateMessageRepository(private val services: ServiceProv
                 unreadOnly = unreadOnly,
             )
         response.privateMessages.map { it.toModel() }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun create(message: String, auth: String?, recipientId: Long): PrivateMessageModel? = runCatching {
+    override suspend fun create(message: String, auth: String?, recipientId: Long): PrivateMessageModel? = try {
         val data =
             CreatePrivateMessageForm(
                 content = message,
@@ -42,9 +46,12 @@ internal class DefaultPrivateMessageRepository(private val services: ServiceProv
                 form = data,
             )
         response.privateMessageView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun edit(messageId: Long, message: String, auth: String?): PrivateMessageModel? = runCatching {
+    override suspend fun edit(messageId: Long, message: String, auth: String?): PrivateMessageModel? = try {
         val data =
             EditPrivateMessageForm(
                 content = message,
@@ -57,9 +64,12 @@ internal class DefaultPrivateMessageRepository(private val services: ServiceProv
                 form = data,
             )
         response.privateMessageView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
-    override suspend fun markAsRead(messageId: Long, auth: String?, read: Boolean): PrivateMessageModel? = runCatching {
+    override suspend fun markAsRead(messageId: Long, auth: String?, read: Boolean): PrivateMessageModel? = try {
         val data =
             MarkPrivateMessageAsReadForm(
                 privateMessageId = messageId,
@@ -72,10 +82,13 @@ internal class DefaultPrivateMessageRepository(private val services: ServiceProv
                 form = data,
             )
         response.privateMessageView.toModel()
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 
     override suspend fun delete(messageId: Long, auth: String?) {
-        runCatching {
+        try {
             val data =
                 DeletePrivateMessageForm(
                     auth = auth.orEmpty(),
@@ -86,6 +99,8 @@ internal class DefaultPrivateMessageRepository(private val services: ServiceProv
                 authHeader = auth.toAuthHeader(),
                 form = data,
             )
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
         }
     }
 }

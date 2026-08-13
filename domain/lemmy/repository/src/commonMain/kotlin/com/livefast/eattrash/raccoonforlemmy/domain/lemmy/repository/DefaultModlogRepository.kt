@@ -5,6 +5,7 @@ import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ModlogItem
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.ModlogItemType
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toAuthHeader
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.repository.utils.toDto
+import kotlinx.coroutines.CancellationException
 
 internal class DefaultModlogRepository(private val services: ServiceProvider) : ModlogRepository {
     override suspend fun getItems(
@@ -13,7 +14,7 @@ internal class DefaultModlogRepository(private val services: ServiceProvider) : 
         limit: Int,
         page: Int,
         type: ModlogItemType,
-    ): List<ModlogItem>? = runCatching {
+    ): List<ModlogItem>? = try {
         val response =
             services.v3.modLog.getItems(
                 authHeader = auth.toAuthHeader(),
@@ -42,5 +43,8 @@ internal class DefaultModlogRepository(private val services: ServiceProvider) : 
                 this += response.transferredToCommunity?.map { it.toDto() }.orEmpty()
             }
         result.sortedByDescending { it.date }
-    }.getOrNull()
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e
+        null
+    }
 }
