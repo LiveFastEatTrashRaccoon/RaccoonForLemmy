@@ -27,7 +27,7 @@ kotlin {
                 implementation(libs.androidx.activity.compose)
                 implementation(libs.androidx.activity)
                 implementation(libs.androidx.browser)
-                implementation(libs.ktor.android)
+                implementation(libs.ktor.okhttp)
                 implementation(libs.coil.gif)
             }
         }
