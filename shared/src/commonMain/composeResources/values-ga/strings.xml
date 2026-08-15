@@ -431,9 +431,6 @@
     <string name="user_info_moderates">Modhnóir na</string>
     <plurals name="inbox_notification_content">
         <item quantity="one">Tá %1$d mír neamhléite</item>
-        <item quantity="two"/>
-        <item quantity="few"/>
-        <item quantity="many"/>
         <item quantity="other">Tá a %1$d mír neamhléite</item>
     </plurals>
 </resources>

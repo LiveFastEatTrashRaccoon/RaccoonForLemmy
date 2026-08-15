@@ -431,8 +431,5 @@
     <string name="user_info_moderates">Модератор</string>
     <plurals name="inbox_notification_content">
         <item quantity="one">Непрочитаних елементів: %1$d</item>
-        <item quantity="few"/>
-        <item quantity="many"/>
-        <item quantity="other"/>
     </plurals>
 </resources>
