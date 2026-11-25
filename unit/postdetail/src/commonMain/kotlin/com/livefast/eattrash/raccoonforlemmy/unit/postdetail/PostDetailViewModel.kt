@@ -14,6 +14,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Setting
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.datetime.epochMillis
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -346,7 +347,7 @@ class PostDetailViewModel(
                 }
 
             PostDetailMviModel.Intent.RefreshPost -> refreshPost()
-            PostDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            PostDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
 
             is PostDetailMviModel.Intent.DownVoteComment -> {
                 if (intent.feedback) {

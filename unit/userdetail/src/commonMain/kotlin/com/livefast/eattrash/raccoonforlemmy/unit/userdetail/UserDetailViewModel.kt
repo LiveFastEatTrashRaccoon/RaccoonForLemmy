@@ -16,6 +16,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserSor
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -223,7 +224,7 @@ class UserDetailViewModel(
                 }
             }
 
-            UserDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            UserDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
             UserDetailMviModel.Intent.LoadNextPage ->
                 viewModelScope.launch {
                     loadNextPage()

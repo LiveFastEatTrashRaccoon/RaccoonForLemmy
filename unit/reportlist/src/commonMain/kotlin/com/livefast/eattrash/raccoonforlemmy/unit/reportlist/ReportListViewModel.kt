@@ -6,6 +6,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.appearance.repository.ThemeRep
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.DefaultMviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentReportModel
@@ -85,7 +86,7 @@ class ReportListViewModel(
                         resolve(it)
                     }
 
-            ReportListMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            ReportListMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
             is ReportListMviModel.Intent.ChangeType -> changeUnresolvedOnly(intent.unresolvedOnly)
         }
     }

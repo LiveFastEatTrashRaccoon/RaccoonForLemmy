@@ -8,6 +8,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.architecture.MviModelDelegate
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenter
 import com.livefast.eattrash.raccoonforlemmy.core.notifications.NotificationCenterEvent
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.inbox.coordinator.InboxCoordinator
@@ -109,7 +110,7 @@ class InboxRepliesViewModel(
                     markAsRead(read = intent.read, reply = reply)
                 }
 
-            InboxRepliesMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            InboxRepliesMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
             is InboxRepliesMviModel.Intent.DownVoteComment -> {
                 val reply = uiState.value.replies.first { it.id == intent.id }
                 toggleDownVoteComment(reply)
