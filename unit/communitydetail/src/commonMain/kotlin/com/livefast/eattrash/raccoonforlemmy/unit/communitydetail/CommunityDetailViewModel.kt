@@ -17,6 +17,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Setting
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.core.utils.zombiemode.ZombieModeHelper
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
@@ -270,7 +271,7 @@ class CommunityDetailViewModel(
                     toggleUpVotePost(post)
                 }
 
-            CommunityDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            CommunityDetailMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
             CommunityDetailMviModel.Intent.Subscribe -> subscribe()
             CommunityDetailMviModel.Intent.Unsubscribe -> unsubscribe()
             is CommunityDetailMviModel.Intent.DeletePost -> handlePostDelete(intent.id)

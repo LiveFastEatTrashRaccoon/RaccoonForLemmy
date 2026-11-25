@@ -12,6 +12,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Account
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommentModel
@@ -121,7 +122,7 @@ class FilteredContentsViewModel(
                     refresh()
                 }
 
-            FilteredContentsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            FilteredContentsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
             FilteredContentsMviModel.Intent.LoadNextPage ->
                 viewModelScope.launch {
                     loadNextPage()

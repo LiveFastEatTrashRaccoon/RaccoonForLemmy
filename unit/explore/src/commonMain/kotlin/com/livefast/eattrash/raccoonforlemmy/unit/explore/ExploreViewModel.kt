@@ -12,6 +12,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Account
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.ApiConfigurationRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
@@ -220,7 +221,7 @@ class ExploreViewModel(
                 }
             }
 
-            ExploreMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            ExploreMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
             is ExploreMviModel.Intent.SetSearch -> setSearch(intent.value)
             is ExploreMviModel.Intent.DownVotePost -> {
                 if (intent.feedback) {

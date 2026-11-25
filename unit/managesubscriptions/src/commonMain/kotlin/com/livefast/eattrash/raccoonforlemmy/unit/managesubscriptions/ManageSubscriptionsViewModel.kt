@@ -12,6 +12,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Account
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.FavoriteCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.MultiCommunityRepository
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.SettingsRepository
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.CommunityModel
@@ -87,7 +88,7 @@ class ManageSubscriptionsViewModel(
 
     override fun reduce(intent: ManageSubscriptionsMviModel.Intent) {
         when (intent) {
-            ManageSubscriptionsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            ManageSubscriptionsMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
             ManageSubscriptionsMviModel.Intent.Refresh -> viewModelScope.launch { refresh() }
             is ManageSubscriptionsMviModel.Intent.Unsubscribe -> {
                 uiState.value.communities.firstOrNull { it.id == intent.id }?.also { community ->

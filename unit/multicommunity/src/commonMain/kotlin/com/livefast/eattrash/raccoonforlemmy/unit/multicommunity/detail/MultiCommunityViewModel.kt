@@ -15,6 +15,7 @@ import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.Setting
 import com.livefast.eattrash.raccoonforlemmy.core.persistence.repository.UserTagRepository
 import com.livefast.eattrash.raccoonforlemmy.core.utils.imageload.ImagePreloadManager
 import com.livefast.eattrash.raccoonforlemmy.core.utils.share.ShareHelper
+import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticEffect
 import com.livefast.eattrash.raccoonforlemmy.core.utils.vibrate.HapticFeedback
 import com.livefast.eattrash.raccoonforlemmy.domain.identity.repository.IdentityRepository
 import com.livefast.eattrash.raccoonforlemmy.domain.lemmy.data.PostModel
@@ -148,7 +149,7 @@ class MultiCommunityViewModel(
                     toggleDownVote(post)
                 }
 
-            MultiCommunityMviModel.Intent.HapticIndication -> hapticFeedback.vibrate()
+            MultiCommunityMviModel.Intent.HapticIndication -> hapticFeedback.vibrate(effect = HapticEffect.Tick)
             MultiCommunityMviModel.Intent.LoadNextPage ->
                 viewModelScope.launch {
                     loadNextPage()
